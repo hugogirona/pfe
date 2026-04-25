@@ -18,7 +18,7 @@ Plateforme web qui connecte les musiciens et artistes passionnés — trouver un
 ```bash
 # 1. Cloner le dépôt
 git clone <url-du-repo>
-cd pfe
+cd pfe/giggr
 
 # 2. Installer les dépendances PHP
 composer install
