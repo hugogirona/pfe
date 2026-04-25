@@ -24,7 +24,7 @@
                 alt="{{ $alt }}"
                 class="absolute inset-0 w-full h-full object-cover"
             />
-            <figcaption class="sro">{{ $alt }}</figcaption>
+            <figcaption class="sr-only">{{ $alt }}</figcaption>
         </figure>
 
         <div @class([

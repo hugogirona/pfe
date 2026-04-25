@@ -7,7 +7,7 @@
     'url'   => '#',
 ])
 
-<article class="flex flex-col rounded-xl overflow-hidden border border-dark/10 bg-bg shadow-sm">
+<article class="flex flex-col w-full h-full rounded-xl overflow-hidden border border-dark/10 bg-bg shadow-sm">
 
 
     <div class="relative h-56 shrink-0 bg-dark/5">
@@ -19,7 +19,6 @@
             />
         @endif
 
-        {{-- Bouton favori --}}
         <button
             type="button"
             class="absolute top-3 right-3 w-10 h-10 flex items-center justify-center rounded-full bg-white/75 backdrop-blur-sm text-dark/40 hover:text-accent hover:bg-white/90 transition-colors duration-200 cursor-pointer"

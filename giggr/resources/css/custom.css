@@ -9,6 +9,14 @@
 }
 
 @layer utilities {
+    .scrollbar-none {
+        scrollbar-width: none;
+    }
+    .scrollbar-none::-webkit-scrollbar {
+        display: none;
+    }
+
+
     .animate-marquee {
         animation: marquee 30s linear infinite;
         will-change: transform;
