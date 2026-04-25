@@ -1,0 +1,23 @@
+@font-face {
+    font-family: 'Antic Didone';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url('/fonts/antic-didone-regular.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: 'DM Sans';
+    font-style: normal;
+    font-weight: 100 900;
+    font-display: swap;
+    src: url('/fonts/dm-sans-regular.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: 'DM Sans';
+    font-style: italic;
+    font-weight: 100 900;
+    font-display: swap;
+    src: url('/fonts/dm-sans-italic.woff2') format('woff2');
+}
