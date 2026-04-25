@@ -82,7 +82,7 @@ Le back-office Filament est accessible sur `http://localhost:8000/admin`.
 | **Laravel**                   | Framework back-end        |
 | **Livewire**                  | Composants dynamiques     |
 | **Alpine.js**                 | Interactivité côté client |
-| **SCSS + BEM**                | Styles                    |
+| **Tailwind CSS**              | Styles                    |
 | **WebSockets** (Laravel Echo) | Messagerie en temps réel  |
 | **MySQL**                     | Base de données           |
 | **Filament**                  | Back-office admin         |
