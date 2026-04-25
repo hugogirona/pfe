@@ -1,4 +1,4 @@
-<section class="max-w-6xl mx-auto px-6 py-16 md:py-24 flex flex-col md:flex-row items-center gap-12 md:gap-8">
+<section class="max-w-6xl mx-auto px-6 py-12 md:py-24 flex flex-col md:flex-row items-center gap-12 md:gap-8">
 
     <div class="flex-1 flex flex-col items-start">
         <p class="text-m font-medium text-dark/50">
@@ -15,9 +15,9 @@
             ta passion pour la musique.
         </p>
 
-        <form class="mt-8 flex items-center gap-3 w-full max-w-lg" role="search">
+        <form class="mt-8 flex flex-col sm:flex-row gap-2 sm:gap-3 w-full max-w-lg" role="search">
             <x-parts.home.search-bar class="min-w-0" />
-            <x-cta variant="dark" size="lg" href="#">Voir les annonces</x-cta>
+            <x-cta variant="dark" size="lg" href="#" class="shrink-0 w-full sm:w-auto">Voir les annonces</x-cta>
         </form>
     </div>
 

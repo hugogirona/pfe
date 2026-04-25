@@ -9,12 +9,13 @@ $logos = [
 ];
 @endphp
 
-<section class="py-16">
+<section class=" py-12 md:py-20">
 
     <h2 class="text-center font-heading text-sm tracking-[0.3em] uppercase text-dark/40 mb-14 mx-6">
         Ils nous font confiance
     </h2>
 
+    <div class="max-w-6xl mx-auto">
     <div class="relative h-8 overflow-hidden marquee-mask"
          x-data="{ paused: false }"
          @mouseenter="paused = true"
@@ -53,6 +54,7 @@ $logos = [
             @endforeach
 
         </div>
+    </div>
     </div>
 
 </section>

@@ -18,8 +18,6 @@ new #[Layout('layouts.app')] #[Title('Accueil')] class extends Component
     <x-text-image
         title="Un titre accrocheur"
         content="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
-        button-label="Button cta"
-        url="#"
         image="home2.webp"
         alt="Instruments de musique et matériel audio"
         orientation="right"

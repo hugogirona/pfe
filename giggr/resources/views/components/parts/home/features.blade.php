@@ -1,4 +1,4 @@
-<section class="relative bg-dark py-20 overflow-hidden">
+<section class="relative bg-dark py-12 md:py-20 overflow-hidden">
 
     <div class="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent"></div>
     <div class="pointer-events-none absolute inset-x-0 top-0 h-72 bg-[radial-gradient(ellipse_80%_50%_at_50%_0%,rgba(246,118,73,0.07),transparent)]"></div>
@@ -35,8 +35,8 @@
             <x-parts.home.feature-kpi value="3" label="annonces actives" />
             <x-parts.home.feature-kpi value="5" label="villes en Belgique" />
 
-            <div class="col-span-2 md:col-span-1 bg-accent/10 border border-accent/20 rounded-2xl py-7 px-6 flex flex-col items-center justify-center text-center gap-4">
-                <p class="text-sm text-white/65 leading-snug">Prêt à rejoindre<br>l'aventure ? viens stp on est pas bcp</p>
+            <div class="md:col-span-1 bg-accent/10 border border-accent/20 rounded-2xl py-7 px-6 flex flex-col items-center justify-center text-center gap-4">
+                <p class="text-sm text-white/65 leading-snug">Prêt‧e‧s&nbsp;?</p>
                 <x-cta variant="accent" href="#">S'inscrire</x-cta>
             </div>
         </div>
