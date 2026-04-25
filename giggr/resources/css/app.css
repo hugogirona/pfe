@@ -5,7 +5,40 @@
 @source '../**/*.blade.php';
 @source '../**/*.js';
 
+@font-face {
+    font-family: 'Antic Didone';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url('/fonts/antic-didone-regular.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: 'DM Sans';
+    font-style: normal;
+    font-weight: 100 900;
+    font-display: swap;
+    src: url('/fonts/dm-sans-regular.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: 'DM Sans';
+    font-style: italic;
+    font-weight: 100 900;
+    font-display: swap;
+    src: url('/fonts/dm-sans-italic.woff2') format('woff2');
+}
+
 @theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-        'Segoe UI Symbol', 'Noto Color Emoji';
+    /* Fonts */
+    --font-sans: 'DM Sans', ui-sans-serif, system-ui, sans-serif;
+    --font-heading: 'Antic Didone', ui-serif, serif;
+
+    /* Couleurs */
+    --color-bg: #f8f8f8;
+    --color-dark: #3d3d3d;
+    --color-accent: #f67649;
+    --color-pastel-salmon: #f9e5de;
+    --color-pastel-blue: #e0ebf4;
+    --color-pastel-taupe: #e0d2ce;
 }
