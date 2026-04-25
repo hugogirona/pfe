@@ -7,7 +7,7 @@
 @php
 $sizes = [
     'base' => 'px-5 py-2 text-base',
-    'lg'   => 'px-8 py-4 text-m',
+    'lg'   => 'px-8 py-4 text-base',
 ];
 
 $variants = [

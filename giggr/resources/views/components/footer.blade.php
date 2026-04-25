@@ -12,9 +12,9 @@
             <div class="md:ml-auto flex flex-col md:flex-row items-center md:items-start gap-8">
                 <nav class="flex flex-col gap-3 items-center md:items-start">
                     <h2 class="sr-only">Navigation de pied de page</h2>
-                    <a href="{{ route('home') }}" class="text-m text-bg/70 hover:text-bg transition-colors duration-150">Accueil</a>
-                    <a href="#" class="text-m text-bg/70 hover:text-bg transition-colors duration-150">Explorer</a>
-                    <a href="#" class="text-m text-bg/70 hover:text-bg transition-colors duration-150">Contact</a>
+                    <a href="{{ route('home') }}" class="text-basetext-bg/70 hover:text-bg transition-colors duration-150">Accueil</a>
+                    <a href="#" class="text-basetext-bg/70 hover:text-bg transition-colors duration-150">Explorer</a>
+                    <a href="#" class="text-basetext-bg/70 hover:text-bg transition-colors duration-150">Contact</a>
                 </nav>
 
                 <x-footer.socials />

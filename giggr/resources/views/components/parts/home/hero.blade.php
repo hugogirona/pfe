@@ -1,7 +1,7 @@
 <section class="max-w-6xl mx-auto px-6 py-12 md:py-24 flex flex-col md:flex-row items-center gap-12 md:gap-8">
 
     <div class="flex-1 flex flex-col items-start">
-        <p class="text-m font-medium text-dark/50">
+        <p class="text-base font-medium text-dark/50">
             Bienvenue sur <span class="text-accent">Giggr</span>
         </p>
 
