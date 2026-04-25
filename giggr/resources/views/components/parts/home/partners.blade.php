@@ -11,7 +11,7 @@ $logos = [
 
 <section class=" py-12 md:py-20">
 
-    <h2 class="text-center font-heading text-sm tracking-[0.3em] uppercase text-dark/40 mb-14 mx-6">
+    <h2 class="text-center font-heading text-base tracking-[0.3em] uppercase text-dark/40 mb-14 mx-6">
         Ils nous font confiance
     </h2>
 

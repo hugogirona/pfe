@@ -9,7 +9,7 @@
             La musique est une passion qui se partage
         </h1>
 
-        <p class="mt-6 text-m leading-relaxed text-dark/55 max-w-sm">
+        <p class="mt-6 text-base md:text-lg leading-relaxed text-dark/55 max-w-sm">
             Connecte-toi avec des musiciens amateurs de ta région.
             Forme ton groupe, organise des jam sessions et partage
             ta passion pour la musique.

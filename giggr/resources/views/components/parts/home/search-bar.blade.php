@@ -11,6 +11,6 @@
         type="search"
         name="{{ $name }}"
         placeholder="{{ $placeholder }}"
-        class="w-full pl-10 pr-4 py-2.5 text-sm bg-bg border border-dark/15 rounded-[6px] text-dark placeholder:text-dark/35 focus:outline-none focus:ring-1 focus:ring-accent transition-colors duration-150"
+        class="w-full h-full pl-10 pr-4 py-2.5 text-base bg-bg border border-dark/15 rounded-[6px] text-dark placeholder:text-dark/35 focus:outline-none focus:ring-1 focus:ring-accent transition-colors duration-150"
     />
 </div>

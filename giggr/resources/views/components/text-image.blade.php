@@ -11,7 +11,7 @@
 
 @php $isLeft = $orientation === 'left'; @endphp
 
-<section class="max-w-6xl mx-auto px-6 py-16">
+<section class="max-w-6xl mx-auto px-6 py-12 md:py-24">
     <div @class([
         'flex rounded-3xl overflow-hidden shadow-sm',
         'flex-col md:flex-row'         => $isLeft,
@@ -38,14 +38,14 @@
             </h2>
 
             @if ($content)
-                <p class="text-sm leading-relaxed text-dark/60 max-w-sm">
+                <p class="text-base md:text-lg leading-relaxed text-dark/60 max-w-sm">
                     {{ $content }}
                 </p>
             @endif
 
             @if ($buttonLabel)
                 <div>
-                    <x-cta variant="dark" :href="$url">{{ $buttonLabel }}</x-cta>
+                    <x-cta size="lg" variant="dark" :href="$url">{{ $buttonLabel }}</x-cta>
                 </div>
             @endif
         </div>

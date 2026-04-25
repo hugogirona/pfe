@@ -4,7 +4,7 @@
 
             <div class="flex flex-col items-center md:items-start">
                 <x-logo class="text-bg" />
-                <p class="mt-3 text-sm text-bg/60 max-w-xs text-center md:text-left">
+                <p class="mt-3 text-base text-bg/60 max-w-xs text-center md:text-left">
                     La plateforme qui connecte les musiciens amateurs.
                 </p>
             </div>

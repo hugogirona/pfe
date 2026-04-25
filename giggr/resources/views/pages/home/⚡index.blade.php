@@ -16,8 +16,10 @@ new #[Layout('layouts.app')] #[Title('Accueil')] class extends Component
     <x-parts.home.partners />
 
     <x-text-image
-        title="Un titre accrocheur"
-        content="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+        title="Trouve le musicien qu'il te manque"
+        content="Guitariste, batteur, claviériste ou chanteur — parcours des centaines de profils et connecte-toi avec des musiciens amateurs de ta région qui partagent ta passion."
+        button-label="Explorer les annonces"
+        url="#"
         image="home2.webp"
         alt="Instruments de musique et matériel audio"
         orientation="right"
@@ -27,14 +29,17 @@ new #[Layout('layouts.app')] #[Title('Accueil')] class extends Component
     <x-parts.home.features />
 
     <x-text-image
-        title="Comment ça marche ?"
-        content="Connecte-toi avec des musiciens amateurs de ta région. Forme ton groupe, organise des jam sessions et partage ta passion pour la musique."
-        button-label="S'inscrire"
+        title="Ta prochaine aventure musicale commence ici"
+        content="Crée ton profil en 2 minutes, décris ton univers musical et laisse la communauté venir à toi. C'est gratuit, c'est local, c'est fait pour toi."
+        button-label="Explorer les profils"
         url="#"
         image="home1.webp"
         alt="Un chanteur sur scène"
         orientation="left"
         bg="bg-pastel-blue"
     />
+
+
+    <x-parts.home.musicians />
 
 </div>

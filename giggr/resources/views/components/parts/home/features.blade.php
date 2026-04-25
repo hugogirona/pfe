@@ -6,7 +6,7 @@
     <div class="relative max-w-6xl mx-auto px-6">
 
         <div class="text-center mb-12">
-            <p class="inline-flex items-center gap-3 text-accent text-xs font-medium tracking-[0.3em] uppercase mb-5">
+            <p class="inline-flex items-center gap-3 text-accent text-base font-medium tracking-[0.3em] uppercase mb-5">
                 <span class="w-8 h-px bg-accent"></span>
                 Rejoins les
                 <span class="w-8 h-px bg-accent"></span>
@@ -36,7 +36,7 @@
             <x-parts.home.feature-kpi value="5" label="villes en Belgique" />
 
             <div class="md:col-span-1 bg-accent/10 border border-accent/20 rounded-2xl py-7 px-6 flex flex-col items-center justify-center text-center gap-4">
-                <p class="text-sm text-white/65 leading-snug">Prêt‧e‧s&nbsp;?</p>
+                <p class="text-base text-white/65 leading-snug">Prêt‧e‧s&nbsp;?</p>
                 <x-cta variant="accent" href="#">S'inscrire</x-cta>
             </div>
         </div>
