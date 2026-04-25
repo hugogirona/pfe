@@ -5,7 +5,7 @@
             Bienvenue sur <span class="text-accent">Giggr</span>
         </p>
 
-        <h1 class="font-heading text-5xl md:text-6xl leading-[1.1] mt-5 text-dark max-w-lg">
+        <h1 class="font-heading text-4xl md:text-5xl leading-[1.1] mt-5 text-dark max-w-lg">
             La musique est une passion qui se partage
         </h1>
 

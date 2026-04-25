@@ -1,3 +1,26 @@
 @media (prefers-reduced-motion: reduce) {
     [x-transition] { transition-duration: 0ms !important; }
+    .animate-marquee  { animation: none !important; }
+}
+
+@keyframes marquee {
+    from { transform: translateX(0); }
+    to   { transform: translateX(calc(-100% / 3)); }
+}
+
+@layer utilities {
+    .animate-marquee {
+        animation: marquee 30s linear infinite;
+        will-change: transform;
+    }
+
+    .marquee-mask {
+        mask-image: linear-gradient(
+            to right,
+            transparent 0%,
+            black 12%,
+            black 88%,
+            transparent 100%
+        );
+    }
 }

@@ -12,6 +12,7 @@ new #[Layout('layouts.app')] #[Title('Accueil')] class extends Component
 
 <div>
     <x-parts.home.hero />
+    <x-parts.home.partners />
 
     <x-text-image
         title="Comment ça marche ?"
