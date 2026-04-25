@@ -1,44 +1,69 @@
-<div class="md:hidden" x-data="{ open: false }">
+<div class="md:hidden"
+     x-data="{ open: false }"
+     x-init="$watch('open', val => {
+         if (val) {
+             document.body.style.overflow = 'hidden';
+         } else {
+             setTimeout(() => document.body.style.overflow = '', 200);
+         }
+     })">
 
-    <button @click="open = !open" class="text-dark p-1" aria-label="Menu">
-        <svg x-show="!open" xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-        </svg>
-        <svg x-show="open" xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
-        </svg>
+    <button @click="open = !open"
+            :aria-expanded="open"
+            class="relative z-50 text-dark/60 hover:text-dark transition-colors duration-150 p-2 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent rounded-[6px]"
+            aria-label="Menu">
+        <span class="flex flex-col justify-center gap-[5px] w-5 h-5">
+            <span class="block h-0.5 w-5 bg-current rounded-full transition-all duration-300 ease-in-out origin-center"
+                  :class="open ? 'rotate-45 translate-y-[7px]' : ''"></span>
+            <span class="block h-0.5 w-5 bg-current rounded-full transition-all duration-300 ease-in-out"
+                  :class="open ? 'opacity-0 scale-x-0' : ''"></span>
+            <span class="block h-0.5 w-5 bg-current rounded-full transition-all duration-300 ease-in-out origin-center"
+                  :class="open ? '-rotate-45 -translate-y-[7px]' : ''"></span>
+        </span>
     </button>
 
-    <div x-show="open"
-         x-transition:enter="transition ease-out duration-150"
-         x-transition:enter-start="opacity-0 -translate-y-2"
-         x-transition:enter-end="opacity-100 translate-y-0"
-         x-transition:leave="transition ease-in duration-100"
-         x-transition:leave-start="opacity-100 translate-y-0"
-         x-transition:leave-end="opacity-0 -translate-y-2"
-         class="absolute top-16 left-0 right-0 bg-bg border-b border-dark/10 px-6 py-4 flex flex-col gap-4">
+    <nav x-show="open"
+         x-transition:enter="transition ease-out duration-300"
+         x-transition:enter-start="-translate-y-full"
+         x-transition:enter-end="translate-y-0"
+         x-transition:leave="transition ease-in duration-200"
+         x-transition:leave-start="translate-y-0"
+         x-transition:leave-end="-translate-y-full"
+         class="fixed inset-0 z-40 bg-bg flex flex-col items-center justify-center gap-6"
+         aria-label="Navigation mobile">
 
-        <x-nav.link href="{{ route('home') }}" :active="request()->routeIs('home')">
-            Accueil
-        </x-nav.link>
-        <x-nav.link href="#" :active="request()->routeIs('explorer')">
-            Explorer
-        </x-nav.link>
-        <x-nav.link href="#" :active="request()->routeIs('contact')">
-            Contact
-        </x-nav.link>
+         <h2 class="sr-only">Navigation principale</h2>
 
-        <hr class="border-dark/10">
+        <a href="{{ route('home') }}"
+           @click="open = false"
+           @class([
+               'text-3xl font-bold transition-colors duration-150 cursor-pointer',
+               'text-dark'        => request()->routeIs('home'),
+               'text-dark/30 hover:text-dark/60' => !request()->routeIs('home'),
+           ])>Accueil</a>
 
-        @auth
-            <a href="#" class="text-sm font-medium text-dark hover:text-accent transition-colors duration-150">
-                Mon profil
-            </a>
-        @else
-            <a href="#" class="text-sm font-medium text-dark hover:text-accent transition-colors duration-150">
-                Connexion
-            </a>
-        @endauth
+        <a href="#"
+           @click="open = false"
+           @class([
+               'text-3xl font-bold transition-colors duration-150 cursor-pointer',
+               'text-dark'        => request()->routeIs('explorer'),
+               'text-dark/30 hover:text-dark/60' => !request()->routeIs('explorer'),
+           ])>Explorer</a>
 
-    </div>
+        <a href="#"
+           @click="open = false"
+           @class([
+               'text-3xl font-bold transition-colors duration-150 cursor-pointer',
+               'text-dark'        => request()->routeIs('contact'),
+               'text-dark/30 hover:text-dark/60' => !request()->routeIs('contact'),
+           ])>Contact</a>
+
+        @guest
+            <div class="absolute bottom-10 left-6 right-6 flex flex-col gap-3">
+                <x-cta variant="dark" class="w-full min-h-[44px] text-base">S'inscrire</x-cta>
+                <x-cta variant="outline" class="w-full min-h-[44px] text-base">Se connecter</x-cta>
+            </div>
+        @endguest
+
+    </nav>
 </div>
