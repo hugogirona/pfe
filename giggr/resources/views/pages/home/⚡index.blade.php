@@ -6,10 +6,10 @@ use Livewire\Component;
 
 new #[Layout('layouts.app')] #[Title('Accueil')] class extends Component
 {
-    
+
 };
 ?>
 
 <div>
-    <p>Home — à construire</p>
+    <x-parts.home.hero />
 </div>

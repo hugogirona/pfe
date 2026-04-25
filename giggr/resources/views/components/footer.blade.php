@@ -23,7 +23,7 @@
         </div>
         <div class="mt-12 pt-6 border-t border-bg/10 flex items-center justify-between">
             <span class="text-xs text-bg/40">© {{ date('Y') }} Giggr. Tous droits réservés.</span>
-            <x-lang-switcher />
+            <x-footer.lang-switcher />
         </div>
     </div>
 </footer>
