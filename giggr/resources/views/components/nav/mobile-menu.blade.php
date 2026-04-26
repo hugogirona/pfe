@@ -34,12 +34,12 @@
 
         <h2 class="sr-only">{{ __('nav.aria_main_nav') }}</h2>
 
-        <a href="{{ $localeRoute('home') }}"
+        <a href="{{ route('home') }}"
            @click="open = false"
            @class([
                'text-3xl font-bold transition-colors duration-150 cursor-pointer',
-               'text-dark'                       => request()->routeIs('home', 'en.home'),
-               'text-dark/30 hover:text-dark/60' => !request()->routeIs('home', 'en.home'),
+               'text-dark'                       => request()->routeIs('home'),
+               'text-dark/30 hover:text-dark/60' => !request()->routeIs('home'),
            ])>{{ __('nav.home') }}</a>
 
         <a href="#"

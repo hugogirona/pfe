@@ -1,5 +1,5 @@
 <div class="hidden md:flex items-center gap-8">
-    <x-nav.link href="{{ $localeRoute('home') }}" :active="request()->routeIs('home', 'en.home')">
+    <x-nav.link href="{{ route('home') }}" :active="request()->routeIs('home')">
         {{ __('nav.home') }}
     </x-nav.link>
     <x-nav.link href="#" :active="request()->routeIs('explorer')">

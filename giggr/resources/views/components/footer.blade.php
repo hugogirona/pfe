@@ -12,7 +12,7 @@
             <div class="md:ml-auto flex flex-col md:flex-row items-center md:items-start gap-8">
                 <nav class="flex flex-col gap-3 items-center md:items-start">
                     <h2 class="sr-only">{{ __('footer.nav_aria') }}</h2>
-                    <a href="{{ $localeRoute('home') }}" class="text-base text-bg/70 hover:text-bg transition-colors duration-150">{{ __('footer.home') }}</a>
+                    <a href="{{ route('home') }}" class="text-base text-bg/70 hover:text-bg transition-colors duration-150">{{ __('footer.home') }}</a>
                     <a href="#" class="text-base text-bg/70 hover:text-bg transition-colors duration-150">{{ __('footer.explore') }}</a>
                     <a href="#" class="text-base text-bg/70 hover:text-bg transition-colors duration-150">{{ __('footer.contact') }}</a>
                 </nav>

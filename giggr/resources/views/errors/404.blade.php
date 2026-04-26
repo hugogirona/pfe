@@ -25,7 +25,7 @@
             {{ __('errors.not_found_title') }}
         </p>
 
-        <x-cta variant="dark" size="lg" href="{{ route('home') }}">
+        <x-cta variant="dark" size="lg" href="{{ LaravelLocalization::getLocalizedURL(app()->getLocale(), '/') }}">
             {{ __('errors.back_home') }}
         </x-cta>
     </main>
