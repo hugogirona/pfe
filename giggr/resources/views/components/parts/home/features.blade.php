@@ -8,35 +8,35 @@
         <div class="text-center mb-12">
             <p class="inline-flex items-center gap-3 text-accent text-base font-medium tracking-[0.3em] uppercase mb-5">
                 <span class="w-8 h-px bg-accent"></span>
-                Rejoins les
+                {{ __('home.features_eyebrow') }}
                 <span class="w-8 h-px bg-accent"></span>
             </p>
             <h2 class="font-heading text-3xl md:text-4xl text-white leading-tight">
-                Tout ce qu'il te faut,<br>au même endroit
+                {{ __('home.features_title') }}
             </h2>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-            <x-parts.home.feature-card icon="search" title="Trouve ton partenaire">
-                Filtre par instrument, style musical et ville. Trouve exactement le profil qu'il te faut en quelques secondes.
+            <x-parts.home.feature-card icon="search" :title="__('home.feature_find_title')">
+                {{ __('home.feature_find_desc') }}
             </x-parts.home.feature-card>
 
-            <x-parts.home.feature-card icon="plus-circle" title="Publie une annonce">
-                En quelques minutes, atteins des centaines de musiciens de ta région. Gratuit et sans prise de tête.
+            <x-parts.home.feature-card icon="plus-circle" :title="__('home.feature_post_title')">
+                {{ __('home.feature_post_desc') }}
             </x-parts.home.feature-card>
 
-            <x-parts.home.feature-card icon="users" title="Rejoins la communauté">
-                Intègre des groupes, participe à des jam sessions et échange avec des passionnés comme toi.
+            <x-parts.home.feature-card icon="users" :title="__('home.feature_community_title')">
+                {{ __('home.feature_community_desc') }}
             </x-parts.home.feature-card>
         </div>
 
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <x-parts.home.feature-kpi value="12" label="musiciens inscrits" />
-            <x-parts.home.feature-kpi value="3" label="annonces actives" />
+            <x-parts.home.feature-kpi value="12" :label="__('home.kpi_musicians')" />
+            <x-parts.home.feature-kpi value="3" :label="__('home.kpi_ads')" />
 
             <div class="col-span-2 bg-accent/10 border border-accent/20 rounded-2xl py-7 px-6 flex flex-col items-center justify-center text-center gap-4">
-                <p class="text-base text-white/65 leading-snug">Prêt‧e‧s à rejoindre l'aventure&nbsp;?</p>
-                <x-cta variant="accent" href="#">S'inscrire</x-cta>
+                <p class="text-base text-white/65 leading-snug">{{ __('home.cta_join') }}</p>
+                <x-cta variant="accent" href="#">{{ __('nav.sign_up') }}</x-cta>
             </div>
         </div>
 

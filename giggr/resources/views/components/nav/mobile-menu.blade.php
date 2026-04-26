@@ -11,7 +11,7 @@
     <button @click="open = !open"
             :aria-expanded="open"
             class="relative z-50 text-dark/60 hover:text-dark transition-colors duration-150 p-2 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent rounded-[6px]"
-            aria-label="Menu">
+            aria-label="{{ __('nav.aria_menu') }}">
         <span class="flex flex-col justify-center gap-[5px] w-5 h-5">
             <span class="block h-0.5 w-5 bg-current rounded-full transition-all duration-300 ease-in-out origin-center"
                   :class="open ? 'rotate-45 translate-y-[7px]' : ''"></span>
@@ -30,38 +30,38 @@
          x-transition:leave-start="translate-y-0"
          x-transition:leave-end="-translate-y-full"
          class="fixed inset-0 z-40 bg-bg flex flex-col items-center justify-center gap-6"
-         aria-label="Navigation mobile">
+         aria-label="{{ __('nav.aria_mobile_nav') }}">
 
-         <h2 class="sr-only">Navigation principale</h2>
+        <h2 class="sr-only">{{ __('nav.aria_main_nav') }}</h2>
 
-        <a href="{{ route('home') }}"
+        <a href="{{ $localeRoute('home') }}"
            @click="open = false"
            @class([
                'text-3xl font-bold transition-colors duration-150 cursor-pointer',
-               'text-dark'        => request()->routeIs('home'),
-               'text-dark/30 hover:text-dark/60' => !request()->routeIs('home'),
-           ])>Accueil</a>
+               'text-dark'                       => request()->routeIs('home', 'en.home'),
+               'text-dark/30 hover:text-dark/60' => !request()->routeIs('home', 'en.home'),
+           ])>{{ __('nav.home') }}</a>
 
         <a href="#"
            @click="open = false"
            @class([
                'text-3xl font-bold transition-colors duration-150 cursor-pointer',
-               'text-dark'        => request()->routeIs('explorer'),
+               'text-dark'                       => request()->routeIs('explorer'),
                'text-dark/30 hover:text-dark/60' => !request()->routeIs('explorer'),
-           ])>Explorer</a>
+           ])>{{ __('nav.explore') }}</a>
 
         <a href="#"
            @click="open = false"
            @class([
                'text-3xl font-bold transition-colors duration-150 cursor-pointer',
-               'text-dark'        => request()->routeIs('contact'),
+               'text-dark'                       => request()->routeIs('contact'),
                'text-dark/30 hover:text-dark/60' => !request()->routeIs('contact'),
-           ])>Contact</a>
+           ])>{{ __('nav.contact') }}</a>
 
         @guest
             <div class="absolute bottom-10 left-6 right-6 flex flex-col gap-3">
-                <x-cta variant="dark" class="w-full min-h-[44px] text-base">S'inscrire</x-cta>
-                <x-cta variant="outline" class="w-full min-h-[44px] text-base">Se connecter</x-cta>
+                <x-cta variant="dark" class="w-full min-h-[44px] text-base">{{ __('nav.sign_up') }}</x-cta>
+                <x-cta variant="outline" class="w-full min-h-[44px] text-base">{{ __('nav.sign_in') }}</x-cta>
             </div>
         @endguest
 
