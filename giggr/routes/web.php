@@ -1,9 +1,13 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
-Route::livewire('/', 'pages::home.index')->name('home');
+Route::group([
+    'prefix'     => LaravelLocalization::setLocale(),
+    'middleware' => ['localizationRedirect', 'localeViewPath'],
+], function () {
 
-Route::prefix('en')->name('en.')->group(function () {
     Route::livewire('/', 'pages::home.index')->name('home');
+
 });
