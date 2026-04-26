@@ -1,5 +1,5 @@
 @props([
-    'placeholder' => 'Recherchez un profil ou un instrument...',
+    'placeholder' => null,
     'name'        => 'q',
 ])
 
@@ -10,7 +10,7 @@
     <input
         type="search"
         name="{{ $name }}"
-        placeholder="{{ $placeholder }}"
+        placeholder="{{ $placeholder ?? __('home.search_placeholder') }}"
         class="w-full h-full pl-10 pr-4 py-2.5 text-base bg-bg border border-dark/15 rounded-[6px] text-dark placeholder:text-dark/35 focus:outline-none focus:ring-1 focus:ring-accent transition-colors duration-150"
     />
 </div>

@@ -5,16 +5,16 @@
             <div class="flex flex-col items-center md:items-start">
                 <x-logo class="text-bg" />
                 <p class="mt-3 text-base text-bg/60 max-w-xs text-center md:text-left">
-                    La plateforme qui connecte les musiciens amateurs.
+                    {{ __('footer.tagline') }}
                 </p>
             </div>
 
             <div class="md:ml-auto flex flex-col md:flex-row items-center md:items-start gap-8">
                 <nav class="flex flex-col gap-3 items-center md:items-start">
-                    <h2 class="sr-only">Navigation de pied de page</h2>
-                    <a href="{{ route('home') }}" class="text-basetext-bg/70 hover:text-bg transition-colors duration-150">Accueil</a>
-                    <a href="#" class="text-basetext-bg/70 hover:text-bg transition-colors duration-150">Explorer</a>
-                    <a href="#" class="text-basetext-bg/70 hover:text-bg transition-colors duration-150">Contact</a>
+                    <h2 class="sr-only">{{ __('footer.nav_aria') }}</h2>
+                    <a href="{{ $localeRoute('home') }}" class="text-base text-bg/70 hover:text-bg transition-colors duration-150">{{ __('footer.home') }}</a>
+                    <a href="#" class="text-base text-bg/70 hover:text-bg transition-colors duration-150">{{ __('footer.explore') }}</a>
+                    <a href="#" class="text-base text-bg/70 hover:text-bg transition-colors duration-150">{{ __('footer.contact') }}</a>
                 </nav>
 
                 <x-footer.socials />
@@ -22,7 +22,7 @@
 
         </div>
         <div class="mt-12 pt-6 border-t border-bg/10 flex items-center justify-between">
-            <span class="text-xs text-bg/40">© {{ date('Y') }} Giggr. Tous droits réservés.</span>
+            <span class="text-xs text-bg/40">{{ __('footer.copyright', ['year' => date('Y')]) }}</span>
             <x-footer.lang-switcher />
         </div>
     </div>
