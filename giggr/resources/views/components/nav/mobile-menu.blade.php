@@ -42,7 +42,7 @@
                'text-dark/30 hover:text-dark/60' => !request()->routeIs('home'),
            ])>{{ __('nav.home') }}</a>
 
-        <a href="#"
+        <a href="{{ route('explorer') }}"
            @click="open = false"
            @class([
                'text-3xl font-bold transition-colors duration-150 cursor-pointer',
