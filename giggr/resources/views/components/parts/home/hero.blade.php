@@ -14,7 +14,7 @@
         </p>
 
         <form class="mt-8 flex flex-col sm:flex-row gap-2 sm:gap-3 w-full max-w-lg" role="search">
-            <x-parts.home.search-bar class="min-w-0" />
+            <x-search-bar class="min-w-0" />
             <x-cta variant="dark" size="lg" href="#" class="shrink-0 w-full sm:w-auto">{{ __('home.hero_cta') }}</x-cta>
         </form>
     </div>

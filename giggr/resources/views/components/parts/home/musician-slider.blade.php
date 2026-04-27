@@ -10,8 +10,8 @@ $profiles = [
 ];
 
 $cloneCount  = 3;
-$prepended   = array_slice($profiles, -$cloneCount);        // dernières 3 → avant
-$appended    = array_slice($profiles,  0, $cloneCount);     // premières 3 → après
+$prepended   = array_slice($profiles, -$cloneCount);
+$appended    = array_slice($profiles,  0, $cloneCount);
 $cardClass   = 'snap-center shrink-0 flex flex-col min-w-[250px] w-[85%] sm:w-[calc(50%-12px)] md:w-[calc(33.333%-16px)]';
 @endphp
 
@@ -46,21 +46,21 @@ $cardClass   = 'snap-center shrink-0 flex flex-col min-w-[250px] w-[85%] sm:w-[c
                 {{-- Clones gauche (dernières 3 cards) --}}
                 @foreach ($prepended as $profile)
                     <div class="{{ $cardClass }}" aria-hidden="true">
-                        <x-parts.home.profile-card :name="$profile['name']" :age="$profile['age']" :city="$profile['city']" :bio="$profile['bio']" :image="$profile['image']" :url="$profile['url']" />
+                        <x-musician-card :musician="$profile" />
                     </div>
                 @endforeach
 
                 {{-- Cards réelles --}}
                 @foreach ($profiles as $profile)
                     <div class="{{ $cardClass }}">
-                        <x-parts.home.profile-card :name="$profile['name']" :age="$profile['age']" :city="$profile['city']" :bio="$profile['bio']" :image="$profile['image']" :url="$profile['url']" />
+                        <x-musician-card :musician="$profile" />
                     </div>
                 @endforeach
 
                 {{-- Clones droite (premières 3 cards) --}}
                 @foreach ($appended as $profile)
                     <div class="{{ $cardClass }}" aria-hidden="true">
-                        <x-parts.home.profile-card :name="$profile['name']" :age="$profile['age']" :city="$profile['city']" :bio="$profile['bio']" :image="$profile['image']" :url="$profile['url']" />
+                        <x-musician-card :musician="$profile" />
                     </div>
                 @endforeach
             </div>

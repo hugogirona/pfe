@@ -38,7 +38,7 @@ new #[Layout('layouts.app')] #[Title('Accueil')] class extends Component
         orientation="left"
         bg="bg-pastel-blue"
     />
-
-    <x-parts.home.musicians />
+    
+    <x-parts.home.musician-slider />
 
 </div>

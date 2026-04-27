@@ -6,7 +6,7 @@
     <title>404 — {{ config('app.name') }}</title>
     <link rel="preload" href="/fonts/dm-sans-regular.woff2" as="font" type="font/woff2" crossorigin>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-    @livewireScripts
+    @livewireStyles
 </head>
 <body class="bg-bg text-dark font-sans antialiased flex flex-col min-h-screen">
     <h1 class="sr-only">404</h1>
@@ -30,5 +30,6 @@
         </x-cta>
     </main>
     <x-footer />
+    @livewireScripts
 </body>
 </html>

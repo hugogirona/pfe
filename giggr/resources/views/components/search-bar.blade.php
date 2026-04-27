@@ -1,11 +1,12 @@
 @props([
     'placeholder' => null,
     'name'        => 'q',
+    'icon'        => 'search',
 ])
 
 <div {{ $attributes->class(['relative flex-1']) }}>
-    <span class="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2">
-        <x-icon name="search" class="w-4 h-4 text-dark/35" />
+    <span class="pointer-events-none absolute inset-y-0 left-3.5 flex items-center justify-center">
+        <x-icon name="{{ $icon }}" class="w-4 h-4 text-dark/35" />
     </span>
     <input
         type="search"
