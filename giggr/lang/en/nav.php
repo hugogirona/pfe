@@ -10,4 +10,5 @@ return [
     'aria_messaging'  => 'Messaging',
     'aria_mobile_nav' => 'Mobile navigation',
     'aria_main_nav'   => 'Main navigation',
+    'site_title'      => 'Welcome to Giggr',
 ];

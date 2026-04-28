@@ -47,7 +47,7 @@ new #[Layout('layouts.app')] #[Title('Explorer — Giggr.')] class extends Compo
 
         <x-parts.explore.tab-switcher />
 
-        <div
+        <section
             x-show="activeTab === 'musiciens'"
             x-transition:enter="transition ease-out duration-200"
             x-transition:enter-start="opacity-0"
@@ -64,16 +64,16 @@ new #[Layout('layouts.app')] #[Title('Explorer — Giggr.')] class extends Compo
             <template x-if="filteredMusicians.length === 0">
                 <x-parts.explore.empty-state />
             </template>
-        </div>
+        </section>
 
-        <div
+        <section
             x-show="activeTab === 'annonces'"
             style="display:none"
             x-transition:enter="transition ease-out duration-200"
             x-transition:enter-start="opacity-0"
             x-transition:enter-end="opacity-100"
         >
-            <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 <h2 class="sr-only">{{ __('explore.tab_lis') }}</h2>
                 @foreach ($announcements as $announcement)
                     <div x-show="filteredAnnouncements.some(a => a.id === {{ $announcement['id'] }})">
@@ -84,7 +84,7 @@ new #[Layout('layouts.app')] #[Title('Explorer — Giggr.')] class extends Compo
             <template x-if="filteredAnnouncements.length === 0">
                 <x-parts.explore.empty-state />
             </template>
-        </div>
+        </section>
 
     </div>
 
