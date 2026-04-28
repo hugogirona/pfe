@@ -14,20 +14,30 @@
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
             <x-form.input
-                name="name"
+                name="first_name"
                 type="text"
-                :label="__('contact.form_name')"
+                :label="__('contact.form_first_name')"
                 :required="true"
                 autocomplete="name"
             />
+            
             <x-form.input
+                name="last_name"
+                type="text"
+                :label="__('contact.form_last_name')"
+                :required="true"
+                autocomplete="name"
+            />
+            
+        </div>
+        
+        <x-form.input
                 name="email"
                 type="email"
                 :label="__('contact.form_email')"
                 :required="true"
                 autocomplete="email"
             />
-        </div>
 
         <x-form.select
             name="subject"

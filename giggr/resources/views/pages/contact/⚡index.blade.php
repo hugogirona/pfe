@@ -18,17 +18,16 @@ new #[Layout('layouts.app')] #[Title('Contact — Giggr.')] class extends Compon
     />
 
     <div class="max-w-6xl mx-auto px-6 py-16 md:py-24">
-        <div class="grid grid-cols-1 lg:grid-cols-5 items-start gap-y-10 gap-x-10 xl:gap-x-16">
 
-            <div class="lg:col-span-2">
-                <x-parts.contact.info />
-            </div>
-
-            <div class="lg:col-span-3">
+        <div class="flex flex-col lg:flex-row items-start gap-y-14 gap-x-10 xl:gap-x-16">
+            <div class="w-full lg:w-1/2 lg:shrink-0">
                 <x-parts.contact.form />
             </div>
-
+            <div class="w-full lg:flex-1">
+                <x-parts.contact.faq />
+            </div>
         </div>
+
     </div>
 
 </div>

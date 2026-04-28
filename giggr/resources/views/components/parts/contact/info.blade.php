@@ -1,6 +1,4 @@
 <aside class="flex flex-col gap-12 h-full">
-
-    {{-- En-tête — typo grande et assertive --}}
     <div>
         <h2 class="inline-block text-accent text-xs font-semibold uppercase tracking-widest mb-4">
             {{ __('contact.info_eyebrow') }}
