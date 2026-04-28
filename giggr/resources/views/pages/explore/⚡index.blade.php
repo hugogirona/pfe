@@ -39,7 +39,7 @@ new #[Layout('layouts.app')] #[Title('Explorer — Giggr.')] class extends Compo
 
 <div x-data="explorerPage(@js($musicians), @js($announcements))">
 
-    <x-parts.explore.header />
+    <x-page-header :title="__('explore.title')" :subtitle="__('explore.subtitle')" />
 
     <x-parts.explore.filter-drawer :instruments="$instruments" :genres="$genres" />
 

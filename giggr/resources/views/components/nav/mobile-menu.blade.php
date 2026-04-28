@@ -34,29 +34,17 @@
 
         <h2 class="sr-only">{{ __('nav.aria_main_nav') }}</h2>
 
-        <a href="{{ route('home') }}"
-           @click="open = false"
-           @class([
-               'text-3xl font-bold transition-colors duration-150 cursor-pointer',
-               'text-dark'                       => request()->routeIs('home'),
-               'text-dark/30 hover:text-dark/60' => !request()->routeIs('home'),
-           ])>{{ __('nav.home') }}</a>
+        <x-nav.mobile-link href="{{ route('home') }}" :active="request()->routeIs('home')">
+            {{ __('nav.home') }}
+        </x-nav.mobile-link>
 
-        <a href="{{ route('explore') }}"
-           @click="open = false"
-           @class([
-               'text-3xl font-bold transition-colors duration-150 cursor-pointer',
-               'text-dark'                       => request()->routeIs('explorer'),
-               'text-dark/30 hover:text-dark/60' => !request()->routeIs('explorer'),
-           ])>{{ __('nav.explore') }}</a>
+        <x-nav.mobile-link href="{{ route('explore') }}" :active="request()->routeIs('explorer')">
+            {{ __('nav.explore') }}
+        </x-nav.mobile-link>
 
-        <a href="#"
-           @click="open = false"
-           @class([
-               'text-3xl font-bold transition-colors duration-150 cursor-pointer',
-               'text-dark'                       => request()->routeIs('contact'),
-               'text-dark/30 hover:text-dark/60' => !request()->routeIs('contact'),
-           ])>{{ __('nav.contact') }}</a>
+        <x-nav.mobile-link href="{{ route('contact') }}" :active="request()->routeIs('contact')">
+            {{ __('nav.contact') }}
+        </x-nav.mobile-link>
 
         @guest
             <div class="absolute bottom-10 left-6 right-6 flex flex-col gap-3">
