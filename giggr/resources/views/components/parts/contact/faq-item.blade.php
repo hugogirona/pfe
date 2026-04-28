@@ -7,7 +7,7 @@
         @click="open = !open"
         aria-expanded="{{ $open ? 'true' : 'false' }}"
         :aria-expanded="open.toString()"
-        class="flex items-center gap-4 w-full py-5 text-left cursor-pointer
+        class="flex items-baseline gap-4 w-full py-5 text-left cursor-pointer
                focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40
                focus-visible:ring-offset-2 rounded-sm">
 
@@ -21,7 +21,7 @@
         </span>
 
         <x-icon name="chevron-down"
-                class="w-4 h-4 shrink-0 text-dark/25 group-hover:text-dark/50 transition-all duration-200"
+                class="w-4 h-4 shrink-0 self-center text-dark/25 group-hover:text-dark/50 transition-all duration-200"
                 x-bind:class="open ? '-rotate-180' : 'rotate-0'" />
     </button>
 
