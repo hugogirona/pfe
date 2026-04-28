@@ -20,8 +20,8 @@ $variants = [
 <a href="{{ $href }}"
    {{ $attributes->class([
        'inline-flex items-center justify-center font-medium rounded-[6px] cursor-pointer',
-       $sizes[$size],
-       $variants[$variant],
+       $sizes[(string) $size],
+       $variants[(string) $variant],
    ]) }}>
     {{ $slot }}
 </a>

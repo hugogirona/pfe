@@ -5,7 +5,7 @@
     <x-nav.link href="{{ route('explore') }}" :active="request()->routeIs('explore')">
         {{ __('nav.explore') }}
     </x-nav.link>
-    <x-nav.link href="#" :active="request()->routeIs('contact')">
+    <x-nav.link href="{{ route('contact') }}" :active="request()->routeIs('contact')">
         {{ __('nav.contact') }}
     </x-nav.link>
 </div>

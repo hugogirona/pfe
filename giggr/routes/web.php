@@ -10,5 +10,6 @@ Route::group([
 
     Route::livewire('/', 'pages::home.index')->name('home');
     Route::livewire('/explorer', 'pages::explore.index')->name('explore');
+    Route::livewire('/contact', 'pages::contact.index')->name('contact');
 
 });
