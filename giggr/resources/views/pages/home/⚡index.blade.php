@@ -19,7 +19,7 @@ new #[Layout('layouts.app')] #[Title('Accueil')] class extends Component
         :title="__('home.text_image_1_title')"
         :content="__('home.text_image_1_content')"
         :button-label="__('home.text_image_1_cta')"
-        url="#"
+        :url="route('explore')"
         image="home2.webp"
         alt="Instruments de musique et matériel audio"
         orientation="right"

@@ -31,7 +31,7 @@
             'flex-1 flex flex-col justify-center gap-6 px-10 py-14',
             $bg,
         ])>
-            <div class="w-8 h-0.5 bg-accent rounded-full"></div>
+            <div class="w-8 h-0.5 bg-accent rounded-full"></div> {{--TDOO: maybe mettre un point pour rappeler le logo--}}
 
             <h2 class="font-heading text-3xl md:text-4xl leading-tight text-dark">
                 {{ $title }}

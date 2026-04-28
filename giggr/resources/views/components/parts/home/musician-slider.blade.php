@@ -15,7 +15,7 @@ $appended    = array_slice($profiles,  0, $cloneCount);
 $cardClass   = 'snap-center shrink-0 flex flex-col min-w-[250px] w-[85%] sm:w-[calc(50%-12px)] md:w-[calc(33.333%-16px)]';
 @endphp
 
-<section class="py-16 md:py-20 bg-pastel-taupe">
+<section class="py-16 md:py-20 bg-pastel-salmon">
     <div class="max-w-6xl mx-auto px-6">
 
         <div class="text-center mb-10">
