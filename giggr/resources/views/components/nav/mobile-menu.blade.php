@@ -32,8 +32,6 @@
          class="fixed inset-0 z-40 bg-bg flex flex-col items-center justify-center gap-6"
          aria-label="{{ __('nav.aria_mobile_nav') }}">
 
-        <h2 class="sr-only">{{ __('nav.aria_main_nav') }}</h2>
-
         <x-nav.mobile-link href="{{ route('home') }}" :active="request()->routeIs('home')">
             {{ __('nav.home') }}
         </x-nav.mobile-link>

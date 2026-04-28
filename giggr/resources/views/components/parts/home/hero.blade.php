@@ -5,9 +5,9 @@
             {{ __('home.welcome') }} <span class="text-accent">Giggr</span>
         </p>
 
-        <h1 class="font-heading text-4xl md:text-5xl leading-[1.1] mt-5 text-dark max-w-lg">
+        <h2 class="font-heading text-4xl md:text-5xl leading-[1.1] mt-5 text-dark max-w-lg">
             {{ __('home.hero_title') }}
-        </h1>
+        </h2>
 
         <p class="mt-6 text-base md:text-lg leading-relaxed text-dark/55 max-w-sm">
             {{ __('home.hero_subtitle') }}

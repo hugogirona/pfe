@@ -20,7 +20,7 @@
                 :required="true"
                 autocomplete="name"
             />
-            
+
             <x-form.input
                 name="last_name"
                 type="text"
@@ -28,9 +28,9 @@
                 :required="true"
                 autocomplete="name"
             />
-            
+
         </div>
-        
+
         <x-form.input
                 name="email"
                 type="email"
@@ -61,7 +61,7 @@
             {!! __('contact.rgpd_label', [
                 'link' => '<a href="#"
                               class="text-accent underline underline-offset-2 hover:opacity-80 transition-opacity duration-150
-                                     focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent rounded-sm">'
+                              focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent rounded-sm">'
                         . __('contact.rgpd_policy')
                         . '</a>',
             ]) !!}
@@ -69,15 +69,10 @@
 
         <p class="text-xs text-dark/40">{{ __('contact.required_legend') }}</p>
 
-        <button
-            type="submit"
-            class="w-full min-h-[44px] inline-flex items-center justify-center gap-2
-                   px-6 py-3 text-base font-medium rounded-[6px] cursor-pointer
-                   bg-dark text-bg hover:opacity-80 transition-opacity duration-150
-                   focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-dark/50 focus-visible:ring-offset-2">
+        <x-cta type="submit" size="lg" class="w-full min-h-[44px] gap-2 mt-1">
             {{ __('contact.form_submit') }}
             <x-icon name="arrow-right" class="w-4 h-4" />
-        </button>
+        </x-cta>
 
     </form>
 </section>

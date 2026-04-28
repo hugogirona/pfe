@@ -11,7 +11,7 @@
             {{ substr(auth()->user()->name, 0, 1) }}
         </a>
     @else
-        <x-cta variant="outline">{{ __('nav.sign_in') }}</x-cta>
-        <x-cta variant="dark">{{ __('nav.sign_up') }}</x-cta>
+        <x-cta href="{{ route('login') }}" variant="outline">{{ __('nav.sign_in') }}</x-cta>
+        <x-cta href="{{ route('register') }}" variant="dark">{{ __('nav.sign_up') }}</x-cta>
     @endauth
 </div>
