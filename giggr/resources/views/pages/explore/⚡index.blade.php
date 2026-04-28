@@ -54,6 +54,7 @@ new #[Layout('layouts.app')] #[Title('Explorer — Giggr.')] class extends Compo
             x-transition:enter-end="opacity-100"
         >
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+             <h2 class="sr-only">{{ __('explore.tab_musicians') }}</h2>
                 @foreach ($musicians as $musician)
                     <div x-show="filteredMusicians.some(m => m.id === {{ $musician['id'] }})">
                         <x-musician-card :musician="$musician" />
@@ -72,7 +73,8 @@ new #[Layout('layouts.app')] #[Title('Explorer — Giggr.')] class extends Compo
             x-transition:enter-start="opacity-0"
             x-transition:enter-end="opacity-100"
         >
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <h2 class="sr-only">{{ __('explore.tab_lis') }}</h2>
                 @foreach ($announcements as $announcement)
                     <div x-show="filteredAnnouncements.some(a => a.id === {{ $announcement['id'] }})">
                         <x-parts.explore.announcement-card :announcement="$announcement" />

@@ -13,7 +13,7 @@
 </head>
 <body class="bg-bg text-dark font-sans antialiased flex flex-col min-h-screen">
 
-    <x-nav />
+    <x-header />
 
     <main class="flex-1">
         {{ $slot }}
