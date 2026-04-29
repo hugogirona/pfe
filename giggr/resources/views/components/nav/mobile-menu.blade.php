@@ -32,21 +32,13 @@
          class="fixed inset-0 z-40 bg-bg flex flex-col items-center justify-center gap-6"
          aria-label="{{ __('nav.aria_mobile_nav') }}">
 
-        <x-nav.mobile-link href="{{ route('home') }}" :active="request()->routeIs('home')">
-            {{ __('nav.home') }}
-        </x-nav.mobile-link>
-
-        <x-nav.mobile-link href="{{ route('explore') }}" :active="request()->routeIs('explorer')">
-            {{ __('nav.explore') }}
-        </x-nav.mobile-link>
-
-        <x-nav.mobile-link href="{{ route('contact') }}" :active="request()->routeIs('contact')">
-            {{ __('nav.contact') }}
-        </x-nav.mobile-link>
+        <x-nav.mobile-link href="{{ route('home') }}">{{ __('nav.home') }}</x-nav.mobile-link>
+        <x-nav.mobile-link href="{{ route('explore') }}">{{ __('nav.explore') }}</x-nav.mobile-link>
+        <x-nav.mobile-link href="{{ route('contact') }}">{{ __('nav.contact') }}</x-nav.mobile-link>
 
         @auth
             <div class="absolute bottom-10 left-6 right-6 flex flex-col gap-3">
-                <x-cta href="{{ route('profile', ['id' => auth()->user()->id]) }}" variant="outline" class="w-full min-h-[44px] text-base">
+                <x-cta href="{{ route('profile', ['id' => auth()->user()->id]) }}" wire:navigate variant="outline" class="w-full min-h-[44px] text-base">
                     {{ __('nav.view_profile') }}
                 </x-cta>
                 <form method="POST" action="/logout">
@@ -60,8 +52,8 @@
 
         @guest
             <div class="absolute bottom-10 left-6 right-6 flex flex-col gap-3">
-                <x-cta href="{{ route('register') }}" variant="dark" class="w-full min-h-[44px] text-base">{{ __('nav.sign_up') }}</x-cta>
-                <x-cta href="{{ route('login') }}" variant="outline" class="w-full min-h-[44px] text-base">{{ __('nav.sign_in') }}</x-cta>
+                <x-cta href="{{ route('register') }}" wire:navigate variant="dark" class="w-full min-h-[44px] text-base">{{ __('nav.sign_up') }}</x-cta>
+                <x-cta href="{{ route('login') }}" wire:navigate variant="outline" class="w-full min-h-[44px] text-base">{{ __('nav.sign_in') }}</x-cta>
             </div>
         @endguest
 

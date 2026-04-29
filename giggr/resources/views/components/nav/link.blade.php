@@ -1,10 +1,10 @@
-@props(['href' => '#', 'active' => false])
+@props(['href' => '#'])
 
-<a href="{{ $href }}"
-   @class([
-       'text-base font-medium transition-colors duration-200 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent rounded-sm',
-       'text-dark/45 hover:text-dark' => !$active,
-       'text-accent'                  => $active,
-   ])>
+<a
+    href="{{ $href }}"
+    wire:navigate.hover
+    wire:current.exact="!text-accent"
+    class="text-base font-medium text-dark/45 hover:text-dark transition-colors duration-200 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent rounded-sm"
+>
     {{ $slot }}
 </a>

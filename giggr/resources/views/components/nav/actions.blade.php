@@ -38,6 +38,7 @@
             >
                 <a
                     href="{{ route('profile', ['id' => auth()->user()->id]) }}"
+                    wire:navigate
                     @click="open = false"
                     role="menuitem"
                     class="flex items-center gap-2.5 px-4 py-3 text-sm text-dark hover:bg-dark/5 transition-colors duration-150 focus-visible:outline-none focus-visible:bg-dark/5"
@@ -62,7 +63,7 @@
             </div>
         </div>
     @else
-        <x-cta href="{{ route('login') }}" variant="outline">{{ __('nav.sign_in') }}</x-cta>
-        <x-cta href="{{ route('register') }}" variant="dark">{{ __('nav.sign_up') }}</x-cta>
+        <x-cta href="{{ route('login') }}" wire:navigate variant="outline">{{ __('nav.sign_in') }}</x-cta>
+        <x-cta href="{{ route('register') }}" wire:navigate variant="dark">{{ __('nav.sign_up') }}</x-cta>
     @endauth
 </div>

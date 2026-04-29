@@ -13,13 +13,17 @@
 </head>
 <body class="bg-bg text-dark font-sans antialiased flex flex-col min-h-screen">
 
-    <x-header />
+    @persist('header')
+        <x-header />
+    @endpersist
 
     <main class="flex-1">
         {{ $slot }}
     </main>
 
-    <x-footer />
+    @persist('footer')
+        <x-footer />
+    @endpersist
 
     <livewire:modal />
 
