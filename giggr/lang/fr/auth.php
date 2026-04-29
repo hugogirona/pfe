@@ -3,7 +3,8 @@
 return [
 
     // Laravel defaults
-    'failed'   => 'Ces identifiants ne correspondent pas à nos enregistrements.',
+    'failed'          => 'Ces identifiants ne correspondent pas à nos enregistrements.',
+    'email_taken'     => 'Cette adresse e-mail est déjà associée à un compte. <a href=":url" class="underline font-medium">Se connecter ?</a>',
     'password' => 'Le mot de passe fourni est incorrect.',
     'throttle' => 'Trop de tentatives de connexion. Veuillez réessayer dans :seconds secondes.',
 

@@ -5,6 +5,7 @@
     'required'     => false,
     'autocomplete' => null,
     'placeholder'  => '',
+    'value'        => null,
 ])
 
 <div class="flex flex-col gap-1.5">
@@ -15,6 +16,7 @@
         type="{{ $type }}"
         id="{{ $name }}"
         name="{{ $name }}"
+        value="{{ old($name, $value) }}"
         placeholder="{{ $placeholder }}"
         @if($required) required aria-required="true" @endif
         @if($autocomplete) autocomplete="{{ $autocomplete }}" @endif
