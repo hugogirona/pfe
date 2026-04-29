@@ -15,13 +15,9 @@ return [
     // Sections
     'tags_title'          => 'What I\'m looking for',
     'description_title'   => 'Description',
-    'info_title'          => 'Practical information',
 
-    // Practical info labels
-    'info_city'           => 'Location',
-    'info_date'           => 'Posted on',
-    'info_level'          => 'Level required',
-    'info_rhythm'         => 'Rehearsal rhythm',
+    // Related
+    'related_title'       => 'You might also be interested in',
 
     // Author card
     'author_title'        => 'Posted by',

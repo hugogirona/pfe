@@ -15,13 +15,9 @@ return [
     // Sections
     'tags_title'          => 'Ce que je recherche',
     'description_title'   => 'Description',
-    'info_title'          => 'Informations pratiques',
 
-    // Practical info labels
-    'info_city'           => 'Localisation',
-    'info_date'           => 'Date de publication',
-    'info_level'          => 'Niveau souhaité',
-    'info_rhythm'         => 'Rythme de répétition',
+    // Related
+    'related_title'       => 'Ces annonces pourraient vous intéresser',
 
     // Author card
     'author_title'        => 'Publié par',
