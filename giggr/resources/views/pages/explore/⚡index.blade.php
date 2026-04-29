@@ -1,6 +1,8 @@
 <?php
 
+use Livewire\Attributes\Computed;
 use Livewire\Attributes\Layout;
+use Livewire\Attributes\On;
 use Livewire\Attributes\Title;
 use Livewire\Component;
 
@@ -32,20 +34,82 @@ new #[Layout('layouts.app')] #[Title('Explorer — Giggr.')] class extends Compo
         ['id' => 8, 'title' => 'Groupe metal cherche guitariste lead',    'type' => 'Recherche',  'city' => 'Anvers',    'instruments' => ['Guitare'],    'genres' => ['Metal'],            'date' => '19/04/2026', 'description' => 'Groupe metal actif depuis 3 ans (EP enregistré, concerts réguliers) cherche guitariste lead pour remplacer un membre partant. Bonne maîtrise technique requise.'],
     ];
 
-    public array $instruments = ['Guitare', 'Basse', 'Batterie', 'Clavier', 'Violon', 'Chant', 'Saxophone', 'Trompette', 'Percussions'];
-    public array $genres      = ['Rock', 'Jazz', 'Pop', 'Folk', 'Metal', 'Classique', 'Electronic', 'Soul', 'Indie', 'Blues', 'World', 'Funk'];
+    public string $filterCity        = '';
+    public array  $filterInstruments = [];
+    public array  $filterGenres      = [];
+
+    #[Computed]
+    public function filteredMusicians(): array
+    {
+        return array_values(array_filter($this->musicians, function ($m) {
+            if ($this->filterCity && !str_contains(strtolower($m['city']), strtolower($this->filterCity))) {
+                return false;
+            }
+            if (!empty($this->filterInstruments) && empty(array_intersect($m['instruments'], $this->filterInstruments))) {
+                return false;
+            }
+            if (!empty($this->filterGenres) && empty(array_intersect($m['genres'], $this->filterGenres))) {
+                return false;
+            }
+            return true;
+        }));
+    }
+
+    #[Computed]
+    public function filteredAnnouncements(): array
+    {
+        return array_values(array_filter($this->announcements, function ($a) {
+            if ($this->filterCity && !str_contains(strtolower($a['city']), strtolower($this->filterCity))) {
+                return false;
+            }
+            if (!empty($this->filterInstruments) && empty(array_intersect($a['instruments'], $this->filterInstruments))) {
+                return false;
+            }
+            if (!empty($this->filterGenres) && empty(array_intersect($a['genres'], $this->filterGenres))) {
+                return false;
+            }
+            return true;
+        }));
+    }
+
+    #[Computed]
+    public function activeFiltersCount(): int
+    {
+        return count($this->filterInstruments) + count($this->filterGenres) + ($this->filterCity ? 1 : 0);
+    }
+
+    public function openFilterDrawer(): void
+    {
+        $this->dispatch('open-filter-drawer',
+            city:        $this->filterCity,
+            instruments: $this->filterInstruments,
+            genres:      $this->filterGenres,
+        );
+    }
+
+    #[On('filters-applied')]
+    public function applyFilters(string $city, array $instruments, array $genres): void
+    {
+        $this->filterCity        = $city;
+        $this->filterInstruments = $instruments;
+        $this->filterGenres      = $genres;
+    }
 };
 ?>
 
-<div x-data="explorerPage(@js($musicians), @js($announcements))">
+<div x-data="explorerTabs">
 
     <x-page-header :title="__('explore.title')" :subtitle="__('explore.subtitle')" />
 
-    <x-parts.explore.filter-drawer :instruments="$instruments" :genres="$genres" />
+    <livewire:parts.explore.filter-drawer />
 
     <div class="max-w-6xl mx-auto px-6 py-8 space-y-6">
 
-        <x-parts.explore.actions />
+        <x-parts.explore.actions
+            :musicians-count="count($this->filteredMusicians)"
+            :announcements-count="count($this->filteredAnnouncements)"
+            :active-filters-count="$this->activeFiltersCount"
+        />
 
         <section
             x-show="activeTab === 'musiciens'"
@@ -53,17 +117,15 @@ new #[Layout('layouts.app')] #[Title('Explorer — Giggr.')] class extends Compo
             x-transition:enter-start="opacity-0"
             x-transition:enter-end="opacity-100"
         >
+            <h2 class="sr-only">{{ __('explore.tab_musicians') }}</h2>
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-             <h2 class="sr-only">{{ __('explore.tab_musicians') }}</h2>
-                @foreach ($musicians as $musician)
-                    <div x-show="filteredMusicians.some(m => m.id === {{ $musician['id'] }})">
-                        <x-musician-card :musician="$musician" />
-                    </div>
+                @foreach ($this->filteredMusicians as $musician)
+                    <x-musician-card :musician="$musician" />
                 @endforeach
             </div>
-            <template x-if="filteredMusicians.length === 0">
+            @if (count($this->filteredMusicians) === 0)
                 <x-parts.explore.empty-state />
-            </template>
+            @endif
         </section>
 
         <section
@@ -73,17 +135,15 @@ new #[Layout('layouts.app')] #[Title('Explorer — Giggr.')] class extends Compo
             x-transition:enter-start="opacity-0"
             x-transition:enter-end="opacity-100"
         >
+            <h2 class="sr-only">{{ __('explore.tab_announcements') }}</h2>
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                <h2 class="sr-only">{{ __('explore.tab_lis') }}</h2>
-                @foreach ($announcements as $announcement)
-                    <div x-show="filteredAnnouncements.some(a => a.id === {{ $announcement['id'] }})">
-                        <x-parts.explore.announcement-card :announcement="$announcement" />
-                    </div>
+                @foreach ($this->filteredAnnouncements as $announcement)
+                    <x-parts.explore.announcement-card :announcement="$announcement" />
                 @endforeach
             </div>
-            <template x-if="filteredAnnouncements.length === 0">
+            @if (count($this->filteredAnnouncements) === 0)
                 <x-parts.explore.empty-state />
-            </template>
+            @endif
         </section>
 
     </div>
