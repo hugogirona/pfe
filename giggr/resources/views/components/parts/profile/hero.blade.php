@@ -9,7 +9,7 @@
     {{-- Back link --}}
     <div class="relative z-10 max-w-6xl mx-auto px-6 pt-6">
         <a
-            href="{{ route('explore') }}"
+            href="{{ route('explore') }}?tab=musiciens"
             class="inline-flex items-center gap-1.5 text-sm text-bg/60 hover:text-bg transition-colors duration-150 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-bg/50 rounded"
         >
             {{ __('profile.back_to_explore') }}

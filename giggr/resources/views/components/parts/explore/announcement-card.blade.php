@@ -48,7 +48,7 @@ $badgeClass = $typeColors[$announcement['type']] ?? 'bg-dark/10 text-dark';
             {{ __('explore.card_posted_on', ['date' => $announcement['date']]) }}
         </span>
         <a
-            href="#"
+            href="{{ route('announcement', ['id' => $announcement['id']]) }}"
             class="group inline-flex items-center gap-1.5 text-sm font-medium text-dark/60 hover:text-accent transition-colors duration-150 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent rounded"
         >
             {{ __('explore.card_see_announcement') }}
