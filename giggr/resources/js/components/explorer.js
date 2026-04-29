@@ -7,6 +7,9 @@ document.addEventListener('alpine:init', () => {
         drawerOpen:        false,
 
         init() {
+            const tab = new URLSearchParams(window.location.search).get('tab');
+            if (tab === 'annonces' || tab === 'musiciens') this.activeTab = tab;
+
             this.$watch('drawerOpen', val => {
                 document.body.style.overflow = val ? 'hidden' : '';
             });
