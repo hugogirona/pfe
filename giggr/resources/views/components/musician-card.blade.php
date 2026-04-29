@@ -3,7 +3,7 @@
 @php
     $instruments = $musician['instruments'] ?? [];
     $genres      = $musician['genres']      ?? [];
-    $url         = $musician['url']         ?? '#';
+    $url         = $musician['url']         ?? route('profile', ['id' => $musician['id']]);
 @endphp
 
 <article

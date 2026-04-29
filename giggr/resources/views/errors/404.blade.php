@@ -10,7 +10,7 @@
 </head>
 <body class="bg-bg text-dark font-sans antialiased flex flex-col min-h-screen">
     <h1 class="sr-only">404</h1>
-    <x-nav />
+    <x-header />
     <main class="flex-1 flex flex-col items-center justify-center px-6 py-16 md:py-24">
         <div class="flex items-center justify-center" role="img" aria-label="404">
             <img

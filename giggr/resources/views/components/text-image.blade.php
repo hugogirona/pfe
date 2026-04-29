@@ -17,15 +17,15 @@
 <div class="max-w-6xl mx-auto px-6 py-12 md:py-24">
     <section @class([
         'flex rounded-3xl overflow-hidden shadow-sm',
-        'flex-col md:flex-row'         => !$isLeft,
-        'flex-col md:flex-row-reverse' => $isLeft,
+        'flex-col-reverse md:flex-row'         => !$isLeft,
+        'flex-col-reverse md:flex-row-reverse' => $isLeft,
     ]) aria-labelledby="{{ $sectionId }}">
 
         <div @class([
             'flex-1 flex flex-col justify-center gap-6 px-10 py-14',
             $bg,
         ])>
-            <div class="w-8 h-0.5 bg-accent rounded-full"></div> {{--TDOO: maybe mettre un point pour rappeler le logo--}}
+            <div class="w-8 h-0.5 bg-accent rounded-full"></div>
 
             <h2 id="{{ $sectionId }}" class="font-heading text-3xl md:text-4xl leading-tight text-dark">
                 {{ $title }}
