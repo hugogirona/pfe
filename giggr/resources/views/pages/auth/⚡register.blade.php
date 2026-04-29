@@ -6,7 +6,12 @@ use Livewire\Component;
 
 new #[Layout('layouts.auth')] #[Title('Créer un compte — Giggr.')] class extends Component
 {
-    //
+    public function mount(): void
+    {
+        if (auth()->check()) {
+            $this->redirect(config('fortify.home'), navigate: true);
+        }
+    }
 };
 ?>
 
@@ -17,8 +22,18 @@ new #[Layout('layouts.auth')] #[Title('Créer un compte — Giggr.')] class exte
         <p class="text-sm text-dark/50">{{ __('auth.register_subtitle') }}</p>
     </div>
 
-    <form action="#" method="POST" novalidate aria-labelledby="register-heading" class="space-y-5">
+    <form action="/register" method="POST" novalidate aria-labelledby="register-heading" class="space-y-5">
         @csrf
+
+        @if ($errors->any())
+            <div class="rounded-[6px] bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-700">
+                <ul class="space-y-1 list-disc list-inside">
+                    @foreach ($errors->all() as $error)
+                        <li>{!! $error !!}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
             <x-form.input

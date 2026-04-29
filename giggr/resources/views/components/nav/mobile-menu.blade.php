@@ -44,10 +44,24 @@
             {{ __('nav.contact') }}
         </x-nav.mobile-link>
 
+        @auth
+            <div class="absolute bottom-10 left-6 right-6 flex flex-col gap-3">
+                <x-cta href="{{ route('profile', ['id' => auth()->user()->id]) }}" variant="outline" class="w-full min-h-[44px] text-base">
+                    {{ __('nav.view_profile') }}
+                </x-cta>
+                <form method="POST" action="/logout">
+                    @csrf
+                    <x-cta type="submit" variant="dark" class="w-full min-h-[44px] text-base">
+                        {{ __('nav.sign_out') }}
+                    </x-cta>
+                </form>
+            </div>
+        @endauth
+
         @guest
             <div class="absolute bottom-10 left-6 right-6 flex flex-col gap-3">
-                <x-cta variant="dark" class="w-full min-h-[44px] text-base">{{ __('nav.sign_up') }}</x-cta>
-                <x-cta variant="outline" class="w-full min-h-[44px] text-base">{{ __('nav.sign_in') }}</x-cta>
+                <x-cta href="{{ route('register') }}" variant="dark" class="w-full min-h-[44px] text-base">{{ __('nav.sign_up') }}</x-cta>
+                <x-cta href="{{ route('login') }}" variant="outline" class="w-full min-h-[44px] text-base">{{ __('nav.sign_in') }}</x-cta>
             </div>
         @endguest
 
