@@ -1,3 +1,5 @@
+@props(['activeFiltersCount' => 0])
+
 <div class="flex items-center gap-3">
 
     {{-- Publier une annonce --}}
@@ -20,18 +22,22 @@
 
     {{-- Filtres --}}
     <button
-        @click="drawerOpen = true"
-        class="relative inline-flex items-center gap-2 h-10 px-4 rounded-xl border border-dark/15 bg-bg text-sm font-medium text-dark/60 hover:text-dark hover:border-dark/30 transition-colors duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
-        :class="hasActiveFilters ? 'border-dark text-dark' : ''"
+        @click="$wire.openFilterDrawer()"
+        type="button"
+        @class([
+            'relative inline-flex items-center gap-2 h-10 px-4 rounded-xl border text-sm font-medium transition-colors duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent',
+            'border-dark text-dark'                                                                  => $activeFiltersCount > 0,
+            'border-dark/15 bg-bg text-dark/60 hover:text-dark hover:border-dark/30'                => $activeFiltersCount === 0,
+        ])
         aria-haspopup="dialog"
     >
         <x-icon name="sliders" class="w-4 h-4" />
         {{ __('explore.filter_title') }}
-        <span
-            x-show="activeFiltersCount > 0"
-            x-text="activeFiltersCount"
-            class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-accent text-bg text-xs font-semibold"
-        ></span>
+        @if ($activeFiltersCount > 0)
+            <span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-accent text-bg text-xs font-semibold">
+                {{ $activeFiltersCount }}
+            </span>
+        @endif
     </button>
 
 </div>

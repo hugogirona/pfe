@@ -15,6 +15,7 @@ return [
     'filter_instruments'=> 'Instruments',
     'filter_genres'    => 'Genres',
     'filter_clear'     => 'Effacer les filtres',
+    'filter_apply'     => 'Appliquer',
     'filter_title'     => 'Filtres',
     'filter_close'     => 'Fermer les filtres',
     'filter_see'       => 'Voir',

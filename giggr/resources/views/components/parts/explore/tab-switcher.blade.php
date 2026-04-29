@@ -1,3 +1,5 @@
+@props(['musiciansCount' => 0, 'announcementsCount' => 0])
+
 <div
     class="relative inline-flex bg-dark/[0.06] rounded-xl p-1 gap-1"
     role="tablist"
@@ -15,6 +17,7 @@
     {{-- Sliding pill --}}
     <div
         x-ref="pill"
+        wire:ignore
         class="absolute top-1 bottom-1 rounded-lg bg-dark shadow-sm pointer-events-none"
         style="transition: left 200ms ease-out, width 200ms ease-out;"
     ></div>
@@ -28,11 +31,7 @@
         :aria-selected="activeTab === 'musiciens'"
     >
         {{ __('explore.tab_musicians') }}
-        <span
-            class="ml-1.5 text-xs opacity-60 tabular-nums"
-            x-text="'(' + filteredMusicians.length + ')'"
-            aria-hidden="true"
-        ></span>
+        <span class="ml-1.5 text-xs opacity-60 tabular-nums" aria-hidden="true">({{ $musiciansCount }})</span>
     </button>
 
     <button
@@ -44,10 +43,6 @@
         :aria-selected="activeTab === 'annonces'"
     >
         {{ __('explore.tab_announcements') }}
-        <span
-            class="ml-1.5 text-xs opacity-60 tabular-nums"
-            x-text="'(' + filteredAnnouncements.length + ')'"
-            aria-hidden="true"
-        ></span>
+        <span class="ml-1.5 text-xs opacity-60 tabular-nums" aria-hidden="true">({{ $announcementsCount }})</span>
     </button>
 </div>
