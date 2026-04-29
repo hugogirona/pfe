@@ -7,10 +7,12 @@ use Livewire\Component;
 new #[Layout('layouts.auth')] #[Title('Réinitialiser le mot de passe — Giggr.')] class extends Component
 {
     public string $token = '';
+    public string $email = '';
 
     public function mount(string $token): void
     {
         $this->token = $token;
+        $this->email = request()->query('email', '');
     }
 };
 ?>
@@ -22,10 +24,20 @@ new #[Layout('layouts.auth')] #[Title('Réinitialiser le mot de passe — Giggr.
         <p class="text-sm text-dark/50">{{ __('auth.reset_subtitle') }}</p>
     </div>
 
-    <form action="#" method="POST" novalidate aria-labelledby="reset-heading" class="space-y-5">
+    <form action="/reset-password" method="POST" novalidate aria-labelledby="reset-heading" class="space-y-5">
         @csrf
 
         <input type="hidden" name="token" value="{{ $token }}">
+
+        @if ($errors->any())
+            <div class="rounded-[6px] bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-700">
+                <ul class="space-y-1 list-disc list-inside">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
 
         <x-form.input
             name="email"
@@ -34,6 +46,7 @@ new #[Layout('layouts.auth')] #[Title('Réinitialiser le mot de passe — Giggr.
             :required="true"
             autocomplete="email"
             :placeholder="__('auth.email_placeholder')"
+            :value="$email ?: old('email')"
         />
 
         <x-form.password

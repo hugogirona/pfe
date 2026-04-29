@@ -1,15 +1,66 @@
 <div class="hidden md:flex items-center gap-3">
     @auth
-        <button class="text-dark/50 hover:text-accent transition-colors duration-150 p-2 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent rounded-[6px]"
-                aria-label="{{ __('nav.aria_messaging') }}">
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12.76c0 1.6 1.123 2.994 2.707 3.227 1.087.16 2.185.283 3.293.369V21l4.076-4.076a1.526 1.526 0 0 1 1.037-.443 48.282 48.282 0 0 0 5.68-.494c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0 0 12 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018Z" />
-            </svg>
+        {{-- Messaging --}}
+        <button
+            type="button"
+            class="text-dark/50 hover:text-accent transition-colors duration-150 p-2 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent rounded-[6px] flex items-center justify-center"
+            aria-label="{{ __('nav.aria_messaging') }}"
+        >
+            <x-icon name="chat-bubble" class="w-6 h-6" />
         </button>
-        <a href="#"
-           class="w-8 h-8 rounded-full bg-accent text-bg flex items-center justify-center text-sm font-semibold uppercase cursor-pointer hover:opacity-90 transition-opacity duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2">
-            {{ substr(auth()->user()->name, 0, 1) }}
-        </a>
+
+        {{-- Profile dropdown --}}
+        <div class="relative" x-data="{ open: false }">
+            <button
+                type="button"
+                @click="open = !open"
+                @keydown.escape.window="open = false"
+                :aria-expanded="open"
+                aria-haspopup="true"
+                aria-label="{{ __('nav.aria_user_menu') }}"
+                class="w-8 h-8 rounded-full bg-dark/60 text-bg flex items-center justify-center text-sm font-semibold uppercase cursor-pointer hover:opacity-90 transition-opacity duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
+            >
+                {{ mb_substr(auth()->user()->name, 0, 1) }}
+            </button>
+
+            <div
+                x-show="open"
+                x-transition:enter="transition ease-out duration-150"
+                x-transition:enter-start="opacity-0 scale-95 -translate-y-1"
+                x-transition:enter-end="opacity-100 scale-100 translate-y-0"
+                x-transition:leave="transition ease-in duration-100"
+                x-transition:leave-start="opacity-100 scale-100 translate-y-0"
+                x-transition:leave-end="opacity-0 scale-95 -translate-y-1"
+                @click.outside="open = false"
+                class="absolute right-0 mt-2 w-44 bg-white rounded-xl border border-dark/10 shadow-lg overflow-hidden z-50"
+                role="menu"
+                style="display: none"
+            >
+                <a
+                    href="{{ route('profile', ['id' => auth()->user()->id]) }}"
+                    @click="open = false"
+                    role="menuitem"
+                    class="flex items-center gap-2.5 px-4 py-3 text-sm text-dark hover:bg-dark/5 transition-colors duration-150 focus-visible:outline-none focus-visible:bg-dark/5"
+                >
+                    <x-icon name="user" class="w-4 h-4 text-dark/40" />
+                    {{ __('nav.view_profile') }}
+                </a>
+
+                <div class="border-t border-dark/8"></div>
+
+                <form method="POST" action="/logout">
+                    @csrf
+                    <button
+                        type="submit"
+                        role="menuitem"
+                        class="w-full flex items-center gap-2.5 px-4 py-3 text-sm text-danger/60 hover:text-danger hover:bg-danger/5 transition-colors duration-150 cursor-pointer focus-visible:outline-none focus-visible:bg-danger/5"
+                    >
+                        <x-icon name="arrow-right-on-rectangle" class="w-4 h-4 text-danger/40" />
+                        {{ __('nav.sign_out') }}
+                    </button>
+                </form>
+            </div>
+        </div>
     @else
         <x-cta href="{{ route('login') }}" variant="outline">{{ __('nav.sign_in') }}</x-cta>
         <x-cta href="{{ route('register') }}" variant="dark">{{ __('nav.sign_up') }}</x-cta>

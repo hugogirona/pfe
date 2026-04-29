@@ -6,7 +6,12 @@ use Livewire\Component;
 
 new #[Layout('layouts.auth')] #[Title('Se connecter — Giggr.')] class extends Component
 {
-    //
+    public function mount(): void
+    {
+        if (auth()->check()) {
+            $this->redirect(config('fortify.home'), navigate: true);
+        }
+    }
 };
 ?>
 
@@ -17,8 +22,14 @@ new #[Layout('layouts.auth')] #[Title('Se connecter — Giggr.')] class extends 
         <p class="text-sm text-dark/50">{{ __('auth.login_subtitle') }}</p>
     </div>
 
-    <form action="#" method="POST" novalidate aria-labelledby="login-heading" class="space-y-5">
+    <form action="/login" method="POST" novalidate aria-labelledby="login-heading" class="space-y-5">
         @csrf
+
+        @if ($errors->any())
+            <div class="rounded-[6px] bg-danger/5 border border-danger/50 px-4 py-3 text-sm text-danger/70">
+                {{ $errors->first() }}
+            </div>
+        @endif
 
         <x-form.input
             name="email"
@@ -27,6 +38,7 @@ new #[Layout('layouts.auth')] #[Title('Se connecter — Giggr.')] class extends 
             :required="true"
             autocomplete="email"
             :placeholder="__('auth.email_placeholder')"
+            :value="old('email')"
         />
 
         <x-form.password
