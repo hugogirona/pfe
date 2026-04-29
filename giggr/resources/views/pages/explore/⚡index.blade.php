@@ -45,7 +45,7 @@ new #[Layout('layouts.app')] #[Title('Explorer — Giggr.')] class extends Compo
 
     <div class="max-w-6xl mx-auto px-6 py-8 space-y-6">
 
-        <x-parts.explore.tab-switcher />
+        <x-parts.explore.actions />
 
         <section
             x-show="activeTab === 'musiciens'"

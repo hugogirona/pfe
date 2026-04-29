@@ -21,6 +21,8 @@
 
     <x-footer />
 
+    <livewire:modal />
+
     @livewireScripts
 </body>
 </html>

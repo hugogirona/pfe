@@ -34,6 +34,9 @@ return [
     'card_favorite'        => 'Ajouter :name aux favoris',
     'card_posted_on'       => 'Publié le :date',
 
+    // CTA
+    'publish_cta'       => 'Publier une annonce',
+
     // Announcement types
     'type_search'     => 'Recherche',
     'type_formation'  => 'Formation',
