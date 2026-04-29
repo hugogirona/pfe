@@ -34,6 +34,9 @@ return [
     'card_favorite'        => 'Add :name to favourites',
     'card_posted_on'       => 'Posted on :date',
 
+    // CTA
+    'publish_cta'       => 'Post a listing',
+
     // Announcement types
     'type_search'     => 'Looking for',
     'type_formation'  => 'Forming band',
