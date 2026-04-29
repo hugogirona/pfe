@@ -91,7 +91,7 @@ new class extends Component {
         <div class="grid grid-cols-2 gap-4">
             <div>
                 <x-form.select name="type" label="Type" wire:model="type" required>
-                    <option value="">Choisir…</option>
+                    <option disabled selected value="">Choisir…</option>
                     @foreach ($availableTypes as $t)
                         <option value="{{ $t }}">{{ $t }}</option>
                     @endforeach
