@@ -45,6 +45,12 @@ new class extends Component {
         $this->draftCity        = '';
         $this->draftInstruments = [];
         $this->draftGenres      = [];
+
+        $this->dispatch('filters-applied',
+            city:        '',
+            instruments: [],
+            genres:      [],
+        );
     }
 
     public function apply(): void
