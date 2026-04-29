@@ -48,6 +48,7 @@
             <option value="partnership">{{ __('contact.subject_partnership') }}</option>
             <option value="bug">{{ __('contact.subject_bug') }}</option>
             <option value="other">{{ __('contact.subject_other') }}</option>
+            {{-- TODO: ajouter l'option feature proposal --}}
         </x-form.select>
 
         <x-form.textarea
