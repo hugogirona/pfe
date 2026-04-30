@@ -24,7 +24,7 @@ class AnnouncementFactory extends Factory
 
         return [
             'user_id' => User::factory(),
-            'city_id' => City::factory(),
+            'city_id' => fn () => City::inRandomOrder()->value('id') ?? City::factory(),
             'title' => fake()->sentence(5),
             'description' => fake()->paragraph(),
             'type' => fake()->randomElement(AnnouncementType::cases()),
