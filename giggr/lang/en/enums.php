@@ -2,7 +2,7 @@
 
 return [
     'announcement_type' => [
-        'search' => 'Search', // ou 'Wanted' / 'Looking for' selon l'UI
+        'search' => 'Search',
         'formation' => 'Band Formation',
         'session' => 'Jam Session',
         'course' => 'Lessons',
