@@ -2,6 +2,8 @@
 
 namespace Tests\Feature\Models;
 
+use App\Models\Announcement;
+use App\Models\City;
 use App\Models\Genre;
 use App\Models\Profile;
 use App\Models\User;
@@ -39,4 +41,16 @@ it('belongs to many profiles', function () {
     $profiles->each(fn ($p) => $p->genres()->attach($genre));
 
     expect($genre->profiles)->toHaveCount(2);
+});
+
+it('belongs to many announcements', function () {
+    $genre         = Genre::factory()->create();
+    $announcements = collect([
+        Announcement::create(['user_id' => User::factory()->create()->id, 'city_id' => City::factory()->create()->id, 'title' => 'A', 'description' => 'B', 'type' => 'search']),
+        Announcement::create(['user_id' => User::factory()->create()->id, 'city_id' => City::factory()->create()->id, 'title' => 'C', 'description' => 'D', 'type' => 'session']),
+    ]);
+
+    $announcements->each(fn ($a) => $a->genres()->attach($genre));
+
+    expect($genre->announcements)->toHaveCount(2);
 });

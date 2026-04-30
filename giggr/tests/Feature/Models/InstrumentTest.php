@@ -2,6 +2,8 @@
 
 namespace Tests\Feature\Models;
 
+use App\Models\Announcement;
+use App\Models\City;
 use App\Models\Instrument;
 use App\Models\Profile;
 use App\Models\User;
@@ -39,4 +41,16 @@ it('belongs to many profiles', function () {
     $profiles->each(fn ($p) => $p->instruments()->attach($instrument));
 
     expect($instrument->profiles)->toHaveCount(2);
+});
+
+it('belongs to many announcements', function () {
+    $instrument    = Instrument::factory()->create();
+    $announcements = collect([
+        Announcement::create(['user_id' => User::factory()->create()->id, 'city_id' => City::factory()->create()->id, 'title' => 'A', 'description' => 'B', 'type' => 'search']),
+        Announcement::create(['user_id' => User::factory()->create()->id, 'city_id' => City::factory()->create()->id, 'title' => 'C', 'description' => 'D', 'type' => 'session']),
+    ]);
+
+    $announcements->each(fn ($a) => $a->instruments()->attach($instrument));
+
+    expect($instrument->announcements)->toHaveCount(2);
 });
