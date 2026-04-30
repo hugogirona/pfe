@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Models;
 
+use App\Enums\AnnouncementType;
 use App\Models\Announcement;
 use App\Models\City;
 use App\Models\Instrument;
@@ -46,8 +47,8 @@ it('belongs to many profiles', function () {
 it('belongs to many announcements', function () {
     $instrument = Instrument::factory()->create();
     $announcements = collect([
-        Announcement::create(['user_id' => User::factory()->create()->id, 'city_id' => City::factory()->create()->id, 'title' => 'A', 'description' => 'B', 'type' => 'search']),
-        Announcement::create(['user_id' => User::factory()->create()->id, 'city_id' => City::factory()->create()->id, 'title' => 'C', 'description' => 'D', 'type' => 'session']),
+        Announcement::create(['user_id' => User::factory()->create()->id, 'city_id' => City::factory()->create()->id, 'title' => 'A', 'description' => 'B', 'type' => AnnouncementType::Search]),
+        Announcement::create(['user_id' => User::factory()->create()->id, 'city_id' => City::factory()->create()->id, 'title' => 'C', 'description' => 'D', 'type' => AnnouncementType::Session]),
     ]);
 
     $announcements->each(fn ($a) => $a->instruments()->attach($instrument));

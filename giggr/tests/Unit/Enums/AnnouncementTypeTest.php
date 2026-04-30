@@ -4,13 +4,11 @@ use App\Enums\AnnouncementType;
 
 it('has all expected cases', function () {
     $values = array_column(AnnouncementType::cases(), 'value');
+    $expectedValues = ['search', 'formation', 'session', 'course', 'event'];
 
-    expect($values)
-        ->toContain('search')
-        ->toContain('formation')
-        ->toContain('session')
-        ->toContain('course')
-        ->toContain('event');
+    sort($values);
+    sort($expectedValues);
+    expect($values)->toBe($expectedValues);
 });
 
 it('provides a label method returning a translation key', function () {

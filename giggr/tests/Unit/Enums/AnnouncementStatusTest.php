@@ -4,11 +4,11 @@ use App\Enums\AnnouncementStatus;
 
 it('has all expected cases', function () {
     $values = array_column(AnnouncementStatus::cases(), 'value');
+    $expectedValues = ['open', 'closed', 'expired'];
 
-    expect($values)
-        ->toContain('open')
-        ->toContain('closed')
-        ->toContain('expired');
+    sort($values);
+    sort($expectedValues);
+    expect($values)->toBe($expectedValues);
 });
 
 it('provides a label method returning a translation key', function () {
