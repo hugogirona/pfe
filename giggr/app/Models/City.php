@@ -26,4 +26,9 @@ class City extends Model
     {
         return $this->hasMany(Profile::class);
     }
+
+    public function announcements(): HasMany
+    {
+        return $this->hasMany(Announcement::class);
+    }
 }

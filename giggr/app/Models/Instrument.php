@@ -18,4 +18,9 @@ class Instrument extends Model
     {
         return $this->belongsToMany(Profile::class);
     }
+
+    public function announcements(): BelongsToMany
+    {
+        return $this->belongsToMany(Announcement::class);
+    }
 }
