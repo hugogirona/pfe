@@ -14,6 +14,6 @@ it('has all expected cases', function () {
 });
 
 it('provides a label method returning a translation key', function () {
-    expect(ProfileStatus::LookingForBand->label())->toBe('enums.profile_status.looking_for_band');
-    expect(ProfileStatus::NotAvailable->label())->toBe('enums.profile_status.not_available');
+    expect(ProfileStatus::LookingForBand->label())->toBe('enums.profile_status.looking_for_band')
+        ->and(ProfileStatus::NotAvailable->label())->toBe('enums.profile_status.not_available');
 });
