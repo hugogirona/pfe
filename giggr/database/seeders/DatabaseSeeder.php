@@ -15,6 +15,7 @@ class DatabaseSeeder extends Seeder
             CitySeeder::class,
             InstrumentSeeder::class,
             GenreSeeder::class,
+            DemoDataSeeder::class,
         ]);
     }
 }
