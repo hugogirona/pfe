@@ -35,7 +35,7 @@ jobs:
 
     - name: Install NPM Dependencies & Build
       run: |
-        npm ci
+        install --include=optional
         npm run build
     
     - name: Generate key
