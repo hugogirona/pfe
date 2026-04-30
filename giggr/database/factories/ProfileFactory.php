@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Enums\ProfileStatus;
+use App\Models\City;
 use App\Models\Genre;
 use App\Models\Instrument;
 use App\Models\Profile;
@@ -19,11 +20,12 @@ class ProfileFactory extends Factory
     public function definition(): array
     {
         return [
-            'user_id'          => User::factory(),
-            'bio'              => fake()->paragraph(),
-            'birth_date'       => fake()->dateTimeBetween('-55 years', '-18 years')->format('Y-m-d'),
-            'avatar_path'      => null,
-            'status'           => fake()->randomElement(ProfileStatus::cases()),
+            'user_id' => User::factory(),
+            'city_id' => fn () => City::inRandomOrder()->value('id') ?? City::factory(),
+            'bio' => fake()->paragraph(),
+            'birth_date' => fake()->dateTimeBetween('-55 years', '-18 years')->format('Y-m-d'),
+            'avatar_path' => null,
+            'status' => fake()->randomElement(ProfileStatus::cases()),
             'experience_years' => fake()->numberBetween(0, 30),
         ];
     }
@@ -32,7 +34,7 @@ class ProfileFactory extends Factory
     {
         return $this->afterCreating(function (Profile $profile) {
             $instruments = Instrument::inRandomOrder()->limit(fake()->numberBetween(1, 3))->get();
-            $genres      = Genre::inRandomOrder()->limit(fake()->numberBetween(1, 3))->get();
+            $genres = Genre::inRandomOrder()->limit(fake()->numberBetween(1, 3))->get();
 
             if ($instruments->isNotEmpty()) {
                 $profile->instruments()->sync($instruments->pluck('id'));

@@ -7,6 +7,7 @@ use App\Models\City;
 use App\Models\Genre;
 use App\Models\Instrument;
 use App\Models\User;
+use Database\Seeders\CitySeeder;
 use Illuminate\Support\Carbon;
 
 it('can be created with required fields', function () {
@@ -122,4 +123,13 @@ it('exposes a working factory', function () {
 
     expect($announcement)->toBeInstanceOf(Announcement::class)
         ->and($announcement->title)->not->toBeEmpty();
+});
+
+it('factory picks a seeded city when cities exist', function () {
+    $this->seed(CitySeeder::class);
+
+    $cityIds = City::pluck('id');
+    $announcement = Announcement::factory()->create();
+
+    expect($cityIds->toArray())->toContain($announcement->city_id);
 });

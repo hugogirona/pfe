@@ -6,6 +6,7 @@ use App\Models\Genre;
 use App\Models\Instrument;
 use App\Models\Profile;
 use App\Models\User;
+use Database\Seeders\CitySeeder;
 
 it('can be created with a user', function () {
     $user = User::factory()->create();
@@ -113,4 +114,19 @@ it('exposes a working factory', function () {
 
     expect($profile)->toBeInstanceOf(Profile::class)
         ->and($profile->user_id)->not->toBeNull();
+});
+
+it('factory sets a city by default', function () {
+    $profile = Profile::factory()->create();
+
+    expect($profile->city_id)->not->toBeNull();
+});
+
+it('factory picks a seeded city when cities exist', function () {
+    $this->seed(CitySeeder::class);
+
+    $cityIds = City::pluck('id');
+    $profile = Profile::factory()->create();
+
+    expect($cityIds->toArray())->toContain($profile->city_id);
 });

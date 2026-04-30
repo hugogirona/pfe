@@ -10,7 +10,8 @@ it('starts every test with an empty users table', function () {
 
 it('does not leak data across tests', function () {
     DB::table('users')->insert([
-        'name' => 'Leaky',
+        'first_name' => 'Leaky',
+        'last_name' => 'User',
         'email' => 'leak@example.com',
         'password' => 'x',
         'created_at' => now(),
