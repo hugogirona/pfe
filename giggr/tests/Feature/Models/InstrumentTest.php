@@ -3,6 +3,7 @@
 namespace Tests\Feature\Models;
 
 use App\Models\Instrument;
+use App\Models\Profile;
 use Illuminate\Database\QueryException;
 
 it('can create an instrument with name and slug', function () {
@@ -25,4 +26,13 @@ it('exposes a working factory', function () {
 
     expect($instrument)->toBeInstanceOf(Instrument::class)
         ->and($instrument->slug)->not->toBeEmpty();
+});
+
+it('belongs to many profiles', function () {
+    $instrument = Instrument::factory()->create();
+    $profiles   = Profile::factory()->count(2)->create();
+
+    $profiles->each(fn ($p) => $p->instruments()->attach($instrument));
+
+    expect($instrument->profiles)->toHaveCount(2);
 });

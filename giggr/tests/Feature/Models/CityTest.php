@@ -3,6 +3,7 @@
 namespace Tests\Feature\Models;
 
 use App\Models\City;
+use App\Models\Profile;
 use Illuminate\Database\QueryException;
 
 it('can create a city with name, slug, country and coordinates', function () {
@@ -48,4 +49,11 @@ it('exposes a working factory', function () {
 
     expect($city)->toBeInstanceOf(City::class)
         ->and($city->slug)->not->toBeEmpty();
+});
+
+it('has many profiles', function () {
+    $city = City::factory()->create();
+    Profile::factory()->count(2)->create(['city_id' => $city->id]);
+
+    expect($city->profiles)->toHaveCount(2);
 });
