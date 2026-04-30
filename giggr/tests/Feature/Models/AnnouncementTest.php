@@ -7,17 +7,18 @@ use App\Models\City;
 use App\Models\Genre;
 use App\Models\Instrument;
 use App\Models\User;
+use Illuminate\Support\Carbon;
 
 it('can be created with required fields', function () {
     $user = User::factory()->create();
     $city = City::factory()->create();
 
     $announcement = Announcement::create([
-        'user_id'     => $user->id,
-        'city_id'     => $city->id,
-        'title'       => 'Recherche guitariste',
+        'user_id' => $user->id,
+        'city_id' => $city->id,
+        'title' => 'Recherche guitariste',
         'description' => 'On cherche un guitariste pour notre groupe.',
-        'type'        => AnnouncementType::Search,
+        'type' => AnnouncementType::Search,
     ]);
 
     expect($announcement->fresh())
@@ -46,10 +47,10 @@ it('casts status to AnnouncementStatus enum', function () {
 });
 
 it('casts expires_at to datetime', function () {
-    $date         = now()->addDays(14);
+    $date = now()->addDays(14);
     $announcement = Announcement::factory()->create(['expires_at' => $date]);
 
-    expect($announcement->fresh()->expires_at)->toBeInstanceOf(\Illuminate\Support\Carbon::class);
+    expect($announcement->fresh()->expires_at)->toBeInstanceOf(Carbon::class);
 });
 
 it('allows null expires_at', function () {
@@ -59,14 +60,14 @@ it('allows null expires_at', function () {
 });
 
 it('belongs to a user', function () {
-    $user         = User::factory()->create();
+    $user = User::factory()->create();
     $announcement = Announcement::factory()->create(['user_id' => $user->id]);
 
     expect($announcement->user->id)->toBe($user->id);
 });
 
 it('belongs to a city', function () {
-    $city         = City::factory()->create();
+    $city = City::factory()->create();
     $announcement = Announcement::factory()->create(['city_id' => $city->id]);
 
     expect($announcement->city->id)->toBe($city->id);
@@ -74,7 +75,7 @@ it('belongs to a city', function () {
 
 it('syncs instruments via pivot', function () {
     $announcement = Announcement::factory()->create();
-    $instruments  = Instrument::factory()->count(2)->create();
+    $instruments = Instrument::factory()->count(2)->create();
 
     $announcement->instruments()->sync($instruments->pluck('id'));
 
@@ -83,7 +84,7 @@ it('syncs instruments via pivot', function () {
 
 it('syncs genres via pivot', function () {
     $announcement = Announcement::factory()->create();
-    $genres       = Genre::factory()->count(2)->create();
+    $genres = Genre::factory()->count(2)->create();
 
     $announcement->genres()->sync($genres->pluck('id'));
 

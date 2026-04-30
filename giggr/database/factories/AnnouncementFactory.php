@@ -23,13 +23,13 @@ class AnnouncementFactory extends Factory
         $hasExpiry = fake()->boolean(50);
 
         return [
-            'user_id'     => User::factory(),
-            'city_id'     => City::factory(),
-            'title'       => fake()->sentence(5),
+            'user_id' => User::factory(),
+            'city_id' => City::factory(),
+            'title' => fake()->sentence(5),
             'description' => fake()->paragraph(),
-            'type'        => fake()->randomElement(AnnouncementType::cases()),
-            'status'      => AnnouncementStatus::Open,
-            'expires_at'  => $hasExpiry ? now()->addDays(fake()->numberBetween(7, 30)) : null,
+            'type' => fake()->randomElement(AnnouncementType::cases()),
+            'status' => AnnouncementStatus::Open,
+            'expires_at' => $hasExpiry ? now()->addDays(fake()->numberBetween(7, 30)) : null,
         ];
     }
 
@@ -37,7 +37,7 @@ class AnnouncementFactory extends Factory
     {
         return $this->afterCreating(function (Announcement $announcement) {
             $instruments = Instrument::inRandomOrder()->limit(fake()->numberBetween(1, 3))->get();
-            $genres      = Genre::inRandomOrder()->limit(fake()->numberBetween(1, 3))->get();
+            $genres = Genre::inRandomOrder()->limit(fake()->numberBetween(1, 3))->get();
 
             if ($instruments->isNotEmpty()) {
                 $announcement->instruments()->sync($instruments->pluck('id'));

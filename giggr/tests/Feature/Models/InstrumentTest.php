@@ -44,7 +44,7 @@ it('belongs to many profiles', function () {
 });
 
 it('belongs to many announcements', function () {
-    $instrument    = Instrument::factory()->create();
+    $instrument = Instrument::factory()->create();
     $announcements = collect([
         Announcement::create(['user_id' => User::factory()->create()->id, 'city_id' => City::factory()->create()->id, 'title' => 'A', 'description' => 'B', 'type' => 'search']),
         Announcement::create(['user_id' => User::factory()->create()->id, 'city_id' => City::factory()->create()->id, 'title' => 'C', 'description' => 'D', 'type' => 'session']),
