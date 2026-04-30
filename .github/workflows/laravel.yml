@@ -64,4 +64,4 @@ jobs:
       if: failure()
       with:
         name: Laravel Logs
-        path: storage/logs/
+        path: giggr/storage/logs/
