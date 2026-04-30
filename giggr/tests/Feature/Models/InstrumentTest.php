@@ -4,6 +4,7 @@ namespace Tests\Feature\Models;
 
 use App\Models\Instrument;
 use App\Models\Profile;
+use App\Models\User;
 use Illuminate\Database\QueryException;
 
 it('can create an instrument with name and slug', function () {
@@ -30,7 +31,10 @@ it('exposes a working factory', function () {
 
 it('belongs to many profiles', function () {
     $instrument = Instrument::factory()->create();
-    $profiles   = Profile::factory()->count(2)->create();
+    $profiles   = collect([
+        Profile::create(['user_id' => User::factory()->create()->id]),
+        Profile::create(['user_id' => User::factory()->create()->id]),
+    ]);
 
     $profiles->each(fn ($p) => $p->instruments()->attach($instrument));
 
