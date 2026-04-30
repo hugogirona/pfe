@@ -18,7 +18,7 @@ $badgeClass = $typeColors[$announcement['type']] ?? 'bg-dark/10 text-dark';
 >
     <article
         data-card="announcement"
-        class="group flex flex-col w-full rounded-xl overflow-hidden border border-dark/10 bg-white shadow-sm hover:shadow-md transition-shadow duration-200"
+        class="group flex flex-col w-full h-full rounded-xl overflow-hidden border border-dark/10 bg-white shadow-sm hover:shadow-md transition-shadow duration-200"
     >
         {{-- Header band --}}
         <div class="px-5 pt-5 pb-4 border-b border-dark/[0.07]">
@@ -38,7 +38,7 @@ $badgeClass = $typeColors[$announcement['type']] ?? 'bg-dark/10 text-dark';
             {{-- Tags --}}
             <div class="flex flex-wrap gap-1.5">
                 @foreach ($announcement['instruments'] as $instr)
-                    <span class="px-2.5 py-0.5 rounded-full bg-dark/[0.06] text-xs font-medium text-dark/60">{{ $instr }}</span>
+                    <span class="px-2.5 py-0.5 rounded-full bg-dark/6 text-xs font-medium text-dark/60">{{ $instr }}</span>
                 @endforeach
                 @foreach ($announcement['genres'] as $genre)
                     <span class="px-2.5 py-0.5 rounded-full bg-pastel-salmon text-xs font-medium text-dark/60">{{ $genre }}</span>

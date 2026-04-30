@@ -3,14 +3,15 @@
 namespace Tests\Feature\Models;
 
 use App\Models\City;
+use App\Models\Profile;
 use Illuminate\Database\QueryException;
 
 it('can create a city with name, slug, country and coordinates', function () {
     $city = City::create([
-        'name'      => 'Liège',
-        'slug'      => 'liege',
-        'country'   => 'BE',
-        'latitude'  => 50.6326,
+        'name' => 'Liège',
+        'slug' => 'liege',
+        'country' => 'BE',
+        'latitude' => 50.6326,
         'longitude' => 5.5797,
     ]);
 
@@ -37,7 +38,7 @@ it('allows null latitude and longitude', function () {
 });
 
 it('enforces a unique slug', function () {
-    City::create(['name' => 'Liège',  'slug' => 'liege']);
+    City::create(['name' => 'Liège', 'slug' => 'liege']);
 
     expect(fn () => City::create(['name' => 'Liege2', 'slug' => 'liege']))
         ->toThrow(QueryException::class);
@@ -48,4 +49,11 @@ it('exposes a working factory', function () {
 
     expect($city)->toBeInstanceOf(City::class)
         ->and($city->slug)->not->toBeEmpty();
+});
+
+it('has many profiles', function () {
+    $city = City::factory()->create();
+    Profile::factory()->count(2)->create(['city_id' => $city->id]);
+
+    expect($city->profiles)->toHaveCount(2);
 });

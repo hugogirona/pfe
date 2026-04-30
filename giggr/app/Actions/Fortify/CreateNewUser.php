@@ -2,16 +2,22 @@
 
 namespace App\Actions\Fortify;
 
+use App\Models\Profile;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Laravel\Fortify\Contracts\CreatesNewUsers;
+use Throwable;
 
 class CreateNewUser implements CreatesNewUsers
 {
     use PasswordValidationRules;
 
+    /**
+     * @throws Throwable
+     */
     public function create(array $input): User
     {
         Validator::make($input, [
@@ -23,10 +29,16 @@ class CreateNewUser implements CreatesNewUsers
             'email.unique' => __('auth.email_taken', ['url' => route('login')]),
         ])->validate();
 
-        return User::create([
-            'name'     => trim($input['first_name'].' '.$input['last_name']),
-            'email'    => $input['email'],
-            'password' => Hash::make($input['password']),
-        ]);
+        return DB::transaction(function () use ($input): User {
+            $user = User::create([
+                'name'     => trim($input['first_name'].' '.$input['last_name']),
+                'email'    => $input['email'],
+                'password' => Hash::make($input['password']),
+            ]);
+
+            Profile::create(['user_id' => $user->id]);
+
+            return $user;
+        });
     }
 }
