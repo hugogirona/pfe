@@ -16,7 +16,7 @@ class GenreSeeder extends Seeder
         ];
 
         foreach ($genres as $name) {
-            Genre::firstOrCreate(
+            Genre::updateOrCreate(
                 ['slug' => Str::slug($name)],
                 ['name' => $name],
             );

@@ -23,7 +23,7 @@ class CitySeeder extends Seeder
         ];
 
         foreach ($cities as $city) {
-            City::firstOrCreate(
+            City::updateOrCreate(
                 ['slug' => $city['slug']],
                 [
                     'name'      => $city['name'],

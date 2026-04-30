@@ -16,7 +16,7 @@ class InstrumentSeeder extends Seeder
         ];
 
         foreach ($instruments as $name) {
-            Instrument::firstOrCreate(
+            Instrument::updateOrCreate(
                 ['slug' => Str::slug($name)],
                 ['name' => $name],
             );
