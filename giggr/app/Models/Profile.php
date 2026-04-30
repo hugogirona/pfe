@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enums\ProfileStatus;
 use Database\Factories\ProfileFactory;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -53,8 +54,10 @@ class Profile extends Model
         return $this->belongsToMany(Genre::class);
     }
 
-    public function getAgeAttribute(): ?int
+    protected function age(): Attribute
     {
-        return $this->birth_date?->age;
+        return Attribute::make(
+            get: fn () => $this->birth_date?->age,
+        );
     }
 }
