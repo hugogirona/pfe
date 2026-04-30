@@ -30,7 +30,7 @@ it('exposes a working factory', function () {
 });
 
 it('belongs to many profiles', function () {
-    $genre    = Genre::factory()->create();
+    $genre = Genre::factory()->create();
     $profiles = collect([
         Profile::create(['user_id' => User::factory()->create()->id]),
         Profile::create(['user_id' => User::factory()->create()->id]),

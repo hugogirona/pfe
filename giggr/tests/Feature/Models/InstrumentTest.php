@@ -31,7 +31,7 @@ it('exposes a working factory', function () {
 
 it('belongs to many profiles', function () {
     $instrument = Instrument::factory()->create();
-    $profiles   = collect([
+    $profiles = collect([
         Profile::create(['user_id' => User::factory()->create()->id]),
         Profile::create(['user_id' => User::factory()->create()->id]),
     ]);

@@ -64,7 +64,7 @@ it('user has one profile', function () {
 it('computes age from birth_date', function () {
     $user = User::factory()->create();
     $profile = Profile::create([
-        'user_id'    => $user->id,
+        'user_id' => $user->id,
         'birth_date' => now()->subYears(25)->toDateString(),
     ]);
 

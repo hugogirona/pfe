@@ -8,10 +8,10 @@ use Illuminate\Database\QueryException;
 
 it('can create a city with name, slug, country and coordinates', function () {
     $city = City::create([
-        'name'      => 'Liège',
-        'slug'      => 'liege',
-        'country'   => 'BE',
-        'latitude'  => 50.6326,
+        'name' => 'Liège',
+        'slug' => 'liege',
+        'country' => 'BE',
+        'latitude' => 50.6326,
         'longitude' => 5.5797,
     ]);
 
@@ -38,7 +38,7 @@ it('allows null latitude and longitude', function () {
 });
 
 it('enforces a unique slug', function () {
-    City::create(['name' => 'Liège',  'slug' => 'liege']);
+    City::create(['name' => 'Liège', 'slug' => 'liege']);
 
     expect(fn () => City::create(['name' => 'Liege2', 'slug' => 'liege']))
         ->toThrow(QueryException::class);

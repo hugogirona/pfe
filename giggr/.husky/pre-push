@@ -1,0 +1,2 @@
+cd giggr
+./vendor/bin/pest
