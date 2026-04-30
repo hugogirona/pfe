@@ -114,3 +114,9 @@ it('exposes a working factory', function () {
     expect($profile)->toBeInstanceOf(Profile::class)
         ->and($profile->user_id)->not->toBeNull();
 });
+
+it('factory sets a city by default', function () {
+    $profile = Profile::factory()->create();
+
+    expect($profile->city_id)->not->toBeNull();
+});
