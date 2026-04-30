@@ -21,20 +21,25 @@ jobs:
           coverage: none
 
       - name: Copy .env
+        working-directory: giggr
         run: php -r "file_exists('.env') || copy('.env.example', '.env');"
 
       - name: Install Dependencies
+        working-directory: giggr
         run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
 
       - name: Generate key
+        working-directory: giggr
         run: php artisan key:generate
 
       - name: Create Database
+        working-directory: giggr
         run: |
           mkdir -p database
           touch database/database.sqlite
 
       - name: Execute tests via Pest
+        working-directory: giggr
         env:
           DB_CONNECTION: sqlite
           DB_DATABASE: database/database.sqlite
