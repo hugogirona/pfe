@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Models;
 
+use App\Models\Announcement;
 use App\Models\City;
 use App\Models\Profile;
 use Illuminate\Database\QueryException;
@@ -56,4 +57,11 @@ it('has many profiles', function () {
     Profile::factory()->count(2)->create(['city_id' => $city->id]);
 
     expect($city->profiles)->toHaveCount(2);
+});
+
+it('has many announcements', function () {
+    $city = City::factory()->create();
+    Announcement::factory()->count(3)->create(['city_id' => $city->id]);
+
+    expect($city->announcements)->toHaveCount(3);
 });

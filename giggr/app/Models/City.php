@@ -17,7 +17,7 @@ class City extends Model
     protected function casts(): array
     {
         return [
-            'latitude'  => 'float',
+            'latitude' => 'float',
             'longitude' => 'float',
         ];
     }
@@ -25,5 +25,10 @@ class City extends Model
     public function profiles(): HasMany
     {
         return $this->hasMany(Profile::class);
+    }
+
+    public function announcements(): HasMany
+    {
+        return $this->hasMany(Announcement::class);
     }
 }
