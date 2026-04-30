@@ -46,6 +46,6 @@ class UserFactory extends Factory
 
     public function withProfile(): static
     {
-        return $this->has(Profile::factory());
+        return $this->has(Profile::factory(), 'profile');
     }
 }

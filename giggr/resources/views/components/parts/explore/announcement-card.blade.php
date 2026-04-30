@@ -14,7 +14,7 @@ $badgeClass = $typeColors[$announcement['type']] ?? 'bg-dark/10 text-dark';
 <a
     href="{{ route('announcement', ['id' => $announcement['id']]) }}"
     wire:navigate
-    class="block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-xl "
+    class="block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-xl"
 >
     <article
         data-card="announcement"
