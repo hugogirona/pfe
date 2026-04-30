@@ -17,14 +17,36 @@ class FavoriteFactory extends Factory
 
     public function definition(): array
     {
-        $favoritable = fake()->boolean(50)
-            ? Profile::factory()->create()
-            : Announcement::factory()->create();
-
         return [
             'user_id' => User::factory(),
-            'favoritable_type' => $favoritable->getMorphClass(),
-            'favoritable_id' => $favoritable->id,
+            'favoritable_type' => null,
+            'favoritable_id' => null,
         ];
+    }
+
+    public function configure(): static
+    {
+        return $this
+            ->afterMaking(function (Favorite $favorite): void {
+                $favoritable = fake()->boolean(50)
+                    ? Profile::factory()->make()
+                    : Announcement::factory()->make();
+
+                $favorite->favoritable_type = $favoritable->getMorphClass();
+                $favorite->favoritable_id = $favoritable->getKey();
+                $favorite->setRelation('favoritable', $favoritable);
+            })
+            ->afterCreating(function (Favorite $favorite): void {
+                $favoritable = fake()->boolean(50)
+                    ? Profile::factory()->create()
+                    : Announcement::factory()->create();
+
+                $favorite->forceFill([
+                    'favoritable_type' => $favoritable->getMorphClass(),
+                    'favoritable_id' => $favoritable->getKey(),
+                ])->save();
+
+                $favorite->setRelation('favoritable', $favoritable);
+            });
     }
 }
