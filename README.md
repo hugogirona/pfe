@@ -62,11 +62,8 @@ php artisan migrate --seed
 ## Lancer le projet
 
 ```bash
-# Terminal 1 — serveur Laravel
-php artisan serve
-
-# Terminal 2 — compilation des assets
-npm run dev
+# Lancer le serveur et la compilation des assets
+composer run dev
 ```
 
 L'application est accessible sur `http://localhost:8000`.
