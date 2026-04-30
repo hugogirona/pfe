@@ -21,9 +21,7 @@
         {{ $slot }}
     </main>
 
-    @persist('footer')
-        <x-footer />
-    @endpersist
+    <x-footer />
 
     <livewire:modal />
 
