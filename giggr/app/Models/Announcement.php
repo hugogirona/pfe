@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Enums\AnnouncementStatus;
 use App\Enums\AnnouncementType;
 use Database\Factories\AnnouncementFactory;
+use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -30,8 +31,8 @@ class Announcement extends Model
     protected function casts(): array
     {
         return [
-            'type'       => AnnouncementType::class,
-            'status'     => AnnouncementStatus::class,
+            'type' => AnnouncementType::class,
+            'status' => AnnouncementStatus::class,
             'expires_at' => 'datetime',
         ];
     }
@@ -56,14 +57,16 @@ class Announcement extends Model
         return $this->belongsToMany(Genre::class);
     }
 
-    public function scopeOpen(Builder $query): Builder
+    #[Scope]
+    protected function open(Builder $query): void
     {
-        return $query->where('status', AnnouncementStatus::Open);
+        $query->where('status', AnnouncementStatus::Open);
     }
 
-    public function scopeActive(Builder $query): Builder
+    #[Scope]
+    protected function active(Builder $query): void
     {
-        return $query->open()->where(function (Builder $q) {
+        $query->open()->where(function (Builder $q) {
             $q->whereNull('expires_at')->orWhere('expires_at', '>', now());
         });
     }
