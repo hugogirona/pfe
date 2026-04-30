@@ -17,14 +17,10 @@ class DemoDataSeeder extends Seeder
             return;
         }
 
-        $this->call([CitySeeder::class, InstrumentSeeder::class, GenreSeeder::class]);
-
         $users = User::factory()->count(30)->withProfile()->create();
 
-        Announcement::factory()->count(50)->recycle($users)->create();
-
+        $announcements = Announcement::factory()->count(50)->recycle($users)->create();
         $profiles = Profile::whereIn('user_id', $users->pluck('id'))->get();
-        $announcements = Announcement::all();
         $favoritables = $profiles->map(fn ($p) => ['type' => $p->getMorphClass(), 'id' => $p->id])
             ->concat($announcements->map(fn ($a) => ['type' => $a->getMorphClass(), 'id' => $a->id])->all());
 
