@@ -1,4 +1,4 @@
-@props(['musician'])
+@props(['profile'])
 
 <div class="relative h-52 md:h-64 bg-dark overflow-hidden" aria-hidden="true">
 
@@ -19,8 +19,8 @@
     {{-- Name in banner --}}
     <div class="absolute bottom-6 left-0 right-0">
         <div class="max-w-6xl mx-auto px-6">
-            <p class="text-bg/40 text-xs font-medium uppercase tracking-widest mb-1">{{ $musician['city'] }}</p>
-            <h1 class="font-heading text-3xl md:text-4xl text-bg leading-tight">{{ $musician['name'] }}</h1>
+            <p class="text-bg/40 text-xs font-medium uppercase tracking-widest mb-1">{{ $profile->city?->name }}</p>
+            <h1 class="font-heading text-3xl md:text-4xl text-bg leading-tight">{{ $profile->user->full_name }}</h1>
         </div>
     </div>
 

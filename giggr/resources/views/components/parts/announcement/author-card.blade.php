@@ -1,5 +1,13 @@
 @props(['author'])
 
+@php
+    $name = $author->user->full_name;
+    $image = $author->avatar_path;
+    $cityName = $author->city?->name;
+    $instruments = $author->instruments->pluck('name');
+    $genres = $author->genres->pluck('name');
+@endphp
+
 <div class="bg-white rounded-2xl border border-dark/10 shadow-sm overflow-hidden">
 
     {{-- Header label --}}
@@ -12,43 +20,37 @@
     {{-- Identity --}}
     <div class="px-6 py-5 flex items-center gap-4 border-b border-dark/[0.07]">
         <div class="shrink-0 w-14 h-14 rounded-full overflow-hidden bg-pastel-blue ring-2 ring-bg shadow-sm">
-            @if (!empty($author['image']))
+            @if ($image)
                 <img
-                    src="{{ Vite::asset('resources/img/profiles/' . $author['image']) }}"
-                    alt="{{ __('profile.avatar_alt', ['name' => $author['name']]) }}"
+                    src="{{ Vite::asset('resources/img/profiles/' . $image) }}"
+                    alt="{{ __('profile.avatar_alt', ['name' => $name]) }}"
                     class="w-full h-full object-cover"
                 />
             @else
                 <div class="w-full h-full flex items-center justify-center">
-                    <span class="font-heading text-xl text-dark/30 select-none">
-                        {{ mb_substr($author['name'], 0, 1) }}
-                    </span>
+                    <span class="font-heading text-xl text-dark/30 select-none">{{ mb_substr($name, 0, 1) }}</span>
                 </div>
             @endif
         </div>
 
         <div class="min-w-0">
-            <p class="font-heading text-xl text-dark leading-tight truncate">{{ $author['name'] }}</p>
+            <p class="font-heading text-xl text-dark leading-tight truncate">{{ $name }}</p>
             <p class="text-sm text-dark/45 mt-0.5 flex items-center gap-1">
                 <x-icon name="map-pin" class="w-3 h-3 shrink-0" />
-                {{ $author['city'] }}
+                {{ $cityName }}
             </p>
         </div>
     </div>
 
-    {{-- Instrument tags --}}
-    @if (!empty($author['instruments']))
+    {{-- Instrument & genre tags --}}
+    @if ($instruments->isNotEmpty())
         <div class="px-6 py-4 border-b border-dark/[0.07]">
             <div class="flex flex-wrap gap-1.5">
-                @foreach ($author['instruments'] as $instr)
-                    <span class="px-2.5 py-1 rounded-full bg-pastel-salmon text-xs font-medium text-accent">
-                        {{ $instr }}
-                    </span>
+                @foreach ($instruments as $instr)
+                    <span class="px-2.5 py-1 rounded-full bg-pastel-salmon text-xs font-medium text-accent">{{ $instr }}</span>
                 @endforeach
-                @foreach ($author['genres'] ?? [] as $genre)
-                    <span class="px-2.5 py-1 rounded-full bg-dark/[0.06] text-xs font-medium text-dark/60">
-                        {{ $genre }}
-                    </span>
+                @foreach ($genres as $genre)
+                    <span class="px-2.5 py-1 rounded-full bg-dark/[0.06] text-xs font-medium text-dark/60">{{ $genre }}</span>
                 @endforeach
             </div>
         </div>
@@ -58,11 +60,11 @@
     <div class="px-6 py-5 space-y-2.5">
         <x-cta variant="accent" class="w-full gap-2">
             <x-icon name="chat-bubble" class="w-4 h-4" />
-            {{ __('announcement.author_contact', ['name' => $author['name']]) }}
+            {{ __('announcement.author_contact', ['name' => $name]) }}
         </x-cta>
 
         <a
-            href="{{ route('profile', ['id' => $author['id']]) }}"
+            href="{{ route('profile', ['id' => $author->id]) }}"
             class="group w-full flex items-center justify-center gap-1.5 py-2 text-sm font-medium text-dark/55 hover:text-dark transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-dark/20 rounded-lg"
         >
             {{ __('announcement.author_see_profile') }}
