@@ -14,7 +14,7 @@
     <main class="flex-1 flex flex-col items-center justify-center px-6 py-16 md:py-24">
         <div class="flex items-center justify-center" role="img" aria-label="404">
             <img
-                src="{{ Vite::asset('resources/img/404.svg') }}"
+                src="{{ asset('img/404.svg') }}"
                 alt=""
                 aria-hidden="true"
                 class="relative z-10 h-[28vw] md:h-[22vw] lg:h-[18vw] w-auto -mx-3 md:-mx-6"
