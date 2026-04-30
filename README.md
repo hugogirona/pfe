@@ -8,7 +8,7 @@ Plateforme web qui connecte les musiciens et artistes passionnés — trouver un
 
 - PHP 8.5+
 - Composer
-- Node.js 22+ et npm
+- Node.js 24+ et npm
 - MySQL 8.4+
 
 
