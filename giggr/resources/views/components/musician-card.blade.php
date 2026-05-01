@@ -10,7 +10,8 @@
 <div class="relative h-full">
     <a
         href="{{ $url }}"
-        wire:navigate
+        @guest x-data @click.prevent="$dispatch('open-auth-modal')" @endguest
+        @auth wire:navigate @endauth
         class="block h-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-xl"
     >
         <article
