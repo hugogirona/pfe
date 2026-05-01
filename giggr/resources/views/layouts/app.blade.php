@@ -24,6 +24,7 @@
     <x-footer />
 
     <livewire:modal />
+    <livewire:auth-modal />
 
     @livewireScripts
 </body>

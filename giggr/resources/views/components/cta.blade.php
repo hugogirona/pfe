@@ -13,8 +13,8 @@ $sizes = [
 
 $variants = [
     'outline' => 'text-dark border border-dark/30 hover:border-dark hover:bg-dark/5 transition-colors duration-150',
-    'dark'    => 'text-bg bg-dark hover:opacity-80 transition-opacity duration-150',
-    'accent'  => 'text-bg bg-accent hover:opacity-90 transition-opacity duration-150',
+    'dark'    => 'text-bg bg-dark border border-transparent hover:opacity-80 transition-opacity duration-150',
+    'accent'  => 'text-bg bg-accent border border-transparent hover:opacity-90 transition-opacity duration-150',
 ];
 
 $base = [
