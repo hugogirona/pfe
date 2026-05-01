@@ -49,3 +49,23 @@ it('explore hides expired announcements', function () {
         ->assertOk()
         ->assertDontSee($announcement->title);
 });
+
+it('explore paginates musicians and hides items beyond page one', function () {
+    $this->seed([CitySeeder::class, InstrumentSeeder::class, GenreSeeder::class]);
+    Profile::factory()->count(12)->create();
+    $thirteenth = Profile::factory()->create();
+
+    $this->get(route('explore'))
+        ->assertOk()
+        ->assertDontSee($thirteenth->user->full_name);
+});
+
+it('explore paginates announcements and hides items beyond page one', function () {
+    $this->seed([CitySeeder::class, InstrumentSeeder::class, GenreSeeder::class]);
+    Announcement::factory()->count(12)->create();
+    $thirteenth = Announcement::factory()->create();
+
+    $this->get(route('explore'))
+        ->assertOk()
+        ->assertDontSee($thirteenth->title);
+});
