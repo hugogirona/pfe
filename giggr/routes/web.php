@@ -10,6 +10,7 @@ Route::group([
 
     Route::livewire('/', 'pages::home.index')->name('home');
     Route::livewire('/explorer', 'pages::explore.index')->name('explore');
+    Route::livewire('/profil/setup', 'pages::profile.setup')->name('profile.setup')->middleware('auth');
     Route::livewire('/profil/{id}', 'pages::profile.index')->name('profile')->middleware('auth');
     Route::livewire('/annonces/{id}', 'pages::announcement.index')->name('announcement')->middleware('auth');
     Route::livewire('/contact', 'pages::contact.index')->name('contact');

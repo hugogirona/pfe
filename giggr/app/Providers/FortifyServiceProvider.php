@@ -9,11 +9,21 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
+use Laravel\Fortify\Contracts\RegisterResponse;
 use Laravel\Fortify\Fortify;
 
 class FortifyServiceProvider extends ServiceProvider
 {
-    public function register(): void {}
+    public function register(): void
+    {
+        $this->app->singleton(RegisterResponse::class, fn () => new class implements RegisterResponse
+        {
+            public function toResponse($request): mixed
+            {
+                return redirect()->route('profile.setup');
+            }
+        });
+    }
 
     public function boot(): void
     {
