@@ -3,16 +3,16 @@ document.addEventListener('alpine:init', () => {
         current:   0,
         count,
         pageCount: count,
-        _ro:       null,
+        _resizeObserver:       null,
 
         init() {
             this._sync();
-            this._ro = new ResizeObserver(() => this._sync());
-            this._ro.observe(this.$refs.track);
+            this._resizeObserver = new ResizeObserver(() => this._sync());
+            this._resizeObserver.observe(this.$refs.track);
         },
 
         destroy() {
-            this._ro?.disconnect();
+            this._resizeObserver?.disconnect();
         },
 
         _visible() {
