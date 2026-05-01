@@ -2,21 +2,24 @@
 
 use App\Models\Announcement;
 use App\Models\Profile;
-use Illuminate\Support\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\On;
 use Livewire\Attributes\Title;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 new #[Layout('layouts.app')] #[Title('Explorer — Giggr.')] class extends Component
 {
+    use WithPagination;
+
     public string $filterCity        = '';
     public array  $filterInstruments = [];
     public array  $filterGenres      = [];
 
     #[Computed]
-    public function filteredMusicians(): Collection
+    public function filteredMusicians(): LengthAwarePaginator
     {
         return Profile::query()
             ->with(['user', 'city', 'instruments', 'genres'])
@@ -29,11 +32,12 @@ new #[Layout('layouts.app')] #[Title('Explorer — Giggr.')] class extends Compo
             ->when($this->filterGenres, fn ($q) => $q->whereHas(
                 'genres', fn ($q2) => $q2->whereIn('name', $this->filterGenres)
             ))
-            ->get();
+            ->orderBy('profiles.id')
+            ->paginate(12, pageName: 'musicians-page');
     }
 
     #[Computed]
-    public function filteredAnnouncements(): Collection
+    public function filteredAnnouncements(): LengthAwarePaginator
     {
         return Announcement::query()
             ->with(['city', 'instruments', 'genres'])
@@ -47,7 +51,8 @@ new #[Layout('layouts.app')] #[Title('Explorer — Giggr.')] class extends Compo
             ->when($this->filterGenres, fn ($q) => $q->whereHas(
                 'genres', fn ($q2) => $q2->whereIn('name', $this->filterGenres)
             ))
-            ->get();
+            ->orderBy('announcements.id')
+            ->paginate(12, pageName: 'announcements-page');
     }
 
     #[Computed]
@@ -71,6 +76,8 @@ new #[Layout('layouts.app')] #[Title('Explorer — Giggr.')] class extends Compo
         $this->filterCity        = $city;
         $this->filterInstruments = $instruments;
         $this->filterGenres      = $genres;
+        $this->resetPage('musicians-page');
+        $this->resetPage('announcements-page');
     }
 };
 ?>
@@ -84,8 +91,8 @@ new #[Layout('layouts.app')] #[Title('Explorer — Giggr.')] class extends Compo
     <div class="max-w-6xl mx-auto px-6 py-8 space-y-6">
 
         <x-parts.explore.actions
-            :musicians-count="$this->filteredMusicians->count()"
-            :announcements-count="$this->filteredAnnouncements->count()"
+            :musicians-count="$this->filteredMusicians->total()"
+            :announcements-count="$this->filteredAnnouncements->total()"
             :active-filters-count="$this->activeFiltersCount"
         />
 
@@ -103,6 +110,10 @@ new #[Layout('layouts.app')] #[Title('Explorer — Giggr.')] class extends Compo
             </div>
             @if ($this->filteredMusicians->isEmpty())
                 <x-parts.explore.empty-state />
+            @else
+                <div class="mt-8">
+                    {{ $this->filteredMusicians->links() }}
+                </div>
             @endif
         </section>
 
@@ -121,6 +132,10 @@ new #[Layout('layouts.app')] #[Title('Explorer — Giggr.')] class extends Compo
             </div>
             @if ($this->filteredAnnouncements->isEmpty())
                 <x-parts.explore.empty-state />
+            @else
+                <div class="mt-8">
+                    {{ $this->filteredAnnouncements->links() }}
+                </div>
             @endif
         </section>
 
