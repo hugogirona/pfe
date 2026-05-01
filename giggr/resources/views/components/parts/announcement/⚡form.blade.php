@@ -13,9 +13,19 @@ new class extends Component {
     public string $description = '';
     public bool $success = false;
 
-    public array $availableInstruments = ['Guitare', 'Basse', 'Batterie', 'Clavier', 'Violon', 'Chant', 'Saxophone', 'Trompette', 'Percussions'];
-    public array $availableGenres = ['Rock', 'Jazz', 'Pop', 'Folk', 'Metal', 'Classique', 'Electronic', 'Soul', 'Indie', 'Blues', 'World', 'Funk'];
-    public array $availableTypes = ['Recherche', 'Formation', 'Événement', 'Session', 'Cours'];
+    public array $availableInstruments = [];
+    public array $availableGenres = [];
+    public array $availableTypes = [];
+
+    public function mount(?string $model_id = null): void
+    {
+        $this->model_id = $model_id;
+        $this->availableInstruments = \App\Models\Instrument::orderBy('name')->pluck('name')->toArray();
+        $this->availableGenres = \App\Models\Genre::orderBy('name')->pluck('name')->toArray();
+        $this->availableTypes = collect(\App\Enums\AnnouncementType::cases())
+            ->map(fn ($case) => ['value' => $case->value, 'label' => __($case->label())])
+            ->toArray();
+    }
 
     public function toggleInstrument(string $instrument): void
     {
@@ -92,8 +102,8 @@ new class extends Component {
             <div>
                 <x-form.select name="type" label="Type" wire:model="type" required>
                     <option disabled selected value="">Choisir…</option>
-                    @foreach ($availableTypes as $t)
-                        <option value="{{ $t }}">{{ $t }}</option>
+                    @foreach ($availableTypes as $typeOption)
+                        <option value="{{ $typeOption['value'] }}">{{ $typeOption['label'] }}</option>
                     @endforeach
                 </x-form.select>
                 @error('type')

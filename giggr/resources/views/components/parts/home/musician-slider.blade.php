@@ -1,17 +1,12 @@
 @php
-$profiles = [
-    ['name' => 'Valentine', 'age' => 26, 'city' => 'Liège, Belgique',    'bio' => 'Cherche groupe de rock pour projet sérieux. 8 ans d\'expérience, disponible les weekends.',                              'image' => 'valentine.webp', 'url' => '#'],
-    ['name' => 'Thomas',    'age' => 30, 'city' => 'Namur, Belgique',    'bio' => 'Batteur jazz & funk depuis 12 ans. Disponible en soirée et les weekends pour projets studio ou scène.',              'image' => 'thomas.webp',    'url' => '#'],
-    ['name' => 'Sarah',     'age' => 22, 'city' => 'Liège, Belgique',    'bio' => 'Pianiste classique reconvertie jazz. Je cherche des musiciens motivés pour des jams régulières.',                    'image' => 'sarah.webp',     'url' => '#'],
-    ['name' => 'Maxime',    'age' => 28, 'city' => 'Bruxelles, Belgique','bio' => 'Bassiste funk & soul, 10 ans de scène. Cherche groupe pour concerts et enregistrements studio.',                    'image' => 'maxime.webp',    'url' => '#'],
-    ['name' => 'Lucie',     'age' => 24, 'city' => 'Gand, Belgique',     'bio' => 'Chanteuse pop-indie à la recherche d\'un groupe créatif. Compositrice, ouverte à tous styles.',                     'image' => 'lucie.webp',     'url' => '#'],
-    ['name' => 'Antoine',   'age' => 32, 'city' => 'Liège, Belgique',    'bio' => 'Saxophoniste depuis 15 ans, jazz et improvisation. Dispo pour projets live et jam sessions.',                        'image' => 'antoine.webp',   'url' => '#'],
-    ['name' => 'Inès',      'age' => 25, 'city' => 'Namur, Belgique',    'bio' => 'Violoniste classique qui explore le folk et le post-rock. Cherche musiciens pour projets originaux.',               'image' => 'ines.webp',      'url' => '#'],
-];
+$profiles = \App\Models\Profile::with(['user', 'city', 'instruments', 'genres'])
+    ->inRandomOrder()
+    ->limit(7)
+    ->get();
 
 $cloneCount  = 3;
-$prepended   = array_slice($profiles, -$cloneCount);
-$appended    = array_slice($profiles,  0, $cloneCount);
+$prepended   = $profiles->slice(-$cloneCount);
+$appended    = $profiles->slice(0, $cloneCount);
 $cardClass   = 'snap-center shrink-0 flex flex-col min-w-[250px] w-[85%] sm:w-[calc(50%-12px)] md:w-[calc(33.333%-16px)]';
 @endphp
 
@@ -46,21 +41,21 @@ $cardClass   = 'snap-center shrink-0 flex flex-col min-w-[250px] w-[85%] sm:w-[c
                 {{-- Clones gauche (dernières 3 cards) --}}
                 @foreach ($prepended as $profile)
                     <div class="{{ $cardClass }}" aria-hidden="true">
-                        <x-musician-card :musician="$profile" />
+                        <x-musician-card :profile="$profile" />
                     </div>
                 @endforeach
 
                 {{-- Cards réelles --}}
                 @foreach ($profiles as $profile)
                     <div class="{{ $cardClass }}">
-                        <x-musician-card :musician="$profile" />
+                        <x-musician-card :profile="$profile" />
                     </div>
                 @endforeach
 
                 {{-- Clones droite (premières 3 cards) --}}
                 @foreach ($appended as $profile)
                     <div class="{{ $cardClass }}" aria-hidden="true">
-                        <x-musician-card :musician="$profile" />
+                        <x-musician-card :profile="$profile" />
                     </div>
                 @endforeach
             </div>

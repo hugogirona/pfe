@@ -9,8 +9,14 @@ new class extends Component {
     public array  $draftInstruments = [];
     public array  $draftGenres      = [];
 
-    public array $availableInstruments = ['Guitare', 'Basse', 'Batterie', 'Clavier', 'Violon', 'Chant', 'Saxophone', 'Trompette', 'Percussions'];
-    public array $availableGenres      = ['Rock', 'Jazz', 'Pop', 'Folk', 'Metal', 'Classique', 'Electronic', 'Soul', 'Indie', 'Blues', 'World', 'Funk'];
+    public array $availableInstruments = [];
+    public array $availableGenres      = [];
+
+    public function mount(): void
+    {
+        $this->availableInstruments = \App\Models\Instrument::orderBy('name')->pluck('name')->toArray();
+        $this->availableGenres      = \App\Models\Genre::orderBy('name')->pluck('name')->toArray();
+    }
 
     #[On('open-filter-drawer')]
     public function open(string $city = '', array $instruments = [], array $genres = []): void

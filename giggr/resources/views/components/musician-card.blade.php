@@ -1,9 +1,10 @@
-@props(['musician'])
+@props(['profile'])
 
 @php
-    $instruments = $musician['instruments'] ?? [];
-    $genres      = $musician['genres']      ?? [];
-    $url         = $musician['url']         ?? route('profile', ['id' => $musician['id']]);
+    $name        = $profile->user->full_name;
+    $instruments = $profile->instruments->pluck('name');
+    $genres      = $profile->genres->pluck('name');
+    $url         = route('profile', ['id' => $profile->id]);
 @endphp
 
 <div class="relative h-full">
@@ -17,17 +18,17 @@
             class="group flex flex-col w-full h-full rounded-xl overflow-hidden border border-dark/10 bg-white shadow-sm hover:shadow-md transition-shadow duration-200"
         >
             <div class="relative h-52 shrink-0 bg-dark/5">
-                @if (!empty($musician['image']))
+                @if ($profile->avatar_path)
                     <img
-                        src="{{ Vite::asset('resources/img/profiles/' . $musician['image']) }}"
-                        alt="Photo de {{ $musician['name'] }}"
+                        src="{{ Vite::asset('resources/img/profiles/' . $profile->avatar_path) }}"
+                        alt="Photo de {{ $name }}"
                         class="absolute inset-0 w-full h-full object-cover object-center"
                         loading="lazy"
                     />
                 @else
                     <div class="absolute inset-0 flex items-center justify-center bg-pastel-taupe">
                         <span class="font-heading text-4xl text-dark/30 select-none">
-                            {{ mb_substr($musician['name'], 0, 1) }}
+                            {{ mb_substr($name, 0, 1) }}
                         </span>
                     </div>
                 @endif
@@ -36,13 +37,13 @@
             {{-- Content --}}
             <div class="flex-1 px-5 py-4 space-y-3">
                 <div>
-                    <h3 class="font-heading text-xl text-dark">{{ $musician['name'] }}</h3>
+                    <h3 class="font-heading text-xl text-dark">{{ $name }}</h3>
                     <p class="text-sm text-dark/40 mt-0.5">
-                        {{ __('explore.card_years', ['n' => $musician['age']]) }} · {{ $musician['city'] }}
+                        {{ __('explore.card_years', ['n' => $profile->age]) }} · {{ $profile->city?->name }}
                     </p>
                 </div>
 
-                @if ($instruments || $genres)
+                @if ($instruments->isNotEmpty() || $genres->isNotEmpty())
                     <div class="flex flex-wrap gap-1.5">
                         @foreach ($instruments as $instr)
                             <span class="px-2.5 py-0.5 rounded-full bg-dark/[0.06] text-xs font-medium text-dark/60">{{ $instr }}</span>
@@ -53,7 +54,7 @@
                     </div>
                 @endif
 
-                <p class="text-sm text-dark/55 leading-relaxed line-clamp-2">{{ $musician['bio'] }}</p>
+                <p class="text-sm text-dark/55 leading-relaxed line-clamp-2">{{ $profile->bio }}</p>
             </div>
 
             {{-- CTA --}}
@@ -71,7 +72,7 @@
     <button
         type="button"
         class="absolute top-3 right-3 z-10 w-10 h-10 flex items-center justify-center rounded-full bg-white/75 backdrop-blur-sm text-dark/40 hover:text-accent hover:bg-white/90 transition-colors duration-200 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
-        aria-label="{{ __('explore.card_favorite', ['name' => $musician['name']]) }}"
+        aria-label="{{ __('explore.card_favorite', ['name' => $name]) }}"
     >
         <x-icon name="heart" class="w-5 h-5" />
     </button>

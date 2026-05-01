@@ -1,14 +1,10 @@
 @props(['announcement'])
 
 @php
-$typeColors = [
-    'Recherche'  => 'bg-accent text-bg',
-    'Formation'  => 'bg-dark text-bg',
-    'Session'    => 'bg-pastel-blue text-dark',
-    'Cours'      => 'bg-pastel-salmon text-dark',
-    'Événement'  => 'bg-pastel-taupe text-dark',
-];
-$badgeClass = $typeColors[$announcement['type']] ?? 'bg-dark/10 text-dark';
+    $badgeClass = $announcement->type->color();
+    $label = __($announcement->type->label());
+    $cityName = $announcement->city?->name;
+    $date = $announcement->created_at->format('d/m/Y');
 @endphp
 
 <div class="relative bg-dark overflow-hidden" aria-hidden="false">
@@ -37,21 +33,21 @@ $badgeClass = $typeColors[$announcement['type']] ?? 'bg-dark/10 text-dark';
         {{-- Type badge + meta --}}
         <div class="flex flex-wrap items-center gap-3 mb-4">
             <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wide {{ $badgeClass }}">
-                {{ $announcement['type'] }}
+                {{ $label }}
             </span>
             <span class="flex items-center gap-1.5 text-sm text-bg/50">
                 <x-icon name="map-pin" class="w-3.5 h-3.5" />
-                {{ $announcement['city'] }}
+                {{ $cityName }}
             </span>
             <span class="flex items-center gap-1.5 text-sm text-bg/50">
                 <x-icon name="calendar" class="w-3.5 h-3.5" />
-                {{ __('announcement.posted_on', ['date' => $announcement['date']]) }}
+                {{ __('announcement.posted_on', ['date' => $date]) }}
             </span>
         </div>
 
         {{-- Title --}}
         <h1 class="font-heading text-3xl md:text-5xl text-bg leading-tight max-w-3xl">
-            {{ $announcement['title'] }}
+            {{ $announcement->title }}
         </h1>
 
     </div>
