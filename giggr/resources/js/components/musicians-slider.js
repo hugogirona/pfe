@@ -1,78 +1,50 @@
-const SMOOTH_MS = 350; // matches CSS smooth-scroll settle time
-const CLONE_MS  = 200; // debounce before teleporting out of clone zone
-
 document.addEventListener('alpine:init', () => {
-    window.Alpine.data('musiciansSlider', (real, clones) => ({
-        current: 0,
-        real,
-        clones,
-        teleporting: false,
-        _timer: null,
-        _items: null,
+    window.Alpine.data('musiciansSlider', (count) => ({
+        current:   0,
+        count,
+        pageCount: count,
+        _resizeObserver:       null,
 
         init() {
-            const track  = this.$refs.track;
-            this._items  = Array.from(track.children);
-            const first  = track.children[this.clones];
-            track.scrollLeft = first.offsetLeft - (track.offsetWidth - first.offsetWidth) / 2;
+            this._sync();
+            this._resizeObserver = new ResizeObserver(() => this._sync());
+            this._resizeObserver.observe(this.$refs.track);
         },
 
-        domIdx(r)       { return r + this.clones; },
-        isClone(domIdx) { return domIdx < this.clones || domIdx >= this.clones + this.real; },
+        destroy() {
+            this._resizeObserver?.disconnect();
+        },
 
-        centerLeft(idx) {
+        _visible() {
             const track = this.$refs.track;
-            const item  = track.children[idx];
-            return item.offsetLeft - (track.offsetWidth - item.offsetWidth) / 2;
+            if (!track.children.length) return 1;
+            const gap = parseFloat(getComputedStyle(track).columnGap) || 24;
+            return Math.max(1, Math.round((track.offsetWidth + gap) / (track.children[0].offsetWidth + gap)));
         },
 
-        go(idx, smooth = true) {
-            const track = this.$refs.track;
-            const left  = this.centerLeft(idx);
-            if (smooth) {
-                track.scrollTo({ left, behavior: 'smooth' });
-            } else {
-                this.teleporting = true;
-                track.style.scrollSnapType = 'none';
-                track.classList.remove('scroll-smooth');
-                track.scrollLeft = left;
-                void track.getBoundingClientRect(); // force reflow so scroll-snap re-enables from the new position
-                requestAnimationFrame(() => {
-                    track.style.scrollSnapType = '';
-                    track.classList.add('scroll-smooth');
-                    this.teleporting = false;
-                });
-            }
+        _sync() {
+            this.pageCount = Math.max(1, this.count - this._visible() + 1);
+            if (this.current >= this.pageCount) this.current = this.pageCount - 1;
         },
 
-        navigate(dir) {
-            const idx = this.domIdx(this.current) + dir;
-            this.go(idx);
-            this.current = (this.current + dir + this.real) % this.real;
-            if (this.isClone(idx)) {
-                setTimeout(() => this.go(this.domIdx(this.current), false), SMOOTH_MS);
-            }
+        go(idx) {
+            this.current = Math.max(0, Math.min(idx, this.pageCount - 1));
+            const item = this.$refs.track.children[this.current];
+            this.$refs.track.scrollTo({ left: item.offsetLeft, behavior: 'smooth' });
         },
 
-        next()      { this.navigate(1); },
-        prev()      { this.navigate(-1); },
-        goToReal(r) { this.current = r; this.go(this.domIdx(r)); },
+        prev() { this.go((this.current - 1 + this.pageCount) % this.pageCount); },
+        next() { this.go((this.current + 1) % this.pageCount); },
+        goTo(i) { this.go(i); },
 
         onScroll() {
-            if (this.teleporting) return;
-            const track      = this.$refs.track;
-            const viewCenter = track.scrollLeft + track.offsetWidth / 2;
+            const track = this.$refs.track;
             let closest = 0, minDist = Infinity;
-            this._items.forEach((item, i) => {
-                const d = Math.abs(item.offsetLeft + item.offsetWidth / 2 - viewCenter);
+            Array.from(track.children).forEach((item, i) => {
+                const d = Math.abs(item.offsetLeft - track.scrollLeft);
                 if (d < minDist) { minDist = d; closest = i; }
             });
-            this.current = ((closest - this.clones) % this.real + this.real) % this.real;
-
-            clearTimeout(this._timer);
-            if (this.isClone(closest)) {
-                this._timer = setTimeout(() => this.go(this.domIdx(this.current), false), CLONE_MS);
-            }
+            this.current = Math.min(closest, this.pageCount - 1);
         },
     }));
 });

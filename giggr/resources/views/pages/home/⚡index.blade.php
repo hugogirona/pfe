@@ -39,6 +39,6 @@ new #[Layout('layouts.app')] #[Title('Accueil')] class extends Component
         bg="bg-pastel-blue"
     />
     
-    <x-parts.home.musician-slider />
+    <livewire:parts.home.musician-slider />
 
 </div>
