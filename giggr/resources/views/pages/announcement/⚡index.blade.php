@@ -55,7 +55,7 @@ new #[Layout('layouts.app')] #[Title('Annonce — Giggr.')] class extends Compon
 
             {{-- Sidebar --}}
             <aside class="w-full lg:w-72 shrink-0 lg:sticky lg:top-24 order-1 lg:order-2">
-                <x-parts.announcement.author-card :author="$announcement->user->profile" />
+                <x-parts.announcement.author-card :author="$announcement->user->profile" :name="$announcement->user->full_name" />
             </aside>
 
         </div>

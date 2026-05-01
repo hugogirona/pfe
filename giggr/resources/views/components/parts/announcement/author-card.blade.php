@@ -1,7 +1,6 @@
-@props(['author'])
+@props(['author', 'name'])
 
 @php
-    $name = $author->user->full_name;
     $image = $author->avatar_path;
     $cityName = $author->city?->name;
     $instruments = $author->instruments->pluck('name');
