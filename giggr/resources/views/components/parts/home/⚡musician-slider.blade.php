@@ -1,13 +1,23 @@
-@php
-$profiles = \App\Models\Profile::with(['user', 'city', 'instruments', 'genres'])
-    ->inRandomOrder()
-    ->limit(7)
-    ->get();
+<?php
 
-$cloneCount  = 3;
-$prepended   = $profiles->slice(-$cloneCount);
-$appended    = $profiles->slice(0, $cloneCount);
-$cardClass   = 'snap-center shrink-0 flex flex-col min-w-[250px] w-[85%] sm:w-[calc(50%-12px)] md:w-[calc(33.333%-16px)]';
+use App\Models\Profile;
+use Livewire\Component;
+
+new class extends Component {
+    public $profiles;
+
+    public function mount(): void
+    {
+        $this->profiles = Profile::with(['user', 'city', 'instruments', 'genres'])
+            ->inRandomOrder()
+            ->limit(7)
+            ->get();
+    }
+};
+?>
+
+@php
+    $cardClass = 'snap-start shrink-0 flex flex-col min-w-[250px] w-[85%] sm:w-[calc(50%-12px)] md:w-[calc(33.333%-16px)]';
 @endphp
 
 <section class="py-16 md:py-20 bg-pastel-salmon">
@@ -20,7 +30,7 @@ $cardClass   = 'snap-center shrink-0 flex flex-col min-w-[250px] w-[85%] sm:w-[c
 
         <div
             class="relative"
-            x-data="musiciansSlider({{ count($profiles) }}, {{ $cloneCount }})"
+            x-data="musiciansSlider({{ $profiles->count() }})"
         >
             <button
                 @click="prev()"
@@ -32,35 +42,18 @@ $cardClass   = 'snap-center shrink-0 flex flex-col min-w-[250px] w-[85%] sm:w-[c
                 </svg>
             </button>
 
-            {{-- Track --}}
             <div
                 x-ref="track"
                 @scroll.passive="onScroll()"
                 class="flex gap-6 overflow-x-auto snap-x snap-mandatory scroll-smooth scrollbar-none overscroll-x-contain pb-2"
             >
-                {{-- Clones gauche (dernières 3 cards) --}}
-                @foreach ($prepended as $profile)
-                    <div class="{{ $cardClass }}" aria-hidden="true">
-                        <x-musician-card :profile="$profile" />
-                    </div>
-                @endforeach
-
-                {{-- Cards réelles --}}
                 @foreach ($profiles as $profile)
                     <div class="{{ $cardClass }}">
                         <x-musician-card :profile="$profile" />
                     </div>
                 @endforeach
-
-                {{-- Clones droite (premières 3 cards) --}}
-                @foreach ($appended as $profile)
-                    <div class="{{ $cardClass }}" aria-hidden="true">
-                        <x-musician-card :profile="$profile" />
-                    </div>
-                @endforeach
             </div>
 
-            {{-- Flèche droite --}}
             <button
                 @click="next()"
                 class="hidden md:flex absolute -right-5 top-[calc(50%-2rem)] -translate-y-1/2 z-10 w-11 h-11 items-center justify-center rounded-full bg-bg border border-dark/15 shadow-sm text-dark hover:bg-dark hover:text-bg transition-colors duration-200 cursor-pointer"
@@ -71,11 +64,10 @@ $cardClass   = 'snap-center shrink-0 flex flex-col min-w-[250px] w-[85%] sm:w-[c
                 </svg>
             </button>
 
-            {{-- Dots --}}
             <div class="flex justify-center items-center gap-2 mt-8" role="tablist" aria-label="{{ __('home.carousel_aria') }}">
-                <template x-for="i in real" :key="i">
+                <template x-for="i in pageCount" :key="i">
                     <button
-                        @click="goToReal(i - 1)"
+                        @click="goTo(i - 1)"
                         :aria-label="`{{ __('home.carousel_goto') }}${i}`"
                         :aria-selected="current === i - 1"
                         class="h-2 rounded-full transition-all duration-300 cursor-pointer motion-reduce:transition-none"
