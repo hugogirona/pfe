@@ -1,9 +1,9 @@
 @props(['profile'])
 
-<div class="relative h-52 md:h-64 bg-dark overflow-hidden" aria-hidden="true">
+<div class="relative h-52 md:h-64 bg-dark overflow-hidden">
 
     {{-- grid bg --}}
-    <div class="absolute inset-0 opacity-[0.04]"
+    <div class="absolute inset-0 opacity-[0.04]" aria-hidden="true"
          style="background-image: repeating-linear-gradient(0deg, currentColor, currentColor 1px, transparent 1px, transparent 40px), repeating-linear-gradient(90deg, currentColor, currentColor 1px, transparent 1px, transparent 40px); color: white;"></div>
 
     {{-- Back link --}}

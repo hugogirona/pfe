@@ -28,10 +28,10 @@
             {{-- Tags --}}
             <div class="flex flex-wrap gap-1.5">
                 @foreach ($announcement->instruments as $instrument)
-                    <span class="px-2.5 py-0.5 rounded-full bg-dark/6 text-xs font-medium text-dark/60">{{ $instrument->name }}</span>
+                    <x-pill variant="instrument">{{ $instrument->name }}</x-pill>
                 @endforeach
                 @foreach ($announcement->genres as $genre)
-                    <span class="px-2.5 py-0.5 rounded-full bg-pastel-salmon text-xs font-medium text-dark/60">{{ $genre->name }}</span>
+                    <x-pill variant="genre">{{ $genre->name }}</x-pill>
                 @endforeach
             </div>
         </div>

@@ -6,7 +6,7 @@
             class="text-dark/50 hover:text-accent transition-colors duration-150 p-2 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent rounded-[6px] flex items-center justify-center"
             aria-label="{{ __('nav.aria_messaging') }}"
         >
-            <x-icon name="chat-bubble" class="w-6 h-6" />
+            <x-icon name="chat-bubble" class="w-8 h-8" />
         </button>
 
         {{-- Profile dropdown --}}
@@ -20,7 +20,7 @@
                 aria-label="{{ __('nav.aria_user_menu') }}"
                 class="w-8 h-8 rounded-full bg-dark/60 text-bg flex items-center justify-center text-sm font-semibold uppercase cursor-pointer hover:opacity-90 transition-opacity duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
             >
-                {{ mb_substr(auth()->user()->name, 0, 1) }}
+                {{ mb_substr(auth()->user()->full_name, 0, 1) }}
             </button>
 
             <div
@@ -64,6 +64,5 @@
         </div>
     @else
         <x-cta href="{{ route('login') }}" wire:navigate variant="dark">{{ __('nav.sign_in') }}</x-cta>
-        <x-cta href="{{ route('register') }}" wire:navigate variant="outline">{{ __('nav.sign_up') }}</x-cta>
     @endauth
 </div>

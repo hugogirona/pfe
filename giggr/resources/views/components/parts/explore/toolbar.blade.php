@@ -16,7 +16,7 @@
         type="button"
         class="inline-flex items-center gap-2 h-10 px-4 rounded-xl bg-dark text-bg text-sm font-medium hover:opacity-80 transition-opacity duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
     >
-        <x-icon name="plus-circle" class="w-6 h-6" />
+        <x-icon name="plus" class="w-4 h-4" />
         {{ __('explore.publish_cta') }}
     </button>
 

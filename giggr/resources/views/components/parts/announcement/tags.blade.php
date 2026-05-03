@@ -22,9 +22,7 @@
                     </p>
                     <div class="flex flex-wrap gap-2">
                         @foreach ($instruments as $instr)
-                            <span class="px-3 py-1.5 rounded-full bg-pastel-salmon text-sm font-medium text-accent">
-                                {{ $instr }}
-                            </span>
+                            <x-pill variant="instrument" size="lg">{{ $instr }}</x-pill>
                         @endforeach
                     </div>
                 </div>
@@ -35,9 +33,7 @@
                     <p class="text-[11px] font-semibold uppercase tracking-widest text-dark/35 mb-2.5">Genres</p>
                     <div class="flex flex-wrap gap-2">
                         @foreach ($genres as $genre)
-                            <span class="px-3 py-1.5 rounded-full bg-dark/[0.06] text-sm font-medium text-dark/60">
-                                {{ $genre }}
-                            </span>
+                            <x-pill variant="genre" size="lg">{{ $genre }}</x-pill>
                         @endforeach
                     </div>
                 </div>

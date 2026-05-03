@@ -47,10 +47,10 @@
                 @if ($instruments->isNotEmpty() || $genres->isNotEmpty())
                     <div class="flex flex-wrap gap-1.5">
                         @foreach ($instruments as $instr)
-                            <span class="px-2.5 py-0.5 rounded-full bg-dark/[0.06] text-xs font-medium text-dark/60">{{ $instr }}</span>
+                            <x-pill variant="instrument">{{ $instr }}</x-pill>
                         @endforeach
                         @foreach ($genres as $genre)
-                            <span class="px-2.5 py-0.5 rounded-full bg-pastel-salmon text-xs font-medium text-dark/60">{{ $genre }}</span>
+                            <x-pill variant="genre">{{ $genre }}</x-pill>
                         @endforeach
                     </div>
                 @endif

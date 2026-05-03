@@ -32,7 +32,7 @@ class FortifyServiceProvider extends ServiceProvider
 
                 app()->setLocale($locale);
 
-                return redirect()->route('profile.setup');
+                return redirect()->route('profile', ['id' => auth()->user()->profile->id]);
             }
         });
     }

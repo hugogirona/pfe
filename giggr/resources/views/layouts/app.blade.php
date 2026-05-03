@@ -13,19 +13,17 @@
 </head>
 <body class="bg-bg text-dark font-sans antialiased flex flex-col min-h-screen">
 
-    @persist('header')
-        <x-header />
-    @endpersist
+<x-header/>
 
-    <main class="flex-1">
-        {{ $slot }}
-    </main>
+<main class="flex-1">
+    {{ $slot }}
+</main>
 
-    <x-footer />
+<x-footer/>
 
-    <livewire:modal />
-    <livewire:auth-modal />
+<livewire:modal/>
+<livewire:auth-modal/>
 
-    @livewireScripts
+@livewireScripts
 </body>
 </html>
