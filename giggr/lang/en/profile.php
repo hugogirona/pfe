@@ -38,6 +38,7 @@ return [
     'friend' => 'Friends',
     'remove_friend' => 'Remove friend',
     'contact' => 'Contact',
+    'contact_name' => 'Contact :name',
 
     // Sections
     'about_title' => 'About',
