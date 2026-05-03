@@ -22,7 +22,7 @@
                     @click.outside="tip = false"
                     class="absolute right-0 top-9 z-10 bg-dark text-bg text-xs px-3 py-2 rounded-lg whitespace-nowrap shadow-lg"
                 >
-                    {{ __('profile.media_coming_soon') }} 
+                    {{ __('profile.media_coming_soon') }}
                 </div>
             </div>
         @endif

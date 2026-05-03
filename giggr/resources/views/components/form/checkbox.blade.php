@@ -8,7 +8,7 @@
                 id="{{ $name }}"
                 name="{{ $name }}"
                 @if($required) required aria-required="true" @endif
-                {{ $attributes->except(['name', 'required']) }}
+                {{ $attributes }}
                 class="peer sr-only"
             />
 

@@ -59,6 +59,10 @@ new #[Layout('layouts.app')] #[Title('Profil — Giggr.')] class extends Compone
     public function saveInstruments(): void
     {
         abort_unless($this->isOwner, 403);
+        $this->validate([
+            'selectedInstruments'   => ['array'],
+            'selectedInstruments.*' => ['integer', 'exists:instruments,id'],
+        ]);
         $this->profile->instruments()->sync($this->selectedInstruments);
         $this->profile->load('instruments');
         $this->dispatch('instruments-saved');
@@ -75,6 +79,10 @@ new #[Layout('layouts.app')] #[Title('Profil — Giggr.')] class extends Compone
     public function saveGenres(): void
     {
         abort_unless($this->isOwner, 403);
+        $this->validate([
+            'selectedGenres'   => ['array'],
+            'selectedGenres.*' => ['integer', 'exists:genres,id'],
+        ]);
         $this->profile->genres()->sync($this->selectedGenres);
         $this->profile->load('genres');
         $this->dispatch('genres-saved');

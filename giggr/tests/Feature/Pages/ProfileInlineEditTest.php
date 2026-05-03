@@ -50,6 +50,70 @@ it('non-owner cannot save bio', function () {
     expect($profile->fresh()->bio)->toBe($originalBio);
 });
 
+it('non-owner cannot save instruments', function () {
+    $this->seed([CitySeeder::class, InstrumentSeeder::class, GenreSeeder::class]);
+    $profile = Profile::factory()->create();
+    $originalIds = $profile->fresh()->instruments->pluck('id')->sort()->values()->toArray();
+    $visitor = User::factory()->create();
+
+    try {
+        Livewire::actingAs($visitor)
+            ->test('pages::profile.index', ['id' => $profile->id])
+            ->call('saveInstruments');
+    } catch (Throwable) {
+    }
+
+    expect($profile->fresh()->instruments->pluck('id')->sort()->values()->toArray())
+        ->toBe($originalIds);
+});
+
+it('non-owner cannot save genres', function () {
+    $this->seed([CitySeeder::class, InstrumentSeeder::class, GenreSeeder::class]);
+    $profile = Profile::factory()->create();
+    $originalIds = $profile->fresh()->genres->pluck('id')->sort()->values()->toArray();
+    $visitor = User::factory()->create();
+
+    try {
+        Livewire::actingAs($visitor)
+            ->test('pages::profile.index', ['id' => $profile->id])
+            ->call('saveGenres');
+    } catch (Throwable) {
+    }
+
+    expect($profile->fresh()->genres->pluck('id')->sort()->values()->toArray())
+        ->toBe($originalIds);
+});
+
+it('saveInstruments rejects non-existent IDs', function () {
+    $this->seed([CitySeeder::class, InstrumentSeeder::class, GenreSeeder::class]);
+    $profile = Profile::factory()->create();
+    $originalIds = $profile->fresh()->instruments->pluck('id')->sort()->values()->toArray();
+
+    Livewire::actingAs($profile->user)
+        ->test('pages::profile.index', ['id' => $profile->id])
+        ->set('selectedInstruments', [999999])
+        ->call('saveInstruments')
+        ->assertHasErrors(['selectedInstruments.*']);
+
+    expect($profile->fresh()->instruments->pluck('id')->sort()->values()->toArray())
+        ->toBe($originalIds);
+});
+
+it('saveGenres rejects non-existent IDs', function () {
+    $this->seed([CitySeeder::class, InstrumentSeeder::class, GenreSeeder::class]);
+    $profile = Profile::factory()->create();
+    $originalIds = $profile->fresh()->genres->pluck('id')->sort()->values()->toArray();
+
+    Livewire::actingAs($profile->user)
+        ->test('pages::profile.index', ['id' => $profile->id])
+        ->set('selectedGenres', [999999])
+        ->call('saveGenres')
+        ->assertHasErrors(['selectedGenres.*']);
+
+    expect($profile->fresh()->genres->pluck('id')->sort()->values()->toArray())
+        ->toBe($originalIds);
+});
+
 it('owner can toggle and save instruments', function () {
     $this->seed([CitySeeder::class, InstrumentSeeder::class, GenreSeeder::class]);
     $profile = Profile::factory()->create();
