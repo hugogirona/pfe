@@ -13,7 +13,7 @@ new #[Layout('layouts.app')]
 #[Title('Complète ton profil — Giggr.')]
 class extends Component {
     public string $bio = '';
-    public string $cityId = '';
+    public ?string $cityId = null;
     public int $experienceYears = 0;
     public string $status = '';
 
@@ -35,34 +35,36 @@ class extends Component {
         }
 
         $this->cities = City::orderBy('name')->pluck('name', 'id')->toArray();
-        $this->instruments = Instrument::orderBy('name')->pluck('name')->toArray();
-        $this->genres = Genre::orderBy('name')->pluck('name')->toArray();
+        $this->instruments = Instrument::orderBy('name')->pluck('name', 'id')->toArray();
+        $this->genres = Genre::orderBy('name')->pluck('name', 'id')->toArray();
 
         $this->bio = $profile->bio ?? '';
-        $this->cityId = (string)($profile->city_id ?? '');
+        $this->cityId = $profile->city_id ? (string)$profile->city_id : null;
         $this->experienceYears = $profile->experience_years;
         $this->status = $profile->status->value;
 
-        $this->selectedInstruments = $profile->instruments->pluck('name')->toArray();
-        $this->selectedGenres = $profile->genres->pluck('name')->toArray();
+        $this->selectedInstruments = $profile->instruments->pluck('id')->toArray();
+        $this->selectedGenres = $profile->genres->pluck('id')->toArray();
     }
 
-    public function toggleInstrument(string $name): void
+    public function toggleInstrument(int $id): void
     {
-        $this->selectedInstruments = in_array($name, $this->selectedInstruments)
-            ? array_values(array_filter($this->selectedInstruments, fn($i) => $i !== $name))
-            : [...$this->selectedInstruments, $name];
+        $this->selectedInstruments = in_array($id, $this->selectedInstruments)
+            ? array_values(array_filter($this->selectedInstruments, fn($i) => $i !== $id))
+            : [...$this->selectedInstruments, $id];
     }
 
-    public function toggleGenre(string $name): void
+    public function toggleGenre(int $id): void
     {
-        $this->selectedGenres = in_array($name, $this->selectedGenres)
-            ? array_values(array_filter($this->selectedGenres, fn($g) => $g !== $name))
-            : [...$this->selectedGenres, $name];
+        $this->selectedGenres = in_array($id, $this->selectedGenres)
+            ? array_values(array_filter($this->selectedGenres, fn($g) => $g !== $id))
+            : [...$this->selectedGenres, $id];
     }
 
     public function save(): void
     {
+        $this->cityId = $this->cityId ?: null;
+
         $this->validate([
             'bio' => ['required', 'string', 'min:10', 'max:1000'],
             'cityId' => ['nullable', 'exists:cities,id'],
@@ -79,8 +81,8 @@ class extends Component {
             'status' => $this->status,
         ]);
 
-        $profile->instruments()->sync(Instrument::whereIn('name', $this->selectedInstruments)->pluck('id'));
-        $profile->genres()->sync(Genre::whereIn('name', $this->selectedGenres)->pluck('id'));
+        $profile->instruments()->sync($this->selectedInstruments);
+        $profile->genres()->sync($this->selectedGenres);
 
         $this->redirect(route('profile', ['id' => $profile->id]), navigate: true);
     }

@@ -20,6 +20,18 @@ class FortifyServiceProvider extends ServiceProvider
         {
             public function toResponse($request): mixed
             {
+                $supported = array_keys(config('laravellocalization.supportedLocales', []));
+                $locale = app()->getLocale();
+
+                if ($referer = $request->header('referer')) {
+                    $first = explode('/', trim((string) parse_url($referer, PHP_URL_PATH), '/'))[0] ?? '';
+                    if (in_array($first, $supported, strict: true)) {
+                        $locale = $first;
+                    }
+                }
+
+                app()->setLocale($locale);
+
                 return redirect()->route('profile.setup');
             }
         });
