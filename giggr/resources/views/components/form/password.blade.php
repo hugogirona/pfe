@@ -35,7 +35,7 @@
             class="absolute inset-y-0 right-0 flex items-center px-3
                    text-dark/35 hover:text-dark transition-colors duration-150
                    cursor-pointer focus-visible:outline-none focus-visible:ring-1
-                   focus-visible:ring-accent rounded-r-[6px]"
+                   focus-visible:ring-accent rounded-r-md"
         >
             <x-icon x-show="!show" name="eye" class="w-5 h-5" />
             <x-icon x-show="show" name="eye-slash" class="w-5 h-5" style="display:none" />

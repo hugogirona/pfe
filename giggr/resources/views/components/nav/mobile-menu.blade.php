@@ -12,13 +12,13 @@
             :aria-expanded="open"
             class="relative z-50 text-dark/60 hover:text-dark transition-colors duration-150 p-2 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent rounded-[6px]"
             aria-label="{{ __('nav.aria_menu') }}">
-        <span class="flex flex-col justify-center gap-[5px] w-5 h-5">
+        <span class="flex flex-col justify-center gap-1.25 w-5 h-5">
             <span class="block h-0.5 w-5 bg-current rounded-full transition-all duration-300 ease-in-out origin-center"
-                  :class="open ? 'rotate-45 translate-y-[7px]' : ''"></span>
+                  :class="open ? 'rotate-45 translate-y-1.75' : ''"></span>
             <span class="block h-0.5 w-5 bg-current rounded-full transition-all duration-300 ease-in-out"
                   :class="open ? 'opacity-0 scale-x-0' : ''"></span>
             <span class="block h-0.5 w-5 bg-current rounded-full transition-all duration-300 ease-in-out origin-center"
-                  :class="open ? '-rotate-45 -translate-y-[7px]' : ''"></span>
+                  :class="open ? '-rotate-45 -translate-y-1.75' : ''"></span>
         </span>
     </button>
 
@@ -38,12 +38,12 @@
 
         @auth
             <div class="absolute bottom-10 left-6 right-6 flex flex-col gap-3">
-                <x-cta href="{{ route('profile', ['id' => auth()->user()->id]) }}" wire:navigate variant="outline" class="w-full min-h-[44px] text-base">
+                <x-cta href="{{ route('profile', ['id' => auth()->user()->id]) }}" wire:navigate variant="outline" class="w-full min-h-11 text-base">
                     {{ __('nav.view_profile') }}
                 </x-cta>
                 <form method="POST" action="/logout">
                     @csrf
-                    <x-cta type="submit" variant="dark" class="w-full min-h-[44px] text-base">
+                    <x-cta type="submit" variant="dark" class="w-full min-h-11 text-base">
                         {{ __('nav.sign_out') }}
                     </x-cta>
                 </form>
@@ -52,8 +52,8 @@
 
         @guest
             <div class="absolute bottom-10 left-6 right-6 flex flex-col gap-3">
-                <x-cta href="{{ route('register') }}" wire:navigate variant="dark" class="w-full min-h-[44px] text-base">{{ __('nav.sign_up') }}</x-cta>
-                <x-cta href="{{ route('login') }}" wire:navigate variant="outline" class="w-full min-h-[44px] text-base">{{ __('nav.sign_in') }}</x-cta>
+                <x-cta href="{{ route('register') }}" wire:navigate variant="dark" class="w-full min-h-11 text-base">{{ __('nav.sign_up') }}</x-cta>
+                <x-cta href="{{ route('login') }}" wire:navigate variant="outline" class="w-full min-h-11 text-base">{{ __('nav.sign_in') }}</x-cta>
             </div>
         @endguest
 

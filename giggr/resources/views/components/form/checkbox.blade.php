@@ -12,7 +12,7 @@
                 class="peer sr-only"
             />
 
-            <div class="absolute inset-0 rounded-[4px] border-2 border-dark/20 bg-white
+            <div class="absolute inset-0 rounded-sm border-2 border-dark/20 bg-white
                         peer-checked:bg-accent peer-checked:border-accent
                         peer-focus-visible:ring-2 peer-focus-visible:ring-offset-1 peer-focus-visible:ring-accent/50
                         group-hover:border-dark/40 peer-checked:group-hover:border-accent
