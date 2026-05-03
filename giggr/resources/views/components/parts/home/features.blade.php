@@ -21,7 +21,7 @@
                 {{ __('home.feature_find_desc') }}
             </x-parts.home.feature-card>
 
-            <x-parts.home.feature-card icon="plus-circle" :title="__('home.feature_post_title')">
+            <x-parts.home.feature-card icon="plus" :title="__('home.feature_post_title')">
                 {{ __('home.feature_post_desc') }}
             </x-parts.home.feature-card>
 
