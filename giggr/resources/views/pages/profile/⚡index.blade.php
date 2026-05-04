@@ -95,6 +95,12 @@ new #[Layout('layouts.app')] #[Title('Profil — Giggr.')] class extends Compone
             'user.announcements' => fn ($q) => $q->active()->with(['city', 'instruments', 'genres']),
         ]);
     }
+
+    #[On('avatar-saved')]
+    public function refreshAvatar(): void
+    {
+        $this->profile->refresh();
+    }
 };
 ?>
 

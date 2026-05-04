@@ -19,9 +19,9 @@
             class="group flex flex-col w-full h-full rounded-xl overflow-hidden border border-dark/10 bg-white shadow-sm hover:shadow-md transition-shadow duration-200"
         >
             <div class="relative h-52 shrink-0 bg-dark/5">
-                @if ($profile->avatar_path)
+                @if ($profile->medium)
                     <img
-                        src="{{ Vite::asset('resources/img/profiles/' . $profile->avatar_path) }}"
+                        src="{{ $profile->medium }}"
                         alt="Photo de {{ $name }}"
                         class="absolute inset-0 w-full h-full object-cover object-center"
                         loading="lazy"
@@ -40,7 +40,9 @@
                 <div>
                     <h3 class="font-heading text-xl text-dark">{{ $name }}</h3>
                     <p class="text-sm text-dark/40 mt-0.5">
-                        {{ __('explore.card_years', ['n' => $profile->age]) }} · {{ $profile->city?->name }}
+                        @if($profile->age){{ __('explore.card_years', ['n' => $profile->age]) }} @endif
+                        @if($profile->age && $profile->city){{' . '}}@endif
+                        @if($profile->city){{  $profile->city->name }}@endif
                     </p>
                 </div>
 

@@ -6,11 +6,15 @@
             class="text-dark/50 hover:text-accent transition-colors duration-150 p-2 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent rounded-[6px] flex items-center justify-center"
             aria-label="{{ __('nav.aria_messaging') }}"
         >
-            <x-icon name="chat-bubble" class="w-8 h-8" />
+            <x-icon name="chat-bubble" class="w-8 h-8"/>
         </button>
 
         {{-- Profile dropdown --}}
-        <div class="relative" x-data="{ open: false }">
+        <div
+            class="relative"
+            x-data="{ open: false, thumbnail: {{ auth()->user()->profile?->thumbnail ? json_encode(auth()->user()->profile->thumbnail) : 'null' }} }"
+            @avatar-saved.window="thumbnail = $event.detail.thumbnail"
+        >
             <button
                 type="button"
                 @click="open = !open"
@@ -18,9 +22,15 @@
                 :aria-expanded="open"
                 aria-haspopup="true"
                 aria-label="{{ __('nav.aria_user_menu') }}"
-                class="w-8 h-8 rounded-full bg-dark/60 text-bg flex items-center justify-center text-sm font-semibold uppercase cursor-pointer hover:opacity-90 transition-opacity duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
+                class="w-8 h-8 rounded-full overflow-hidden bg-dark/60 text-bg flex items-center justify-center text-sm font-semibold uppercase cursor-pointer hover:opacity-90 transition-opacity duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
             >
-                {{ mb_substr(auth()->user()->full_name, 0, 1) }}
+                <img
+                    x-show="thumbnail"
+                    :src="thumbnail"
+                    alt="{{ __('profile.avatar_alt', ['name' => auth()->user()->full_name]) }}"
+                    class="w-full h-full object-cover object-center"
+                />
+                <span x-show="!thumbnail">{{ mb_substr(auth()->user()->full_name, 0, 1) }}</span>
             </button>
 
             <div
@@ -43,7 +53,7 @@
                     role="menuitem"
                     class="flex items-center gap-2.5 px-4 py-3 text-sm text-dark hover:bg-dark/5 transition-colors duration-150 focus-visible:outline-none focus-visible:bg-dark/5"
                 >
-                    <x-icon name="user" class="w-4 h-4 text-dark/40" />
+                    <x-icon name="user" class="w-4 h-4 text-dark/40"/>
                     {{ __('nav.view_profile') }}
                 </a>
 
@@ -56,7 +66,7 @@
                         role="menuitem"
                         class="w-full flex items-center gap-2.5 px-4 py-3 text-sm text-danger/60 hover:text-danger hover:bg-danger/5 transition-colors duration-150 cursor-pointer focus-visible:outline-none focus-visible:bg-danger/5"
                     >
-                        <x-icon name="arrow-right-on-rectangle" class="w-4 h-4 text-danger/40" />
+                        <x-icon name="arrow-right-on-rectangle" class="w-4 h-4 text-danger/40"/>
                         {{ __('nav.sign_out') }}
                     </button>
                 </form>
