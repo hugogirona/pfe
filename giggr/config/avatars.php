@@ -12,7 +12,4 @@ return [
     'quality' => 90,
 
     'max_file_size' => 5 * 1024,
-
-    'allowed_mimes' => ['image/jpeg', 'image/png', 'image/webp', 'image/gif'],
-
 ];

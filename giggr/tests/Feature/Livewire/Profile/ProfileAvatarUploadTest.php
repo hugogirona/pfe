@@ -57,13 +57,11 @@ it('non-owner cannot upload an avatar', function () {
     $profile = Profile::factory()->create(['avatar_path' => null]);
     $visitor = User::factory()->create();
 
-    try {
-        Livewire::actingAs($visitor)
-            ->test('parts.profile.avatar-form', ['model_id' => (string) $profile->id])
-            ->set('photo', UploadedFile::fake()->image('avatar.jpg', 400, 400))
-            ->call('save');
-    } catch (Throwable) {
-    }
+    Livewire::actingAs($visitor)
+        ->test('parts.profile.avatar-form', ['model_id' => (string) $profile->id])
+        ->set('photo', UploadedFile::fake()->image('avatar.jpg', 400, 400))
+        ->call('save')
+        ->assertForbidden();
 
     expect($profile->fresh()->avatar_path)->toBeNull();
 });

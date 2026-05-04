@@ -9,10 +9,8 @@ function sampleJpegContent(): string
     $image = imagecreatetruecolor(400, 400);
     ob_start();
     imagejpeg($image);
-    $content = ob_get_clean();
-    imagedestroy($image);
 
-    return $content;
+    return (string) ob_get_clean();
 }
 
 it('creates thumbnail and medium webp variants on the public disk', function () {

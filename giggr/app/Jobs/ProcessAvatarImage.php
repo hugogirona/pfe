@@ -26,22 +26,24 @@ class ProcessAvatarImage implements ShouldQueue
         $absolutePath = Storage::disk('local')->path($this->tmpPath);
         $config = config('avatars');
 
-        foreach ($config['variants'] as $name => $size) {
-            $encoded = $manager
-                ->decodePath($absolutePath)
-                ->cover($size['width'], $size['height'])
-                ->encode(new WebpEncoder(quality: $config['quality']));
+        try {
+            foreach ($config['variants'] as $name => $size) {
+                $encoded = $manager
+                    ->decodePath($absolutePath)
+                    ->cover($size['width'], $size['height'])
+                    ->encode(new WebpEncoder(quality: $config['quality']));
 
-            Storage::disk($config['disk'])->put(
-                "avatars/{$name}/{$this->stem}.webp",
-                (string) $encoded,
-            );
+                Storage::disk($config['disk'])->put(
+                    "avatars/{$name}/{$this->stem}.webp",
+                    (string) $encoded,
+                );
+            }
+
+            $this->deleteOldVariants();
+            $this->profile->update(['avatar_path' => $this->stem]);
+        } finally {
+            Storage::disk('local')->delete($this->tmpPath);
         }
-
-        $this->deleteOldVariants();
-        $this->profile->update(['avatar_path' => $this->stem]);
-
-        Storage::disk('local')->delete($this->tmpPath);
     }
 
     private function deleteOldVariants(): void

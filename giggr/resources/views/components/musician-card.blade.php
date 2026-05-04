@@ -40,7 +40,9 @@
                 <div>
                     <h3 class="font-heading text-xl text-dark">{{ $name }}</h3>
                     <p class="text-sm text-dark/40 mt-0.5">
-                        @if($profile->age){{ __('explore.card_years', ['n' => $profile->age]) }} @endif{{ ' · ' .  $profile->city?->name }}
+                        @if($profile->age){{ __('explore.card_years', ['n' => $profile->age]) }} @endif
+                        @if($profile->age && $profile->city){{' . '}}@endif
+                        @if($profile->city){{  $profile->city->name }}@endif
                     </p>
                 </div>
 
