@@ -26,8 +26,6 @@ class ProcessAvatarImage implements ShouldQueue
         $absolutePath = Storage::disk('local')->path($this->tmpPath);
         $config = config('avatars');
 
-        $this->deleteOldVariants();
-
         foreach ($config['variants'] as $name => $size) {
             $encoded = $manager
                 ->decodePath($absolutePath)
@@ -40,6 +38,7 @@ class ProcessAvatarImage implements ShouldQueue
             );
         }
 
+        $this->deleteOldVariants();
         $this->profile->update(['avatar_path' => $this->stem]);
 
         Storage::disk('local')->delete($this->tmpPath);

@@ -1,7 +1,7 @@
 @props(['author', 'name'])
 
 @php
-    $image = $author->avatar_path;
+    $image = $author->thumbnail;
     $cityName = $author->city?->name;
     $instruments = $author->instruments->pluck('name');
     $genres = $author->genres->pluck('name');
@@ -21,7 +21,7 @@
         <div class="shrink-0 w-14 h-14 rounded-full overflow-hidden bg-pastel-blue ring-2 ring-bg shadow-sm">
             @if ($image)
                 <img
-                    src="{{ Vite::asset('resources/img/profiles/' . $image) }}"
+                    src="{{ $image }}"
                     alt="{{ __('profile.avatar_alt', ['name' => $name]) }}"
                     class="w-full h-full object-cover"
                 />
