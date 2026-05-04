@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Concerns\HandlesAvatar;
 use App\Enums\ProfileStatus;
 use Database\Factories\ProfileFactory;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -14,7 +15,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Profile extends Model
 {
     /** @use HasFactory<ProfileFactory> */
-    use HasFactory, SoftDeletes;
+    use HandlesAvatar, HasFactory, SoftDeletes;
 
     protected $fillable = [
         'user_id',
@@ -29,7 +30,7 @@ class Profile extends Model
     protected function casts(): array
     {
         return [
-            'status'     => ProfileStatus::class,
+            'status' => ProfileStatus::class,
             'birth_date' => 'date',
         ];
     }
@@ -58,6 +59,20 @@ class Profile extends Model
     {
         return Attribute::make(
             get: fn () => $this->birth_date?->age,
+        );
+    }
+
+    protected function thumbnail(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->avatarVariantUrl('thumbnail'),
+        );
+    }
+
+    protected function medium(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->avatarVariantUrl('medium'),
         );
     }
 }

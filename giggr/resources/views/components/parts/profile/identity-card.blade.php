@@ -9,7 +9,7 @@
 
 <div class="bg-white rounded-2xl border border-dark/10 shadow-sm overflow-hidden">
 
-    <x-parts.profile.card-avatar :profile="$profile" />
+    <x-parts.profile.card-avatar :profile="$profile" :isOwner="$isOwner" />
 
     <x-parts.profile.card-identity :profile="$profile" />
 
