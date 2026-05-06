@@ -14,11 +14,11 @@ return new class extends Migration
         Schema::create('cities', function (Blueprint $table) {
             $table->id();
             $table->string('name')->index();
-            $table->string('name_alt')->nullable()->index();
+            $table->string('name_alt')->nullable();
             $table->string('slug')->unique();
             $table->string('country', 2)->default('BE');
             $table->string('postal_code', 4)->index();
-            $table->string('searchable')->index();
+            $table->string('searchable');
             $table->decimal('latitude', total: 8, places: 5)->nullable();
             $table->decimal('longitude', total: 8, places: 5)->nullable();
             $table->timestamps();

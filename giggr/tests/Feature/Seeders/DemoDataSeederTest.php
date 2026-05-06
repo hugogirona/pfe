@@ -17,7 +17,7 @@ it('does not seed anything in production', function () {
     expect(User::count())->toBe(0);
 });
 
-it('seeds 30 users in local environment', function () {
+it('seeds 30 demo users plus the developer account in local environment', function () {
     App::partialMock()
         ->shouldReceive('environment')
         ->with(['local', 'staging'])
@@ -25,7 +25,18 @@ it('seeds 30 users in local environment', function () {
 
     $this->seed(DemoDataSeeder::class);
 
-    expect(User::count())->toBe(30);
+    expect(User::count())->toBe(31);
+});
+
+it('seeds the developer account with a stable email', function () {
+    App::partialMock()
+        ->shouldReceive('environment')
+        ->with(['local', 'staging'])
+        ->andReturn(true);
+
+    $this->seed(DemoDataSeeder::class);
+
+    expect(User::where('email', 'hello@giggr.com')->exists())->toBeTrue();
 });
 
 it('seeds a profile for every user', function () {

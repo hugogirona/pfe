@@ -17,6 +17,13 @@ class DemoDataSeeder extends Seeder
             return;
         }
 
+        User::factory()->withProfile()->create([
+            'first_name' => 'Hugo',
+            'last_name' => 'Girona',
+            'email' => 'hello@giggr.com',
+            'password' => 'change_this',
+        ]);
+
         $users = User::factory()->count(30)->withProfile()->create();
 
         $announcements = Announcement::factory()->count(50)->recycle($users)->create();

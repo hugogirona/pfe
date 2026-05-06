@@ -74,9 +74,10 @@ it('exposes a working factory', function () {
         ->and($city->searchable)->not->toBeEmpty();
 });
 
-it('makeSearchable normalizes name + alt + postal into a slug', function () {
+it('makeSearchable normalizes name + alt + postal into a slug joined by single spaces', function () {
     expect(City::makeSearchable('Liège', 'Luik', '4000'))->toBe('liege luik 4000')
-        ->and(City::makeSearchable('Maldegem', null, '9990'))->toBe('maldegem  9990');
+        ->and(City::makeSearchable('Maldegem', null, '9990'))->toBe('maldegem 9990')
+        ->and(City::makeSearchable('Maldegem', '', '9990'))->toBe('maldegem 9990');
 });
 
 it('exposes display_name accessor as "name (postal_code)"', function () {

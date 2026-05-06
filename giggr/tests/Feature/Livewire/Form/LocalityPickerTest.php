@@ -1,12 +1,21 @@
 <?php
 
 use App\Models\City;
-use Database\Seeders\CitySeeder;
+use Illuminate\Support\Str;
 use Livewire\Livewire;
 
-it('shows nothing when query is empty', function () {
-    $this->seed(CitySeeder::class);
+function locality(string $name, string $postal, ?string $alt = null): City
+{
+    return City::factory()->create([
+        'name' => $name,
+        'name_alt' => $alt,
+        'slug' => Str::slug($name).'-'.$postal,
+        'postal_code' => $postal,
+        'searchable' => City::makeSearchable($name, $alt, $postal),
+    ]);
+}
 
+it('shows nothing when query is empty', function () {
     Livewire::test('parts.form.locality-picker')
         ->assertSet('results', [])
         ->set('query', '')
@@ -14,7 +23,7 @@ it('shows nothing when query is empty', function () {
 });
 
 it('filters localities by partial canonical name', function () {
-    $this->seed(CitySeeder::class);
+    locality('Liège', '4000', 'Luik');
 
     Livewire::test('parts.form.locality-picker')
         ->set('query', 'lieg')
@@ -22,7 +31,7 @@ it('filters localities by partial canonical name', function () {
 });
 
 it('matches accent-insensitively', function () {
-    $this->seed(CitySeeder::class);
+    locality('Liège', '4000', 'Luik');
 
     Livewire::test('parts.form.locality-picker')
         ->set('query', 'liege')
@@ -30,7 +39,7 @@ it('matches accent-insensitively', function () {
 });
 
 it('matches via the FR alias when name is in NL', function () {
-    $this->seed(CitySeeder::class);
+    locality('Antwerpen', '2000', 'Anvers');
 
     Livewire::test('parts.form.locality-picker')
         ->set('query', 'anvers')
@@ -38,7 +47,7 @@ it('matches via the FR alias when name is in NL', function () {
 });
 
 it('matches via the NL alias when name is in FR', function () {
-    $this->seed(CitySeeder::class);
+    locality('Liège', '4000', 'Luik');
 
     Livewire::test('parts.form.locality-picker')
         ->set('query', 'luik')
@@ -46,7 +55,7 @@ it('matches via the NL alias when name is in FR', function () {
 });
 
 it('matches by postal code', function () {
-    $this->seed(CitySeeder::class);
+    locality('Liège', '4000', 'Luik');
 
     Livewire::test('parts.form.locality-picker')
         ->set('query', '4000')
@@ -54,17 +63,18 @@ it('matches by postal code', function () {
 });
 
 it('caps results at 8', function () {
-    $this->seed(CitySeeder::class);
+    foreach (range(1, 10) as $i) {
+        locality("Anville{$i}", str_pad((string) (1000 + $i), 4, '0', STR_PAD_LEFT));
+    }
 
     $component = Livewire::test('parts.form.locality-picker')
-        ->set('query', 'a');
+        ->set('query', 'anv');
 
-    expect(count($component->get('results')))->toBeLessThanOrEqual(8);
+    expect(count($component->get('results')))->toBe(8);
 });
 
 it('selecting a result sets cityId and replaces the query with the display name', function () {
-    $this->seed(CitySeeder::class);
-    $liege = City::where('postal_code', '4000')->where('name', 'Liège')->first();
+    $liege = locality('Liège', '4000', 'Luik');
 
     Livewire::test('parts.form.locality-picker')
         ->set('query', 'lieg')
@@ -75,8 +85,7 @@ it('selecting a result sets cityId and replaces the query with the display name'
 });
 
 it('renders the preselected city display name on mount', function () {
-    $this->seed(CitySeeder::class);
-    $liege = City::where('postal_code', '4000')->where('name', 'Liège')->first();
+    $liege = locality('Liège', '4000', 'Luik');
 
     Livewire::test('parts.form.locality-picker', ['cityId' => $liege->id])
         ->assertSet('query', 'Liège (4000)');

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Database\Factories\CityFactory;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -32,14 +33,20 @@ class City extends Model
         ];
     }
 
-    public function getDisplayNameAttribute(): string
+    protected function displayName(): Attribute
     {
-        return "{$this->name} ({$this->postal_code})";
+        return Attribute::make(
+            get: fn (): string => "$this->name ($this->postal_code)",
+        );
     }
 
     public static function makeSearchable(string $name, ?string $alt, string $postal): string
     {
-        return trim(Str::slug($name).' '.Str::slug($alt ?? '').' '.$postal);
+        return implode(' ', array_filter([
+            Str::slug($name),
+            $alt !== null ? Str::slug($alt) : '',
+            $postal,
+        ], fn (string $part) => $part !== ''));
     }
 
     public function profiles(): HasMany
