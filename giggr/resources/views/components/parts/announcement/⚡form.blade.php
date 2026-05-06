@@ -1,16 +1,31 @@
 <?php
 
+use App\Enums\AnnouncementStatus;
+use App\Enums\AnnouncementType;
+use App\Models\Announcement;
+use App\Models\Genre;
+use App\Models\Instrument;
+use Livewire\Attributes\Validate;
 use Livewire\Component;
 
 new class extends Component {
     public ?string $model_id = null;
 
+    #[Validate('required|min:5|max:100')]
     public string $title = '';
+
+    #[Validate('required|in:search,formation,session,course,event')]
     public string $type = '';
-    public string $city = '';
+
+    #[Validate('required|exists:cities,id')]
+    public ?int $city_id = null;
+
     public array $selectedInstruments = [];
     public array $selectedGenres = [];
+
+    #[Validate('required|min:20|max:1000')]
     public string $description = '';
+
     public bool $success = false;
 
     public array $availableInstruments = [];
@@ -20,36 +35,51 @@ new class extends Component {
     public function mount(?string $model_id = null): void
     {
         $this->model_id = $model_id;
-        $this->availableInstruments = \App\Models\Instrument::orderBy('name')->pluck('name')->toArray();
-        $this->availableGenres = \App\Models\Genre::orderBy('name')->pluck('name')->toArray();
-        $this->availableTypes = collect(\App\Enums\AnnouncementType::cases())
-            ->map(fn ($case) => ['value' => $case->value, 'label' => __($case->label())])
+        $this->availableInstruments = Instrument::orderBy('name')->get(['id', 'name'])->toArray();
+        $this->availableGenres = Genre::orderBy('name')->get(['id', 'name'])->toArray();
+        $this->availableTypes = collect(AnnouncementType::cases())
+            ->map(fn($case) => ['value' => $case->value, 'label' => __($case->label())])
             ->toArray();
     }
 
-    public function toggleInstrument(string $instrument): void
+    public function toggleInstrument(int $id): void
     {
-        $this->selectedInstruments = in_array($instrument, $this->selectedInstruments)
-            ? array_values(array_filter($this->selectedInstruments, fn($i) => $i !== $instrument))
-            : [...$this->selectedInstruments, $instrument];
+        $this->selectedInstruments = in_array($id, $this->selectedInstruments)
+            ? array_values(array_filter($this->selectedInstruments, fn($i) => $i !== $id))
+            : [...$this->selectedInstruments, $id];
     }
 
-    public function toggleGenre(string $genre): void
+    public function toggleGenre(int $id): void
     {
-        $this->selectedGenres = in_array($genre, $this->selectedGenres)
-            ? array_values(array_filter($this->selectedGenres, fn($g) => $g !== $genre))
-            : [...$this->selectedGenres, $genre];
+        $this->selectedGenres = in_array($id, $this->selectedGenres)
+            ? array_values(array_filter($this->selectedGenres, fn($g) => $g !== $id))
+            : [...$this->selectedGenres, $id];
     }
 
     public function save(): void
     {
-        $this->validate([
-            'title'       => 'required|min:5|max:100',
-            'type'        => 'required',
-            'city'        => 'required',
-            'description' => 'required|min:20|max:1000',
+        abort_unless(auth()->check(), 403);
+
+        $this->validate();
+
+        $announcement = Announcement::create([
+            'user_id'     => auth()->id(),
+            'city_id'     => $this->city_id,
+            'title'       => $this->title,
+            'description' => $this->description,
+            'type'        => $this->type,
+            'status'      => AnnouncementStatus::Open,
         ]);
 
+        if ($this->selectedInstruments) {
+            $announcement->instruments()->sync($this->selectedInstruments);
+        }
+
+        if ($this->selectedGenres) {
+            $announcement->genres()->sync($this->selectedGenres);
+        }
+
+        $this->dispatch('announcement-created', id: $announcement->id);
         $this->success = true;
     }
 
@@ -88,38 +118,32 @@ new class extends Component {
             <x-form.input
                 name="title"
                 label="Titre de l'annonce"
-                wire:model="title"
+                wire:model.live.blur="title"
                 placeholder="Ex : Cherche bassiste pour trio jazz"
                 required
             />
             @error('title')
-                <p class="text-xs text-accent mt-1.5">{{ $message }}</p>
+                <p class="text-xs text-accent mt-1.5" role="alert">{{ $message }}</p>
             @enderror
         </div>
 
         {{-- Type + Ville --}}
         <div class="grid grid-cols-2 gap-4">
             <div>
-                <x-form.select name="type" label="Type" wire:model="type" required>
+                <x-form.select name="type" label="Type" wire:model.live.blur="type" required>
                     <option disabled selected value="">Choisir…</option>
                     @foreach ($availableTypes as $typeOption)
                         <option value="{{ $typeOption['value'] }}">{{ $typeOption['label'] }}</option>
                     @endforeach
                 </x-form.select>
                 @error('type')
-                    <p class="text-xs text-accent mt-1.5">{{ $message }}</p>
+                    <p class="text-xs text-accent mt-1.5" role="alert">{{ $message }}</p>
                 @enderror
             </div>
             <div>
-                <x-form.input
-                    name="city"
-                    label="Ville"
-                    wire:model="city"
-                    placeholder="Ex : Liège"
-                    required
-                />
-                @error('city')
-                    <p class="text-xs text-accent mt-1.5">{{ $message }}</p>
+                <livewire:parts.form.locality-picker wire:model.live="city_id" />
+                @error('city_id')
+                    <p class="text-xs text-accent mt-1.5" role="alert">{{ $message }}</p>
                 @enderror
             </div>
         </div>
@@ -131,14 +155,14 @@ new class extends Component {
                 @foreach ($availableInstruments as $instr)
                     <button
                         type="button"
-                        wire:click="toggleInstrument('{{ $instr }}')"
+                        wire:click="toggleInstrument({{ $instr['id'] }})"
                         @class([
                             'h-9 px-4 rounded-full border text-sm font-medium transition-all duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent',
-                            'bg-dark text-bg border-dark'                                                   => in_array($instr, $selectedInstruments),
-                            'bg-white text-dark/60 border-dark/15 hover:border-dark/40 hover:text-dark'    => !in_array($instr, $selectedInstruments),
+                            'bg-dark text-bg border-dark'                                                => in_array($instr['id'], $selectedInstruments),
+                            'bg-white text-dark/60 border-dark/15 hover:border-dark/40 hover:text-dark' => !in_array($instr['id'], $selectedInstruments),
                         ])
-                        aria-pressed="{{ in_array($instr, $selectedInstruments) ? 'true' : 'false' }}"
-                    >{{ $instr }}</button>
+                        aria-pressed="{{ in_array($instr['id'], $selectedInstruments) ? 'true' : 'false' }}"
+                    >{{ $instr['name'] }}</button>
                 @endforeach
             </div>
         </div>
@@ -150,14 +174,14 @@ new class extends Component {
                 @foreach ($availableGenres as $genre)
                     <button
                         type="button"
-                        wire:click="toggleGenre('{{ $genre }}')"
+                        wire:click="toggleGenre({{ $genre['id'] }})"
                         @class([
                             'h-9 px-4 rounded-full border text-sm font-medium transition-all duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent',
-                            'bg-accent text-bg border-accent'                                               => in_array($genre, $selectedGenres),
-                            'bg-white text-dark/60 border-dark/15 hover:border-dark/40 hover:text-dark'    => !in_array($genre, $selectedGenres),
+                            'bg-accent text-bg border-accent'                                            => in_array($genre['id'], $selectedGenres),
+                            'bg-white text-dark/60 border-dark/15 hover:border-dark/40 hover:text-dark' => !in_array($genre['id'], $selectedGenres),
                         ])
-                        aria-pressed="{{ in_array($genre, $selectedGenres) ? 'true' : 'false' }}"
-                    >{{ $genre }}</button>
+                        aria-pressed="{{ in_array($genre['id'], $selectedGenres) ? 'true' : 'false' }}"
+                    >{{ $genre['name'] }}</button>
                 @endforeach
             </div>
         </div>
@@ -167,13 +191,13 @@ new class extends Component {
             <x-form.textarea
                 name="description"
                 label="Description"
-                wire:model="description"
+                wire:model.live.blur="description"
                 placeholder="Décrivez votre projet, votre niveau, vos disponibilités…"
                 :rows="4"
                 required
             />
             @error('description')
-                <p class="text-xs text-accent mt-1.5">{{ $message }}</p>
+                <p class="text-xs text-accent mt-1.5" role="alert">{{ $message }}</p>
             @enderror
         </div>
 
@@ -181,9 +205,12 @@ new class extends Component {
         <div class="flex justify-end pt-2 border-t border-dark/10">
             <button
                 type="submit"
+                wire:loading.attr="disabled"
+                wire:loading.class="opacity-60 cursor-not-allowed"
                 class="h-11 px-6 rounded-[6px] bg-dark text-bg text-sm font-medium hover:opacity-80 transition-opacity duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
             >
-                Publier l'annonce
+                <span wire:loading.remove wire:target="save">Publier l'annonce</span>
+                <span wire:loading wire:target="save">Publication…</span>
             </button>
         </div>
 
