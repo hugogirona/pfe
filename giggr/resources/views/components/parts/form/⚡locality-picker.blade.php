@@ -9,13 +9,20 @@ new class extends Component {
     #[Modelable]
     public ?int $cityId = null;
 
+    public string $label = '';
+
+    public string $placeholder = '';
+
     public string $query = '';
 
     /** @var array<int, array{id:int, display:string}> */
     public array $results = [];
 
-    public function mount(): void
+    public function mount(?string $label = null, ?string $placeholder = null): void
     {
+        $this->label       = $label ?? __('announcement.form_city_label');
+        $this->placeholder = $placeholder ?? __('announcement.form_city_placeholder');
+
         if ($this->cityId !== null) {
             $city = City::find($this->cityId);
             if ($city) {
@@ -73,13 +80,13 @@ new class extends Component {
     @keydown.escape.window="$wire.set('results', [])"
 >
     <label for="locality-picker-input" class="text-sm font-medium text-dark/70">
-        Ville<span class="text-accent ml-0.5" aria-hidden="true">*</span>
+        {{ $label }}<span class="text-accent ml-0.5" aria-hidden="true">*</span>
     </label>
     <input
         id="locality-picker-input"
         type="text"
         wire:model.live.debounce.200ms="query"
-        placeholder="Ex : Liège, Antwerpen, 4000…"
+        placeholder="{{ $placeholder }}"
         autocomplete="off"
         role="combobox"
         aria-expanded="{{ count($results) > 0 ? 'true' : 'false' }}"

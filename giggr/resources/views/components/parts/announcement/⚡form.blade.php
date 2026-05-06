@@ -99,15 +99,15 @@ new class extends Component {
             </svg>
         </div>
         <div>
-            <h3 class="font-heading text-xl text-dark">Annonce publiée !</h3>
-            <p class="text-sm text-dark/60 mt-1">Votre annonce est maintenant visible par la communauté.</p>
+            <h3 class="font-heading text-xl text-dark">{{ __('announcement.form_success_title') }}</h3>
+            <p class="text-sm text-dark/60 mt-1">{{ __('announcement.form_success_body') }}</p>
         </div>
         <button
             wire:click="close"
             type="button"
-            class="h-11 px-6 rounded-[6px] bg-dark text-bg text-sm font-medium hover:opacity-80 transition-opacity duration-150 cursor-pointer"
+            class="h-11 px-6 rounded-md bg-dark text-bg text-sm font-medium hover:opacity-80 transition-opacity duration-150 cursor-pointer"
         >
-            Fermer
+            {{ __('announcement.form_close') }}
         </button>
     </div>
 @else
@@ -117,9 +117,9 @@ new class extends Component {
         <div>
             <x-form.input
                 name="title"
-                label="Titre de l'annonce"
+                :label="__('announcement.form_title_label')"
                 wire:model.live.blur="title"
-                placeholder="Ex : Cherche bassiste pour trio jazz"
+                :placeholder="__('announcement.form_title_placeholder')"
                 required
             />
             @error('title')
@@ -130,8 +130,8 @@ new class extends Component {
         {{-- Type + Ville --}}
         <div class="grid grid-cols-2 gap-4">
             <div>
-                <x-form.select name="type" label="Type" wire:model.live.blur="type" required>
-                    <option disabled selected value="">Choisir…</option>
+                <x-form.select name="type" :label="__('announcement.form_type_label')" wire:model.live.blur="type" required>
+                    <option disabled selected value="">{{ __('announcement.form_type_placeholder') }}</option>
                     @foreach ($availableTypes as $typeOption)
                         <option value="{{ $typeOption['value'] }}">{{ $typeOption['label'] }}</option>
                     @endforeach
@@ -150,8 +150,8 @@ new class extends Component {
 
         {{-- Instruments --}}
         <div class="flex flex-col gap-2">
-            <span class="text-sm font-medium text-dark/70">Instruments</span>
-            <div class="flex flex-wrap gap-2" role="group" aria-label="Instruments">
+            <span class="text-sm font-medium text-dark/70">{{ __('announcement.form_instruments_label') }}</span>
+            <div class="flex flex-wrap gap-2" role="group" aria-label="{{ __('announcement.form_instruments_label') }}">
                 @foreach ($availableInstruments as $instr)
                     <button
                         type="button"
@@ -169,8 +169,8 @@ new class extends Component {
 
         {{-- Genres --}}
         <div class="flex flex-col gap-2">
-            <span class="text-sm font-medium text-dark/70">Genres</span>
-            <div class="flex flex-wrap gap-2" role="group" aria-label="Genres">
+            <span class="text-sm font-medium text-dark/70">{{ __('announcement.form_genres_label') }}</span>
+            <div class="flex flex-wrap gap-2" role="group" aria-label="{{ __('announcement.form_genres_label') }}">
                 @foreach ($availableGenres as $genre)
                     <button
                         type="button"
@@ -190,9 +190,9 @@ new class extends Component {
         <div>
             <x-form.textarea
                 name="description"
-                label="Description"
+                :label="__('announcement.form_description_label')"
                 wire:model.live.blur="description"
-                placeholder="Décrivez votre projet, votre niveau, vos disponibilités…"
+                :placeholder="__('announcement.form_description_placeholder')"
                 :rows="4"
                 required
             />
@@ -207,10 +207,10 @@ new class extends Component {
                 type="submit"
                 wire:loading.attr="disabled"
                 wire:loading.class="opacity-60 cursor-not-allowed"
-                class="h-11 px-6 rounded-[6px] bg-dark text-bg text-sm font-medium hover:opacity-80 transition-opacity duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
+                class="h-11 px-6 rounded-md bg-dark text-bg text-sm font-medium hover:opacity-80 transition-opacity duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
             >
-                <span wire:loading.remove wire:target="save">Publier l'annonce</span>
-                <span wire:loading wire:target="save">Publication…</span>
+                <span wire:loading.remove wire:target="save">{{ __('announcement.form_submit') }}</span>
+                <span wire:loading wire:target="save">{{ __('announcement.form_submitting') }}</span>
             </button>
         </div>
 

@@ -45,8 +45,8 @@ class UserFactory extends Factory
         ]);
     }
 
-    public function withProfile(): static
+    public function withProfile(array $attributes = []): static
     {
-        return $this->has(Profile::factory(), 'profile');
+        return $this->has(Profile::factory()->state($attributes), 'profile');
     }
 }

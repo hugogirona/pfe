@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Announcement;
+use App\Models\City;
 use App\Models\Favorite;
 use App\Models\Profile;
 use App\Models\User;
@@ -17,7 +18,13 @@ class DemoDataSeeder extends Seeder
             return;
         }
 
-        User::factory()->withProfile()->create([
+        $liege = City::where('name', 'Liège')->where('postal_code', '4020')->first();
+
+        User::factory()->withProfile([
+            'city_id' => $liege?->id,
+            'birth_date' => '2000-02-14',
+            'experience_years' => 12,
+        ])->create([
             'first_name' => 'Hugo',
             'last_name' => 'Girona',
             'email' => 'hello@giggr.com',
