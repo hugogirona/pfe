@@ -195,6 +195,11 @@ return [
     |
     */
 
-    'attributes' => [],
+    'attributes' => [
+        'title' => 'title',
+        'type' => 'type',
+        'city_id' => 'city',
+        'description' => 'description',
+    ],
 
 ];
