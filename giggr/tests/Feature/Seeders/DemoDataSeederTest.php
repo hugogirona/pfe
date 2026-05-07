@@ -1,7 +1,7 @@
 <?php
 
 use App\Models\Announcement;
-use App\Models\Favorite;
+use App\Models\Follow;
 use App\Models\Profile;
 use App\Models\User;
 use Database\Seeders\DemoDataSeeder;
@@ -62,7 +62,7 @@ it('seeds approximately 50 announcements', function () {
         ->and(Announcement::count())->toBeLessThanOrEqual(60);
 });
 
-it('seeds approximately 100 favorites', function () {
+it('seeds approximately 100 follows', function () {
     App::partialMock()
         ->shouldReceive('environment')
         ->with(['local', 'staging'])
@@ -70,8 +70,8 @@ it('seeds approximately 100 favorites', function () {
 
     $this->seed(DemoDataSeeder::class);
 
-    expect(Favorite::count())->toBeGreaterThanOrEqual(80)
-        ->and(Favorite::count())->toBeLessThanOrEqual(120);
+    expect(Follow::count())->toBeGreaterThanOrEqual(80)
+        ->and(Follow::count())->toBeLessThanOrEqual(120);
 });
 
 it('every announcement belongs to a seeded user', function () {
@@ -87,7 +87,7 @@ it('every announcement belongs to a seeded user', function () {
     expect(Announcement::whereNotIn('user_id', $userIds)->count())->toBe(0);
 });
 
-it('every favorite belongs to a seeded user', function () {
+it('every follow belongs to a seeded user', function () {
     App::partialMock()
         ->shouldReceive('environment')
         ->with(['local', 'staging'])
@@ -97,5 +97,5 @@ it('every favorite belongs to a seeded user', function () {
 
     $userIds = User::pluck('id');
 
-    expect(Favorite::whereNotIn('user_id', $userIds)->count())->toBe(0);
+    expect(Follow::whereNotIn('user_id', $userIds)->count())->toBe(0);
 });

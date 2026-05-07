@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Announcement;
 use App\Models\City;
-use App\Models\Favorite;
+use App\Models\Follow;
 use App\Models\Profile;
 use App\Models\User;
 use Illuminate\Database\Seeder;
@@ -35,7 +35,7 @@ class DemoDataSeeder extends Seeder
 
         $announcements = Announcement::factory()->count(50)->recycle($users)->create();
         $profiles = Profile::whereIn('user_id', $users->pluck('id'))->get();
-        $favoritables = $profiles->map(fn ($p) => ['type' => $p->getMorphClass(), 'id' => $p->id])
+        $followables = $profiles->map(fn ($p) => ['type' => $p->getMorphClass(), 'id' => $p->id])
             ->concat($announcements->map(fn ($a) => ['type' => $a->getMorphClass(), 'id' => $a->id])->all());
 
         $created = 0;
@@ -44,15 +44,15 @@ class DemoDataSeeder extends Seeder
         while ($created < 100 && $attempts < 500) {
             $attempts++;
             $user = $users->random();
-            $favoritable = $favoritables->random();
+            $followable = $followables->random();
 
-            $favorite = Favorite::firstOrCreate([
+            $follow = Follow::firstOrCreate([
                 'user_id' => $user->id,
-                'favoritable_type' => $favoritable['type'],
-                'favoritable_id' => $favoritable['id'],
+                'followable_type' => $followable['type'],
+                'followable_id' => $followable['id'],
             ]);
 
-            if ($favorite->wasRecentlyCreated) {
+            if ($follow->wasRecentlyCreated) {
                 $created++;
             }
         }

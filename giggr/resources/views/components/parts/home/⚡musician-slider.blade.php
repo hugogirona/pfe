@@ -1,10 +1,13 @@
 <?php
 
+use App\Models\Follow;
 use App\Models\Profile;
 use Livewire\Component;
 
 new class extends Component {
     public $profiles;
+
+    public array $followedProfileIds = [];
 
     public function mount(): void
     {
@@ -12,6 +15,15 @@ new class extends Component {
             ->inRandomOrder()
             ->limit(7)
             ->get();
+
+        $viewer = auth()->user();
+        if ($viewer !== null && $this->profiles->isNotEmpty()) {
+            $this->followedProfileIds = Follow::where('user_id', $viewer->id)
+                ->where('followable_type', 'profile')
+                ->whereIn('followable_id', $this->profiles->pluck('id'))
+                ->pluck('followable_id')
+                ->all();
+        }
     }
 };
 ?>
@@ -49,7 +61,7 @@ new class extends Component {
             >
                 @foreach ($profiles as $profile)
                     <div class="{{ $cardClass }}">
-                        <x-musician-card :profile="$profile" />
+                        <x-musician-card :profile="$profile" :followed-profile-ids="$followedProfileIds" />
                     </div>
                 @endforeach
             </div>

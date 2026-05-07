@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Announcement;
+use App\Models\Follow;
 use App\Models\Profile;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Livewire\Attributes\Computed;
@@ -56,6 +57,26 @@ new #[Layout('layouts.app')] #[Title('Explorer — Giggr.')] class extends Compo
     }
 
     #[Computed]
+    public function followedProfileIds(): array
+    {
+        $viewer = auth()->user();
+        if ($viewer === null) {
+            return [];
+        }
+
+        $profileIds = $this->filteredMusicians->pluck('id')->all();
+        if ($profileIds === []) {
+            return [];
+        }
+
+        return Follow::where('user_id', $viewer->id)
+            ->where('followable_type', 'profile')
+            ->whereIn('followable_id', $profileIds)
+            ->pluck('followable_id')
+            ->all();
+    }
+
+    #[Computed]
     public function activeFiltersCount(): int
     {
         return count($this->filterInstruments) + count($this->filterGenres) + ($this->filterCity ? 1 : 0);
@@ -105,7 +126,7 @@ new #[Layout('layouts.app')] #[Title('Explorer — Giggr.')] class extends Compo
             <h2 class="sr-only">{{ __('explore.tab_musicians') }}</h2>
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 @foreach ($this->filteredMusicians as $profile)
-                    <x-musician-card :profile="$profile" />
+                    <x-musician-card :profile="$profile" :followed-profile-ids="$this->followedProfileIds" />
                 @endforeach
             </div>
             @if ($this->filteredMusicians->isEmpty())
