@@ -44,20 +44,28 @@ it('morphs to an Announcement', function () {
         ->and($follow->followable->id)->toBe($announcement->id);
 });
 
-it('morph map stores profile string instead of class name', function () {
+it('morph map stores profile alias instead of the class FQCN', function () {
     $user = User::factory()->create();
     $profile = Profile::factory()->create();
-    $follow = Follow::create(['user_id' => $user->id, 'followable_type' => 'profile', 'followable_id' => $profile->id]);
 
-    expect($follow->fresh()->followable_type)->toBe('profile');
+    // Use getMorphClass() (and User::follow() which calls it) so the test
+    // exercises the actual morph map enforced in AppServiceProvider.
+    $user->follow($profile);
+
+    expect(Follow::where('user_id', $user->id)->first()->followable_type)
+        ->toBe('profile')
+        ->not->toBe(Profile::class);
 });
 
-it('morph map stores announcement string instead of class name', function () {
+it('morph map stores announcement alias instead of the class FQCN', function () {
     $user = User::factory()->create();
     $announcement = Announcement::factory()->create();
-    $follow = Follow::create(['user_id' => $user->id, 'followable_type' => 'announcement', 'followable_id' => $announcement->id]);
 
-    expect($follow->fresh()->followable_type)->toBe('announcement');
+    $user->follow($announcement);
+
+    expect(Follow::where('user_id', $user->id)->first()->followable_type)
+        ->toBe('announcement')
+        ->not->toBe(Announcement::class);
 });
 
 it('enforces composite unique constraint on user + followable', function () {

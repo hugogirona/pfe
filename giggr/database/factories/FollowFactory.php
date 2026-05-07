@@ -10,6 +10,10 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
  * @extends Factory<Follow>
+ *
+ * Note: ->make() returns a Follow with followable_type/id set to null.
+ * To get a fully-related instance without persisting, set the followable
+ * explicitly: Follow::factory()->make(['followable_type' => 'profile', 'followable_id' => $id])
  */
 class FollowFactory extends Factory
 {
@@ -26,27 +30,17 @@ class FollowFactory extends Factory
 
     public function configure(): static
     {
-        return $this
-            ->afterMaking(function (Follow $follow): void {
-                $followable = fake()->boolean(50)
-                    ? Profile::factory()->make()
-                    : Announcement::factory()->make();
+        return $this->afterCreating(function (Follow $follow): void {
+            $followable = fake()->boolean(50)
+                ? Profile::factory()->create()
+                : Announcement::factory()->create();
 
-                $follow->followable_type = $followable->getMorphClass();
-                $follow->followable_id = $followable->getKey();
-                $follow->setRelation('followable', $followable);
-            })
-            ->afterCreating(function (Follow $follow): void {
-                $followable = fake()->boolean(50)
-                    ? Profile::factory()->create()
-                    : Announcement::factory()->create();
+            $follow->forceFill([
+                'followable_type' => $followable->getMorphClass(),
+                'followable_id' => $followable->getKey(),
+            ])->save();
 
-                $follow->forceFill([
-                    'followable_type' => $followable->getMorphClass(),
-                    'followable_id' => $followable->getKey(),
-                ])->save();
-
-                $follow->setRelation('followable', $followable);
-            });
+            $follow->setRelation('followable', $followable);
+        });
     }
 }

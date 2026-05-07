@@ -107,6 +107,36 @@ it('renders the button variant with full text label when variant=button', functi
         ->assertSee(__('social.follow'));
 });
 
+it('uses preloaded props instead of querying when all are provided', function () {
+    $viewer = User::factory()->create();
+    $profile = Profile::factory()->create();
+    $component = Livewire::actingAs($viewer)
+        ->test('parts.social.follow-button', [
+            'profileId' => $profile->id,
+            'musicianName' => 'Cached Display Name',
+            'ownerId' => $profile->user_id,
+            'isFollowing' => true,
+        ]);
+
+    expect($component->get('musicianName'))->toBe('Cached Display Name')
+        ->and($component->get('ownerId'))->toBe($profile->user_id)
+        ->and($component->get('isFollowing'))->toBeTrue();
+});
+
+it('preloaded ownerId still hides the button when viewer owns the profile', function () {
+    $self = User::factory()->create();
+    $profile = Profile::factory()->create(['user_id' => $self->id]);
+
+    Livewire::actingAs($self)
+        ->test('parts.social.follow-button', [
+            'profileId' => $profile->id,
+            'musicianName' => 'whatever',
+            'ownerId' => $self->id,
+            'isFollowing' => false,
+        ])
+        ->assertSet('isOwn', true);
+});
+
 it('button variant toggles state and persists the follow', function () {
     $viewer = User::factory()->create();
     $profile = Profile::factory()->create();

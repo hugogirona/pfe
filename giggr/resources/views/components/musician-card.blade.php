@@ -1,10 +1,16 @@
-@props(['profile'])
+@props([
+    'profile',
+    // Pass an array of profile IDs the viewer already follows (computed once at the page level)
+    // to skip the per-card follow-state query. Null = unknown, the button will query itself.
+    'followedProfileIds' => null,
+])
 
 @php
     $name        = $profile->user->full_name;
     $instruments = $profile->instruments->pluck('name');
     $genres      = $profile->genres->pluck('name');
     $url         = route('profile', ['id' => $profile->id]);
+    $isFollowing = is_array($followedProfileIds) ? in_array($profile->id, $followedProfileIds, true) : null;
 @endphp
 
 <div class="relative h-full">
@@ -73,6 +79,12 @@
 
     {{-- Outside the <a> so clicks never bubble to the link --}}
     <div class="absolute top-3 right-3 z-10">
-        <livewire:parts.social.follow-button :profile-id="$profile->id" :wire:key="'follow-profile-'.$profile->id" />
+        <livewire:parts.social.follow-button
+            :profile-id="$profile->id"
+            :musician-name="$name"
+            :owner-id="$profile->user_id"
+            :is-following="$isFollowing"
+            :wire:key="'follow-profile-'.$profile->id"
+        />
     </div>
 </div>

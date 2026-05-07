@@ -10,46 +10,64 @@ new class extends Component {
 
     public string $musicianName = '';
 
+    public ?int $ownerId = null;
+
     public bool $isFollowing = false;
 
     public bool $isOwn = false;
 
-    public function mount(int $profileId, string $variant = 'heart'): void
+    public function mount(
+        int     $profileId,
+        string  $variant = 'heart',
+        ?string $musicianName = null,
+        ?int    $ownerId = null,
+        ?bool   $isFollowing = null,
+    ): void
     {
         $this->profileId = $profileId;
         $this->variant = $variant;
+
+        if ($musicianName !== null && $ownerId !== null && $isFollowing !== null) {
+            $this->musicianName = $musicianName;
+            $this->ownerId = $ownerId;
+            $this->isOwn = auth()->id() === $ownerId;
+            $this->isFollowing = !$this->isOwn && $isFollowing;
+
+            return;
+        }
 
         $profile = Profile::with('user')->find($profileId);
         if ($profile === null) {
             return;
         }
 
-        $this->musicianName = $profile->user->full_name;
+        $this->musicianName = $musicianName ?? $profile->user->full_name;
+        $this->ownerId = $ownerId ?? $profile->user_id;
 
         $viewer = auth()->user();
         if ($viewer === null) {
             return;
         }
 
-        $this->isOwn = $viewer->id === $profile->user_id;
+        $this->isOwn = $viewer->id === $this->ownerId;
         if ($this->isOwn) {
             return;
         }
 
-        $this->isFollowing = $viewer->isFollowing($profile);
+        $this->isFollowing = $isFollowing ?? $viewer->isFollowing($profile);
     }
 
     public function toggle(): void
     {
         abort_unless(auth()->check(), 403);
 
-        $profile = Profile::find($this->profileId);
-        if ($profile === null) {
+        $viewer = auth()->user();
+        if ($viewer->id === $this->ownerId) {
             return;
         }
 
-        $viewer = auth()->user();
-        if ($viewer->id === $profile->user_id) {
+        $profile = Profile::find($this->profileId);
+        if ($profile === null) {
             return;
         }
 
@@ -66,7 +84,6 @@ new class extends Component {
 
 <div>
     @if ($isOwn)
-        {{-- Hidden for the musician viewing their own card / profile. --}}
     @elseif ($variant === 'button')
         @if (auth()->check())
             <button
@@ -80,7 +97,7 @@ new class extends Component {
                 aria-pressed="{{ $isFollowing ? 'true' : 'false' }}"
                 aria-label="{{ $isFollowing ? __('social.unfollow_aria', ['name' => $musicianName]) : __('social.follow_aria', ['name' => $musicianName]) }}"
             >
-                <x-icon name="heart" class="w-4 h-4" />
+                <x-icon name="heart" class="w-4 h-4"/>
                 <span>{{ $isFollowing ? __('social.following') : __('social.follow') }}</span>
             </button>
         @else
@@ -91,7 +108,7 @@ new class extends Component {
                 class="w-full flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium bg-transparent text-dark border border-dark/20 hover:border-dark/40 hover:bg-dark/5 transition-colors duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-dark/30 focus-visible:ring-offset-1"
                 aria-label="{{ __('social.follow_aria', ['name' => $musicianName]) }}"
             >
-                <x-icon name="heart" class="w-4 h-4" />
+                <x-icon name="heart" class="w-4 h-4"/>
                 <span>{{ __('social.follow') }}</span>
             </button>
         @endif
@@ -108,7 +125,7 @@ new class extends Component {
             aria-label="{{ $isFollowing ? __('social.unfollow_aria', ['name' => $musicianName]) : __('social.follow_aria', ['name' => $musicianName]) }}"
         >
             <span class="sr-only">{{ $isFollowing ? __('social.following') : __('social.follow') }}</span>
-            <x-icon name="heart" class="w-5 h-5" />
+            <x-icon name="heart" class="w-5 h-5"/>
         </button>
     @else
         <button
@@ -119,7 +136,7 @@ new class extends Component {
             aria-label="{{ __('social.follow_aria', ['name' => $musicianName]) }}"
         >
             <span class="sr-only">{{ __('social.follow') }}</span>
-            <x-icon name="heart" class="w-5 h-5" />
+            <x-icon name="heart" class="w-5 h-5"/>
         </button>
     @endif
 </div>
