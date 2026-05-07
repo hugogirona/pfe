@@ -37,10 +37,6 @@ return [
     'follow' => 'Suivre',
     'following' => 'Suivi·e',
     'unfollow' => 'Ne plus suivre',
-    'add_friend' => 'Inviter',
-    'friend_pending' => 'Invitation envoyée',
-    'friend' => 'Ami·e',
-    'remove_friend' => 'Retirer des amis',
     'contact' => 'Contacter',
     'contact_name' => 'Contacter :name',
 

@@ -72,11 +72,7 @@
     </a>
 
     {{-- Outside the <a> so clicks never bubble to the link --}}
-    <button
-        type="button"
-        class="absolute top-3 right-3 z-10 w-10 h-10 flex items-center justify-center rounded-full bg-white/75 backdrop-blur-sm text-dark/40 hover:text-accent hover:bg-white/90 transition-colors duration-200 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
-        aria-label="{{ __('explore.card_favorite', ['name' => $name]) }}"
-    >
-        <x-icon name="heart" class="w-5 h-5" />
-    </button>
+    <div class="absolute top-3 right-3 z-10">
+        <livewire:parts.social.follow-button :profile-id="$profile->id" :wire:key="'follow-profile-'.$profile->id" />
+    </div>
 </div>

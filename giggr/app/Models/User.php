@@ -6,6 +6,7 @@ namespace App\Models;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -50,8 +51,32 @@ class User extends Authenticatable
         return $this->hasMany(Announcement::class);
     }
 
-    public function favorites(): HasMany
+    public function follows(): HasMany
     {
-        return $this->hasMany(Favorite::class);
+        return $this->hasMany(Follow::class);
+    }
+
+    public function follow(Model $followable): Follow
+    {
+        return $this->follows()->firstOrCreate([
+            'followable_type' => $followable->getMorphClass(),
+            'followable_id' => $followable->getKey(),
+        ]);
+    }
+
+    public function unfollow(Model $followable): void
+    {
+        $this->follows()
+            ->where('followable_type', $followable->getMorphClass())
+            ->where('followable_id', $followable->getKey())
+            ->delete();
+    }
+
+    public function isFollowing(Model $followable): bool
+    {
+        return $this->follows()
+            ->where('followable_type', $followable->getMorphClass())
+            ->where('followable_id', $followable->getKey())
+            ->exists();
     }
 }

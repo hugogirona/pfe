@@ -37,10 +37,6 @@ return [
     'follow' => 'Follow',
     'following' => 'Following',
     'unfollow' => 'Unfollow',
-    'add_friend' => 'Add friend',
-    'friend_pending' => 'Request sent',
-    'friend' => 'Friends',
-    'remove_friend' => 'Remove friend',
     'contact' => 'Contact',
     'contact_name' => 'Contact :name',
 
