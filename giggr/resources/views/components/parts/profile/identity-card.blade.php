@@ -5,6 +5,8 @@
     'allGenres'           => [],
     'selectedInstruments' => [],
     'selectedGenres'      => [],
+    'followersCount'      => 0,
+    'followedCount'       => 0,
 ])
 
 <div class="bg-white rounded-2xl border border-dark/10 shadow-sm overflow-hidden">
@@ -12,6 +14,12 @@
     <x-parts.profile.card-avatar :profile="$profile" :isOwner="$isOwner" />
 
     <x-parts.profile.card-identity :profile="$profile" />
+
+    <x-parts.profile.card-relations
+        :profile="$profile"
+        :followers-count="$followersCount"
+        :followed-count="$followedCount"
+    />
 
     <x-parts.profile.card-stats :profile="$profile" />
 

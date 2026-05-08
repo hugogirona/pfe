@@ -20,7 +20,7 @@ class DemoDataSeeder extends Seeder
 
         $liege = City::where('name', 'Liège')->where('postal_code', '4020')->first();
 
-        User::factory()->withProfile([
+        $hugo = User::factory()->withProfile([
             'city_id' => $liege?->id,
             'birth_date' => '2000-02-14',
             'experience_years' => 12,
@@ -32,6 +32,15 @@ class DemoDataSeeder extends Seeder
         ]);
 
         $users = User::factory()->count(30)->withProfile()->create();
+
+        // Give Hugo a populated social graph for dev smoke testing.
+        $hugoProfile = $hugo->profile;
+        foreach ($users->random(5) as $followed) {
+            $hugo->follow($followed->profile);
+        }
+        foreach ($users->random(5) as $follower) {
+            $follower->follow($hugoProfile);
+        }
 
         $announcements = Announcement::factory()->count(50)->recycle($users)->create();
         $profiles = Profile::whereIn('user_id', $users->pluck('id'))->get();

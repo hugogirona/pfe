@@ -78,6 +78,8 @@ new class extends Component {
             $viewer->follow($profile);
             $this->isFollowing = true;
         }
+
+        $this->dispatch('follow-state-changed');
     }
 };
 ?>
