@@ -83,8 +83,6 @@ it('profile page renders the followers and following counts', function () {
         ->get(route('profile', ['id' => $profile->id]))
         ->assertOk();
 
-    $response->assertSeeText('2', false)
-        ->assertSeeText('3', false)
-        ->assertSee(__('social.tab_followers'))
-        ->assertSee(__('social.tab_followed'));
+    $response->assertSeeTextInOrder(['2', __('social.tab_followers')], false)
+        ->assertSeeTextInOrder(['3', __('social.tab_followed')], false);
 });
