@@ -27,7 +27,12 @@ new #[Layout('layouts.app')] #[Title('Profil — Giggr.')] class extends Compone
             'instruments',
             'genres',
             'user.announcements' => fn ($q) => $q->active()->with(['city', 'instruments', 'genres']),
-        ])->findOrFail($id);
+        ])
+            ->withCount([
+                'followers',
+                'followed as followed_count',
+            ])
+            ->findOrFail($id);
 
         $this->isOwner = auth()->check() && auth()->id() === $this->profile->user_id;
 
@@ -101,10 +106,21 @@ new #[Layout('layouts.app')] #[Title('Profil — Giggr.')] class extends Compone
     {
         $this->profile->refresh();
     }
+
+    #[On('follow-state-changed')]
+    public function refreshCounts(): void
+    {
+        $this->profile->loadCount([
+            'followers',
+            'followed as followed_count',
+        ]);
+    }
 };
 ?>
 
 <div>
+
+    <livewire:parts.social.relations-modal />
 
     <x-parts.profile.hero :profile="$profile" />
 
@@ -120,6 +136,8 @@ new #[Layout('layouts.app')] #[Title('Profil — Giggr.')] class extends Compone
                     :allGenres="$allGenres"
                     :selectedInstruments="$selectedInstruments"
                     :selectedGenres="$selectedGenres"
+                    :followers-count="$profile->followers_count ?? 0"
+                    :followed-count="$profile->followed_count ?? 0"
                 />
             </aside>
 

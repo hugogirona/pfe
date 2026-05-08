@@ -10,6 +10,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Profile extends Model
@@ -53,6 +55,17 @@ class Profile extends Model
     public function genres(): BelongsToMany
     {
         return $this->belongsToMany(Genre::class);
+    }
+
+    public function followers(): MorphMany
+    {
+        return $this->morphMany(Follow::class, 'followable');
+    }
+
+    public function followed(): HasMany
+    {
+        return $this->hasMany(Follow::class, 'user_id', 'user_id')
+            ->where('followable_type', 'profile');
     }
 
     protected function age(): Attribute

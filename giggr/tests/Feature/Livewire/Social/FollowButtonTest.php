@@ -152,3 +152,13 @@ it('button variant toggles state and persists the follow', function () {
         ->where('followable_id', $profile->id)
         ->exists())->toBeTrue();
 });
+
+it('dispatches follow-state-changed after a successful toggle', function () {
+    $viewer = User::factory()->create();
+    $profile = Profile::factory()->create();
+
+    Livewire::actingAs($viewer)
+        ->test('parts.social.follow-button', ['profileId' => $profile->id])
+        ->call('toggle')
+        ->assertDispatched('follow-state-changed');
+});
