@@ -13,7 +13,7 @@
         aria-label="{{ trans_choice('social.count_followers', $followersCount, ['n' => $followersCount]) }}"
     >
         <span class="font-heading text-base">{{ $followersCount }}</span>
-        <span class="text-dark/50">{{ trans_choice('social.tab_followers', $followersCount) }}</span>
+        <span class="text-dark/50">{{ __('social.tab_followers') }}</span>
     </button>
 
     <span class="text-dark/25 select-none" aria-hidden="true">·</span>
