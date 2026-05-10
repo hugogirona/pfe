@@ -33,6 +33,30 @@ it('profile page redirects guests to login', function () {
         ->assertRedirectToRoute('login');
 });
 
+it('preserves relation counts when the avatar is refreshed', function () {
+    $this->seed([CitySeeder::class, InstrumentSeeder::class, GenreSeeder::class]);
+
+    $owner = User::factory()->create();
+    $profile = Profile::factory()->create(['user_id' => $owner->id]);
+
+    $follower = User::factory()->create();
+    $follower->follow($profile);
+    $other = Profile::factory()->create();
+    $owner->follow($other);
+
+    $this->actingAs($owner);
+
+    $component = Livewire::test('pages::profile.index', ['id' => $profile->id]);
+
+    expect($component->get('profile')->followers_count)->toBe(1)
+        ->and($component->get('profile')->followed_count)->toBe(1);
+
+    $component->dispatch('avatar-saved');
+
+    expect($component->get('profile')->followers_count)->toBe(1)
+        ->and($component->get('profile')->followed_count)->toBe(1);
+});
+
 it('refreshes followers and followed counts when follow-state-changed is received', function () {
     $this->seed([CitySeeder::class, InstrumentSeeder::class, GenreSeeder::class]);
 
@@ -46,13 +70,11 @@ it('refreshes followers and followed counts when follow-state-changed is receive
     expect($component->get('profile')->followers_count)->toBe(0)
         ->and($component->get('profile')->followed_count)->toBe(0);
 
-    // External change: someone follows me, and I follow someone
     $follower = User::factory()->create();
     $follower->follow($profile);
     $other = Profile::factory()->create();
     $owner->follow($other);
 
-    // Counts are still stale at this point until the event fires
     $component->dispatch('follow-state-changed');
 
     expect($component->get('profile')->followers_count)->toBe(1)
@@ -65,13 +87,11 @@ it('profile page renders the followers and following counts', function () {
     $owner = User::factory()->create();
     $profile = Profile::factory()->create(['user_id' => $owner->id]);
 
-    // 2 followers
     $follower1 = User::factory()->create();
     $follower2 = User::factory()->create();
     $follower1->follow($profile);
     $follower2->follow($profile);
 
-    // 3 followings (profiles)
     $followed1 = Profile::factory()->create();
     $followed2 = Profile::factory()->create();
     $followed3 = Profile::factory()->create();

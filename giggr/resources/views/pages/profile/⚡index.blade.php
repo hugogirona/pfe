@@ -105,10 +105,16 @@ new #[Layout('layouts.app')] #[Title('Profil — Giggr.')] class extends Compone
     public function refreshAvatar(): void
     {
         $this->profile->refresh();
+        $this->reloadRelationCounts();
     }
 
     #[On('follow-state-changed')]
     public function refreshCounts(): void
+    {
+        $this->reloadRelationCounts();
+    }
+
+    private function reloadRelationCounts(): void
     {
         $this->profile->loadCount([
             'followers',

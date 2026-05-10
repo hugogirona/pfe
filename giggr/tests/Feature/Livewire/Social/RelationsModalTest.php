@@ -100,7 +100,7 @@ it('following tab excludes followed announcements (only profiles)', function () 
     $component = Livewire::test('parts.social.relations-modal')
         ->dispatch('open-relations-modal', profileId: $profile->id, tab: 'followed');
 
-    expect($component->get('followed')->total())->toBe(1);
+    expect($component->get('followed')->count())->toBe(1);
 });
 
 it('switching tabs updates the displayed list', function () {
@@ -142,7 +142,7 @@ it('renders empty state when no followers and tab is followers', function () {
     $component = Livewire::test('parts.social.relations-modal')
         ->dispatch('open-relations-modal', profileId: $profile->id, tab: 'followers');
 
-    expect($component->get('followers')->total())->toBe(0);
+    expect($component->get('followers')->count())->toBe(0);
 });
 
 it('shows the visitor empty message when viewing someone elses profile (followers)', function () {

@@ -2,18 +2,13 @@
 
 use App\Models\Follow;
 use App\Models\Profile;
-use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Collection;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\On;
 use Livewire\Component;
-use Livewire\WithPagination;
 
 new class extends Component {
-    use WithPagination;
-
-    private const VALID_TABS = ['followers', 'followed'];
-
-    private const PER_PAGE = 20;
+    private const array VALID_TABS = ['followers', 'followed'];
 
     public bool $open = false;
 
@@ -25,7 +20,6 @@ new class extends Component {
 
     public bool $isOwnProfile = false;
 
-    /** @var array<int, int> Profile IDs the current viewer already follows (across the visible rows). */
     public array $followedIds = [];
 
     #[On('open-relations-modal')]
@@ -33,7 +27,6 @@ new class extends Component {
     {
         $this->profileId = $profileId;
         $this->activeTab = in_array($tab, self::VALID_TABS, true) ? $tab : 'followers';
-        $this->resetPage('relations-page');
 
         $profile = Profile::with('user')->find($profileId);
         $this->musicianName = $profile?->user->full_name ?? '';
@@ -50,7 +43,6 @@ new class extends Component {
         }
 
         $this->activeTab = $tab;
-        $this->resetPage('relations-page');
         $this->refreshFollowedIds();
     }
 
@@ -93,7 +85,7 @@ new class extends Component {
         }
 
         $list = $this->activeTab === 'followers' ? $this->followers : $this->followed;
-        $rowIds = collect($list->items())->pluck('id')->all();
+        $rowIds = $list->pluck('id')->all();
         if ($rowIds === []) {
             $this->followedIds = [];
 
@@ -109,10 +101,10 @@ new class extends Component {
     }
 
     #[Computed]
-    public function followers(): LengthAwarePaginator
+    public function followers(): Collection
     {
         if ($this->profileId === null) {
-            return new LengthAwarePaginator([], 0, self::PER_PAGE);
+            return new Collection;
         }
 
         return Profile::query()
@@ -122,19 +114,19 @@ new class extends Component {
                 ->where('followable_id', $this->profileId)
             )
             ->orderBy('id')
-            ->paginate(self::PER_PAGE, pageName: 'relations-page');
+            ->get();
     }
 
     #[Computed]
-    public function followed(): LengthAwarePaginator
+    public function followed(): Collection
     {
         if ($this->profileId === null) {
-            return new LengthAwarePaginator([], 0, self::PER_PAGE);
+            return new Collection;
         }
 
         $profile = Profile::find($this->profileId);
         if ($profile === null) {
-            return new LengthAwarePaginator([], 0, self::PER_PAGE);
+            return new Collection;
         }
 
         $ownerFollowsIds = Follow::query()
@@ -146,7 +138,7 @@ new class extends Component {
             ->with(['user', 'city'])
             ->whereIn('id', $ownerFollowsIds)
             ->orderBy('id')
-            ->paginate(self::PER_PAGE, pageName: 'relations-page');
+            ->get();
     }
 };
 ?>
@@ -162,7 +154,7 @@ new class extends Component {
     })"
     x-show="show"
     @keydown.escape.window="if (show) $wire.close()"
-    class="fixed inset-0 z-[60] flex items-center justify-center p-4"
+    class="fixed inset-0 z-60 flex items-center justify-center p-4"
     style="display: none"
     role="dialog"
     aria-modal="true"
@@ -193,7 +185,6 @@ new class extends Component {
         x-transition:leave-end="opacity-0 scale-95 translate-y-2"
         class="relative z-10 w-full max-w-md max-h-[80vh] rounded-2xl bg-bg shadow-2xl flex flex-col overflow-hidden"
     >
-        {{-- Header: tablist + close --}}
         <header class="flex items-center justify-between gap-2 px-2 pr-3 pt-2 border-b border-dark/10 shrink-0">
             <div role="tablist" aria-label="{{ __('social.relations_aria') }}" class="flex flex-1">
                 <button
@@ -209,7 +200,7 @@ new class extends Component {
                     ])
                 >
                     {{ __('social.tab_followers') }}
-                    <span class="ml-1 text-dark/40">{{ $this->followers->total() }}</span>
+                    <span class="ml-1 text-dark/40">{{ $this->followers->count() }}</span>
                 </button>
                 <button
                     type="button"
@@ -224,7 +215,7 @@ new class extends Component {
                     ])
                 >
                     {{ __('social.tab_followed') }}
-                    <span class="ml-1 text-dark/40">{{ $this->followed->total() }}</span>
+                    <span class="ml-1 text-dark/40">{{ $this->followed->count() }}</span>
                 </button>
             </div>
 
@@ -281,12 +272,6 @@ new class extends Component {
                         </li>
                     @endforeach
                 </ul>
-
-                @if ($list->hasPages())
-                    <div class="px-4 py-3 border-t border-dark/[0.07]">
-                        {{ $list->links() }}
-                    </div>
-                @endif
             @endif
         </div>
     </div>
