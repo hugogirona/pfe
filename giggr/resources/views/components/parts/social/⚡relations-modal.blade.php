@@ -38,7 +38,7 @@ new class extends Component {
 
     public function setTab(string $tab): void
     {
-        if (! in_array($tab, self::VALID_TABS, true)) {
+        if (!in_array($tab, self::VALID_TABS, true)) {
             return;
         }
 
@@ -60,7 +60,7 @@ new class extends Component {
             $viewer->unfollow($target);
             $this->followedIds = array_values(array_filter(
                 $this->followedIds,
-                fn (int $id) => $id !== $profileId,
+                fn(int $id) => $id !== $profileId,
             ));
         } else {
             $viewer->follow($target);
@@ -109,7 +109,7 @@ new class extends Component {
 
         return Profile::query()
             ->with(['user', 'city'])
-            ->whereHas('user.follows', fn ($q) => $q
+            ->whereHas('user.follows', fn($q) => $q
                 ->where('followable_type', 'profile')
                 ->where('followable_id', $this->profileId)
             )
@@ -160,7 +160,6 @@ new class extends Component {
     aria-modal="true"
     aria-labelledby="relations-modal-title"
 >
-    {{-- Backdrop --}}
     <div
         x-show="show"
         x-transition:enter="transition ease-out duration-200"
@@ -174,7 +173,6 @@ new class extends Component {
         aria-hidden="true"
     ></div>
 
-    {{-- Centered card --}}
     <div
         x-show="show"
         x-transition:enter="transition ease-[cubic-bezier(0.34,1.56,0.64,1)] duration-300"
@@ -225,7 +223,7 @@ new class extends Component {
                 class="w-11 h-11 flex items-center justify-center rounded-full text-dark/40 hover:text-dark hover:bg-dark/5 transition-colors duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent shrink-0"
                 aria-label="{{ __('social.close_relations') }}"
             >
-                <x-icon name="x-mark" class="w-5 h-5" />
+                <x-icon name="x-mark" class="w-5 h-5"/>
             </button>
         </header>
 
