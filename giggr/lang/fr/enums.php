@@ -15,4 +15,8 @@ return [
         'open_to_collab' => 'Ouvert collaboration',
         'not_available' => 'Non disponible',
     ],
+    'media_type' => [
+        'image' => 'Photo',
+        'youtube' => 'Vidéo YouTube',
+    ],
 ];
