@@ -62,6 +62,13 @@ class Profile extends Model
         return $this->morphMany(Follow::class, 'followable');
     }
 
+    public function media(): HasMany
+    {
+        return $this->hasMany(Media::class)
+            ->orderBy('position')
+            ->orderBy('id');
+    }
+
     public function followed(): HasMany
     {
         return $this->hasMany(Follow::class, 'user_id', 'user_id')
