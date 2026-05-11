@@ -52,4 +52,22 @@ return [
     'video_play' => 'Play video',
     'media_caption' => 'Caption',
 
+    // Gallery add menu
+    'gallery_add_image' => 'Photo',
+    'gallery_add_video' => 'Video',
+    'gallery_add_video_title' => 'Add a video',
+    'gallery_add_image_title' => 'Add a photo',
+    'gallery_soon' => 'Soon',
+
+    // Add YouTube form
+    'add_youtube_label' => 'YouTube URL',
+    'add_youtube_placeholder' => 'https://www.youtube.com/watch?v=...',
+    'add_youtube_caption_label' => 'Description (optional)',
+    'add_youtube_caption_placeholder' => 'e.g. My latest gig',
+    'add_youtube_submit' => 'Add the video',
+    'add_youtube_submitting' => 'Adding…',
+    'media_invalid_youtube_url' => 'Invalid YouTube URL. Paste a valid YouTube link.',
+    'media_youtube_duplicate' => 'This video is already in your gallery.',
+    'media_cap_reached' => 'You have reached the limit of :max medias per profile.',
+
 ];
