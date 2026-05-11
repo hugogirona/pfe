@@ -13,7 +13,6 @@
                     size="icon"
                     @click="open = !open"
                     @keydown.escape.window="open = false"
-                    aria-expanded="false"
                     x-bind:aria-expanded="open"
                     aria-haspopup="true"
                     aria-label="{{ __('profile.add_media') }}"

@@ -30,7 +30,6 @@ return [
     'genres_empty_owner' => 'Ajoute tes genres.',
     'gallery_empty_owner' => "Tu n'as pas encore partagé de médias.",
     'add_media' => 'Ajouter des médias',
-    'media_coming_soon' => 'Upload de médias bientôt disponible.',
     'announcements_empty_owner' => "Tu n'as pas encore d'annonces actives.",
 
     // Social actions
@@ -50,7 +49,6 @@ return [
     // Gallery
     'photo_alt' => 'Photo partagée par :name',
     'video_play' => 'Lire la vidéo',
-    'media_caption' => 'Légende',
 
     // Gallery add menu
     'gallery_add_image' => 'Photo',

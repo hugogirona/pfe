@@ -30,7 +30,6 @@ return [
     'genres_empty_owner' => 'Add your genres.',
     'gallery_empty_owner' => "You haven't shared any media yet.",
     'add_media' => 'Add media',
-    'media_coming_soon' => 'Media upload coming soon.',
     'announcements_empty_owner' => 'You have no active listings yet.',
 
     // Social actions
@@ -50,7 +49,6 @@ return [
     // Gallery
     'photo_alt' => 'Photo shared by :name',
     'video_play' => 'Play video',
-    'media_caption' => 'Caption',
 
     // Gallery add menu
     'gallery_add_image' => 'Photo',
