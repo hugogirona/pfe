@@ -17,7 +17,8 @@ it('owner can add a youtube video by pasting the 11-char id', function () {
         ->call('save')
         ->assertHasNoErrors()
         ->assertDispatched('media-added')
-        ->assertDispatched('close-modal');
+        ->assertNotDispatched('close-modal')
+        ->assertSet('success', true);
 
     expect(Media::count())->toBe(1)
         ->and(Media::first())
@@ -25,6 +26,31 @@ it('owner can add a youtube video by pasting the 11-char id', function () {
         ->source->toBe('cj9kbTU9pKA')
         ->caption->toBe('Mon dernier concert')
         ->profile_id->toBe($profile->id);
+});
+
+it('close action dispatches close-modal', function () {
+    $owner = User::factory()->create();
+    $profile = Profile::factory()->create(['user_id' => $owner->id]);
+
+    Livewire::actingAs($owner)
+        ->test('parts.profile.add-youtube-form', ['model_id' => $profile->id])
+        ->set('videoId', 'cj9kbTU9pKA')
+        ->call('save')
+        ->call('close')
+        ->assertDispatched('close-modal');
+});
+
+it('shows the success message after save', function () {
+    $owner = User::factory()->create();
+    $profile = Profile::factory()->create(['user_id' => $owner->id]);
+
+    Livewire::actingAs($owner)
+        ->test('parts.profile.add-youtube-form', ['model_id' => $profile->id])
+        ->set('videoId', 'cj9kbTU9pKA')
+        ->call('save')
+        ->assertSee(__('profile.add_youtube_success_title'))
+        ->assertSee(__('profile.add_youtube_success_body'))
+        ->assertSee(__('profile.add_youtube_close'));
 });
 
 it('accepts ids with hyphens and underscores', function () {
@@ -233,17 +259,4 @@ it('caption length is capped', function () {
         ->set('caption', str_repeat('a', 256))
         ->call('save')
         ->assertHasErrors(['caption']);
-});
-
-it('resets the form after a successful save', function () {
-    $owner = User::factory()->create();
-    $profile = Profile::factory()->create(['user_id' => $owner->id]);
-
-    Livewire::actingAs($owner)
-        ->test('parts.profile.add-youtube-form', ['model_id' => $profile->id])
-        ->set('videoId', 'cj9kbTU9pKA')
-        ->set('caption', 'something')
-        ->call('save')
-        ->assertSet('videoId', '')
-        ->assertSet('caption', '');
 });

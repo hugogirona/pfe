@@ -66,6 +66,9 @@ return [
     'add_youtube_caption_placeholder' => 'e.g. My latest gig',
     'add_youtube_submit' => 'Add the video',
     'add_youtube_submitting' => 'Adding…',
+    'add_youtube_success_title' => 'Video added!',
+    'add_youtube_success_body' => 'Your video is now visible in your gallery.',
+    'add_youtube_close' => 'Close',
     'media_youtube_duplicate' => 'This video is already in your gallery.',
     'media_cap_reached' => 'You have reached the limit of :max medias per profile.',
 

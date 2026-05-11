@@ -66,6 +66,9 @@ return [
     'add_youtube_caption_placeholder' => 'Ex : Mon dernier concert',
     'add_youtube_submit' => 'Ajouter la vidéo',
     'add_youtube_submitting' => 'Ajout…',
+    'add_youtube_success_title' => 'Vidéo ajoutée !',
+    'add_youtube_success_body' => 'Ta vidéo est maintenant visible dans ta galerie.',
+    'add_youtube_close' => 'Fermer',
     'media_youtube_duplicate' => 'Cette vidéo est déjà dans ta galerie.',
     'media_cap_reached' => 'Tu as atteint la limite de :max médias par profil.',
 
