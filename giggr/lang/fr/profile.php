@@ -60,13 +60,14 @@ return [
     'gallery_soon' => 'Bientôt',
 
     // Add YouTube form
-    'add_youtube_label' => 'URL YouTube',
-    'add_youtube_placeholder' => 'https://www.youtube.com/watch?v=...',
+    'add_youtube_help_title' => 'Comment trouver l\'ID de la vidéo ?',
+    'add_youtube_help_body' => 'Dans une URL YouTube comme <code class="font-mono text-dark">https://www.youtube.com/watch?v=<strong>cj9kbTU9pKA</strong></code>, c\'est la partie après <code class="font-mono text-dark">?v=</code>, exactement 11 caractères.',
+    'add_youtube_label' => 'ID de la vidéo',
+    'add_youtube_placeholder' => 'Ex : cj9kbTU9pKA',
     'add_youtube_caption_label' => 'Description (optionnelle)',
     'add_youtube_caption_placeholder' => 'Ex : Mon dernier concert',
     'add_youtube_submit' => 'Ajouter la vidéo',
     'add_youtube_submitting' => 'Ajout…',
-    'media_invalid_youtube_url' => 'URL YouTube invalide. Colle un lien YouTube valide.',
     'media_youtube_duplicate' => 'Cette vidéo est déjà dans ta galerie.',
     'media_cap_reached' => 'Tu as atteint la limite de :max médias par profil.',
 

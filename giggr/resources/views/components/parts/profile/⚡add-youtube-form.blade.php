@@ -3,7 +3,6 @@
 use App\Enums\MediaType;
 use App\Models\Media;
 use App\Models\Profile;
-use App\Support\YouTubeUrl;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
 
@@ -12,8 +11,8 @@ new class extends Component {
 
     public ?string $model_id = null;
 
-    #[Validate('required|string|max:500')]
-    public string $url = '';
+    #[Validate('required|string|regex:/^[A-Za-z0-9_-]{11}$/')]
+    public string $videoId = '';
 
     #[Validate('nullable|string|max:255')]
     public string $caption = '';
@@ -32,25 +31,18 @@ new class extends Component {
 
         $this->validate();
 
-        $id = YouTubeUrl::extractId($this->url);
-        if ($id === null) {
-            $this->addError('url', __('profile.media_invalid_youtube_url'));
-
-            return;
-        }
-
         if ($profile->media()->count() >= self::MAX_MEDIAS_PER_PROFILE) {
-            $this->addError('url', __('profile.media_cap_reached', ['max' => self::MAX_MEDIAS_PER_PROFILE]));
+            $this->addError('videoId', __('profile.media_cap_reached', ['max' => self::MAX_MEDIAS_PER_PROFILE]));
 
             return;
         }
 
         $duplicate = $profile->media()
             ->where('type', MediaType::Youtube->value)
-            ->where('source', $id)
+            ->where('source', $this->videoId)
             ->exists();
         if ($duplicate) {
-            $this->addError('url', __('profile.media_youtube_duplicate'));
+            $this->addError('videoId', __('profile.media_youtube_duplicate'));
 
             return;
         }
@@ -58,12 +50,12 @@ new class extends Component {
         Media::create([
             'profile_id' => $profile->id,
             'type' => MediaType::Youtube,
-            'source' => $id,
+            'source' => $this->videoId,
             'caption' => $this->caption !== '' ? $this->caption : null,
             'position' => ($profile->media()->max('position') ?? -1) + 1,
         ]);
 
-        $this->reset(['url', 'caption']);
+        $this->reset(['videoId', 'caption']);
         $this->dispatch('media-added');
         $this->dispatch('close-modal');
     }
@@ -72,15 +64,22 @@ new class extends Component {
 
 <form wire:submit="save" class="space-y-5" novalidate>
 
+    <div class="bg-pastel-blue/40 border border-pastel-blue rounded-md p-4 text-sm text-dark/75 leading-relaxed">
+        <p class="font-medium text-dark mb-1">{{ __('profile.add_youtube_help_title') }}</p>
+        <p>
+            {!! __('profile.add_youtube_help_body') !!}
+        </p>
+    </div>
+
     <div>
         <x-form.input
-            name="url"
+            name="videoId"
             :label="__('profile.add_youtube_label')"
-            wire:model="url"
+            wire:model="videoId"
             :placeholder="__('profile.add_youtube_placeholder')"
             required
         />
-        @error('url')
+        @error('videoId')
             <p class="text-xs text-accent mt-1.5" role="alert">{{ $message }}</p>
         @enderror
     </div>

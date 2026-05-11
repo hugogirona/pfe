@@ -6,13 +6,13 @@ use App\Models\Profile;
 use App\Models\User;
 use Livewire\Livewire;
 
-it('owner can add a youtube video by pasting a watch url', function () {
+it('owner can add a youtube video by pasting the 11-char id', function () {
     $owner = User::factory()->create();
     $profile = Profile::factory()->create(['user_id' => $owner->id]);
 
     Livewire::actingAs($owner)
         ->test('parts.profile.add-youtube-form', ['model_id' => $profile->id])
-        ->set('url', 'https://www.youtube.com/watch?v=cj9kbTU9pKA')
+        ->set('videoId', 'cj9kbTU9pKA')
         ->set('caption', 'Mon dernier concert')
         ->call('save')
         ->assertHasNoErrors()
@@ -27,21 +27,18 @@ it('owner can add a youtube video by pasting a watch url', function () {
         ->profile_id->toBe($profile->id);
 });
 
-it('extracts the id from various url formats', function (string $url, string $expectedId) {
+it('accepts ids with hyphens and underscores', function () {
     $owner = User::factory()->create();
     $profile = Profile::factory()->create(['user_id' => $owner->id]);
 
     Livewire::actingAs($owner)
         ->test('parts.profile.add-youtube-form', ['model_id' => $profile->id])
-        ->set('url', $url)
+        ->set('videoId', 'AB_cd-EF1gh')
         ->call('save')
         ->assertHasNoErrors();
 
-    expect(Media::first()->source)->toBe($expectedId);
-})->with([
-    ['https://youtu.be/cj9kbTU9pKA', 'cj9kbTU9pKA'],
-    ['https://www.youtube.com/embed/cj9kbTU9pKA', 'cj9kbTU9pKA'],
-]);
+    expect(Media::first()->source)->toBe('AB_cd-EF1gh');
+});
 
 it('assigns the next position automatically (max + 1)', function () {
     $owner = User::factory()->create();
@@ -51,7 +48,7 @@ it('assigns the next position automatically (max + 1)', function () {
 
     Livewire::actingAs($owner)
         ->test('parts.profile.add-youtube-form', ['model_id' => $profile->id])
-        ->set('url', 'https://youtu.be/cj9kbTU9pKA')
+        ->set('videoId', 'cj9kbTU9pKA')
         ->call('save')
         ->assertHasNoErrors();
 
@@ -66,34 +63,67 @@ it('assigns position 0 to the first media on the profile', function () {
 
     Livewire::actingAs($owner)
         ->test('parts.profile.add-youtube-form', ['model_id' => $profile->id])
-        ->set('url', 'https://youtu.be/cj9kbTU9pKA')
+        ->set('videoId', 'cj9kbTU9pKA')
         ->call('save');
 
     expect(Media::first()->position)->toBe(0);
 });
 
-it('rejects an invalid url', function () {
+it('rejects a url instead of an id', function () {
     $owner = User::factory()->create();
     $profile = Profile::factory()->create(['user_id' => $owner->id]);
 
     Livewire::actingAs($owner)
         ->test('parts.profile.add-youtube-form', ['model_id' => $profile->id])
-        ->set('url', 'https://vimeo.com/12345')
+        ->set('videoId', 'https://www.youtube.com/watch?v=cj9kbTU9pKA')
         ->call('save')
-        ->assertHasErrors(['url']);
+        ->assertHasErrors(['videoId']);
 
     expect(Media::count())->toBe(0);
 });
 
-it('rejects an empty url', function () {
+it('rejects an id shorter than 11 chars', function () {
     $owner = User::factory()->create();
     $profile = Profile::factory()->create(['user_id' => $owner->id]);
 
     Livewire::actingAs($owner)
         ->test('parts.profile.add-youtube-form', ['model_id' => $profile->id])
-        ->set('url', '')
+        ->set('videoId', 'tooshort')
         ->call('save')
-        ->assertHasErrors(['url' => 'required']);
+        ->assertHasErrors(['videoId']);
+});
+
+it('rejects an id longer than 11 chars', function () {
+    $owner = User::factory()->create();
+    $profile = Profile::factory()->create(['user_id' => $owner->id]);
+
+    Livewire::actingAs($owner)
+        ->test('parts.profile.add-youtube-form', ['model_id' => $profile->id])
+        ->set('videoId', 'thisidistoolong')
+        ->call('save')
+        ->assertHasErrors(['videoId']);
+});
+
+it('rejects an id with invalid characters', function () {
+    $owner = User::factory()->create();
+    $profile = Profile::factory()->create(['user_id' => $owner->id]);
+
+    Livewire::actingAs($owner)
+        ->test('parts.profile.add-youtube-form', ['model_id' => $profile->id])
+        ->set('videoId', 'cj9kbT!9pKA')
+        ->call('save')
+        ->assertHasErrors(['videoId']);
+});
+
+it('rejects an empty id', function () {
+    $owner = User::factory()->create();
+    $profile = Profile::factory()->create(['user_id' => $owner->id]);
+
+    Livewire::actingAs($owner)
+        ->test('parts.profile.add-youtube-form', ['model_id' => $profile->id])
+        ->set('videoId', '')
+        ->call('save')
+        ->assertHasErrors(['videoId' => 'required']);
 });
 
 it('rejects a duplicate youtube id on the same profile', function () {
@@ -108,9 +138,9 @@ it('rejects a duplicate youtube id on the same profile', function () {
 
     Livewire::actingAs($owner)
         ->test('parts.profile.add-youtube-form', ['model_id' => $profile->id])
-        ->set('url', 'https://www.youtube.com/watch?v=cj9kbTU9pKA')
+        ->set('videoId', 'cj9kbTU9pKA')
         ->call('save')
-        ->assertHasErrors(['url']);
+        ->assertHasErrors(['videoId']);
 
     expect(Media::count())->toBe(1);
 });
@@ -130,7 +160,7 @@ it('allows the same youtube id on different profiles', function () {
 
     Livewire::actingAs($owner2)
         ->test('parts.profile.add-youtube-form', ['model_id' => $profile2->id])
-        ->set('url', 'https://www.youtube.com/watch?v=cj9kbTU9pKA')
+        ->set('videoId', 'cj9kbTU9pKA')
         ->call('save')
         ->assertHasNoErrors();
 
@@ -147,9 +177,9 @@ it('rejects when the profile already has 20 medias', function () {
 
     Livewire::actingAs($owner)
         ->test('parts.profile.add-youtube-form', ['model_id' => $profile->id])
-        ->set('url', 'https://youtu.be/cj9kbTU9pKA')
+        ->set('videoId', 'cj9kbTU9pKA')
         ->call('save')
-        ->assertHasErrors(['url']);
+        ->assertHasErrors(['videoId']);
 
     expect(Media::count())->toBe(20);
 });
@@ -161,7 +191,7 @@ it('non-owner cannot add a video', function () {
 
     Livewire::actingAs($stranger)
         ->test('parts.profile.add-youtube-form', ['model_id' => $profile->id])
-        ->set('url', 'https://youtu.be/cj9kbTU9pKA')
+        ->set('videoId', 'cj9kbTU9pKA')
         ->call('save')
         ->assertForbidden();
 
@@ -173,7 +203,7 @@ it('guest cannot add a video', function () {
     $profile = Profile::factory()->create(['user_id' => $owner->id]);
 
     Livewire::test('parts.profile.add-youtube-form', ['model_id' => $profile->id])
-        ->set('url', 'https://youtu.be/cj9kbTU9pKA')
+        ->set('videoId', 'cj9kbTU9pKA')
         ->call('save')
         ->assertForbidden();
 
@@ -186,7 +216,7 @@ it('caption is optional', function () {
 
     Livewire::actingAs($owner)
         ->test('parts.profile.add-youtube-form', ['model_id' => $profile->id])
-        ->set('url', 'https://youtu.be/cj9kbTU9pKA')
+        ->set('videoId', 'cj9kbTU9pKA')
         ->call('save')
         ->assertHasNoErrors();
 
@@ -199,7 +229,7 @@ it('caption length is capped', function () {
 
     Livewire::actingAs($owner)
         ->test('parts.profile.add-youtube-form', ['model_id' => $profile->id])
-        ->set('url', 'https://youtu.be/cj9kbTU9pKA')
+        ->set('videoId', 'cj9kbTU9pKA')
         ->set('caption', str_repeat('a', 256))
         ->call('save')
         ->assertHasErrors(['caption']);
@@ -211,9 +241,9 @@ it('resets the form after a successful save', function () {
 
     Livewire::actingAs($owner)
         ->test('parts.profile.add-youtube-form', ['model_id' => $profile->id])
-        ->set('url', 'https://youtu.be/cj9kbTU9pKA')
+        ->set('videoId', 'cj9kbTU9pKA')
         ->set('caption', 'something')
         ->call('save')
-        ->assertSet('url', '')
+        ->assertSet('videoId', '')
         ->assertSet('caption', '');
 });
