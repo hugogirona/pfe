@@ -70,7 +70,10 @@ it('belongs to a profile', function () {
 
 it('cascades on profile delete', function () {
     $profile = Profile::factory()->create();
-    Media::factory()->count(3)->create(['profile_id' => $profile->id]);
+    Media::factory()
+        ->count(3)
+        ->sequence(fn ($s) => ['position' => $s->index])
+        ->create(['profile_id' => $profile->id]);
 
     $profile->forceDelete();
 
@@ -114,10 +117,8 @@ it('display_url accessor returns the youtube embed url for youtube type', functi
 });
 
 it('display_url accessor returns a Storage url for image type', function () {
-    $media = Media::factory()->image()->create(['source' => 'profiles-photo-abc12345']);
-
-    // For images we expose the medium variant by default in display_url
-    expect($media->display_url)->toContain('profiles-photo-abc12345');
+    $media = Media::factory()->image()->create(['source' => 'gallery-photo-abc12345']);
+    expect($media->display_url)->toContain('gallery-photo-abc12345');
 });
 
 it('youtube_thumbnail_url accessor returns the i.ytimg.com hqdefault url', function () {
@@ -137,4 +138,24 @@ it('profile_id is required (not null at the DB level)', function () {
         'type' => MediaType::Image,
         'source' => 'whatever',
     ]))->toThrow(QueryException::class);
+});
+
+it('enforces unique (profile_id, position) at the DB level', function () {
+    $profile = Profile::factory()->create();
+    Media::factory()->create(['profile_id' => $profile->id, 'position' => 5]);
+
+    expect(fn () => Media::factory()->create([
+        'profile_id' => $profile->id,
+        'position' => 5,
+    ]))->toThrow(QueryException::class);
+});
+
+it('allows the same position across different profiles', function () {
+    $profile1 = Profile::factory()->create();
+    $profile2 = Profile::factory()->create();
+
+    Media::factory()->create(['profile_id' => $profile1->id, 'position' => 0]);
+    Media::factory()->create(['profile_id' => $profile2->id, 'position' => 0]);
+
+    expect(Media::count())->toBe(2);
 });

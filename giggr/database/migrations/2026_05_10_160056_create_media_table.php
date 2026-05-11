@@ -19,7 +19,7 @@ return new class extends Migration
             $table->unsignedSmallInteger('height')->nullable();
             $table->timestamps();
 
-            $table->index(['profile_id', 'position']);
+            $table->unique(['profile_id', 'position']);
         });
     }
 

@@ -64,7 +64,9 @@ class Profile extends Model
 
     public function media(): HasMany
     {
-        return $this->hasMany(Media::class)->orderBy('position');
+        return $this->hasMany(Media::class)
+            ->orderBy('position')
+            ->orderBy('id');
     }
 
     public function followed(): HasMany
