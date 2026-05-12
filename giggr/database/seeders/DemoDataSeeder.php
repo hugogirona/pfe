@@ -2,16 +2,32 @@
 
 namespace Database\Seeders;
 
+use App\Actions\UploadMediaImage;
+use App\Enums\MediaType;
 use App\Models\Announcement;
 use App\Models\City;
 use App\Models\Follow;
+use App\Models\Media;
 use App\Models\Profile;
 use App\Models\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\App;
+use Throwable;
 
 class DemoDataSeeder extends Seeder
 {
+    private const string DEMO_YOUTUBE_ID = 'y6120QOlsfU';
+
+    private const array DEMO_IMAGE_RGB = [102, 51, 153];
+
+    private const int DEMO_IMAGE_WIDTH = 1200;
+
+    private const int DEMO_IMAGE_HEIGHT = 800;
+
+    /**
+     * @throws Throwable
+     */
     public function run(): void
     {
         if (! App::environment(['local', 'staging'])) {
@@ -33,7 +49,6 @@ class DemoDataSeeder extends Seeder
 
         $users = User::factory()->count(30)->withProfile()->create();
 
-        // Give Hugo a populated social graph for dev smoke testing.
         $hugoProfile = $hugo->profile;
         foreach ($users->random(5) as $followed) {
             $hugo->follow($followed->profile);
@@ -65,5 +80,44 @@ class DemoDataSeeder extends Seeder
                 $created++;
             }
         }
+
+        $this->seedMedia($hugoProfile, $profiles);
+    }
+
+    /**
+     * @throws Throwable
+     */
+    private function seedMedia(Profile $hugoProfile, iterable $otherProfiles): void
+    {
+        $tmpPath = tempnam(sys_get_temp_dir(), 'giggr-demo-media-').'.jpg';
+        $img = imagecreatetruecolor(self::DEMO_IMAGE_WIDTH, self::DEMO_IMAGE_HEIGHT);
+        imagefill($img, 0, 0, imagecolorallocate($img, ...self::DEMO_IMAGE_RGB));
+        imagejpeg($img, $tmpPath, 80);
+
+        $file = new UploadedFile($tmpPath, 'demo-photo.jpg', 'image/jpeg', null, true);
+        $hugoImage = app(UploadMediaImage::class)->execute($hugoProfile, $file);
+        $this->attachYoutube($hugoProfile);
+
+        foreach ($otherProfiles as $profile) {
+            Media::create([
+                'profile_id' => $profile->id,
+                'type' => MediaType::Image,
+                'source' => $hugoImage->source,
+                'position' => 0,
+                'width' => self::DEMO_IMAGE_WIDTH,
+                'height' => self::DEMO_IMAGE_HEIGHT,
+            ]);
+            $this->attachYoutube($profile);
+        }
+    }
+
+    private function attachYoutube(Profile $profile): void
+    {
+        Media::create([
+            'profile_id' => $profile->id,
+            'type' => MediaType::Youtube,
+            'source' => self::DEMO_YOUTUBE_ID,
+            'position' => 1,
+        ]);
     }
 }
