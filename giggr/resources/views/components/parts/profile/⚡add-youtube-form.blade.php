@@ -7,8 +7,6 @@ use Livewire\Attributes\Validate;
 use Livewire\Component;
 
 new class extends Component {
-    private const int MAX_MEDIAS_PER_PROFILE = 20;
-
     public ?string $model_id = null;
 
     #[Validate('required|string|regex:/^[A-Za-z0-9_-]{11}$/')]
@@ -33,8 +31,9 @@ new class extends Component {
 
         $this->validate();
 
-        if ($profile->media()->count() >= self::MAX_MEDIAS_PER_PROFILE) {
-            $this->addError('videoId', __('profile.media_cap_reached', ['max' => self::MAX_MEDIAS_PER_PROFILE]));
+        $cap = (int) config('media.max_per_profile');
+        if ($profile->media()->count() >= $cap) {
+            $this->addError('videoId', __('profile.media_cap_reached', ['max' => $cap]));
 
             return;
         }

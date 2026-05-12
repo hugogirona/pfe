@@ -32,18 +32,22 @@
                     class="absolute right-0 mt-2 w-52 bg-white rounded-xl border border-dark/10 shadow-lg overflow-hidden z-10 divide-y divide-dark/8"
                     style="display: none"
                 >
-                    {{-- Add image (disabled until #3 ships) --}}
+                    {{-- Add image --}}
                     <li>
                         <button
                             type="button"
-                            disabled
-                            class="w-full flex items-center gap-2.5 px-4 py-3 text-sm text-dark/30 cursor-not-allowed"
+                            @click="
+                                open = false;
+                                $dispatch('open-modal', {
+                                    component: 'parts.profile.add-image-form',
+                                    title: '{{ __('profile.gallery_add_image_title') }}',
+                                    model_id: '{{ $profile->id }}',
+                                });
+                            "
+                            class="w-full flex items-center gap-2.5 px-4 py-3 text-sm text-dark hover:bg-dark/5 transition-colors duration-150 cursor-pointer focus-visible:outline-none focus-visible:bg-dark/5"
                         >
-                            <x-icon name="photo" class="w-4 h-4 text-dark/20"/>
-                            <span class="flex-1 text-left">{{ __('profile.gallery_add_image') }}</span>
-                            <span class="text-[10px] font-medium uppercase tracking-wide bg-pastel-taupe text-dark/55 rounded-full px-2 py-0.5">
-                                {{ __('profile.gallery_soon') }}
-                            </span>
+                            <x-icon name="photo" class="w-4 h-4 text-dark/40"/>
+                            <span>{{ __('profile.gallery_add_image') }}</span>
                         </button>
                     </li>
 

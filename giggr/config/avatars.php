@@ -4,6 +4,8 @@ return [
 
     'disk' => 'public',
 
+    'base_dir' => 'avatars',
+
     'variants' => [
         'thumbnail' => ['width' => 300, 'height' => 300],
         'medium' => ['width' => 800, 'height' => 800],
