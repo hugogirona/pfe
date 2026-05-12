@@ -19,6 +19,8 @@ class Media extends Model
 
     private const string YOUTUBE_THUMBNAIL_URL = 'https://i.ytimg.com/vi/%s/hqdefault.jpg';
 
+    private const string IMAGE_VARIANT_DIR = 'media';
+
     protected $table = 'media';
 
     protected $fillable = [
@@ -46,14 +48,34 @@ class Media extends Model
         return $this->belongsTo(Profile::class);
     }
 
+    public function deleteVariants(): void
+    {
+        if ($this->type !== MediaType::Image) {
+            return;
+        }
+
+        $disk = Storage::disk(config('media.disk', 'public'));
+        foreach (array_keys(config('media.variants', [])) as $variant) {
+            $disk->delete($this->variantPath($variant));
+        }
+    }
+
     protected function displayUrl(): Attribute
     {
         return Attribute::make(
             get: fn (): string => match ($this->type) {
                 MediaType::Youtube => self::YOUTUBE_EMBED_URL.$this->source,
-                MediaType::Image => Storage::disk(config('media.disk', 'public'))
-                    ->url("media/medium/{$this->source}.webp"),
+                MediaType::Image => $this->variantUrl('medium'),
             },
+        );
+    }
+
+    protected function thumbnailUrl(): Attribute
+    {
+        return Attribute::make(
+            get: fn (): ?string => $this->type === MediaType::Image
+                ? $this->variantUrl('thumbnail')
+                : null,
         );
     }
 
@@ -64,5 +86,15 @@ class Media extends Model
                 ? sprintf(self::YOUTUBE_THUMBNAIL_URL, $this->source)
                 : null,
         );
+    }
+
+    private function variantUrl(string $variant): string
+    {
+        return Storage::disk(config('media.disk', 'public'))->url($this->variantPath($variant));
+    }
+
+    private function variantPath(string $variant): string
+    {
+        return self::IMAGE_VARIANT_DIR."/{$variant}/{$this->source}.webp";
     }
 }

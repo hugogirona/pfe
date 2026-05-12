@@ -55,8 +55,6 @@ return [
     'gallery_add_video' => 'Video',
     'gallery_add_video_title' => 'Add a video',
     'gallery_add_image_title' => 'Add a photo',
-    'gallery_soon' => 'Soon',
-
     // Add YouTube form
     'add_youtube_help_title' => 'How to find the video ID?',
     'add_youtube_help_body' => 'In a YouTube URL like <code class="font-mono text-dark">https://www.youtube.com/watch?v=<strong>cj9kbTU9pKA</strong></code>, it\'s the part after <code class="font-mono text-dark">?v=</code>, exactly 11 characters.',
@@ -69,6 +67,17 @@ return [
     'add_youtube_success_title' => 'Video added!',
     'add_youtube_success_body' => 'Your video is now visible in your gallery.',
     'add_youtube_close' => 'Close',
+
+    // Add image form
+    'add_image_drop' => 'Drop a photo here or click to browse',
+    'add_image_hint' => 'JPEG, PNG or WebP. 5 MB max.',
+    'add_image_caption_label' => 'Description (optional)',
+    'add_image_caption_placeholder' => 'e.g. Backstage at my last gig',
+    'add_image_submit' => 'Add the photo',
+    'add_image_submitting' => 'Uploading…',
+    'add_image_success_title' => 'Photo added!',
+    'add_image_success_body' => 'Your photo is now visible in your gallery.',
+    'add_image_close' => 'Close',
     'media_youtube_duplicate' => 'This video is already in your gallery.',
     'media_cap_reached' => 'You have reached the limit of :max medias per profile.',
 

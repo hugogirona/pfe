@@ -55,8 +55,6 @@ return [
     'gallery_add_video' => 'Vidéo',
     'gallery_add_video_title' => 'Ajouter une vidéo',
     'gallery_add_image_title' => 'Ajouter une photo',
-    'gallery_soon' => 'Bientôt',
-
     // Add YouTube form
     'add_youtube_help_title' => 'Comment trouver l\'ID de la vidéo ?',
     'add_youtube_help_body' => 'Dans une URL YouTube comme <code class="font-mono text-dark">https://www.youtube.com/watch?v=<strong>cj9kbTU9pKA</strong></code>, c\'est la partie après <code class="font-mono text-dark">?v=</code>, exactement 11 caractères.',
@@ -69,6 +67,17 @@ return [
     'add_youtube_success_title' => 'Vidéo ajoutée !',
     'add_youtube_success_body' => 'Ta vidéo est maintenant visible dans ta galerie.',
     'add_youtube_close' => 'Fermer',
+
+    // Add image form
+    'add_image_drop' => 'Glisse une photo ici ou clique pour parcourir',
+    'add_image_hint' => 'JPEG, PNG ou WebP. 5 Mo max.',
+    'add_image_caption_label' => 'Description (optionnelle)',
+    'add_image_caption_placeholder' => 'Ex : Backstage de mon dernier concert',
+    'add_image_submit' => 'Ajouter la photo',
+    'add_image_submitting' => 'Envoi…',
+    'add_image_success_title' => 'Photo ajoutée !',
+    'add_image_success_body' => 'Ta photo est maintenant visible dans ta galerie.',
+    'add_image_close' => 'Fermer',
     'media_youtube_duplicate' => 'Cette vidéo est déjà dans ta galerie.',
     'media_cap_reached' => 'Tu as atteint la limite de :max médias par profil.',
 

@@ -6,6 +6,7 @@ use App\Enums\MediaType;
 use App\Models\Media;
 use App\Models\Profile;
 use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\Storage;
 
 it('can create an image media with all fields', function () {
     $profile = Profile::factory()->create();
@@ -148,6 +149,38 @@ it('enforces unique (profile_id, position) at the DB level', function () {
         'profile_id' => $profile->id,
         'position' => 5,
     ]))->toThrow(QueryException::class);
+});
+
+it('thumbnail_url accessor returns the thumbnail webp variant for images', function () {
+    $media = Media::factory()->image()->create(['source' => 'abc12345']);
+
+    expect($media->thumbnail_url)->toContain('media/thumbnail/abc12345.webp');
+});
+
+it('thumbnail_url is null for youtube type', function () {
+    $media = Media::factory()->youtube()->create();
+
+    expect($media->thumbnail_url)->toBeNull();
+});
+
+it('deleteVariants removes the image variants from disk', function () {
+    Storage::fake('public');
+    $media = Media::factory()->image()->create(['source' => 'to-delete']);
+    Storage::disk('public')->put('media/thumbnail/to-delete.webp', 'fake');
+    Storage::disk('public')->put('media/medium/to-delete.webp', 'fake');
+
+    $media->deleteVariants();
+
+    Storage::disk('public')
+        ->assertMissing('media/thumbnail/to-delete.webp')
+        ->assertMissing('media/medium/to-delete.webp');
+});
+
+it('deleteVariants is a no-op for youtube type', function () {
+    Storage::fake('public');
+    $media = Media::factory()->youtube()->create();
+
+    expect(fn () => $media->deleteVariants())->not->toThrow(\Throwable::class);
 });
 
 it('allows the same position across different profiles', function () {
