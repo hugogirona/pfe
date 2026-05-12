@@ -8,11 +8,6 @@ use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Encoders\WebpEncoder;
 use Intervention\Image\Laravel\Facades\Image;
 
-/**
- * Generates aspect-ratio-preserving WebP variants for a gallery media image,
- * mirrors ProcessAvatarImage but uses scaleDown (not cover) so portrait /
- * landscape / panoramic images keep their native ratio.
- */
 class ProcessMediaImage implements ShouldQueue
 {
     use Queueable;
@@ -31,7 +26,7 @@ class ProcessMediaImage implements ShouldQueue
             foreach ($config['variants'] as $name => $size) {
                 $encoded = Image::decodePath($absolutePath)
                     ->scaleDown($size['max_edge'], $size['max_edge'])
-                    ->encode(new WebpEncoder(quality: $config['quality']));
+                    ->encode(new WebpEncoder(quality: $config['quality'], strip: true));
 
                 Storage::disk($config['disk'])->put(
                     "{$config['base_dir']}/{$name}/{$this->stem}.webp",

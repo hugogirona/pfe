@@ -28,7 +28,7 @@ class ProcessAvatarImage implements ShouldQueue
             foreach ($config['variants'] as $name => $size) {
                 $encoded = Image::decodePath($absolutePath)
                     ->cover($size['width'], $size['height'])
-                    ->encode(new WebpEncoder(quality: $config['quality']));
+                    ->encode(new WebpEncoder(quality: $config['quality'], strip: true));
 
                 Storage::disk($config['disk'])->put(
                     "{$config['base_dir']}/{$name}/{$this->stem}.webp",
