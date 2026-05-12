@@ -260,3 +260,156 @@ it('caption length is capped', function () {
         ->call('save')
         ->assertHasErrors(['caption']);
 });
+
+// -- Edit mode --------------------------------------------------------------
+
+it('prefills the videoId and caption when mounted in edit mode', function () {
+    $owner = User::factory()->create();
+    $profile = Profile::factory()->create(['user_id' => $owner->id]);
+    $media = Media::factory()->youtube()->create([
+        'profile_id' => $profile->id,
+        'source' => 'cj9kbTU9pKA',
+        'caption' => 'Caption d\'origine',
+        'position' => 0,
+    ]);
+
+    Livewire::actingAs($owner)
+        ->test('parts.profile.add-youtube-form', ['media_id' => $media->id])
+        ->assertSet('videoId', 'cj9kbTU9pKA')
+        ->assertSet('caption', 'Caption d\'origine')
+        ->assertSet('isEdit', true);
+});
+
+it('updates the videoId and caption in edit mode', function () {
+    $owner = User::factory()->create();
+    $profile = Profile::factory()->create(['user_id' => $owner->id]);
+    $media = Media::factory()->youtube()->create([
+        'profile_id' => $profile->id,
+        'source' => 'cj9kbTU9pKA',
+        'caption' => 'Avant',
+        'position' => 0,
+    ]);
+
+    Livewire::actingAs($owner)
+        ->test('parts.profile.add-youtube-form', ['media_id' => $media->id])
+        ->set('videoId', 'AB_cd-EF1gh')
+        ->set('caption', 'Après')
+        ->call('save')
+        ->assertHasNoErrors()
+        ->assertDispatched('media-updated')
+        ->assertSet('success', true);
+
+    expect($media->fresh())
+        ->source->toBe('AB_cd-EF1gh')
+        ->caption->toBe('Après');
+});
+
+it('skips the cap check in edit mode', function () {
+    $owner = User::factory()->create();
+    $profile = Profile::factory()->create(['user_id' => $owner->id]);
+    $medias = Media::factory()
+        ->youtube()
+        ->count(20)
+        ->sequence(fn ($s) => ['position' => $s->index])
+        ->create(['profile_id' => $profile->id]);
+
+    Livewire::actingAs($owner)
+        ->test('parts.profile.add-youtube-form', ['media_id' => $medias->first()->id])
+        ->set('caption', 'Edition autorisée')
+        ->call('save')
+        ->assertHasNoErrors();
+});
+
+it('does not flag the same media as a duplicate in edit mode', function () {
+    $owner = User::factory()->create();
+    $profile = Profile::factory()->create(['user_id' => $owner->id]);
+    $media = Media::factory()->youtube()->create([
+        'profile_id' => $profile->id,
+        'source' => 'cj9kbTU9pKA',
+        'position' => 0,
+    ]);
+
+    Livewire::actingAs($owner)
+        ->test('parts.profile.add-youtube-form', ['media_id' => $media->id])
+        ->set('caption', 'Nouvelle légende')
+        ->call('save')
+        ->assertHasNoErrors();
+});
+
+it('still rejects a different existing videoId on the same profile in edit mode', function () {
+    $owner = User::factory()->create();
+    $profile = Profile::factory()->create(['user_id' => $owner->id]);
+    Media::factory()->youtube()->create([
+        'profile_id' => $profile->id,
+        'source' => 'AB_cd-EF1gh',
+        'position' => 0,
+    ]);
+    $editing = Media::factory()->youtube()->create([
+        'profile_id' => $profile->id,
+        'source' => 'cj9kbTU9pKA',
+        'position' => 1,
+    ]);
+
+    Livewire::actingAs($owner)
+        ->test('parts.profile.add-youtube-form', ['media_id' => $editing->id])
+        ->set('videoId', 'AB_cd-EF1gh')
+        ->call('save')
+        ->assertHasErrors(['videoId']);
+});
+
+it('non-owner cannot edit a youtube media', function () {
+    $owner = User::factory()->create();
+    $profile = Profile::factory()->create(['user_id' => $owner->id]);
+    $media = Media::factory()->youtube()->create(['profile_id' => $profile->id, 'position' => 0]);
+    $stranger = User::factory()->create();
+
+    Livewire::actingAs($stranger)
+        ->test('parts.profile.add-youtube-form', ['media_id' => $media->id])
+        ->set('caption', 'Hack')
+        ->call('save')
+        ->assertForbidden();
+
+    expect($media->fresh()->caption)->not->toBe('Hack');
+});
+
+it('shows the update success message after edit', function () {
+    $owner = User::factory()->create();
+    $profile = Profile::factory()->create(['user_id' => $owner->id]);
+    $media = Media::factory()->youtube()->create(['profile_id' => $profile->id, 'position' => 0]);
+
+    Livewire::actingAs($owner)
+        ->test('parts.profile.add-youtube-form', ['media_id' => $media->id])
+        ->set('caption', 'Nouveau')
+        ->call('save')
+        ->assertSee(__('profile.update_youtube_success_title'));
+});
+
+// -- Delete mode ------------------------------------------------------------
+
+it('deletes the youtube media row', function () {
+    $owner = User::factory()->create();
+    $profile = Profile::factory()->create(['user_id' => $owner->id]);
+    $media = Media::factory()->youtube()->create(['profile_id' => $profile->id, 'position' => 0]);
+
+    Livewire::actingAs($owner)
+        ->test('parts.profile.add-youtube-form', ['media_id' => $media->id])
+        ->call('delete')
+        ->assertDispatched('media-deleted')
+        ->assertDispatched('close-modal');
+
+    expect(Media::find($media->id))->toBeNull();
+});
+
+it('non-owner cannot delete a youtube media', function () {
+    $owner = User::factory()->create();
+    $profile = Profile::factory()->create(['user_id' => $owner->id]);
+    $media = Media::factory()->youtube()->create(['profile_id' => $profile->id, 'position' => 0]);
+    $stranger = User::factory()->create();
+
+    Livewire::actingAs($stranger)
+        ->test('parts.profile.add-youtube-form', ['media_id' => $media->id])
+        ->call('delete')
+        ->assertForbidden();
+
+    expect(Media::find($media->id))->not->toBeNull();
+});

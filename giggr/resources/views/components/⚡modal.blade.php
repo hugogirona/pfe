@@ -7,14 +7,16 @@ new class extends Component {
     public ?string $current  = null;
     public string  $key      = '';
     public ?string $model_id = null;
+    public ?string $media_id = null;
     public string  $title    = '';
 
     #[On('open-modal')]
-    public function open(string $component, string $title = '', ?string $model_id = null): void
+    public function open(string $component, string $title = '', ?string $model_id = null, ?string $media_id = null): void
     {
         $this->current  = $component;
         $this->title    = $title;
         $this->model_id = $model_id;
+        $this->media_id = $media_id;
         $this->key      = uniqid();
     }
 
@@ -23,6 +25,7 @@ new class extends Component {
     {
         $this->current  = null;
         $this->model_id = null;
+        $this->media_id = null;
         $this->title    = '';
     }
 };
@@ -81,6 +84,7 @@ new class extends Component {
                     :is="$current"
                     :wire:key="$key"
                     :model_id="$model_id"
+                    :media_id="$media_id"
                 />
             @endif
         </div>

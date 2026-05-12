@@ -70,3 +70,19 @@ it('assigns sequential positions without duplicates under repeated upload', func
 
     expect($profile->media()->pluck('position')->all())->toBe([0, 1, 2, 3, 4]);
 });
+
+it('refuses to replace a non-image media', function () {
+    $profile = Profile::factory()->create();
+    $media = Media::factory()->youtube()->create([
+        'profile_id' => $profile->id,
+        'position' => 0,
+    ]);
+    $originalSource = $media->source;
+
+    expect(fn () => app(UploadMediaImage::class)->replace($media, UploadedFile::fake()->image('photo.jpg')))
+        ->toThrow(InvalidArgumentException::class);
+
+    expect($media->fresh())
+        ->source->toBe($originalSource)
+        ->type->toBe(MediaType::Youtube);
+});

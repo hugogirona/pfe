@@ -195,3 +195,169 @@ it('shows the success message after save', function () {
         ->assertSee(__('profile.add_image_success_body'))
         ->assertSee(__('profile.add_image_close'));
 });
+
+// -- Edit mode --------------------------------------------------------------
+
+it('prefills the caption when mounted in edit mode', function () {
+    $owner = User::factory()->create();
+    $profile = Profile::factory()->create(['user_id' => $owner->id]);
+    $media = Media::factory()->image()->create([
+        'profile_id' => $profile->id,
+        'caption' => 'Caption d\'origine',
+        'position' => 0,
+    ]);
+
+    Livewire::actingAs($owner)
+        ->test('parts.profile.add-image-form', ['media_id' => $media->id])
+        ->assertSet('caption', 'Caption d\'origine')
+        ->assertSet('isEdit', true);
+});
+
+it('updates only the caption when no new photo is provided', function () {
+    $owner = User::factory()->create();
+    $profile = Profile::factory()->create(['user_id' => $owner->id]);
+    $media = Media::factory()->image()->create([
+        'profile_id' => $profile->id,
+        'source' => 'gallery-photo-untouched',
+        'caption' => 'Avant',
+        'width' => 1000,
+        'height' => 800,
+        'position' => 0,
+    ]);
+
+    Livewire::actingAs($owner)
+        ->test('parts.profile.add-image-form', ['media_id' => $media->id])
+        ->set('caption', 'Après')
+        ->call('save')
+        ->assertHasNoErrors()
+        ->assertDispatched('media-updated')
+        ->assertSet('success', true);
+
+    $media->refresh();
+    expect($media)
+        ->caption->toBe('Après')
+        ->source->toBe('gallery-photo-untouched')
+        ->width->toBe(1000)
+        ->and($media->height)->toBe(800);
+});
+
+it('replaces the image and old variants when a new photo is uploaded', function () {
+    Storage::fake('local');
+    Storage::fake('public');
+
+    $owner = User::factory()->create();
+    $profile = Profile::factory()->create(['user_id' => $owner->id]);
+    $media = Media::factory()->image()->create([
+        'profile_id' => $profile->id,
+        'source' => 'gallery-photo-old',
+        'caption' => 'Avant',
+        'position' => 0,
+    ]);
+    Storage::disk('public')->put('media/thumbnail/gallery-photo-old.webp', 'fake');
+    Storage::disk('public')->put('media/medium/gallery-photo-old.webp', 'fake');
+
+    Livewire::actingAs($owner)
+        ->test('parts.profile.add-image-form', ['media_id' => $media->id])
+        ->set('photo', UploadedFile::fake()->image('new.jpg', 1600, 900))
+        ->set('caption', 'Après')
+        ->call('save')
+        ->assertHasNoErrors()
+        ->assertDispatched('media-updated');
+
+    $media->refresh();
+    expect($media)
+        ->caption->toBe('Après')
+        ->width->toBe(1600)
+        ->and($media->height)->toBe(900)
+        ->and($media->source)->not->toBe('gallery-photo-old');
+
+    Storage::disk('public')
+        ->assertMissing('media/thumbnail/gallery-photo-old.webp')
+        ->assertMissing('media/medium/gallery-photo-old.webp')
+        ->assertExists("media/thumbnail/{$media->source}.webp")
+        ->assertExists("media/medium/{$media->source}.webp");
+});
+
+it('skips the cap check in edit mode (already counted)', function () {
+    $owner = User::factory()->create();
+    $profile = Profile::factory()->create(['user_id' => $owner->id]);
+    $medias = Media::factory()
+        ->count(20)
+        ->sequence(fn ($s) => ['position' => $s->index])
+        ->create(['profile_id' => $profile->id]);
+
+    Livewire::actingAs($owner)
+        ->test('parts.profile.add-image-form', ['media_id' => $medias->first()->id])
+        ->set('caption', 'Edition autorisée')
+        ->call('save')
+        ->assertHasNoErrors();
+});
+
+it('non-owner cannot edit a media', function () {
+    $owner = User::factory()->create();
+    $profile = Profile::factory()->create(['user_id' => $owner->id]);
+    $media = Media::factory()->image()->create(['profile_id' => $profile->id, 'position' => 0]);
+    $stranger = User::factory()->create();
+
+    Livewire::actingAs($stranger)
+        ->test('parts.profile.add-image-form', ['media_id' => $media->id])
+        ->set('caption', 'Hack')
+        ->call('save')
+        ->assertForbidden();
+
+    expect($media->fresh()->caption)->not->toBe('Hack');
+});
+
+it('shows the update success message after edit', function () {
+    $owner = User::factory()->create();
+    $profile = Profile::factory()->create(['user_id' => $owner->id]);
+    $media = Media::factory()->image()->create(['profile_id' => $profile->id, 'position' => 0]);
+
+    Livewire::actingAs($owner)
+        ->test('parts.profile.add-image-form', ['media_id' => $media->id])
+        ->set('caption', 'Nouveau')
+        ->call('save')
+        ->assertSee(__('profile.update_image_success_title'));
+});
+
+// -- Delete mode ------------------------------------------------------------
+
+it('deletes the media and its variants from disk', function () {
+    Storage::fake('local');
+    Storage::fake('public');
+
+    $owner = User::factory()->create();
+    $profile = Profile::factory()->create(['user_id' => $owner->id]);
+    $media = Media::factory()->image()->create([
+        'profile_id' => $profile->id,
+        'source' => 'gallery-photo-to-delete',
+        'position' => 0,
+    ]);
+    Storage::disk('public')->put('media/thumbnail/gallery-photo-to-delete.webp', 'fake');
+    Storage::disk('public')->put('media/medium/gallery-photo-to-delete.webp', 'fake');
+
+    Livewire::actingAs($owner)
+        ->test('parts.profile.add-image-form', ['media_id' => $media->id])
+        ->call('delete')
+        ->assertDispatched('media-deleted')
+        ->assertDispatched('close-modal');
+
+    expect(Media::find($media->id))->toBeNull();
+    Storage::disk('public')
+        ->assertMissing('media/thumbnail/gallery-photo-to-delete.webp')
+        ->assertMissing('media/medium/gallery-photo-to-delete.webp');
+});
+
+it('non-owner cannot delete a media', function () {
+    $owner = User::factory()->create();
+    $profile = Profile::factory()->create(['user_id' => $owner->id]);
+    $media = Media::factory()->image()->create(['profile_id' => $profile->id, 'position' => 0]);
+    $stranger = User::factory()->create();
+
+    Livewire::actingAs($stranger)
+        ->test('parts.profile.add-image-form', ['media_id' => $media->id])
+        ->call('delete')
+        ->assertForbidden();
+
+    expect(Media::find($media->id))->not->toBeNull();
+});
