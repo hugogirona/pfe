@@ -94,6 +94,17 @@ it('factory enforces user_a_id < user_b_id and seeds the pivot rows', function (
         ->toContain($convo->user_b_id);
 });
 
+it('latestMessage returns the most recent message in the conversation', function () {
+    $alice = User::factory()->create();
+    $bob = User::factory()->create();
+    $convo = Conversation::between($alice, $bob);
+    Message::factory()->for($convo)->for($alice, 'sender')->create(['body' => 'first']);
+    $latest = Message::factory()->for($convo)->for($bob, 'sender')->create(['body' => 'second']);
+
+    expect($convo->latestMessage->id)->toBe($latest->id)
+        ->and($convo->latestMessage->body)->toBe('second');
+});
+
 it('casts accepted_at and last_message_at to datetime', function () {
     $alice = User::factory()->create();
     $bob = User::factory()->create();
