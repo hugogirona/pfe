@@ -27,16 +27,21 @@ class SendMessage
 
         return DB::transaction(function () use ($sender, $recipient, $body): Message {
             $conversation = Conversation::between($sender, $recipient);
+            $conversation = Conversation::query()
+                ->whereKey($conversation->getKey())
+                ->lockForUpdate()
+                ->firstOrFail();
 
             $message = $conversation->messages()->create([
                 'sender_id' => $sender->id,
                 'body' => $body,
             ]);
 
-            $updates = ['last_message_at' => now()];
+            $timestamp = now();
+            $updates = ['last_message_at' => $timestamp];
 
             if ($conversation->accepted_at === null && $this->shouldAutoAccept($conversation, $sender, $recipient)) {
-                $updates['accepted_at'] = now();
+                $updates['accepted_at'] = $timestamp;
             }
 
             $conversation->update($updates);
