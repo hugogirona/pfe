@@ -102,7 +102,9 @@ class Profile extends Model
             return null;
         }
 
+        $baseDir = config('avatars.base_dir');
+
         return Storage::disk(config('avatars.disk'))
-            ->url("avatars/{$variant}/{$this->avatar_path}.webp");
+            ->url("{$baseDir}/{$variant}/{$this->avatar_path}.webp");
     }
 }

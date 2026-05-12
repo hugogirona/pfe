@@ -2,6 +2,7 @@
 
 return [
     'disk' => 'public',
+    'base_dir' => 'media',
     'variants' => [
         'thumbnail' => ['max_edge' => 400],
         'medium' => ['max_edge' => 1600],

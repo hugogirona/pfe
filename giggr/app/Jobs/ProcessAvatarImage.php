@@ -31,7 +31,7 @@ class ProcessAvatarImage implements ShouldQueue
                     ->encode(new WebpEncoder(quality: $config['quality']));
 
                 Storage::disk($config['disk'])->put(
-                    "avatars/{$name}/{$this->stem}.webp",
+                    "{$config['base_dir']}/{$name}/{$this->stem}.webp",
                     (string) $encoded,
                 );
             }
@@ -54,7 +54,7 @@ class ProcessAvatarImage implements ShouldQueue
         $config = config('avatars');
 
         foreach (array_keys($config['variants']) as $name) {
-            Storage::disk($config['disk'])->delete("avatars/{$name}/{$old}.webp");
+            Storage::disk($config['disk'])->delete("{$config['base_dir']}/{$name}/{$old}.webp");
         }
     }
 }

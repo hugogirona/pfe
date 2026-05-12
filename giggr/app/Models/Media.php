@@ -19,8 +19,6 @@ class Media extends Model
 
     private const string YOUTUBE_THUMBNAIL_URL = 'https://i.ytimg.com/vi/%s/hqdefault.jpg';
 
-    private const string IMAGE_VARIANT_DIR = 'media';
-
     protected $table = 'media';
 
     protected $fillable = [
@@ -95,6 +93,6 @@ class Media extends Model
 
     private function variantPath(string $variant): string
     {
-        return self::IMAGE_VARIANT_DIR."/{$variant}/{$this->source}.webp";
+        return config('media.base_dir')."/{$variant}/{$this->source}.webp";
     }
 }

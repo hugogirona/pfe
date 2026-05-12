@@ -34,7 +34,7 @@ class ProcessMediaImage implements ShouldQueue
                     ->encode(new WebpEncoder(quality: $config['quality']));
 
                 Storage::disk($config['disk'])->put(
-                    "media/{$name}/{$this->stem}.webp",
+                    "{$config['base_dir']}/{$name}/{$this->stem}.webp",
                     (string) $encoded,
                 );
             }
