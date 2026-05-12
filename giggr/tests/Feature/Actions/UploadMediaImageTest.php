@@ -51,3 +51,22 @@ it('handles null caption', function () {
 
     expect($media->caption)->toBeNull();
 });
+
+it('throws if image dimensions cannot be read', function () {
+    $profile = Profile::factory()->create();
+    $file = UploadedFile::fake()->create('photo.jpg', 10, 'image/jpeg');
+
+    expect(fn () => app(UploadMediaImage::class)->execute($profile, $file))
+        ->toThrow(RuntimeException::class);
+});
+
+it('assigns sequential positions without duplicates under repeated upload', function () {
+    $profile = Profile::factory()->create();
+    $action = app(UploadMediaImage::class);
+
+    foreach (range(1, 5) as $i) {
+        $action->execute($profile, UploadedFile::fake()->image("photo-{$i}.jpg"));
+    }
+
+    expect($profile->media()->pluck('position')->all())->toBe([0, 1, 2, 3, 4]);
+});
