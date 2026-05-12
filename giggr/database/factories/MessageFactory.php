@@ -4,7 +4,6 @@ namespace Database\Factories;
 
 use App\Models\Conversation;
 use App\Models\Message;
-use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -18,9 +17,26 @@ class MessageFactory extends Factory
     {
         return [
             'conversation_id' => Conversation::factory(),
-            'sender_id' => User::factory(),
+            'sender_id' => null,
             'body' => fake()->sentence(),
         ];
+    }
+
+    public function configure(): static
+    {
+        return $this->afterMaking(function (Message $message): void {
+            if ($message->sender_id !== null) {
+                return;
+            }
+            $conversation = Conversation::find($message->conversation_id);
+            if ($conversation === null) {
+                return;
+            }
+            $message->sender_id = fake()->randomElement([
+                $conversation->user_a_id,
+                $conversation->user_b_id,
+            ]);
+        });
     }
 
     public function read(): static

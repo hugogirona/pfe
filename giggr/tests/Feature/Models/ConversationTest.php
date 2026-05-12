@@ -85,6 +85,15 @@ it('requester() returns the user who started the conversation', function () {
         ->and($convo->requester->id)->toBe($alice->id);
 });
 
+it('factory enforces user_a_id < user_b_id and seeds the pivot rows', function () {
+    $convo = Conversation::factory()->create();
+
+    expect($convo->user_a_id)->toBeLessThan($convo->user_b_id)
+        ->and($convo->participants()->pluck('users.id')->all())
+        ->toContain($convo->user_a_id)
+        ->toContain($convo->user_b_id);
+});
+
 it('casts accepted_at and last_message_at to datetime', function () {
     $alice = User::factory()->create();
     $bob = User::factory()->create();

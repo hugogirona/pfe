@@ -25,6 +25,20 @@ class ConversationFactory extends Factory
         ];
     }
 
+    public function configure(): static
+    {
+        return $this->afterMaking(function (Conversation $convo): void {
+            if ($convo->user_a_id > $convo->user_b_id) {
+                [$convo->user_a_id, $convo->user_b_id] = [$convo->user_b_id, $convo->user_a_id];
+            }
+        })->afterCreating(function (Conversation $convo): void {
+            $convo->participants()->syncWithoutDetaching([
+                $convo->user_a_id,
+                $convo->user_b_id,
+            ]);
+        });
+    }
+
     public function accepted(): static
     {
         return $this->state(fn () => ['accepted_at' => now()]);

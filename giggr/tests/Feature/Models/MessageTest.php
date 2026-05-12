@@ -48,6 +48,15 @@ it('body is fillable and persisted', function () {
     expect($message->fresh()->body)->toBe('Salut !');
 });
 
+it('factory sender defaults to one of the conversation participants', function () {
+    $message = Message::factory()->create();
+
+    expect($message->sender_id)->toBeIn([
+        $message->conversation->user_a_id,
+        $message->conversation->user_b_id,
+    ]);
+});
+
 it('is removed when its conversation is deleted', function () {
     $alice = User::factory()->create();
     $bob = User::factory()->create();
