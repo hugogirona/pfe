@@ -3,7 +3,7 @@
     <nav class="max-w-6xl mx-auto px-6 py-4 flex items-center gap-10 relative"
          aria-label="{{ __('nav.aria_main_nav') }}">
         <h2 class="sr-only">{{ __('nav.aria_main_nav') }}</h2>
-        <a wire:navigate.hover href="{{route('home')}}" title="Vers la page d'accueil">
+        <a wire:navigate.hover href="{{route('home')}}">
             <x-logo />
         </a>
         <x-nav.links />
