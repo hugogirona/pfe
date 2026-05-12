@@ -1,9 +1,11 @@
 <?php
 
 use App\Actions\SendMessage;
+use App\Events\MessageSent;
 use App\Models\Conversation;
 use App\Models\Message;
 use App\Models\User;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Validation\ValidationException;
 
 it('sends a message and creates the conversation on first send', function () {
@@ -104,6 +106,16 @@ it('touches last_message_at on every send', function () {
     app(SendMessage::class)->execute($alice, $bob, 'Hi');
 
     expect(Conversation::first()->last_message_at)->not->toBeNull();
+});
+
+it('dispatches MessageSent after sending', function () {
+    Event::fake();
+    $alice = User::factory()->withProfile()->create();
+    $bob = User::factory()->withProfile()->create();
+
+    $message = app(SendMessage::class)->execute($alice, $bob, 'Hi');
+
+    Event::assertDispatched(MessageSent::class, fn (MessageSent $event) => $event->message->id === $message->id);
 });
 
 it('unhides the conversation for the recipient on new message', function () {
