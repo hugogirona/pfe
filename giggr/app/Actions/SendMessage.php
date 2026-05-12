@@ -2,6 +2,7 @@
 
 namespace App\Actions;
 
+use App\Events\MessageSent;
 use App\Models\Conversation;
 use App\Models\Message;
 use App\Models\User;
@@ -25,7 +26,7 @@ class SendMessage
             'body' => ['required', 'string', 'min:1', 'max:2000'],
         ])->validate();
 
-        return DB::transaction(function () use ($sender, $recipient, $body): Message {
+        $message = DB::transaction(function () use ($sender, $recipient, $body): Message {
             $conversation = Conversation::between($sender, $recipient);
             $conversation = Conversation::query()
                 ->whereKey($conversation->getKey())
@@ -52,6 +53,10 @@ class SendMessage
 
             return $message;
         });
+
+        MessageSent::dispatch($message);
+
+        return $message;
     }
 
     private function shouldAutoAccept(Conversation $conversation, User $sender, User $recipient): bool
