@@ -1,5 +1,6 @@
 <?php
 
+use App\Actions\UploadAvatarImage;
 use App\Models\Profile;
 use Livewire\Component;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
@@ -29,7 +30,7 @@ new class extends Component {
             ],
         ]);
 
-        $this->profile->processAvatar($this->photo);
+        app(UploadAvatarImage::class)->execute($this->profile, $this->photo);
 
         $this->dispatch('avatar-saved', thumbnail: $this->profile->refresh()->thumbnail);
         $this->dispatch('close-modal');

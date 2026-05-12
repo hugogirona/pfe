@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Concerns\HandlesAvatar;
 use App\Enums\ProfileStatus;
 use Database\Factories\ProfileFactory;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -13,11 +12,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Storage;
 
 class Profile extends Model
 {
     /** @use HasFactory<ProfileFactory> */
-    use HandlesAvatar, HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes;
 
     protected $fillable = [
         'user_id',
@@ -94,5 +94,15 @@ class Profile extends Model
         return Attribute::make(
             get: fn () => $this->avatarVariantUrl('medium'),
         );
+    }
+
+    private function avatarVariantUrl(string $variant): ?string
+    {
+        if (! $this->avatar_path) {
+            return null;
+        }
+
+        return Storage::disk(config('avatars.disk'))
+            ->url("avatars/{$variant}/{$this->avatar_path}.webp");
     }
 }
