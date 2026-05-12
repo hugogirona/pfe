@@ -6,9 +6,8 @@ use App\Models\Profile;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\Storage;
-use Intervention\Image\Drivers\Gd\Driver as GdDriver;
 use Intervention\Image\Encoders\WebpEncoder;
-use Intervention\Image\ImageManager;
+use Intervention\Image\Laravel\Facades\Image;
 
 class ProcessAvatarImage implements ShouldQueue
 {
@@ -22,14 +21,12 @@ class ProcessAvatarImage implements ShouldQueue
 
     public function handle(): void
     {
-        $manager = ImageManager::usingDriver(GdDriver::class);
         $absolutePath = Storage::disk('local')->path($this->tmpPath);
         $config = config('avatars');
 
         try {
             foreach ($config['variants'] as $name => $size) {
-                $encoded = $manager
-                    ->decodePath($absolutePath)
+                $encoded = Image::decodePath($absolutePath)
                     ->cover($size['width'], $size['height'])
                     ->encode(new WebpEncoder(quality: $config['quality']));
 

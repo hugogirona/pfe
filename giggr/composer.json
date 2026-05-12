@@ -12,6 +12,7 @@
         "php": "^8.5",
         "ext-gd": "*",
         "intervention/image": "^4.0",
+        "intervention/image-laravel": "^4.0",
         "laravel/fortify": "^1.36",
         "laravel/framework": "^13.0",
         "laravel/tinker": "^3.0",
