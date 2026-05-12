@@ -49,6 +49,7 @@ return [
     // Gallery
     'photo_alt' => 'Photo shared by :name',
     'video_play' => 'Play video',
+    'lightbox_close' => 'Close preview',
 
     // Gallery add menu
     'gallery_add_image' => 'Photo',
@@ -80,5 +81,27 @@ return [
     'add_image_close' => 'Close',
     'media_youtube_duplicate' => 'This video is already in your gallery.',
     'media_cap_reached' => 'You have reached the limit of :max medias per profile.',
+
+    // Edit / delete media
+    'gallery_edit_mode' => 'Edit gallery',
+    'gallery_edit_image_title' => 'Edit photo',
+    'gallery_edit_video_title' => 'Edit video',
+    'gallery_edit_hint_owner' => 'Tap a media to edit it.',
+    'gallery_edit_item' => 'Edit this media',
+
+    'update_image_submit' => 'Save',
+    'update_image_submitting' => 'Saving…',
+    'update_image_success_title' => 'Photo updated!',
+    'update_image_success_body' => 'Your changes are visible in your gallery.',
+    'update_image_replace_hint' => 'Drop a new photo to replace this one.',
+    'delete_image_submit' => 'Delete',
+    'delete_image_confirm' => 'Permanently delete this photo?',
+
+    'update_youtube_submit' => 'Save',
+    'update_youtube_submitting' => 'Saving…',
+    'update_youtube_success_title' => 'Video updated!',
+    'update_youtube_success_body' => 'Your changes are visible in your gallery.',
+    'delete_youtube_submit' => 'Delete',
+    'delete_youtube_confirm' => 'Permanently delete this video?',
 
 ];

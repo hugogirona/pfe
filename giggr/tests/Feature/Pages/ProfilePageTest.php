@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Media;
 use App\Models\Profile;
 use App\Models\User;
 use Database\Seeders\CitySeeder;
@@ -79,6 +80,45 @@ it('refreshes followers and followed counts when follow-state-changed is receive
 
     expect($component->get('profile')->followers_count)->toBe(1)
         ->and($component->get('profile')->followed_count)->toBe(1);
+});
+
+it('profile page renders gallery items when the profile has medias', function () {
+    $this->seed([CitySeeder::class, InstrumentSeeder::class, GenreSeeder::class]);
+
+    $owner = User::factory()->create();
+    $profile = Profile::factory()->create(['user_id' => $owner->id]);
+
+    Media::factory()->image()->create([
+        'profile_id' => $profile->id,
+        'source' => 'gallery-photo-rendered',
+        'caption' => 'Caption visible only in lightbox',
+        'position' => 0,
+    ]);
+    Media::factory()->youtube()->create([
+        'profile_id' => $profile->id,
+        'source' => 'cj9kbTU9pKA',
+        'caption' => 'Caption visible only in lightbox',
+        'position' => 1,
+    ]);
+
+    $response = $this->actingAs(User::factory()->create())
+        ->get(route('profile', ['id' => $profile->id]))
+        ->assertOk();
+
+    $response->assertSee('gallery-photo-rendered')
+        ->assertSee('i.ytimg.com/vi/cj9kbTU9pKA/hqdefault.jpg', false)
+        // Captions live in the lightbox, not in the grid items
+        ->assertDontSee('Caption visible only in lightbox');
+});
+
+it('profile page renders the empty state when no medias', function () {
+    $this->seed([CitySeeder::class, InstrumentSeeder::class, GenreSeeder::class]);
+    $profile = Profile::factory()->create();
+
+    $this->actingAs(User::factory()->create())
+        ->get(route('profile', ['id' => $profile->id]))
+        ->assertOk()
+        ->assertSee(__('profile.gallery_empty'));
 });
 
 it('profile page renders the followers and following counts', function () {

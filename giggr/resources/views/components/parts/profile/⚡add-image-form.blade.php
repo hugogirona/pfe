@@ -1,6 +1,7 @@
 <?php
 
 use App\Actions\UploadMediaImage;
+use App\Models\Media;
 use App\Models\Profile;
 use Livewire\Component;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
@@ -11,15 +12,30 @@ new class extends Component {
 
     public ?string $model_id = null;
 
+    public ?string $media_id = null;
+
     public ?TemporaryUploadedFile $photo = null;
 
     public string $caption = '';
 
     public bool $success = false;
 
-    public function mount(?string $model_id = null): void
+    public bool $isEdit = false;
+
+    public ?string $currentImageUrl = null;
+
+    public function mount(?string $model_id = null, ?string $media_id = null): void
     {
         $this->model_id = $model_id;
+        $this->media_id = $media_id;
+
+        if ($media_id !== null) {
+            $media = Media::findOrFail((int) $media_id);
+            $this->isEdit = true;
+            $this->model_id = (string) $media->profile_id;
+            $this->caption = $media->caption ?? '';
+            $this->currentImageUrl = $media->thumbnail_url;
+        }
     }
 
     public function save(): void
@@ -31,13 +47,31 @@ new class extends Component {
 
         $this->validate([
             'photo' => [
-                'required',
+                $this->isEdit ? 'nullable' : 'required',
                 'image',
                 'mimes:jpeg,jpg,png,webp',
                 'max:'.config('media.max_file_size'),
             ],
             'caption' => ['nullable', 'string', 'max:255'],
         ]);
+
+        if ($this->isEdit) {
+            $media = Media::findOrFail((int) $this->media_id);
+            abort_unless($media->profile_id === $profile->id, 403);
+
+            if ($this->photo !== null) {
+                app(UploadMediaImage::class)->replace($media, $this->photo);
+            }
+
+            $media->update([
+                'caption' => $this->caption !== '' ? $this->caption : null,
+            ]);
+
+            $this->dispatch('media-updated');
+            $this->success = true;
+
+            return;
+        }
 
         $cap = (int) config('media.max_per_profile');
         if ($profile->media()->count() >= $cap) {
@@ -56,6 +90,20 @@ new class extends Component {
         $this->success = true;
     }
 
+    public function delete(): void
+    {
+        abort_unless(auth()->check() && $this->media_id !== null, 403);
+
+        $media = Media::findOrFail((int) $this->media_id);
+        abort_unless(auth()->id() === $media->profile->user_id, 403);
+
+        $media->deleteVariants();
+        $media->delete();
+
+        $this->dispatch('media-deleted');
+        $this->dispatch('close-modal');
+    }
+
     public function close(): void
     {
         $this->dispatch('close-modal');
@@ -72,8 +120,12 @@ new class extends Component {
             </svg>
         </div>
         <div>
-            <h3 class="font-heading text-xl text-dark">{{ __('profile.add_image_success_title') }}</h3>
-            <p class="text-sm text-dark/60 mt-1">{{ __('profile.add_image_success_body') }}</p>
+            <h3 class="font-heading text-xl text-dark">
+                {{ $isEdit ? __('profile.update_image_success_title') : __('profile.add_image_success_title') }}
+            </h3>
+            <p class="text-sm text-dark/60 mt-1">
+                {{ $isEdit ? __('profile.update_image_success_body') : __('profile.add_image_success_body') }}
+            </p>
         </div>
         <button
             wire:click="close"
@@ -105,6 +157,13 @@ new class extends Component {
                             alt=""
                             class="max-w-full max-h-48 rounded-md object-contain ring-1 ring-dark/10"
                         />
+                    @elseif ($isEdit && $currentImageUrl)
+                        <img
+                            src="{{ $currentImageUrl }}"
+                            alt=""
+                            class="max-w-full max-h-48 rounded-md object-contain ring-1 ring-dark/10"
+                        />
+                        <p class="text-xs text-dark/50">{{ __('profile.update_image_replace_hint') }}</p>
                     @else
                         <x-icon name="photo" class="w-10 h-10 text-dark/30"/>
                         <p class="text-sm text-dark/60">{{ __('profile.add_image_drop') }}</p>
@@ -140,15 +199,33 @@ new class extends Component {
             @enderror
         </div>
 
-        <div class="flex justify-end pt-2 border-t border-dark/10">
+        <div class="flex justify-between items-center pt-2 border-t border-dark/10">
+            @if ($isEdit)
+                <button
+                    type="button"
+                    wire:click="delete"
+                    wire:confirm="{{ __('profile.delete_image_confirm') }}"
+                    wire:loading.attr="disabled"
+                    class="h-11 px-5 rounded-md text-sm font-medium text-danger border border-danger/40 hover:bg-danger/10 transition-colors duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
+                >
+                    {{ __('profile.delete_image_submit') }}
+                </button>
+            @else
+                <span></span>
+            @endif
+
             <button
                 type="submit"
                 wire:loading.attr="disabled"
                 wire:loading.class="opacity-60 cursor-not-allowed"
                 class="h-11 px-6 rounded-md bg-dark text-bg text-sm font-medium hover:opacity-80 transition-opacity duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
             >
-                <span wire:loading.remove wire:target="save,photo">{{ __('profile.add_image_submit') }}</span>
-                <span wire:loading wire:target="save,photo">{{ __('profile.add_image_submitting') }}</span>
+                <span wire:loading.remove wire:target="save,photo">
+                    {{ $isEdit ? __('profile.update_image_submit') : __('profile.add_image_submit') }}
+                </span>
+                <span wire:loading wire:target="save,photo">
+                    {{ $isEdit ? __('profile.update_image_submitting') : __('profile.add_image_submitting') }}
+                </span>
             </button>
         </div>
 

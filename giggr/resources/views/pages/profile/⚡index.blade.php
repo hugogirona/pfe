@@ -26,6 +26,7 @@ new #[Layout('layouts.app')] #[Title('Profil — Giggr.')] class extends Compone
             'city',
             'instruments',
             'genres',
+            'media',
             'user.announcements' => fn ($q) => $q->active()->with(['city', 'instruments', 'genres']),
         ])
             ->withCount([
@@ -108,6 +109,14 @@ new #[Layout('layouts.app')] #[Title('Profil — Giggr.')] class extends Compone
         $this->reloadRelationCounts();
     }
 
+    #[On('media-added')]
+    #[On('media-updated')]
+    #[On('media-deleted')]
+    public function refreshMedia(): void
+    {
+        $this->profile->load('media');
+    }
+
     #[On('follow-state-changed')]
     public function refreshCounts(): void
     {
@@ -127,6 +136,7 @@ new #[Layout('layouts.app')] #[Title('Profil — Giggr.')] class extends Compone
 <div>
 
     <livewire:parts.social.relations-modal />
+    <livewire:parts.profile.media-lightbox />
 
     <x-parts.profile.hero :profile="$profile" />
 

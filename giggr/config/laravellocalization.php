@@ -12,7 +12,7 @@ return [
     // FR is default: '/' = français, '/en' = english (no /fr prefix)
     'hideDefaultLocaleInURL' => true,
 
-    'localesOrder'   => ['fr', 'en'],
+    'localesOrder' => ['fr', 'en'],
     'localesMapping' => [],
 
     'utf8suffix' => env('LARAVELLOCALIZATION_UTF8SUFFIX', '.UTF-8'),

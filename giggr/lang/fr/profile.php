@@ -49,6 +49,7 @@ return [
     // Gallery
     'photo_alt' => 'Photo partagée par :name',
     'video_play' => 'Lire la vidéo',
+    'lightbox_close' => 'Fermer la prévisualisation',
 
     // Gallery add menu
     'gallery_add_image' => 'Photo',
@@ -80,5 +81,27 @@ return [
     'add_image_close' => 'Fermer',
     'media_youtube_duplicate' => 'Cette vidéo est déjà dans ta galerie.',
     'media_cap_reached' => 'Tu as atteint la limite de :max médias par profil.',
+
+    // Edit / delete media
+    'gallery_edit_mode' => 'Modifier la galerie',
+    'gallery_edit_image_title' => 'Modifier la photo',
+    'gallery_edit_video_title' => 'Modifier la vidéo',
+    'gallery_edit_hint_owner' => 'Clique sur un média pour le modifier.',
+    'gallery_edit_item' => 'Modifier ce média',
+
+    'update_image_submit' => 'Enregistrer',
+    'update_image_submitting' => 'Enregistrement…',
+    'update_image_success_title' => 'Photo mise à jour !',
+    'update_image_success_body' => 'Tes modifications sont visibles dans ta galerie.',
+    'update_image_replace_hint' => 'Glisse une nouvelle photo pour remplacer celle-ci.',
+    'delete_image_submit' => 'Supprimer',
+    'delete_image_confirm' => 'Supprimer définitivement cette photo ?',
+
+    'update_youtube_submit' => 'Enregistrer',
+    'update_youtube_submitting' => 'Enregistrement…',
+    'update_youtube_success_title' => 'Vidéo mise à jour !',
+    'update_youtube_success_body' => 'Tes modifications sont visibles dans ta galerie.',
+    'delete_youtube_submit' => 'Supprimer',
+    'delete_youtube_confirm' => 'Supprimer définitivement cette vidéo ?',
 
 ];

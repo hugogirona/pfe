@@ -8,14 +8,61 @@ use App\Models\Media;
 use App\Models\Profile;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use RuntimeException;
+use Throwable;
 
 class UploadMediaImage
 {
     private const string TMP_DIR = 'media-tmp';
 
+    /**
+     * @throws Throwable
+     */
     public function execute(Profile $profile, UploadedFile $file, ?string $caption = null): Media
+    {
+        [$stem, $width, $height] = $this->processVariants($file);
+
+        return DB::transaction(function () use ($profile, $stem, $caption, $width, $height): Media {
+            $lockedProfile = Profile::query()->lockForUpdate()->findOrFail($profile->id);
+            $nextPosition = ($lockedProfile->media()->max('position') ?? -1) + 1;
+
+            return Media::create([
+                'profile_id' => $lockedProfile->id,
+                'type' => MediaType::Image,
+                'source' => $stem,
+                'caption' => $caption,
+                'position' => $nextPosition,
+                'width' => $width,
+                'height' => $height,
+            ]);
+        });
+    }
+
+    public function replace(Media $media, UploadedFile $file): void
+    {
+        [$newStem, $width, $height] = $this->processVariants($file);
+
+        $oldSource = $media->source;
+
+        $media->update([
+            'source' => $newStem,
+            'width' => $width,
+            'height' => $height,
+        ]);
+
+        $disk = Storage::disk(config('media.disk', 'public'));
+        $baseDir = config('media.base_dir');
+        foreach (array_keys(config('media.variants', [])) as $variant) {
+            $disk->delete($baseDir.'/'.$variant.'/'.$oldSource.'.webp');
+        }
+    }
+
+    /**
+     * @return array{0: string, 1: int, 2: int}
+     */
+    private function processVariants(UploadedFile $file): array
     {
         $dimensions = @getimagesize($file->getRealPath());
         if ($dimensions === false) {
@@ -34,19 +81,6 @@ class UploadMediaImage
 
         ProcessMediaImage::dispatchSync($tmpPath, $stem);
 
-        return DB::transaction(function () use ($profile, $stem, $caption, $width, $height): Media {
-            $lockedProfile = Profile::query()->lockForUpdate()->findOrFail($profile->id);
-            $nextPosition = ($lockedProfile->media()->max('position') ?? -1) + 1;
-
-            return Media::create([
-                'profile_id' => $lockedProfile->id,
-                'type' => MediaType::Image,
-                'source' => $stem,
-                'caption' => $caption,
-                'position' => $nextPosition,
-                'width' => $width,
-                'height' => $height,
-            ]);
-        });
+        return [$stem, $width, $height];
     }
 }
