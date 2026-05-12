@@ -93,14 +93,16 @@ it('renders the caption when present', function () {
 
 it('does not render a caption section when caption is null', function () {
     $profile = Profile::factory()->create();
+    $caption = 'Texte de légende qui ne doit pas apparaître';
     $media = Media::factory()->image()->create([
         'profile_id' => $profile->id,
-        'caption' => null,
+        'caption' => $caption,
     ]);
+    $media->update(['caption' => null]);
 
     Livewire::test('parts.profile.media-lightbox')
         ->dispatch('open-media-lightbox', mediaId: $media->id)
-        ->assertDontSeeText('caption-text-marker');
+        ->assertDontSeeText($caption);
 });
 
 it('image media exposes width and height for aspect-ratio rendering', function () {
