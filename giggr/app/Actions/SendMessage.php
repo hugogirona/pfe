@@ -54,7 +54,11 @@ class SendMessage
             return $message;
         });
 
-        MessageSent::dispatch($message);
+        try {
+            MessageSent::dispatch($message);
+        } catch (Throwable $e) {
+            report($e);
+        }
 
         return $message;
     }

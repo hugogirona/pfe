@@ -3,8 +3,9 @@
         {{-- Messaging --}}
         <button
             type="button"
-            class="text-dark/50 hover:text-accent transition-colors duration-150 p-2 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent rounded-[6px] flex items-center justify-center"
             aria-label="{{ __('nav.aria_messaging') }}"
+            @click="Livewire.dispatchTo('modal', 'open-modal', { component: 'parts.messaging.inbox', title: @js(__('messaging.title')) })"
+            class="text-dark/50 hover:text-accent transition-colors duration-150 p-2 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent rounded-[6px] flex items-center justify-center"
         >
             <x-icon name="chat-bubble" class="w-8 h-8"/>
         </button>
