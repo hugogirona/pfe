@@ -22,8 +22,11 @@
         @endif
         $dispatch('open-media-lightbox', { mediaId: {{ $media->id }} });
     "
-    @if ($canEdit) x-bind:aria-label="editMode ? @js(__('profile.gallery_edit_item')) : @js($isImage ? __('profile.photo_alt', ['name' => $musicianName]) : __('profile.video_play'))" @endif
-    class="group relative w-full aspect-[4/3] rounded-xl overflow-hidden bg-pastel-taupe cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent transition-shadow duration-200 hover:shadow-lg"
+    @if ($canEdit) x-bind:aria-label="editMode
+    ? @js(__('profile.gallery_edit_item'))
+    : @js($isImage ? __('profile.photo_alt', ['name' => $musicianName]) : __('profile.video_play'))"
+    @endif
+    class="group relative w-full aspect-4/3 rounded-xl overflow-hidden bg-pastel-taupe cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent transition-shadow duration-200 hover:shadow-lg"
     @if ($canEdit) x-bind:class="editMode ? 'ring-2 ring-accent shadow-lg' : ''" @endif
     @unless ($canEdit) aria-label="{{ $isImage ? __('profile.photo_alt', ['name' => $musicianName]) : __('profile.video_play') }}" @endunless
 >

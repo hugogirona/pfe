@@ -26,6 +26,7 @@ new class extends Component {
     public function close(): void
     {
         $this->open = false;
+        $this->mediaId = null;
     }
 
     #[Computed]

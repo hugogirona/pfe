@@ -75,8 +75,10 @@ it('close() resets state', function () {
     Livewire::test('parts.profile.media-lightbox')
         ->dispatch('open-media-lightbox', mediaId: $media->id)
         ->assertSet('open', true)
+        ->assertSet('mediaId', $media->id)
         ->call('close')
-        ->assertSet('open', false);
+        ->assertSet('open', false)
+        ->assertSet('mediaId', null);
 });
 
 it('renders the caption when present', function () {

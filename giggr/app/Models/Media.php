@@ -52,9 +52,15 @@ class Media extends Model
             return;
         }
 
+        self::deleteVariantsForSource($this->source);
+    }
+
+    public static function deleteVariantsForSource(string $source): void
+    {
         $disk = Storage::disk(config('media.disk', 'public'));
+        $baseDir = config('media.base_dir');
         foreach (array_keys(config('media.variants', [])) as $variant) {
-            $disk->delete($this->variantPath($variant));
+            $disk->delete($baseDir.'/'.$variant.'/'.$source.'.webp');
         }
     }
 

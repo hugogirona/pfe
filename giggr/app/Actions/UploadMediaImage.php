@@ -8,8 +8,8 @@ use App\Models\Media;
 use App\Models\Profile;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use InvalidArgumentException;
 use RuntimeException;
 use Throwable;
 
@@ -42,6 +42,12 @@ class UploadMediaImage
 
     public function replace(Media $media, UploadedFile $file): void
     {
+        if ($media->type !== MediaType::Image) {
+            throw new InvalidArgumentException(
+                "Cannot replace a non-image media (id={$media->id}, type={$media->type->value}).",
+            );
+        }
+
         [$newStem, $width, $height] = $this->processVariants($file);
 
         $oldSource = $media->source;
@@ -52,11 +58,7 @@ class UploadMediaImage
             'height' => $height,
         ]);
 
-        $disk = Storage::disk(config('media.disk', 'public'));
-        $baseDir = config('media.base_dir');
-        foreach (array_keys(config('media.variants', [])) as $variant) {
-            $disk->delete($baseDir.'/'.$variant.'/'.$oldSource.'.webp');
-        }
+        Media::deleteVariantsForSource($oldSource);
     }
 
     /**
