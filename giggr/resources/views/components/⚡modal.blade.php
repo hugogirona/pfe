@@ -33,6 +33,8 @@ new class extends Component {
 
 <div
     x-data="{ show: $wire.entangle('current').live }"
+    x-init="$watch('show', val => document.body.style.overflow = val ? 'hidden' : '')"
+    x-on:livewire:navigating.window="document.body.style.overflow = ''"
     x-show="show"
     class="fixed inset-0 z-50 overflow-hidden"
     style="display: none"
