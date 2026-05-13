@@ -485,6 +485,120 @@ it('messageReceived ignores payloads for a different conversation', function () 
     expect((string) $pivotAfter->last_read_at)->toBe((string) $charlieReadAtBefore);
 });
 
+it('acceptRequest sets accepted_at and moves convo to messages tab', function () {
+    $alice = User::factory()->withProfile()->create();
+    $bob = User::factory()->withProfile()->create();
+    $request = Conversation::between($bob, $alice);
+    $request->update(['last_message_at' => now()]);
+
+    Livewire::actingAs($alice)
+        ->test('parts.messaging.inbox')
+        ->call('acceptRequest', $request->id);
+
+    expect($request->fresh()->accepted_at)->not->toBeNull();
+});
+
+it('acceptRequest refuses when called by the requester', function () {
+    $alice = User::factory()->withProfile()->create();
+    $bob = User::factory()->withProfile()->create();
+    $request = Conversation::between($alice, $bob);
+
+    Livewire::actingAs($alice)
+        ->test('parts.messaging.inbox')
+        ->call('acceptRequest', $request->id)
+        ->assertForbidden();
+
+    expect($request->fresh()->accepted_at)->toBeNull();
+});
+
+it('acceptRequest refuses when called by an outsider', function () {
+    $alice = User::factory()->withProfile()->create();
+    $bob = User::factory()->withProfile()->create();
+    $eve = User::factory()->withProfile()->create();
+    $request = Conversation::between($bob, $alice);
+
+    Livewire::actingAs($eve)
+        ->test('parts.messaging.inbox')
+        ->call('acceptRequest', $request->id)
+        ->assertForbidden();
+});
+
+it('acceptRequest is a no-op if convo is already accepted', function () {
+    $alice = User::factory()->withProfile()->create();
+    $bob = User::factory()->withProfile()->create();
+    $request = Conversation::between($bob, $alice);
+    $originalAcceptedAt = now()->subHour()->startOfSecond();
+    $request->update(['accepted_at' => $originalAcceptedAt]);
+
+    Livewire::actingAs($alice)
+        ->test('parts.messaging.inbox')
+        ->call('acceptRequest', $request->id);
+
+    expect($request->fresh()->accepted_at->getTimestamp())->toBe($originalAcceptedAt->getTimestamp());
+});
+
+it('declineRequest hides the conversation for the current user', function () {
+    $alice = User::factory()->withProfile()->create();
+    $bob = User::factory()->withProfile()->create();
+    $request = Conversation::between($bob, $alice);
+
+    Livewire::actingAs($alice)
+        ->test('parts.messaging.inbox')
+        ->call('declineRequest', $request->id);
+
+    $pivot = $alice->fresh()->conversations()->find($request->id)->pivot;
+    expect($pivot->hidden_at)->not->toBeNull();
+});
+
+it('declineRequest leaves the conversation visible for the other participant', function () {
+    $alice = User::factory()->withProfile()->create();
+    $bob = User::factory()->withProfile()->create();
+    $request = Conversation::between($bob, $alice);
+
+    Livewire::actingAs($alice)
+        ->test('parts.messaging.inbox')
+        ->call('declineRequest', $request->id);
+
+    $bobPivot = $bob->fresh()->conversations()->find($request->id)->pivot;
+    expect($bobPivot->hidden_at)->toBeNull();
+});
+
+it('declineRequest refuses when called by the requester', function () {
+    $alice = User::factory()->withProfile()->create();
+    $bob = User::factory()->withProfile()->create();
+    $request = Conversation::between($alice, $bob);
+
+    Livewire::actingAs($alice)
+        ->test('parts.messaging.inbox')
+        ->call('declineRequest', $request->id)
+        ->assertForbidden();
+});
+
+it('declineRequest refuses when called by an outsider', function () {
+    $alice = User::factory()->withProfile()->create();
+    $bob = User::factory()->withProfile()->create();
+    $eve = User::factory()->withProfile()->create();
+    $request = Conversation::between($bob, $alice);
+
+    Livewire::actingAs($eve)
+        ->test('parts.messaging.inbox')
+        ->call('declineRequest', $request->id)
+        ->assertForbidden();
+});
+
+it('declineRequest closes the thread and returns to list', function () {
+    $alice = User::factory()->withProfile()->create();
+    $bob = User::factory()->withProfile()->create();
+    $request = Conversation::between($bob, $alice);
+
+    Livewire::actingAs($alice)
+        ->test('parts.messaging.inbox')
+        ->call('openConversation', $request->id)
+        ->call('declineRequest', $request->id)
+        ->assertSet('view', 'list')
+        ->assertSet('currentConversationId', null);
+});
+
 it('switchTab ignores invalid values', function () {
     $alice = User::factory()->withProfile()->create();
 

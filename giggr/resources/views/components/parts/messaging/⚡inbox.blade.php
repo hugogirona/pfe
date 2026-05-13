@@ -239,6 +239,47 @@ new class extends Component {
         unset($this->currentConversation, $this->correspondent);
     }
 
+    public function acceptRequest(int $id): void
+    {
+        $conversation = $this->resolvePendingRequest($id);
+
+        if ($conversation->accepted_at === null) {
+            $conversation->update(['accepted_at' => now()]);
+        }
+
+        unset($this->currentConversation, $this->conversations, $this->visibleConversations);
+    }
+
+    public function declineRequest(int $id): void
+    {
+        $conversation = $this->resolvePendingRequest($id);
+
+        auth()->user()->conversations()->updateExistingPivot($conversation->id, [
+            'hidden_at' => now(),
+        ]);
+
+        if ($this->currentConversationId === $conversation->id) {
+            $this->backToList();
+        }
+
+        unset($this->conversations, $this->visibleConversations);
+    }
+
+    private function resolvePendingRequest(int $id): Conversation
+    {
+        $userId = (int) auth()->id();
+
+        $conversation = auth()->user()
+            ->conversations()
+            ->whereKey($id)
+            ->first();
+
+        abort_unless($conversation !== null, 403);
+        abort_unless($conversation->requester_user_id !== $userId, 403);
+
+        return $conversation;
+    }
+
     public function send(): void
     {
         abort_unless(
@@ -291,7 +332,12 @@ new class extends Component {
             $otherName = $other?->full_name ?? '—';
         @endphp
 
-        <x-parts.messaging.thread-header :user="$other" :name="$otherName"/>
+        <x-parts.messaging.thread-header
+            :user="$other"
+            :name="$otherName"
+            :conversation="$convo"
+            :current-user-id="$currentUserId"
+        />
 
         <x-parts.messaging.thread-messages
             :conversation="$convo"
