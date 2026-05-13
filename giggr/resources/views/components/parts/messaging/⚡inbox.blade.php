@@ -259,6 +259,8 @@ new class extends Component {
         $this->body = '';
 
         unset($this->currentConversation, $this->conversations, $this->visibleConversations);
+
+        $this->dispatch('thread-updated');
     }
 };
 ?>
