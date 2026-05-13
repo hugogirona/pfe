@@ -104,4 +104,10 @@ return [
     'delete_youtube_submit' => 'Delete',
     'delete_youtube_confirm' => 'Permanently delete this video?',
 
+    'block' => 'Block',
+    'block_name' => 'Block :name',
+    'block_confirm' => 'Block :name? You won\'t be able to exchange messages anymore.',
+    'unblock' => 'Unblock',
+    'unblock_name' => 'Unblock :name',
+
 ];
