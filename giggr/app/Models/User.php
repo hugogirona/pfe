@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use InvalidArgumentException;
 
 class User extends Authenticatable
 {
@@ -99,5 +100,47 @@ class User extends Authenticatable
             ->where('followable_type', $followable->getMorphClass())
             ->where('followable_id', $followable->getKey())
             ->exists();
+    }
+
+    public function blockedUsers(): BelongsToMany
+    {
+        return $this->belongsToMany(
+            related: self::class,
+            table: 'user_blocks',
+            foreignPivotKey: 'blocker_user_id',
+            relatedPivotKey: 'blocked_user_id',
+        )->withTimestamps();
+    }
+
+    public function block(User $target): void
+    {
+        if ($this->id === $target->id) {
+            throw new InvalidArgumentException('A user cannot block themselves.');
+        }
+
+        $this->blockedUsers()->syncWithoutDetaching([$target->id]);
+        $existing = $this->conversations()
+            ->whereHas('participants', fn ($q) => $q->whereKey($target->id))
+            ->first();
+        if ($existing !== null) {
+            $this->conversations()->updateExistingPivot($existing->id, [
+                'hidden_at' => now(),
+            ]);
+        }
+    }
+
+    public function unblock(User $target): void
+    {
+        $this->blockedUsers()->detach($target->id);
+    }
+
+    public function hasBlocked(User $other): bool
+    {
+        return $this->blockedUsers()->whereKey($other->id)->exists();
+    }
+
+    public function isBlockedBy(User $other): bool
+    {
+        return $other->hasBlocked($this);
     }
 }
