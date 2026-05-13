@@ -140,6 +140,21 @@ it('dispatches MessageSent after sending', function () {
     Event::assertDispatched(MessageSent::class, fn (MessageSent $event) => $event->message->id === $message->id);
 });
 
+it('unhides the conversation for the sender on new message', function () {
+    $alice = User::factory()->withProfile()->create();
+    $bob = User::factory()->withProfile()->create();
+    $action = app(SendMessage::class);
+
+    $action->execute($alice, $bob, 'Hi');
+    $convoId = Conversation::first()->id;
+    $alice->conversations()->updateExistingPivot($convoId, ['hidden_at' => now()]);
+    expect($alice->conversations()->first()->pivot->hidden_at)->not->toBeNull();
+
+    $action->execute($alice, $bob, 'Hi again');
+
+    expect($alice->fresh()->conversations()->first()->pivot->hidden_at)->toBeNull();
+});
+
 it('unhides the conversation for the recipient on new message', function () {
     $alice = User::factory()->withProfile()->create();
     $bob = User::factory()->withProfile()->create();
