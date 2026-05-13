@@ -15,4 +15,11 @@ return [
     'compose_placeholder' => 'Écris ton message…',
     'send' => 'Envoyer',
     'back' => 'Retour aux conversations',
+    'sent' => 'Envoyé',
+    'read' => 'Lu',
+    'day_today' => "Aujourd'hui",
+    'day_yesterday' => 'Hier',
+    'unread_count' => '{1} 1 message non lu|[2,*] :count messages non lus',
+    'new_messages' => '{1} 1 nouveau message|[2,*] :count nouveaux messages',
+    'typing_aria' => ':name est en train d\'écrire',
 ];
