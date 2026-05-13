@@ -8,6 +8,7 @@ return [
     'sign_in' => 'Se connecter',
     'sign_out' => 'Se déconnecter',
     'view_profile' => 'Voir le profil',
+    'settings' => 'Paramètres',
     'aria_user_menu' => 'Menu utilisateur',
     'aria_menu' => 'Menu',
     'aria_messaging' => 'Messagerie',

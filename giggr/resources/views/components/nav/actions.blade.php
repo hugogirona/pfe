@@ -52,6 +52,17 @@
                     {{ __('nav.view_profile') }}
                 </a>
 
+                <a
+                    href="{{ route('settings.account') }}"
+                    wire:navigate
+                    @click="open = false"
+                    role="menuitem"
+                    class="flex items-center gap-2.5 px-4 py-3 text-sm text-dark hover:bg-dark/5 transition-colors duration-150 focus-visible:outline-none focus-visible:bg-dark/5"
+                >
+                    <x-icon name="cog-6-tooth" class="w-4 h-4 text-dark/40"/>
+                    {{ __('nav.settings') }}
+                </a>
+
                 <div class="border-t border-dark/8"></div>
 
                 <form method="POST" action="/logout">
