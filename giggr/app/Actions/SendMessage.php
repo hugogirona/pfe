@@ -22,6 +22,10 @@ class SendMessage
             throw new InvalidArgumentException('A user cannot send a message to themselves.');
         }
 
+        if ($sender->hasBlocked($recipient) || $sender->isBlockedBy($recipient)) {
+            throw new InvalidArgumentException('Messages cannot be exchanged between blocked users.');
+        }
+
         Validator::make(['body' => $body], [
             'body' => ['required', 'string', 'min:1', 'max:2000'],
         ])->validate();
