@@ -18,6 +18,41 @@ new class extends Component {
 
     public string $body = '';
 
+    /**
+     * Subscribe to the active conversation channel only while the thread is open.
+     *
+     * @return array<string, string>
+     */
+    public function getListeners(): array
+    {
+        if ($this->currentConversationId === null) {
+            return [];
+        }
+
+        return [
+            "echo-private:conversation.{$this->currentConversationId},.message.sent" => 'messageReceived',
+        ];
+    }
+
+    public function messageReceived(array $payload = []): void
+    {
+        if ($this->view !== 'thread' || $this->currentConversationId === null) {
+            return;
+        }
+
+        if (isset($payload['conversation_id']) && (int) $payload['conversation_id'] !== $this->currentConversationId) {
+            return;
+        }
+
+        auth()->user()->conversations()->updateExistingPivot($this->currentConversationId, [
+            'last_read_at' => now(),
+        ]);
+
+        unset($this->currentConversation);
+
+        $this->dispatch('thread-updated');
+    }
+
     public function mount(?string $model_id = null): void
     {
         abort_unless(auth()->check(), 403);
@@ -166,7 +201,6 @@ new class extends Component {
 
 @php $currentUserId = (int) auth()->id(); @endphp
 
-{{-- Escape the modal's p-6 wrapper so tabs / header / compose can be edge-to-edge sticky --}}
 <section
     class="-m-6 h-full flex flex-col bg-bg"
     aria-labelledby="messaging-inbox-heading"
@@ -175,7 +209,6 @@ new class extends Component {
 
     @if ($view === 'list')
 
-        {{-- Tabs (W3C tablist pattern: same panel, filtered by active tab) --}}
         <div
             role="tablist"
             aria-label="{{ __('messaging.aria_tabs') }}"
@@ -204,7 +237,6 @@ new class extends Component {
             @endforeach
         </div>
 
-        {{-- Conversation list / empty state --}}
         <div
             id="messaging-inbox-panel"
             role="tabpanel"
@@ -261,6 +293,7 @@ new class extends Component {
             class="flex-1 overflow-y-auto px-5 py-4"
             x-data="{ scrollToBottom() { this.$nextTick(() => { this.$el.scrollTop = this.$el.scrollHeight; }); } }"
             x-init="scrollToBottom()"
+            @thread-updated.window="scrollToBottom()"
             wire:key="thread-{{ $convo?->id ?? 0 }}"
             aria-labelledby="messaging-thread-heading"
             role="log"

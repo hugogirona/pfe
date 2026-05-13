@@ -55,7 +55,7 @@ class SendMessage
         });
 
         try {
-            MessageSent::dispatch($message);
+            broadcast(new MessageSent($message))->toOthers();
         } catch (Throwable $e) {
             report($e);
         }
