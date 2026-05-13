@@ -33,7 +33,7 @@ it('seeds 30 demo users plus the developer account in local environment', functi
 
     $this->seed(DemoDataSeeder::class);
 
-    expect(User::count())->toBe(31);
+    expect(User::count())->toBe(32);
 });
 
 it('seeds the developer account with a stable email', function () {
@@ -44,7 +44,7 @@ it('seeds the developer account with a stable email', function () {
 
     $this->seed(DemoDataSeeder::class);
 
-    expect(User::where('email', 'hello@giggr.com')->exists())->toBeTrue();
+    expect(User::where('email', 'hugo@giggr.com')->exists())->toBeTrue();
 });
 
 it('seeds a profile for every user', function () {
