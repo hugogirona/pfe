@@ -22,4 +22,7 @@ return [
     'unread_count' => '{1} 1 message non lu|[2,*] :count messages non lus',
     'new_messages' => '{1} 1 nouveau message|[2,*] :count nouveaux messages',
     'typing_aria' => ':name est en train d\'écrire',
+    'accept_request' => 'Accepter',
+    'decline_request' => 'Refuser',
+    'decline_confirm' => 'Refuser cette demande ? La conversation disparaîtra de ta boîte.',
 ];

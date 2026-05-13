@@ -22,4 +22,7 @@ return [
     'unread_count' => '{1} 1 unread message|[2,*] :count unread messages',
     'new_messages' => '{1} 1 new message|[2,*] :count new messages',
     'typing_aria' => ':name is typing',
+    'accept_request' => 'Accept',
+    'decline_request' => 'Decline',
+    'decline_confirm' => 'Decline this request? The conversation will disappear from your inbox.',
 ];
