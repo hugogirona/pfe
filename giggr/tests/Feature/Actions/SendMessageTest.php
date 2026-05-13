@@ -42,6 +42,28 @@ it('records the first sender as the conversation requester', function () {
     expect(Conversation::first()->requester_user_id)->toBe($alice->id);
 });
 
+it('refuses to send when the recipient has blocked the sender', function () {
+    $alice = User::factory()->withProfile()->create();
+    $bob = User::factory()->withProfile()->create();
+    $bob->block($alice);
+
+    expect(fn () => app(SendMessage::class)->execute($alice, $bob, 'Hi'))
+        ->toThrow(InvalidArgumentException::class);
+
+    expect(Message::count())->toBe(0);
+});
+
+it('refuses to send when the sender has blocked the recipient', function () {
+    $alice = User::factory()->withProfile()->create();
+    $bob = User::factory()->withProfile()->create();
+    $alice->block($bob);
+
+    expect(fn () => app(SendMessage::class)->execute($alice, $bob, 'Hi'))
+        ->toThrow(InvalidArgumentException::class);
+
+    expect(Message::count())->toBe(0);
+});
+
 it('rejects sending a message to yourself', function () {
     $alice = User::factory()->withProfile()->create();
 

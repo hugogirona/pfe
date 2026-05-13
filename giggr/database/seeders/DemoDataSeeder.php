@@ -43,18 +43,32 @@ class DemoDataSeeder extends Seeder
         ])->create([
             'first_name' => 'Hugo',
             'last_name' => 'Girona',
-            'email' => 'hello@giggr.com',
+            'email' => 'hugo@giggr.com',
+            'password' => 'change_this',
+        ]);
+
+        $valentina = User::factory()->withProfile([
+            'city_id' => $liege?->id,
+            'birth_date' => '1995-02-01',
+            'experience_years' => 4,
+        ])->create([
+            'first_name' => 'Valentina',
+            'last_name' => 'Vuksani',
+            'email' => 'vali@giggr.com',
             'password' => 'change_this',
         ]);
 
         $users = User::factory()->count(30)->withProfile()->create();
 
         $hugoProfile = $hugo->profile;
+        $valentinaProfile = $valentina->profile;
         foreach ($users->random(5) as $followed) {
             $hugo->follow($followed->profile);
+            $valentina->follow($followed->profile);
         }
         foreach ($users->random(5) as $follower) {
             $follower->follow($hugoProfile);
+            $follower->follow($valentinaProfile);
         }
 
         $announcements = Announcement::factory()->count(50)->recycle($users)->create();
@@ -81,13 +95,13 @@ class DemoDataSeeder extends Seeder
             }
         }
 
-        $this->seedMedia($hugoProfile, $profiles);
+        $this->seedMedia($hugoProfile, $valentinaProfile, $profiles);
     }
 
     /**
      * @throws Throwable
      */
-    private function seedMedia(Profile $hugoProfile, iterable $otherProfiles): void
+    private function seedMedia(Profile $hugoProfile, Profile $valentinaProfile, iterable $otherProfiles): void
     {
         $tmpPath = tempnam(sys_get_temp_dir(), 'giggr-demo-media-').'.jpg';
         $img = imagecreatetruecolor(self::DEMO_IMAGE_WIDTH, self::DEMO_IMAGE_HEIGHT);
@@ -95,8 +109,12 @@ class DemoDataSeeder extends Seeder
         imagejpeg($img, $tmpPath, 80);
 
         $file = new UploadedFile($tmpPath, 'demo-photo.jpg', 'image/jpeg', null, true);
+
         $hugoImage = app(UploadMediaImage::class)->execute($hugoProfile, $file);
         $this->attachYoutube($hugoProfile);
+
+        app(UploadMediaImage::class)->execute($valentinaProfile, $file);
+        $this->attachYoutube($valentinaProfile);
 
         foreach ($otherProfiles as $profile) {
             Media::create([

@@ -21,7 +21,18 @@
         <x-icon name="arrow-right" class="w-5 h-5 rotate-180"/>
     </button>
     <x-parts.messaging.avatar :user="$user" class="w-9 h-9 text-sm"/>
-    <h3 id="messaging-thread-heading" class="text-sm font-medium text-dark truncate min-w-0 flex-1">{{ $name }}</h3>
+    <h3 id="messaging-thread-heading" class="text-sm font-medium text-dark truncate min-w-0 flex-1">
+        @if ($user)
+            <a
+                href="{{ route('profile', ['id' => $user->id]) }}"
+                wire:navigate
+                class="hover:underline focus-visible:underline focus-visible:outline-none cursor-pointer"
+                aria-label="{{ __('messaging.open_profile', ['name' => $name]) }}"
+            >{{ $name }}</a>
+        @else
+            {{ $name }}
+        @endif
+    </h3>
 
     @if ($isPendingRequest)
         <div class="flex items-center gap-1.5 shrink-0">

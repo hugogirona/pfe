@@ -104,4 +104,10 @@ return [
     'delete_youtube_submit' => 'Supprimer',
     'delete_youtube_confirm' => 'Supprimer définitivement cette vidéo ?',
 
+    'block' => 'Bloquer',
+    'block_name' => 'Bloquer :name',
+    'block_confirm' => 'Bloquer :name ? Vous ne pourrez plus échanger de messages.',
+    'unblock' => 'Débloquer',
+    'unblock_name' => 'Débloquer :name',
+
 ];

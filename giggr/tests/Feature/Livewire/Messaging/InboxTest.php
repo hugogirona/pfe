@@ -599,6 +599,48 @@ it('declineRequest closes the thread and returns to list', function () {
         ->assertSet('currentConversationId', null);
 });
 
+it('thread view shows blocked-by-you notice when current user has blocked the correspondent', function () {
+    $alice = User::factory()->withProfile()->create();
+    $bob = User::factory()->withProfile()->create();
+    $convo = Conversation::between($alice, $bob);
+    $convo->update(['accepted_at' => now()]);
+    $alice->block($bob);
+
+    Livewire::actingAs($alice)
+        ->test('parts.messaging.inbox')
+        ->call('openConversation', $convo->id)
+        ->assertSee(__('messaging.blocked_by_you'))
+        ->assertDontSee(__('messaging.compose_placeholder'));
+});
+
+it('thread view shows blocked-by-them notice when correspondent has blocked current user', function () {
+    $alice = User::factory()->withProfile()->create();
+    $bob = User::factory()->withProfile()->create();
+    $convo = Conversation::between($alice, $bob);
+    $convo->update(['accepted_at' => now()]);
+    $bob->block($alice);
+
+    Livewire::actingAs($alice)
+        ->test('parts.messaging.inbox')
+        ->call('openConversation', $convo->id)
+        ->assertSee(__('messaging.blocked_by_them'))
+        ->assertDontSee(__('messaging.compose_placeholder'));
+});
+
+it('thread view shows the compose form when not blocked', function () {
+    $alice = User::factory()->withProfile()->create();
+    $bob = User::factory()->withProfile()->create();
+    $convo = Conversation::between($alice, $bob);
+    $convo->update(['accepted_at' => now()]);
+
+    Livewire::actingAs($alice)
+        ->test('parts.messaging.inbox')
+        ->call('openConversation', $convo->id)
+        ->assertSee(__('messaging.compose_placeholder'))
+        ->assertDontSee(__('messaging.blocked_by_you'))
+        ->assertDontSee(__('messaging.blocked_by_them'));
+});
+
 it('switchTab ignores invalid values', function () {
     $alice = User::factory()->withProfile()->create();
 

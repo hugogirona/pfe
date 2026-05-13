@@ -172,6 +172,30 @@ new class extends Component {
             : null;
     }
 
+    /**
+     * Returns null when messaging is allowed, 'blocked-by-me' if the current
+     * user has blocked the correspondent, or 'blocked-by-them' if the
+     * correspondent has blocked the current user.
+     */
+    #[Computed]
+    public function blockState(): ?string
+    {
+        $correspondent = $this->correspondent;
+        if ($correspondent === null) {
+            return null;
+        }
+
+        $me = auth()->user();
+        if ($me->hasBlocked($correspondent)) {
+            return 'blocked-by-me';
+        }
+        if ($correspondent->hasBlocked($me)) {
+            return 'blocked-by-them';
+        }
+
+        return null;
+    }
+
     public function switchTab(string $tab): void
     {
         if (in_array($tab, ['messages', 'requests'], true)) {
@@ -347,7 +371,10 @@ new class extends Component {
             :new-message-marker-count="$newMessageMarkerCount"
         />
 
-        <x-parts.messaging.compose-form :conversation-id="$convo?->id"/>
+        <x-parts.messaging.compose-form
+            :conversation-id="$convo?->id"
+            :block-state="$this->blockState"
+        />
 
     @endif
 
