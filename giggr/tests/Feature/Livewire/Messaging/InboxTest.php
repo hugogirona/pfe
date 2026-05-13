@@ -206,6 +206,215 @@ it('mount ignores model_id pointing at an unknown user', function () {
         ->assertSet('draftRecipientId', null);
 });
 
+it('openConversation marks unread messages from others as read', function () {
+    $alice = User::factory()->withProfile()->create();
+    $bob = User::factory()->withProfile()->create();
+    $convo = Conversation::between($alice, $bob);
+    $unreadFromBob = Message::factory()->for($convo)->for($bob, 'sender')->count(3)->create(['read_at' => null]);
+    $ownMessage = Message::factory()->for($convo)->for($alice, 'sender')->create(['read_at' => null]);
+
+    Livewire::actingAs($alice)
+        ->test('parts.messaging.inbox')
+        ->call('openConversation', $convo->id);
+
+    foreach ($unreadFromBob as $message) {
+        expect($message->fresh()->read_at)->not->toBeNull();
+    }
+    expect($ownMessage->fresh()->read_at)->toBeNull();
+});
+
+it('messageReceived marks the new incoming message as read', function () {
+    $alice = User::factory()->withProfile()->create();
+    $bob = User::factory()->withProfile()->create();
+    $convo = Conversation::between($alice, $bob);
+
+    $component = Livewire::actingAs($alice)
+        ->test('parts.messaging.inbox')
+        ->call('openConversation', $convo->id);
+
+    $incoming = Message::factory()->for($convo)->for($bob, 'sender')->create(['read_at' => null]);
+
+    $component->call('messageReceived', ['conversation_id' => $convo->id, 'id' => $incoming->id]);
+
+    expect($incoming->fresh()->read_at)->not->toBeNull();
+});
+
+it('incomingMessage refreshes the conversation list with fresh unread counts', function () {
+    $alice = User::factory()->withProfile()->create();
+    $bob = User::factory()->withProfile()->create();
+    $convo = Conversation::between($alice, $bob);
+    $convo->update(['accepted_at' => now(), 'last_message_at' => now()]);
+
+    $component = Livewire::actingAs($alice)
+        ->test('parts.messaging.inbox')
+        ->assertDontSeeHtml('bg-accent text-bg text-[10px]');
+
+    Message::factory()->for($convo)->for($bob, 'sender')->create([
+        'body' => 'Live message',
+        'read_at' => null,
+    ]);
+
+    $component
+        ->call('incomingMessage', ['conversation_id' => $convo->id])
+        ->assertSee('Live message')
+        ->assertSeeHtml('bg-accent text-bg text-[10px]');
+});
+
+it('shows the unread count in the conversation row when messages are unread', function () {
+    $alice = User::factory()->withProfile()->create();
+    $bob = User::factory()->withProfile()->create();
+    $convo = Conversation::between($alice, $bob);
+    $convo->update(['accepted_at' => now(), 'last_message_at' => now()]);
+    Message::factory()->for($convo)->for($bob, 'sender')->count(4)->create(['read_at' => null]);
+
+    Livewire::actingAs($alice)
+        ->test('parts.messaging.inbox')
+        ->assertSee('4')
+        ->assertSee($bob->full_name);
+});
+
+it('does not show an unread count when the conversation is fully read', function () {
+    $alice = User::factory()->withProfile()->create();
+    $bob = User::factory()->withProfile()->create();
+    $convo = Conversation::between($alice, $bob);
+    $convo->update(['accepted_at' => now(), 'last_message_at' => now()]);
+    Message::factory()->for($convo)->for($bob, 'sender')->count(3)->create(['read_at' => now()]);
+
+    Livewire::actingAs($alice)
+        ->test('parts.messaging.inbox')
+        ->assertDontSeeHtml('bg-accent text-bg text-[10px]');
+});
+
+it('renders the time HH:MM on each message bubble in the thread', function () {
+    $alice = User::factory()->withProfile()->create();
+    $bob = User::factory()->withProfile()->create();
+    $convo = Conversation::between($alice, $bob);
+    $convo->update(['accepted_at' => now()]);
+    Message::factory()->for($convo)->for($bob, 'sender')->create([
+        'body' => 'Bonjour',
+        'created_at' => now()->setTime(14, 32),
+    ]);
+
+    Livewire::actingAs($alice)
+        ->test('parts.messaging.inbox')
+        ->call('openConversation', $convo->id)
+        ->assertSee('14:32');
+});
+
+it('sets the new-messages marker when opening a conversation with unread incoming', function () {
+    $alice = User::factory()->withProfile()->create();
+    $bob = User::factory()->withProfile()->create();
+    $convo = Conversation::between($alice, $bob);
+    $convo->update(['accepted_at' => now()]);
+
+    Message::factory()->for($convo)->for($alice, 'sender')->create(['body' => 'old mine', 'read_at' => null]);
+    $firstUnread = Message::factory()->for($convo)->for($bob, 'sender')->create(['body' => 'unread 1', 'read_at' => null]);
+    Message::factory()->for($convo)->for($bob, 'sender')->count(2)->create(['body' => 'unread n', 'read_at' => null]);
+
+    Livewire::actingAs($alice)
+        ->test('parts.messaging.inbox')
+        ->call('openConversation', $convo->id)
+        ->assertSet('newMessageMarkerId', $firstUnread->id)
+        ->assertSet('newMessageMarkerCount', 3);
+});
+
+it('does not set the new-messages marker when there are no unread incoming', function () {
+    $alice = User::factory()->withProfile()->create();
+    $bob = User::factory()->withProfile()->create();
+    $convo = Conversation::between($alice, $bob);
+    $convo->update(['accepted_at' => now()]);
+    Message::factory()->for($convo)->for($bob, 'sender')->create(['body' => 'read', 'read_at' => now()]);
+
+    Livewire::actingAs($alice)
+        ->test('parts.messaging.inbox')
+        ->call('openConversation', $convo->id)
+        ->assertSet('newMessageMarkerId', null)
+        ->assertSet('newMessageMarkerCount', 0);
+});
+
+it('dismissNewMessageMarker clears the marker state', function () {
+    $alice = User::factory()->withProfile()->create();
+    $bob = User::factory()->withProfile()->create();
+    $convo = Conversation::between($alice, $bob);
+    $convo->update(['accepted_at' => now()]);
+    Message::factory()->for($convo)->for($bob, 'sender')->create(['read_at' => null]);
+
+    Livewire::actingAs($alice)
+        ->test('parts.messaging.inbox')
+        ->call('openConversation', $convo->id)
+        ->call('dismissNewMessageMarker')
+        ->assertSet('newMessageMarkerId', null)
+        ->assertSet('newMessageMarkerCount', 0);
+});
+
+it('backToList clears the new-messages marker', function () {
+    $alice = User::factory()->withProfile()->create();
+    $bob = User::factory()->withProfile()->create();
+    $convo = Conversation::between($alice, $bob);
+    $convo->update(['accepted_at' => now()]);
+    Message::factory()->for($convo)->for($bob, 'sender')->create(['read_at' => null]);
+
+    Livewire::actingAs($alice)
+        ->test('parts.messaging.inbox')
+        ->call('openConversation', $convo->id)
+        ->call('backToList')
+        ->assertSet('newMessageMarkerId', null);
+});
+
+it('inserts a day separator between messages from different days', function () {
+    $alice = User::factory()->withProfile()->create();
+    $bob = User::factory()->withProfile()->create();
+    $convo = Conversation::between($alice, $bob);
+    $convo->update(['accepted_at' => now()]);
+    Message::factory()->for($convo)->for($bob, 'sender')->create([
+        'body' => 'Old message',
+        'created_at' => now()->subDay(),
+    ]);
+    Message::factory()->for($convo)->for($alice, 'sender')->create([
+        'body' => 'Today reply',
+        'created_at' => now(),
+    ]);
+
+    Livewire::actingAs($alice)
+        ->test('parts.messaging.inbox')
+        ->call('openConversation', $convo->id)
+        ->assertSee(__('messaging.day_yesterday'))
+        ->assertSee(__('messaging.day_today'));
+});
+
+it('readReceiptReceived in thread view busts the conversation cache', function () {
+    $alice = User::factory()->withProfile()->create();
+    $bob = User::factory()->withProfile()->create();
+    $convo = Conversation::between($alice, $bob);
+    $convo->update(['accepted_at' => now()]);
+    $myMessage = Message::factory()->for($convo)->for($alice, 'sender')->create([
+        'body' => 'Salut Bob',
+        'read_at' => null,
+    ]);
+
+    $component = Livewire::actingAs($alice)
+        ->test('parts.messaging.inbox')
+        ->call('openConversation', $convo->id);
+
+    // Bob reads the message in the background
+    $myMessage->update(['read_at' => now()]);
+
+    $component
+        ->call('readReceiptReceived', ['conversation_id' => $convo->id])
+        ->assertSee('Salut Bob');
+
+    expect($component->get('currentConversation')->messages->first()->read_at)->not->toBeNull();
+});
+
+it('readReceiptReceived is a no-op when not viewing the matching conversation', function () {
+    $alice = User::factory()->withProfile()->create();
+
+    Livewire::actingAs($alice)
+        ->test('parts.messaging.inbox')
+        ->call('readReceiptReceived', ['conversation_id' => 999])
+        ->assertSet('view', 'list');
+});
+
 it('messageReceived marks the conversation as read when viewing it', function () {
     $alice = User::factory()->withProfile()->create();
     $bob = User::factory()->withProfile()->create();

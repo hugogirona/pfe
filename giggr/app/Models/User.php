@@ -63,6 +63,20 @@ class User extends Authenticatable
             ->withPivot(['last_read_at', 'hidden_at']);
     }
 
+    public function unreadConversationsCount(): int
+    {
+        return Conversation::query()
+            ->whereHas('participants', function ($q): void {
+                $q->where('users.id', $this->id)
+                    ->where('conversation_user.hidden_at', null);
+            })
+            ->whereHas('messages', function ($q): void {
+                $q->where('sender_id', '!=', $this->id)
+                    ->whereNull('read_at');
+            })
+            ->count();
+    }
+
     public function follow(Model $followable): Follow
     {
         return $this->follows()->firstOrCreate([

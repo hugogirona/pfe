@@ -1,7 +1,9 @@
 <?php
 
+use App\Actions\MarkConversationAsRead;
 use App\Actions\SendMessage;
 use App\Models\Conversation;
+use App\Models\Message;
 use App\Models\User;
 use Illuminate\Support\Collection;
 use Livewire\Attributes\Computed;
@@ -18,20 +20,33 @@ new class extends Component {
 
     public string $body = '';
 
+    public ?int $newMessageMarkerId = null;
+
+    public int $newMessageMarkerCount = 0;
+
     /**
-     * Subscribe to the active conversation channel only while the thread is open.
-     *
      * @return array<string, string>
      */
     public function getListeners(): array
     {
-        if ($this->currentConversationId === null) {
-            return [];
-        }
+        $userId = (int) auth()->id();
 
         return [
-            "echo-private:conversation.{$this->currentConversationId},.message.sent" => 'messageReceived',
+            "echo-private:App.Models.User.{$userId},.message.sent" => 'incomingMessage',
         ];
+    }
+
+    public function incomingMessage(array $payload = []): void
+    {
+        unset($this->conversations, $this->visibleConversations);
+
+        $isViewingMatchingThread = $this->view === 'thread'
+            && isset($payload['conversation_id'])
+            && (int) $payload['conversation_id'] === $this->currentConversationId;
+
+        if ($isViewingMatchingThread) {
+            $this->messageReceived($payload);
+        }
     }
 
     public function messageReceived(array $payload = []): void
@@ -44,13 +59,25 @@ new class extends Component {
             return;
         }
 
-        auth()->user()->conversations()->updateExistingPivot($this->currentConversationId, [
-            'last_read_at' => now(),
-        ]);
+        $this->markConversationAsRead($this->currentConversationId);
 
         unset($this->currentConversation);
 
         $this->dispatch('thread-updated');
+    }
+
+
+    public function readReceiptReceived(array $payload = []): void
+    {
+        if ($this->view !== 'thread' || $this->currentConversationId === null) {
+            return;
+        }
+
+        if (isset($payload['conversation_id']) && (int) $payload['conversation_id'] !== $this->currentConversationId) {
+            return;
+        }
+
+        unset($this->currentConversation);
     }
 
     public function mount(?string $model_id = null): void
@@ -94,10 +121,15 @@ new class extends Component {
     #[Computed]
     public function conversations(): Collection
     {
+        $userId = (int) auth()->id();
+
         return auth()->user()
             ->conversations()
             ->wherePivot('hidden_at', null)
             ->with(['participants.profile', 'latestMessage'])
+            ->withCount(['messages as unread_count_for_me' => function ($q) use ($userId): void {
+                $q->where('sender_id', '!=', $userId)->whereNull('read_at');
+            }])
             ->orderByDesc('last_message_at')
             ->orderByDesc('conversations.created_at')
             ->get();
@@ -154,9 +186,28 @@ new class extends Component {
             403,
         );
 
-        auth()->user()->conversations()->updateExistingPivot($id, [
-            'last_read_at' => now(),
-        ]);
+        $userId = (int) auth()->id();
+
+        $firstUnread = Message::query()
+            ->where('conversation_id', $id)
+            ->where('sender_id', '!=', $userId)
+            ->whereNull('read_at')
+            ->orderBy('created_at')
+            ->orderBy('id')
+            ->first(['id']);
+
+        if ($firstUnread !== null) {
+            $this->newMessageMarkerId = (int) $firstUnread->id;
+            $this->newMessageMarkerCount = Message::query()
+                ->where('conversation_id', $id)
+                ->where('sender_id', '!=', $userId)
+                ->whereNull('read_at')
+                ->count();
+        } else {
+            $this->dismissNewMessageMarker();
+        }
+
+        $this->markConversationAsRead($id);
 
         $this->currentConversationId = $id;
         $this->view = 'thread';
@@ -165,12 +216,25 @@ new class extends Component {
         unset($this->currentConversation, $this->correspondent, $this->conversations, $this->visibleConversations);
     }
 
+    public function dismissNewMessageMarker(): void
+    {
+        $this->newMessageMarkerId = null;
+        $this->newMessageMarkerCount = 0;
+    }
+
+    private function markConversationAsRead(int $conversationId): void
+    {
+        app(MarkConversationAsRead::class)->execute(auth()->user(), $conversationId);
+        $this->dispatch('messaging-updated');
+    }
+
     public function backToList(): void
     {
         $this->currentConversationId = null;
         $this->draftRecipientId = null;
         $this->view = 'list';
         $this->body = '';
+        $this->dismissNewMessageMarker();
 
         unset($this->currentConversation, $this->correspondent);
     }
@@ -209,148 +273,33 @@ new class extends Component {
 
     @if ($view === 'list')
 
-        <div
-            role="tablist"
-            aria-label="{{ __('messaging.aria_tabs') }}"
-            class="flex shrink-0 border-b border-dark/10"
-        >
-            @foreach (['messages', 'requests'] as $tab)
-                <button
-                    type="button"
-                    role="tab"
-                    id="messaging-tab-{{ $tab }}"
-                    aria-selected="{{ $activeTab === $tab ? 'true' : 'false' }}"
-                    aria-controls="messaging-inbox-panel"
-                    tabindex="{{ $activeTab === $tab ? '0' : '-1' }}"
-                    wire:click="switchTab('{{ $tab }}')"
-                    @class([
-                        'flex-1 py-4 text-sm font-medium transition-colors duration-150 cursor-pointer relative focus-visible:outline-none focus-visible:bg-dark/5',
-                        'text-dark' => $activeTab === $tab,
-                        'text-dark/40 hover:text-dark/70' => $activeTab !== $tab,
-                    ])
-                >
-                    {{ __('messaging.tab_'.$tab) }}
-                    @if ($activeTab === $tab)
-                        <span class="absolute inset-x-6 bottom-0 h-0.5 bg-accent rounded-full" aria-hidden="true"></span>
-                    @endif
-                </button>
-            @endforeach
-        </div>
+        <x-parts.messaging.inbox-tabs :active-tab="$activeTab"/>
 
-        <div
-            id="messaging-inbox-panel"
-            role="tabpanel"
-            aria-labelledby="messaging-tab-{{ $activeTab }}"
-            class="flex-1 overflow-y-auto"
-        >
-            @if ($this->visibleConversations->isEmpty())
-                <div class="h-full flex flex-col items-center justify-center px-8 py-12 text-center" role="status">
-                    <div class="w-16 h-16 rounded-full bg-dark/5 flex items-center justify-center mb-4" aria-hidden="true">
-                        <x-icon name="chat-bubble" class="w-8 h-8 text-dark/30"/>
-                    </div>
-                    <p class="text-sm text-dark/50 italic">
-                        {{ $activeTab === 'messages' ? __('messaging.empty_messages') : __('messaging.empty_requests') }}
-                    </p>
-                </div>
-            @else
-                <ul class="divide-y divide-dark/8">
-                    @foreach ($this->visibleConversations as $conversation)
-                        <li>
-                            <x-parts.messaging.conversation-row
-                                :conversation="$conversation"
-                                :current-user-id="$currentUserId"
-                            />
-                        </li>
-                    @endforeach
-                </ul>
-            @endif
-        </div>
+        <x-parts.messaging.conversation-list
+            :conversations="$this->visibleConversations"
+            :active-tab="$activeTab"
+            :current-user-id="$currentUserId"
+        />
 
     @else
 
-        {{-- Thread view --}}
         @php
             $convo = $this->currentConversation;
             $other = $this->correspondent;
             $otherName = $other?->full_name ?? '—';
         @endphp
 
-        <header class="flex items-center gap-3 px-5 py-3 border-b border-dark/10 shrink-0 bg-bg">
-            <button
-                type="button"
-                wire:click="backToList"
-                class="w-9 h-9 flex items-center justify-center rounded-full text-dark/60 hover:text-dark hover:bg-dark/5 transition-colors duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
-                aria-label="{{ __('messaging.back') }}"
-            >
-                <x-icon name="arrow-right" class="w-5 h-5 rotate-180"/>
-            </button>
-            <x-parts.messaging.avatar :user="$other" class="w-9 h-9 text-sm"/>
-            <h3 id="messaging-thread-heading" class="text-sm font-medium text-dark truncate">{{ $otherName }}</h3>
-        </header>
+        <x-parts.messaging.thread-header :user="$other" :name="$otherName"/>
 
-        {{-- Messages --}}
-        <div
-            class="flex-1 overflow-y-auto px-5 py-4"
-            x-data="{ scrollToBottom() { this.$nextTick(() => { this.$el.scrollTop = this.$el.scrollHeight; }); } }"
-            x-init="scrollToBottom()"
-            @thread-updated.window="scrollToBottom()"
-            wire:key="thread-{{ $convo?->id ?? 0 }}"
-            aria-labelledby="messaging-thread-heading"
-            role="log"
-            aria-live="polite"
-        >
-            @if ($convo && $convo->messages->isNotEmpty())
-                <ol class="space-y-1.5">
-                    @foreach ($convo->messages as $message)
-                        @php
-                            $isMine = (int) $message->sender_id === $currentUserId;
-                            $authorLabel = $isMine ? __('messaging.you') : $otherName;
-                        @endphp
-                        <li class="flex {{ $isMine ? 'justify-end' : 'justify-start' }}">
-                            <x-parts.messaging.message-bubble
-                                :message="$message"
-                                :is-mine="$isMine"
-                                :author-label="$authorLabel"
-                            />
-                        </li>
-                    @endforeach
-                </ol>
-            @else
-                <p class="h-full flex items-center justify-center text-sm text-dark/40 italic">
-                    {{ __('messaging.no_messages_yet') }}
-                </p>
-            @endif
-        </div>
+        <x-parts.messaging.thread-messages
+            :conversation="$convo"
+            :other-name="$otherName"
+            :current-user-id="$currentUserId"
+            :new-message-marker-id="$newMessageMarkerId"
+            :new-message-marker-count="$newMessageMarkerCount"
+        />
 
-        {{-- Compose --}}
-        <form
-            wire:submit="send"
-            aria-label="{{ __('messaging.compose_aria') }}"
-            class="flex items-end gap-2 px-4 py-3 border-t border-dark/10 shrink-0 bg-bg"
-        >
-            <label for="messaging-compose-body" class="sr-only">
-                {{ __('messaging.compose_label') }}
-            </label>
-            <div class="flex-1 min-h-10 rounded-2xl bg-dark/5 has-[textarea:focus]:bg-bg has-[textarea:focus]:ring-1 has-[textarea:focus]:ring-accent transition-colors duration-150">
-                <textarea
-                    id="messaging-compose-body"
-                    name="body"
-                    wire:model="body"
-                    rows="1"
-                    placeholder="{{ __('messaging.compose_placeholder') }}"
-                    class="block w-full max-h-32 resize-none bg-transparent px-4 py-2 text-sm leading-6 text-dark placeholder-dark/40 focus:outline-none"
-                    @keydown.enter.prevent="if (! $event.shiftKey) $wire.send()"
-                ></textarea>
-            </div>
-            <button
-                type="submit"
-                wire:loading.attr="disabled"
-                class="w-10 h-10 flex items-center justify-center rounded-full bg-accent text-bg hover:bg-accent/85 transition-colors duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed shrink-0"
-                aria-label="{{ __('messaging.send') }}"
-            >
-                <x-icon name="arrow-right" class="w-4 h-4 -rotate-45"/>
-            </button>
-        </form>
+        <x-parts.messaging.compose-form :conversation-id="$convo?->id"/>
 
     @endif
 

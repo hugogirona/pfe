@@ -32,7 +32,7 @@
 >
     @if ($isImage)
         <img
-            src="{{ $media->thumbnail_url }}"
+            src="{{ $media->display_url }}"
             alt=""
             class="absolute inset-0 w-full h-full object-cover transition-transform duration-300 motion-safe:group-hover:scale-105"
             loading="lazy"
