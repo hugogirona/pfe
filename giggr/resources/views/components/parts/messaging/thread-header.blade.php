@@ -3,6 +3,7 @@
     'name',
     'conversation' => null,
     'currentUserId' => null,
+    'showActions' => false,
 ])
 
 @php
@@ -50,6 +51,25 @@
                 class="px-3 py-1.5 rounded-md text-xs font-medium bg-accent text-bg hover:opacity-90 transition-opacity duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-1"
             >
                 {{ __('messaging.accept_request') }}
+            </button>
+        </div>
+    @elseif ($showActions && $conversation)
+        <div class="flex items-center gap-0.5 shrink-0">
+            <button
+                type="button"
+                @click="confirm = 'block'"
+                class="w-9 h-9 flex items-center justify-center rounded-full text-dark/60 hover:text-danger hover:bg-dark/5 transition-colors duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
+                aria-label="{{ __('messaging.block_correspondent_aria', ['name' => $name]) }}"
+            >
+                <x-icon name="no-symbol" class="w-5 h-5"/>
+            </button>
+            <button
+                type="button"
+                @click="confirm = 'delete'"
+                class="w-9 h-9 flex items-center justify-center rounded-full text-dark/60 hover:text-danger hover:bg-dark/5 transition-colors duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
+                aria-label="{{ __('messaging.delete_conversation_aria', ['name' => $name]) }}"
+            >
+                <x-icon name="trash" class="w-5 h-5"/>
             </button>
         </div>
     @endif

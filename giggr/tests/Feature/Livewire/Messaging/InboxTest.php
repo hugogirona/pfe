@@ -641,6 +641,97 @@ it('thread view shows the compose form when not blocked', function () {
         ->assertDontSee(__('messaging.blocked_by_them'));
 });
 
+it('deleteConversation hides the conversation for the current user', function () {
+    $alice = User::factory()->withProfile()->create();
+    $bob = User::factory()->withProfile()->create();
+    $convo = Conversation::between($alice, $bob);
+    $convo->update(['accepted_at' => now()]);
+
+    Livewire::actingAs($alice)
+        ->test('parts.messaging.inbox')
+        ->call('openConversation', $convo->id)
+        ->call('deleteConversation', $convo->id);
+
+    $pivot = $alice->fresh()->conversations()->find($convo->id)->pivot;
+    expect($pivot->hidden_at)->not->toBeNull()
+        ->and($bob->fresh()->conversations()->find($convo->id)->pivot->hidden_at)->toBeNull();
+});
+
+it('deleteConversation returns to the list view and hides the row', function () {
+    $alice = User::factory()->withProfile()->create();
+    $bob = User::factory()->withProfile()->create();
+    $convo = Conversation::between($alice, $bob);
+    $convo->update(['accepted_at' => now(), 'last_message_at' => now()]);
+
+    Livewire::actingAs($alice)
+        ->test('parts.messaging.inbox')
+        ->call('openConversation', $convo->id)
+        ->call('deleteConversation', $convo->id)
+        ->assertSet('view', 'list')
+        ->assertDontSee($bob->full_name);
+});
+
+it('deleteConversation aborts when the user does not participate in the conversation', function () {
+    $alice = User::factory()->withProfile()->create();
+    $bob = User::factory()->withProfile()->create();
+    $carol = User::factory()->withProfile()->create();
+    $convo = Conversation::between($alice, $bob);
+
+    Livewire::actingAs($carol)
+        ->test('parts.messaging.inbox')
+        ->call('deleteConversation', $convo->id)
+        ->assertStatus(403);
+});
+
+it('thread view shows the delete conversation button on accepted conversations', function () {
+    $alice = User::factory()->withProfile()->create();
+    $bob = User::factory()->withProfile()->create();
+    $convo = Conversation::between($alice, $bob);
+    $convo->update(['accepted_at' => now()]);
+
+    Livewire::actingAs($alice)
+        ->test('parts.messaging.inbox')
+        ->call('openConversation', $convo->id)
+        ->assertSee(__('messaging.delete_conversation_aria', ['name' => $bob->full_name]));
+});
+
+it('blockCorrespondent blocks the other participant and returns to the list', function () {
+    $alice = User::factory()->withProfile()->create();
+    $bob = User::factory()->withProfile()->create();
+    $convo = Conversation::between($alice, $bob);
+    $convo->update(['accepted_at' => now()]);
+
+    Livewire::actingAs($alice)
+        ->test('parts.messaging.inbox')
+        ->call('openConversation', $convo->id)
+        ->call('blockCorrespondent')
+        ->assertSet('view', 'list');
+
+    expect($alice->fresh()->hasBlocked($bob))->toBeTrue()
+        ->and($alice->fresh()->conversations()->find($convo->id)->pivot->hidden_at)->not->toBeNull();
+});
+
+it('blockCorrespondent aborts when not in a thread view', function () {
+    $alice = User::factory()->withProfile()->create();
+
+    Livewire::actingAs($alice)
+        ->test('parts.messaging.inbox')
+        ->call('blockCorrespondent')
+        ->assertStatus(403);
+});
+
+it('thread view shows the block correspondent button on accepted conversations', function () {
+    $alice = User::factory()->withProfile()->create();
+    $bob = User::factory()->withProfile()->create();
+    $convo = Conversation::between($alice, $bob);
+    $convo->update(['accepted_at' => now()]);
+
+    Livewire::actingAs($alice)
+        ->test('parts.messaging.inbox')
+        ->call('openConversation', $convo->id)
+        ->assertSee(__('messaging.block_correspondent_aria', ['name' => $bob->full_name]));
+});
+
 it('switchTab ignores invalid values', function () {
     $alice = User::factory()->withProfile()->create();
 

@@ -1,5 +1,6 @@
 <?php
 
+use App\Actions\HideConversation;
 use App\Actions\MarkConversationAsRead;
 use App\Actions\SendMessage;
 use App\Models\Conversation;
@@ -263,6 +264,37 @@ new class extends Component {
         unset($this->currentConversation, $this->correspondent);
     }
 
+    public function deleteConversation(int $id): void
+    {
+        abort_unless(
+            auth()->user()->conversations()->whereKey($id)->exists(),
+            403,
+        );
+
+        app(HideConversation::class)->execute(auth()->user(), $id);
+
+        if ($this->currentConversationId === $id) {
+            $this->backToList();
+        }
+
+        unset($this->conversations, $this->visibleConversations);
+        $this->dispatch('messaging-updated');
+    }
+
+    public function blockCorrespondent(): void
+    {
+        abort_unless($this->view === 'thread', 403);
+
+        $correspondent = $this->correspondent;
+        abort_unless($correspondent !== null, 404);
+
+        auth()->user()->block($correspondent);
+        $this->backToList();
+
+        unset($this->conversations, $this->visibleConversations);
+        $this->dispatch('messaging-updated');
+    }
+
     public function acceptRequest(int $id): void
     {
         $conversation = $this->resolvePendingRequest($id);
@@ -356,25 +388,37 @@ new class extends Component {
             $otherName = $other?->full_name ?? '—';
         @endphp
 
-        <x-parts.messaging.thread-header
-            :user="$other"
-            :name="$otherName"
-            :conversation="$convo"
-            :current-user-id="$currentUserId"
-        />
+        @php $showThreadActions = $convo !== null && $convo->accepted_at !== null; @endphp
 
-        <x-parts.messaging.thread-messages
-            :conversation="$convo"
-            :other-name="$otherName"
-            :current-user-id="$currentUserId"
-            :new-message-marker-id="$newMessageMarkerId"
-            :new-message-marker-count="$newMessageMarkerCount"
-        />
+        <div class="contents" x-data="{ confirm: null }">
+            <x-parts.messaging.thread-header
+                :user="$other"
+                :name="$otherName"
+                :conversation="$convo"
+                :current-user-id="$currentUserId"
+                :show-actions="$showThreadActions"
+            />
 
-        <x-parts.messaging.compose-form
-            :conversation-id="$convo?->id"
-            :block-state="$this->blockState"
-        />
+            @if ($showThreadActions)
+                <x-parts.messaging.thread-confirm-bar
+                    :conversation-id="$convo->id"
+                    :other-name="$otherName"
+                />
+            @endif
+
+            <x-parts.messaging.thread-messages
+                :conversation="$convo"
+                :other-name="$otherName"
+                :current-user-id="$currentUserId"
+                :new-message-marker-id="$newMessageMarkerId"
+                :new-message-marker-count="$newMessageMarkerCount"
+            />
+
+            <x-parts.messaging.compose-form
+                :conversation-id="$convo?->id"
+                :block-state="$this->blockState"
+            />
+        </div>
 
     @endif
 
