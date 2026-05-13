@@ -206,6 +206,76 @@ it('mount ignores model_id pointing at an unknown user', function () {
         ->assertSet('draftRecipientId', null);
 });
 
+it('messageReceived marks the conversation as read when viewing it', function () {
+    $alice = User::factory()->withProfile()->create();
+    $bob = User::factory()->withProfile()->create();
+    $convo = Conversation::between($alice, $bob);
+    $convo->update(['accepted_at' => now()]);
+
+    $component = Livewire::actingAs($alice)
+        ->test('parts.messaging.inbox')
+        ->call('openConversation', $convo->id);
+
+    $alice->conversations()->updateExistingPivot($convo->id, ['last_read_at' => now()->subHour()]);
+
+    $component->call('messageReceived', ['conversation_id' => $convo->id, 'id' => 1, 'body' => 'New']);
+
+    $pivot = $alice->fresh()->conversations()->find($convo->id)->pivot;
+    expect($pivot->last_read_at)->toBeGreaterThan(now()->subMinute());
+});
+
+it('messageReceived refreshes the thread to show the new message', function () {
+    $alice = User::factory()->withProfile()->create();
+    $bob = User::factory()->withProfile()->create();
+    $convo = Conversation::between($alice, $bob);
+    $convo->update(['accepted_at' => now()]);
+
+    $component = Livewire::actingAs($alice)
+        ->test('parts.messaging.inbox')
+        ->call('openConversation', $convo->id)
+        ->assertDontSee('Live message from Bob');
+
+    Message::factory()
+        ->for($convo)
+        ->for($bob, 'sender')
+        ->create(['body' => 'Live message from Bob']);
+
+    $component
+        ->call('messageReceived', ['conversation_id' => $convo->id])
+        ->assertSee('Live message from Bob');
+});
+
+it('messageReceived is a no-op in list view', function () {
+    $alice = User::factory()->withProfile()->create();
+    $bob = User::factory()->withProfile()->create();
+    $convo = Conversation::between($alice, $bob);
+
+    Livewire::actingAs($alice)
+        ->test('parts.messaging.inbox')
+        ->call('messageReceived', ['conversation_id' => $convo->id, 'id' => 1])
+        ->assertSet('view', 'list');
+});
+
+it('messageReceived ignores payloads for a different conversation', function () {
+    $alice = User::factory()->withProfile()->create();
+    $bob = User::factory()->withProfile()->create();
+    $charlie = User::factory()->withProfile()->create();
+    $aliceBob = Conversation::between($alice, $bob);
+    $aliceBob->update(['accepted_at' => now()]);
+    $aliceCharlie = Conversation::between($alice, $charlie);
+
+    $alice->conversations()->updateExistingPivot($aliceCharlie->id, ['last_read_at' => now()->subHour()]);
+    $charlieReadAtBefore = $alice->conversations()->find($aliceCharlie->id)->pivot->last_read_at;
+
+    Livewire::actingAs($alice)
+        ->test('parts.messaging.inbox')
+        ->call('openConversation', $aliceBob->id)
+        ->call('messageReceived', ['conversation_id' => $aliceCharlie->id, 'id' => 1]);
+
+    $pivotAfter = $alice->fresh()->conversations()->find($aliceCharlie->id)->pivot;
+    expect((string) $pivotAfter->last_read_at)->toBe((string) $charlieReadAtBefore);
+});
+
 it('switchTab ignores invalid values', function () {
     $alice = User::factory()->withProfile()->create();
 
