@@ -25,4 +25,6 @@ return [
     'accept_request' => 'Accepter',
     'decline_request' => 'Refuser',
     'decline_confirm' => 'Refuser cette demande ? La conversation disparaîtra de ta boîte.',
+    'blocked_by_you' => 'Tu as bloqué cet utilisateur. Débloque-le depuis ses paramètres pour échanger à nouveau.',
+    'blocked_by_them' => 'Tu ne peux pas envoyer de message à cet utilisateur.',
 ];

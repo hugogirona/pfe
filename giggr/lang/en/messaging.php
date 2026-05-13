@@ -25,4 +25,6 @@ return [
     'accept_request' => 'Accept',
     'decline_request' => 'Decline',
     'decline_confirm' => 'Decline this request? The conversation will disappear from your inbox.',
+    'blocked_by_you' => "You've blocked this user. Unblock them from settings to message again.",
+    'blocked_by_them' => "You can't send messages to this user.",
 ];
