@@ -9,6 +9,7 @@ return [
     'empty_requests' => 'Aucune demande en attente.',
     'no_messages_yet' => 'Aucun message',
     'open_conversation_with' => 'Ouvrir la conversation avec :name',
+    'open_profile' => 'Voir le profil de :name',
     'you' => 'Vous',
     'compose_aria' => 'Rédiger un message',
     'compose_label' => 'Message',
