@@ -57,7 +57,7 @@
         <div class="flex items-center gap-0.5 shrink-0">
             <button
                 type="button"
-                @click="confirm = 'block'"
+                @click="$dispatch('thread-action-confirm', { action: 'block' })"
                 class="w-9 h-9 flex items-center justify-center rounded-full text-dark/60 hover:text-danger hover:bg-dark/5 transition-colors duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
                 aria-label="{{ __('messaging.block_correspondent_aria', ['name' => $name]) }}"
             >
@@ -65,7 +65,7 @@
             </button>
             <button
                 type="button"
-                @click="confirm = 'delete'"
+                @click="$dispatch('thread-action-confirm', { action: 'delete' })"
                 class="w-9 h-9 flex items-center justify-center rounded-full text-dark/60 hover:text-danger hover:bg-dark/5 transition-colors duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
                 aria-label="{{ __('messaging.delete_conversation_aria', ['name' => $name]) }}"
             >

@@ -390,7 +390,7 @@ new class extends Component {
 
         @php $showThreadActions = $convo !== null && $convo->accepted_at !== null; @endphp
 
-        <div class="contents" x-data="{ confirm: null }">
+        <div class="contents">
             <x-parts.messaging.thread-header
                 :user="$other"
                 :name="$otherName"

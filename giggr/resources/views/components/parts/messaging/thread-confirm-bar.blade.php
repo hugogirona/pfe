@@ -4,6 +4,8 @@
 ])
 
 <div
+    x-data="{ confirm: null }"
+    @thread-action-confirm.window="confirm = $event.detail.action"
     class="grid shrink-0 transition-[grid-template-rows] duration-300 ease-[cubic-bezier(0.32,0.72,0,1)]"
     :class="confirm ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'"
     :aria-hidden="confirm ? 'false' : 'true'"

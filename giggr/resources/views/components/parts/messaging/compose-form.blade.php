@@ -41,14 +41,20 @@
                 window.Echo.private('conversation.' + id).whisper('typing', {});
                 this.typingCooldown = setTimeout(() => { this.typingCooldown = null; }, 2000);
             },
+            threadUpdatedCleanup: null,
             init() {
                 this.$nextTick(() => {
                     const ta = this.$refs.textarea;
                     if (ta && ta.value) this.autosize(ta);
                 });
-                this.$wire.on('thread-updated', () => {
+                this.threadUpdatedCleanup = this.$wire.on('thread-updated', () => {
                     if (this.$refs.textarea) this.reset(this.$refs.textarea);
                 });
+            },
+            destroy() {
+                if (typeof this.threadUpdatedCleanup === 'function') {
+                    this.threadUpdatedCleanup();
+                }
             },
         }"
     >
