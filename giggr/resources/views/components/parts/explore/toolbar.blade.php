@@ -3,22 +3,24 @@
 <div class="flex items-center gap-3">
 
     {{-- Publier une annonce --}}
-    <button
-        x-show="activeTab === 'annonces'"
-        x-transition:enter="transition ease-out duration-150"
-        x-transition:enter-start="opacity-0"
-        x-transition:enter-end="opacity-100"
-        x-transition:leave="transition ease-in-out duration-250"
-        x-transition:leave-start="opacity-100"
-        x-transition:leave-end="opacity-0"
-        @click="$wire.dispatch('open-modal', { component: 'parts.announcement.form', title: 'Publier une annonce' })"
-        style="display: none"
-        type="button"
-        class="inline-flex items-center gap-2 h-10 px-4 rounded-xl bg-dark text-bg text-sm font-medium hover:opacity-80 transition-opacity duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
-    >
-        <x-icon name="plus" class="w-4 h-4" />
-        {{ __('explore.publish_cta') }}
-    </button>
+    @auth
+        <button
+            x-show="activeTab === 'annonces'"
+            x-transition:enter="transition ease-out duration-150"
+            x-transition:enter-start="opacity-0"
+            x-transition:enter-end="opacity-100"
+            x-transition:leave="transition ease-in-out duration-250"
+            x-transition:leave-start="opacity-100"
+            x-transition:leave-end="opacity-0"
+            @click="$wire.dispatch('open-modal', { component: 'parts.announcement.form', title: 'Publier une annonce' })"
+            style="display: none"
+            type="button"
+            class="inline-flex items-center gap-2 h-10 px-4 rounded-xl bg-dark text-bg text-sm font-medium hover:opacity-80 transition-opacity duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
+        >
+            <x-icon name="plus" class="w-4 h-4" />
+            {{ __('explore.publish_cta') }}
+        </button>
+    @endauth
 
     {{-- Filtres --}}
     <button
