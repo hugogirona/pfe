@@ -58,6 +58,51 @@ it('preserves relation counts when the avatar is refreshed', function () {
         ->and($component->get('profile')->followed_count)->toBe(1);
 });
 
+it('preserves relation counts after announcement-created is received', function () {
+    $this->seed([CitySeeder::class, InstrumentSeeder::class, GenreSeeder::class]);
+
+    $owner = User::factory()->create();
+    $profile = Profile::factory()->create(['user_id' => $owner->id]);
+
+    $follower = User::factory()->create();
+    $follower->follow($profile);
+    $other = Profile::factory()->create();
+    $owner->follow($other);
+
+    $this->actingAs($owner);
+
+    $component = Livewire::test('pages::profile.index', ['id' => $profile->id]);
+
+    expect($component->get('profile')->followers_count)->toBe(1)
+        ->and($component->get('profile')->followed_count)->toBe(1);
+
+    $component->dispatch('announcement-created', id: 1);
+
+    expect($component->get('profile')->followers_count)->toBe(1)
+        ->and($component->get('profile')->followed_count)->toBe(1);
+});
+
+it('preserves relation counts after the bio is saved', function () {
+    $this->seed([CitySeeder::class, InstrumentSeeder::class, GenreSeeder::class]);
+
+    $owner = User::factory()->create();
+    $profile = Profile::factory()->create(['user_id' => $owner->id]);
+
+    $follower = User::factory()->create();
+    $follower->follow($profile);
+    $other = Profile::factory()->create();
+    $owner->follow($other);
+
+    $this->actingAs($owner);
+
+    $component = Livewire::test('pages::profile.index', ['id' => $profile->id])
+        ->set('bio', 'A new bio with more than ten characters.')
+        ->call('saveBio');
+
+    expect($component->get('profile')->followers_count)->toBe(1)
+        ->and($component->get('profile')->followed_count)->toBe(1);
+});
+
 it('refreshes followers and followed counts when follow-state-changed is received', function () {
     $this->seed([CitySeeder::class, InstrumentSeeder::class, GenreSeeder::class]);
 
