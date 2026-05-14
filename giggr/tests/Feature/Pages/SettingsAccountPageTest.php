@@ -35,25 +35,64 @@ it('settings account page lists the blocked users', function () {
         ->assertSee($charlie->full_name);
 });
 
-it('unblock action removes the block', function () {
+it('toggleBlock unblocks an initially blocked user', function () {
     $alice = User::factory()->withProfile()->create();
     $bob = User::factory()->withProfile()->create();
     $alice->block($bob);
 
     Livewire::actingAs($alice)
         ->test('pages::settings.account')
-        ->call('unblock', $bob->id);
+        ->call('toggleBlock', $bob->id);
 
     expect($alice->fresh()->hasBlocked($bob))->toBeFalse();
 });
 
-it('unblock with unknown user id is a no-op', function () {
+it('toggleBlock keeps the row visible after unblock', function () {
     $alice = User::factory()->withProfile()->create();
+    $bob = User::factory()->withProfile()->create();
+    $alice->block($bob);
 
     Livewire::actingAs($alice)
         ->test('pages::settings.account')
-        ->call('unblock', 999999)
-        ->assertOk();
+        ->call('toggleBlock', $bob->id)
+        ->assertSee($bob->full_name)
+        ->assertSee(__('settings.block'));
+});
+
+it('toggleBlock can re-block the user from the same row', function () {
+    $alice = User::factory()->withProfile()->create();
+    $bob = User::factory()->withProfile()->create();
+    $alice->block($bob);
+
+    Livewire::actingAs($alice)
+        ->test('pages::settings.account')
+        ->call('toggleBlock', $bob->id)
+        ->call('toggleBlock', $bob->id);
+
+    expect($alice->fresh()->hasBlocked($bob))->toBeTrue();
+});
+
+it('reloading the settings page drops unblocked rows', function () {
+    $this->seed([CitySeeder::class, InstrumentSeeder::class, GenreSeeder::class]);
+    $alice = User::factory()->withProfile()->create();
+    $bob = User::factory()->withProfile()->create();
+    $alice->block($bob);
+    $alice->unblock($bob);
+
+    $this->actingAs($alice)
+        ->get(route('settings.account'))
+        ->assertOk()
+        ->assertDontSee($bob->full_name);
+});
+
+it('toggleBlock with a user id outside of the initial snapshot is forbidden', function () {
+    $alice = User::factory()->withProfile()->create();
+    $bob = User::factory()->withProfile()->create();
+
+    Livewire::actingAs($alice)
+        ->test('pages::settings.account')
+        ->call('toggleBlock', $bob->id)
+        ->assertForbidden();
 });
 
 it('guest cannot mount the settings page Livewire component', function () {

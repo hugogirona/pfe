@@ -54,6 +54,9 @@ class SendMessage
             $conversation->participants()->updateExistingPivot($recipient->id, [
                 'hidden_at' => null,
             ]);
+            $conversation->participants()->updateExistingPivot($sender->id, [
+                'hidden_at' => null,
+            ]);
 
             return $message;
         });

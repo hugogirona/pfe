@@ -26,6 +26,10 @@ return [
     'accept_request' => 'Accepter',
     'decline_request' => 'Refuser',
     'decline_confirm' => 'Refuser cette demande ? La conversation disparaîtra de ta boîte.',
+    'delete' => 'Supprimer',
+    'delete_confirm' => 'Supprimer cette conversation ? Elle disparaîtra de ta boîte.',
+    'delete_conversation_aria' => 'Supprimer la conversation avec :name',
+    'block_correspondent_aria' => 'Bloquer :name',
     'blocked_by_you' => 'Tu as bloqué cet utilisateur. Débloque-le depuis ses paramètres pour échanger à nouveau.',
     'blocked_by_them' => 'Tu ne peux pas envoyer de message à cet utilisateur.',
 ];
