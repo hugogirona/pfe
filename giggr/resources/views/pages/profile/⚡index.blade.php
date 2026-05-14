@@ -8,8 +8,9 @@ use Livewire\Attributes\On;
 use Livewire\Attributes\Title;
 use Livewire\Component;
 
-new #[Layout('layouts.app')] #[Title('Profil — Giggr.')] class extends Component
-{
+new #[Layout('layouts.app')]
+#[Title('Profil — Giggr.')]
+class extends Component {
     public Profile $profile;
     public bool $isOwner = false;
 
@@ -19,6 +20,11 @@ new #[Layout('layouts.app')] #[Title('Profil — Giggr.')] class extends Compone
     public array $allInstruments = [];
     public array $allGenres = [];
 
+    public function hydrate(): void
+    {
+        $this->reloadRelationCounts();
+    }
+
     public function mount(int $id): void
     {
         $this->profile = Profile::with([
@@ -27,7 +33,7 @@ new #[Layout('layouts.app')] #[Title('Profil — Giggr.')] class extends Compone
             'instruments',
             'genres',
             'media',
-            'user.announcements' => fn ($q) => $q->active()->with(['city', 'instruments', 'genres']),
+            'user.announcements' => fn($q) => $q->active()->with(['city', 'instruments', 'genres']),
         ])
             ->withCount([
                 'followers',
@@ -58,7 +64,7 @@ new #[Layout('layouts.app')] #[Title('Profil — Giggr.')] class extends Compone
     {
         abort_unless($this->isOwner, 403);
         $this->selectedInstruments = in_array($id, $this->selectedInstruments)
-            ? array_values(array_filter($this->selectedInstruments, fn ($i) => $i !== $id))
+            ? array_values(array_filter($this->selectedInstruments, fn($i) => $i !== $id))
             : [...$this->selectedInstruments, $id];
     }
 
@@ -66,7 +72,7 @@ new #[Layout('layouts.app')] #[Title('Profil — Giggr.')] class extends Compone
     {
         abort_unless($this->isOwner, 403);
         $this->validate([
-            'selectedInstruments'   => ['array'],
+            'selectedInstruments' => ['array'],
             'selectedInstruments.*' => ['integer', 'exists:instruments,id'],
         ]);
         $this->profile->instruments()->sync($this->selectedInstruments);
@@ -78,7 +84,7 @@ new #[Layout('layouts.app')] #[Title('Profil — Giggr.')] class extends Compone
     {
         abort_unless($this->isOwner, 403);
         $this->selectedGenres = in_array($id, $this->selectedGenres)
-            ? array_values(array_filter($this->selectedGenres, fn ($g) => $g !== $id))
+            ? array_values(array_filter($this->selectedGenres, fn($g) => $g !== $id))
             : [...$this->selectedGenres, $id];
     }
 
@@ -86,7 +92,7 @@ new #[Layout('layouts.app')] #[Title('Profil — Giggr.')] class extends Compone
     {
         abort_unless($this->isOwner, 403);
         $this->validate([
-            'selectedGenres'   => ['array'],
+            'selectedGenres' => ['array'],
             'selectedGenres.*' => ['integer', 'exists:genres,id'],
         ]);
         $this->profile->genres()->sync($this->selectedGenres);
@@ -98,7 +104,7 @@ new #[Layout('layouts.app')] #[Title('Profil — Giggr.')] class extends Compone
     public function refreshAnnouncements(): void
     {
         $this->profile->load([
-            'user.announcements' => fn ($q) => $q->active()->with(['city', 'instruments', 'genres']),
+            'user.announcements' => fn($q) => $q->active()->with(['city', 'instruments', 'genres']),
         ]);
     }
 
@@ -135,10 +141,10 @@ new #[Layout('layouts.app')] #[Title('Profil — Giggr.')] class extends Compone
 
 <div>
 
-    <livewire:parts.social.relations-modal />
-    <livewire:parts.profile.media-lightbox />
+    <livewire:parts.social.relations-modal/>
+    <livewire:parts.profile.media-lightbox/>
 
-    <x-parts.profile.hero :profile="$profile" />
+    <x-parts.profile.hero :profile="$profile"/>
 
     <div class="max-w-6xl mx-auto px-6 py-10">
         <div class="flex flex-col lg:flex-row gap-8 lg:items-start">
@@ -159,8 +165,8 @@ new #[Layout('layouts.app')] #[Title('Profil — Giggr.')] class extends Compone
 
             {{-- Main content --}}
             <div class="w-full lg:flex-1 min-w-0 space-y-6">
-                <x-parts.profile.about :profile="$profile" :isOwner="$isOwner" />
-                <x-parts.profile.media-gallery :profile="$profile" :isOwner="$isOwner" />
+                <x-parts.profile.about :profile="$profile" :isOwner="$isOwner"/>
+                <x-parts.profile.media-gallery :profile="$profile" :isOwner="$isOwner"/>
                 <x-parts.profile.announcements :profile="$profile" :isOwner="$isOwner" />
             </div>
 
