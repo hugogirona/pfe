@@ -90,3 +90,62 @@ it('renders the preselected city display name on mount', function () {
     Livewire::test('parts.form.locality-picker', ['cityId' => $liege->id])
         ->assertSet('query', 'Liège (4000)');
 });
+
+it('selectFromCoords picks the nearest city when coords fall close enough', function () {
+    $liege = City::factory()->create([
+        'name' => 'Liège',
+        'slug' => 'liege-4000',
+        'postal_code' => '4000',
+        'searchable' => 'liege 4000',
+        'latitude' => 50.6326,
+        'longitude' => 5.5797,
+    ]);
+    City::factory()->create([
+        'name' => 'Bruxelles',
+        'slug' => 'bruxelles-1000',
+        'postal_code' => '1000',
+        'searchable' => 'bruxelles 1000',
+        'latitude' => 50.8466,
+        'longitude' => 4.3528,
+    ]);
+
+    Livewire::test('parts.form.locality-picker')
+        ->call('selectFromCoords', 50.6326, 5.5797)
+        ->assertSet('cityId', $liege->id)
+        ->assertSet('query', 'Liège (4000)')
+        ->assertSet('tooFar', false);
+});
+
+it('selectFromCoords flags tooFar and leaves the selection untouched when no city is within range', function () {
+    $liege = City::factory()->create([
+        'name' => 'Liège',
+        'slug' => 'liege-4000',
+        'postal_code' => '4000',
+        'searchable' => 'liege 4000',
+        'latitude' => 50.6326,
+        'longitude' => 5.5797,
+    ]);
+
+    Livewire::test('parts.form.locality-picker', ['cityId' => $liege->id])
+        ->call('selectFromCoords', 40.7128, -74.0060) // New York
+        ->assertSet('cityId', $liege->id)
+        ->assertSet('query', 'Liège (4000)')
+        ->assertSet('tooFar', true);
+});
+
+it('selectFromCoords clears a previous tooFar flag once a city is found', function () {
+    $liege = City::factory()->create([
+        'name' => 'Liège',
+        'slug' => 'liege-4000',
+        'postal_code' => '4000',
+        'searchable' => 'liege 4000',
+        'latitude' => 50.6326,
+        'longitude' => 5.5797,
+    ]);
+
+    Livewire::test('parts.form.locality-picker')
+        ->set('tooFar', true)
+        ->call('selectFromCoords', 50.6326, 5.5797)
+        ->assertSet('tooFar', false)
+        ->assertSet('cityId', $liege->id);
+});
