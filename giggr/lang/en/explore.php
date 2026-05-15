@@ -10,6 +10,8 @@ return [
 
     // Filters
     'filter_city' => 'City or region',
+    'filter_following_label' => 'Followed accounts',
+    'filter_following' => 'Only people I follow',
     'filter_radius' => 'Radius',
     'filter_radius_km' => ':n km',
     'filter_instruments' => 'Instruments',

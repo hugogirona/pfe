@@ -15,24 +15,34 @@ new #[Layout('layouts.app')] #[Title('Explorer — Giggr.')] class extends Compo
 {
     use WithPagination;
 
-    public string $filterCity        = '';
+    public ?int   $filterCityId      = null;
     public array  $filterInstruments = [];
     public array  $filterGenres      = [];
+    public bool   $filterFollowing   = false;
+
+    #[Computed]
+    public function followedProfileIdsForFilter(): array
+    {
+        return auth()->check()
+            ? auth()->user()->followedProfileIds()
+            : [];
+    }
 
     #[Computed]
     public function filteredMusicians(): LengthAwarePaginator
     {
+        $followingActive = $this->filterFollowing && auth()->check();
+
         return Profile::query()
             ->with(['user', 'city', 'instruments', 'genres'])
-            ->when($this->filterCity, fn ($q) => $q->whereHas(
-                'city', fn ($q2) => $q2->where('name', 'like', '%' . $this->filterCity . '%')
-            ))
+            ->when($this->filterCityId, fn ($q) => $q->where('city_id', $this->filterCityId))
             ->when($this->filterInstruments, fn ($q) => $q->whereHas(
                 'instruments', fn ($q2) => $q2->whereIn('name', $this->filterInstruments)
             ))
             ->when($this->filterGenres, fn ($q) => $q->whereHas(
                 'genres', fn ($q2) => $q2->whereIn('name', $this->filterGenres)
             ))
+            ->when($followingActive, fn ($q) => $q->whereIn('id', $this->followedProfileIdsForFilter))
             ->orderBy('profiles.id')
             ->paginate(12, pageName: 'musicians-page');
     }
@@ -40,17 +50,20 @@ new #[Layout('layouts.app')] #[Title('Explorer — Giggr.')] class extends Compo
     #[Computed]
     public function filteredAnnouncements(): LengthAwarePaginator
     {
+        $followingActive = $this->filterFollowing && auth()->check();
+
         return Announcement::query()
             ->with(['city', 'instruments', 'genres'])
             ->active()
-            ->when($this->filterCity, fn ($q) => $q->whereHas(
-                'city', fn ($q2) => $q2->where('name', 'like', '%' . $this->filterCity . '%')
-            ))
+            ->when($this->filterCityId, fn ($q) => $q->where('city_id', $this->filterCityId))
             ->when($this->filterInstruments, fn ($q) => $q->whereHas(
                 'instruments', fn ($q2) => $q2->whereIn('name', $this->filterInstruments)
             ))
             ->when($this->filterGenres, fn ($q) => $q->whereHas(
                 'genres', fn ($q2) => $q2->whereIn('name', $this->filterGenres)
+            ))
+            ->when($followingActive, fn ($q) => $q->whereHas(
+                'user.profile', fn ($q2) => $q2->whereIn('id', $this->followedProfileIdsForFilter)
             ))
             ->orderBy('announcements.id')
             ->paginate(12, pageName: 'announcements-page');
@@ -79,24 +92,29 @@ new #[Layout('layouts.app')] #[Title('Explorer — Giggr.')] class extends Compo
     #[Computed]
     public function activeFiltersCount(): int
     {
-        return count($this->filterInstruments) + count($this->filterGenres) + ($this->filterCity ? 1 : 0);
+        return count($this->filterInstruments)
+            + count($this->filterGenres)
+            + ($this->filterCityId !== null ? 1 : 0)
+            + ($this->filterFollowing ? 1 : 0);
     }
 
     public function openFilterDrawer(): void
     {
         $this->dispatch('open-filter-drawer',
-            city:        $this->filterCity,
+            cityId:      $this->filterCityId,
             instruments: $this->filterInstruments,
             genres:      $this->filterGenres,
+            following:   $this->filterFollowing,
         );
     }
 
     #[On('filters-applied')]
-    public function applyFilters(string $city, array $instruments, array $genres): void
+    public function applyFilters(?int $cityId, array $instruments, array $genres, bool $following = false): void
     {
-        $this->filterCity        = $city;
+        $this->filterCityId      = $cityId;
         $this->filterInstruments = $instruments;
         $this->filterGenres      = $genres;
+        $this->filterFollowing   = $following;
         $this->resetPage('musicians-page');
         $this->resetPage('announcements-page');
     }
