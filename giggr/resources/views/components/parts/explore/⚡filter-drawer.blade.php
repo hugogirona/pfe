@@ -157,46 +157,10 @@ new class extends Component {
                 />
             </section>
 
-            {{-- Rayon --}}
-            <section
-                x-data="{
-                    radius: $wire.entangle('draftRadius'),
-                    labelAny: @js(__('explore.filter_radius_any')),
-                }"
-                aria-labelledby="drawer-radius-heading"
-            >
-                <div class="flex items-center justify-between mb-3">
-                    <h3 id="drawer-radius-heading" class="text-xs font-semibold uppercase tracking-widest text-dark/40">
-                        {{ __('explore.filter_radius') }}
-                    </h3>
-                    <span
-                        class="text-xs font-semibold text-accent tabular-nums"
-                        x-text="radius === 0 ? labelAny : radius + ' km'"
-                        aria-live="polite"
-                    >&nbsp;</span>
-                </div>
-                <input
-                    type="range"
-                    min="0"
-                    max="200"
-                    step="10"
-                    x-model="radius"
-                    @if ($draftCityId === null) disabled @endif
-                    aria-labelledby="drawer-radius-heading"
-                    aria-valuemin="0"
-                    aria-valuemax="200"
-                    :aria-valuenow="radius"
-                    class="w-full appearance-none bg-transparent cursor-pointer disabled:cursor-not-allowed disabled:opacity-40 motion-reduce:transition-none focus-visible:outline-none
-                        [&::-webkit-slider-runnable-track]:h-1.5 [&::-webkit-slider-runnable-track]:rounded-full [&::-webkit-slider-runnable-track]:bg-dark/10
-                        [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:-mt-[7px] [&::-webkit-slider-thumb]:w-5 [&::-webkit-slider-thumb]:h-5 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-accent [&::-webkit-slider-thumb]:shadow-md [&::-webkit-slider-thumb]:cursor-pointer
-                        [&::-moz-range-track]:h-1.5 [&::-moz-range-track]:rounded-full [&::-moz-range-track]:bg-dark/10 [&::-moz-range-track]:border-0
-                        [&::-moz-range-thumb]:w-5 [&::-moz-range-thumb]:h-5 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:bg-accent [&::-moz-range-thumb]:border-0 [&::-moz-range-thumb]:shadow-md [&::-moz-range-thumb]:cursor-pointer
-                        focus-visible:[&::-webkit-slider-thumb]:ring-2 focus-visible:[&::-webkit-slider-thumb]:ring-accent/40 focus-visible:[&::-webkit-slider-thumb]:ring-offset-2"
-                />
-                @if ($draftCityId === null)
-                    <p class="text-xs text-dark/40 italic mt-2">{{ __('explore.filter_radius_disabled_hint') }}</p>
-                @endif
-            </section>
+            <x-parts.explore.radius-slider
+                model="draftRadius"
+                :disabled="$draftCityId === null"
+            />
 
             @auth
                 {{-- Comptes suivis --}}
