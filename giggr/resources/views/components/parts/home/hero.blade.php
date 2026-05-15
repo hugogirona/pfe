@@ -6,14 +6,12 @@
         </p>
 
         <h2 class="font-heading text-4xl md:text-5xl leading-[1.1] mt-5 text-dark max-w-lg">
-            {{ __('home.hero_title') }}
+            {!! __('home.hero_title', ['share' => '<span class="hero-underline">'.__('home.hero_title_share').'</span>']) !!}
         </h2>
 
         <p class="mt-6 text-base md:text-lg leading-relaxed text-dark/55 max-w-sm">
             {{ __('home.hero_subtitle') }}
         </p>
-
-        {{-- //TODO insert accent svg subline --}}
 
 {{--        <form class="mt-8 flex flex-col sm:flex-row gap-2 sm:gap-3 w-full max-w-lg" role="search">--}}
 {{--            <x-search-bar class="min-w-0" />--}}

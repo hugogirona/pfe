@@ -3,7 +3,8 @@
 return [
     // Hero
     'welcome' => 'Welcome to',
-    'hero_title' => 'Music is a passion meant to be shared',
+    'hero_title' => 'Music is a passion meant to be :share',
+    'hero_title_share' => 'shared',
     'hero_subtitle' => 'Connect with amateur musicians in your area. Form your band, organise jam sessions and share your passion for music.',
     'hero_cta' => 'Browse listings',
     'search_placeholder' => 'Search for a profile or instrument...',

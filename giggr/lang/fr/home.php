@@ -3,7 +3,8 @@
 return [
     // Hero
     'welcome' => 'Bienvenue sur',
-    'hero_title' => 'La musique est une passion qui se partage',
+    'hero_title' => 'La musique est une passion qui se :share',
+    'hero_title_share' => 'partage',
     'hero_subtitle' => 'Connecte-toi avec des musiciens amateurs de ta région. Forme ton groupe, organise des jam sessions et partage ta passion pour la musique.',
     'hero_cta' => 'Voir les annonces',
     'search_placeholder' => 'Recherchez un profil ou un instrument...',
