@@ -137,6 +137,20 @@ it('nearby scope tightens results when the radius shrinks', function () {
         ->and($ids)->not->toContain($mid->id);
 });
 
+it('orderByDistance sorts cities from nearest to farthest from the given origin', function () {
+    $origin = City::factory()->create(['latitude' => 50.0, 'longitude' => 5.0]);
+    $close = City::factory()->create(['latitude' => 50.05, 'longitude' => 5.05]); // ~6 km
+    $mid = City::factory()->create(['latitude' => 50.5, 'longitude' => 5.5]); // ~62 km
+
+    $ordered = City::query()
+        ->whereIn('id', [$origin->id, $close->id, $mid->id])
+        ->orderByDistance(50.0, 5.0)
+        ->pluck('id')
+        ->all();
+
+    expect($ordered)->toBe([$origin->id, $close->id, $mid->id]);
+});
+
 it('nearby scope returns the origin city only when radius is 0', function () {
     $origin = City::factory()->create(['latitude' => 50.0, 'longitude' => 5.0]);
     $close = City::factory()->create(['latitude' => 50.05, 'longitude' => 5.05]);

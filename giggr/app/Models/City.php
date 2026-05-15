@@ -82,6 +82,15 @@ class City extends Model
         );
     }
 
+    #[Scope]
+    protected function orderByDistance(Builder $query, float $lat, float $lng): void
+    {
+        $query->orderByRaw(
+            self::haversineKmSql().' asc',
+            [$lat, $lng, $lat],
+        );
+    }
+
     /**
      * Haversine formula, see https://en.wikipedia.org/wiki/Haversine_formula
      */
