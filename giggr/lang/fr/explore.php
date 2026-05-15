@@ -41,10 +41,5 @@ return [
     // CTA
     'publish_cta' => 'Publier une annonce',
 
-    // Announcement types
-    'type_search' => 'Recherche',
-    'type_formation' => 'Formation',
-    'type_session' => 'Session',
-    'type_course' => 'Cours',
-    'type_event' => 'Événement',
+    'filter_types' => "Type d'annonce",
 ];

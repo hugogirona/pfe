@@ -1,6 +1,7 @@
 <?php
 
 use App\Enums\AnnouncementStatus;
+use App\Enums\AnnouncementType;
 use App\Models\Announcement;
 use App\Models\City;
 use App\Models\Profile;
@@ -229,4 +230,38 @@ it('filter drawer exposes the radius slider', function () {
     $this->get(route('explore'))
         ->assertOk()
         ->assertSee(__('explore.filter_radius'));
+});
+
+it('type filter narrows announcements to selected types only', function () {
+    $this->seed([CitySeeder::class, InstrumentSeeder::class, GenreSeeder::class]);
+    $gig = Announcement::factory()->create(['type' => AnnouncementType::Gig]);
+    $lessons = Announcement::factory()->create(['type' => AnnouncementType::Lessons]);
+    $musician = Announcement::factory()->create(['type' => AnnouncementType::MusicianWanted]);
+
+    $component = Livewire::test('pages::explore.index')
+        ->set('filterTypes', ['gig', 'lessons']);
+
+    $titles = $component->get('filteredAnnouncements')->pluck('title')->all();
+    expect($titles)->toContain($gig->title)
+        ->and($titles)->toContain($lessons->title)
+        ->and($titles)->not->toContain($musician->title);
+});
+
+it('type filter is ignored when empty', function () {
+    $this->seed([CitySeeder::class, InstrumentSeeder::class, GenreSeeder::class]);
+    Announcement::factory()->count(3)->create();
+
+    $component = Livewire::test('pages::explore.index')
+        ->set('filterTypes', []);
+
+    expect($component->get('filteredAnnouncements')->total())->toBe(3);
+});
+
+it('type filter counts toward activeFiltersCount per selected type', function () {
+    $this->seed([CitySeeder::class, InstrumentSeeder::class, GenreSeeder::class]);
+
+    Livewire::test('pages::explore.index')
+        ->assertSet('activeFiltersCount', 0)
+        ->set('filterTypes', ['gig', 'lessons'])
+        ->assertSet('activeFiltersCount', 2);
 });

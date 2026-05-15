@@ -17,6 +17,8 @@ new class extends Component {
 
     public bool $required = true;
 
+    public bool $filterStyle = false;
+
     public string $query = '';
 
     public bool $tooFar = false;
@@ -24,10 +26,11 @@ new class extends Component {
     /** @var array<int, array{id:int, display:string}> */
     public array $results = [];
 
-    public function mount(?string $label = null, ?string $placeholder = null): void
+    public function mount(?string $label = null, ?string $placeholder = null, bool $filterStyle = false): void
     {
         $this->label = $label ?? __('announcement.form_city_label');
         $this->placeholder = $placeholder ?? __('announcement.form_city_placeholder');
+        $this->filterStyle = $filterStyle;
 
         if ($this->cityId !== null) {
             $city = City::find($this->cityId);
@@ -133,14 +136,20 @@ new class extends Component {
     }"
     @keydown.escape.window="$wire.set('results', [])"
 >
-    <label for="locality-picker-input" class="text-sm font-medium text-dark/70">
+    <label for="locality-picker-input" @class([
+        'block text-xs font-semibold uppercase tracking-widest text-dark/40 mb-3' => $filterStyle,
+        'text-sm font-medium text-dark/70' => !$filterStyle,
+    ])>
         {{ $label }}
-        @if ($required)
+        @if ($required && !$filterStyle)
             <span class="text-accent ml-0.5" aria-hidden="true">*</span>
         @endif
     </label>
 
-    <div class="relative mt-1.5">
+    <div @class([
+        'relative',
+        'mt-1.5' => !$filterStyle,
+    ])>
         <input
             id="locality-picker-input"
             type="text"

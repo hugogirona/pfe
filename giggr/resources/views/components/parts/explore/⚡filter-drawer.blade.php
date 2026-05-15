@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\AnnouncementType;
 use App\Models\Genre;
 use App\Models\Instrument;
 use Livewire\Attributes\On;
@@ -11,26 +12,33 @@ new class extends Component {
     public int $draftRadius = 0;
     public array $draftInstruments = [];
     public array $draftGenres = [];
+    public array $draftTypes = [];
     public bool $draftFollowing = false;
 
     public int $pickerKey = 0;
 
     public array $availableInstruments = [];
     public array $availableGenres = [];
+    /** @var array<int, array{value:string, label:string}> */
+    public array $availableTypes = [];
 
     public function mount(): void
     {
         $this->availableInstruments = Instrument::orderBy('name')->pluck('name')->toArray();
         $this->availableGenres = Genre::orderBy('name')->pluck('name')->toArray();
+        $this->availableTypes = collect(AnnouncementType::cases())
+            ->map(fn ($case) => ['value' => $case->value, 'label' => __($case->label())])
+            ->all();
     }
 
     #[On('open-filter-drawer')]
-    public function open(?int $cityId = null, int $radius = 0, array $instruments = [], array $genres = [], bool $following = false): void
+    public function open(?int $cityId = null, int $radius = 0, array $instruments = [], array $genres = [], array $types = [], bool $following = false): void
     {
         $this->draftCityId = $cityId;
         $this->draftRadius = $radius;
         $this->draftInstruments = $instruments;
         $this->draftGenres = $genres;
+        $this->draftTypes = $types;
         $this->draftFollowing = $following;
         $this->open = true;
     }
@@ -54,12 +62,20 @@ new class extends Component {
             : [...$this->draftGenres, $genre];
     }
 
+    public function toggleType(string $type): void
+    {
+        $this->draftTypes = in_array($type, $this->draftTypes)
+            ? array_values(array_filter($this->draftTypes, fn($t) => $t !== $type))
+            : [...$this->draftTypes, $type];
+    }
+
     public function clear(): void
     {
         $this->draftCityId = null;
         $this->draftRadius = 0;
         $this->draftInstruments = [];
         $this->draftGenres = [];
+        $this->draftTypes = [];
         $this->draftFollowing = false;
         // This is for the reset of the input after "clear filters" button
         $this->pickerKey++;
@@ -69,6 +85,7 @@ new class extends Component {
             radius: 0,
             instruments: [],
             genres: [],
+            types: [],
             following: false,
         );
     }
@@ -80,6 +97,7 @@ new class extends Component {
             radius: $this->draftRadius,
             instruments: $this->draftInstruments,
             genres: $this->draftGenres,
+            types: $this->draftTypes,
             following: $this->draftFollowing,
         );
         $this->open = false;
@@ -126,7 +144,7 @@ new class extends Component {
         <div class="flex items-center justify-between px-6 py-5 border-b border-dark/10 shrink-0">
             <div class="flex items-center gap-3">
                 <h2 class="font-heading text-xl text-dark">{{ __('explore.filter_title') }}</h2>
-                @php $activeDraft = count($draftInstruments) + count($draftGenres) + ($draftCityId !== null ? 1 : 0) + ($draftCityId !== null && $draftRadius > 0 ? 1 : 0) + ($draftFollowing ? 1 : 0); @endphp
+                @php $activeDraft = count($draftInstruments) + count($draftGenres) + count($draftTypes) + ($draftCityId !== null ? 1 : 0) + ($draftCityId !== null && $draftRadius > 0 ? 1 : 0) + ($draftFollowing ? 1 : 0); @endphp
                 @if ($activeDraft > 0)
                     <span
                         class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-accent text-bg text-xs font-semibold">
@@ -153,6 +171,7 @@ new class extends Component {
                     wire:model.live="draftCityId"
                     :label="__('explore.filter_city')"
                     :required="false"
+                    :filter-style="true"
                     :wire:key="'drawer-locality-' . $pickerKey"
                 />
             </section>
@@ -160,6 +179,12 @@ new class extends Component {
             <x-parts.explore.radius-slider
                 model="draftRadius"
                 :disabled="$draftCityId === null"
+            />
+
+            <x-parts.explore.type-filter
+                :types="$availableTypes"
+                :selected="$draftTypes"
+                visible-on="activeTab === 'annonces'"
             />
 
             @auth
@@ -230,7 +255,7 @@ new class extends Component {
 
         {{-- Footer --}}
         <div class="shrink-0 flex items-center gap-3 px-6 py-4 border-t border-dark/10 bg-bg">
-            @if ($draftCityId !== null || $draftRadius > 0 || count($draftInstruments) > 0 || count($draftGenres) > 0 || $draftFollowing)
+            @if ($draftCityId !== null || $draftRadius > 0 || count($draftInstruments) > 0 || count($draftGenres) > 0 || count($draftTypes) > 0 || $draftFollowing)
                 <button
                     wire:click="clear"
                     type="button"

@@ -41,10 +41,5 @@ return [
     // CTA
     'publish_cta' => 'Post a listing',
 
-    // Announcement types
-    'type_search' => 'Looking for',
-    'type_formation' => 'Forming band',
-    'type_session' => 'Session',
-    'type_course' => 'Lessons',
-    'type_event' => 'Event',
+    'filter_types' => 'Listing type',
 ];
