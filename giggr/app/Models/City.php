@@ -83,7 +83,7 @@ class City extends Model
     }
 
     /**
-     Formulae Haversine, see https://en.wikipedia.org/wiki/Haversine_formula
+     * Haversine formula, see https://en.wikipedia.org/wiki/Haversine_formula
      */
     private static function haversineKmSql(): string
     {
