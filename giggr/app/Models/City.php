@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Database\Factories\CityFactory;
+use Illuminate\Database\Eloquent\Attributes\Scope;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -13,6 +15,12 @@ class City extends Model
 {
     /** @use HasFactory<CityFactory> */
     use HasFactory;
+
+    /**
+     * Earth's mean radius in kilometers, used as the multiplier in the
+     * haversine formula further in the code.
+     */
+    private const int EARTH_RADIUS_KM = 6371;
 
     protected $fillable = [
         'name',
@@ -57,5 +65,34 @@ class City extends Model
     public function announcements(): HasMany
     {
         return $this->hasMany(Announcement::class);
+    }
+
+    /**
+     * @noinspection PhpParamsInspection because of the type hinting, whereRaw actually accepts a string
+     */
+    #[Scope]
+    protected function nearby(Builder $query, float $lat, float $lng, float $radiusKm): void
+    {
+        // I had to add CAST(? AS REAL) because in SQLite the radius value
+        // was being treated as text, so the comparison was always true and
+        // every row was returned. Wrapping it in CAST fixed the tests. f--- SQLite.
+        $query->whereRaw(
+            self::haversineKmSql().' <= CAST(? AS REAL)',
+            [$lat, $lng, $lat, $radiusKm],
+        );
+    }
+
+    /**
+     Formulae Haversine, see https://en.wikipedia.org/wiki/Haversine_formula
+     */
+    private static function haversineKmSql(): string
+    {
+        $r = self::EARTH_RADIUS_KM;
+
+        return "($r * acos("
+            .'cos(radians(?)) * cos(radians(latitude))'
+            .' * cos(radians(longitude) - radians(?))'
+            .' + sin(radians(?)) * sin(radians(latitude))'
+            .'))';
     }
 }
