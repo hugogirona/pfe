@@ -63,4 +63,34 @@
     .range-slider:focus-visible::-moz-range-thumb {
         @apply ring-2 ring-accent/40 ring-offset-2;
     }
+
+    /* Animated hand-drawn underline that reveals from left to right. */
+    .hero-underline {
+        position: relative;
+        display: inline-block;
+        isolation: isolate;
+    }
+    .hero-underline::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: -0.18em;
+        height: 0.35em;
+        background: url('../img/underline.svg') center / 100% 100% no-repeat;
+        clip-path: inset(0 100% 0 0);
+        animation: hero-underline-reveal 200ms ease-out 600ms forwards;
+        z-index: -1;
+    }
+}
+
+@keyframes hero-underline-reveal {
+    to { clip-path: inset(0 0 0 0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .hero-underline::after {
+        animation: none;
+        clip-path: inset(0 0 0 0);
+    }
 }
