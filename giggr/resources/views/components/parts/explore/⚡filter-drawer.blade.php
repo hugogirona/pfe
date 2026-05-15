@@ -1,30 +1,38 @@
 <?php
 
+use App\Models\Genre;
+use App\Models\Instrument;
 use Livewire\Attributes\On;
 use Livewire\Component;
 
 new class extends Component {
-    public bool   $open             = false;
-    public string $draftCity        = '';
-    public array  $draftInstruments = [];
-    public array  $draftGenres      = [];
+    public bool $open = false;
+    public ?int $draftCityId = null;
+    public int $draftRadius = 0;
+    public array $draftInstruments = [];
+    public array $draftGenres = [];
+    public bool $draftFollowing = false;
+
+    public int $pickerKey = 0;
 
     public array $availableInstruments = [];
-    public array $availableGenres      = [];
+    public array $availableGenres = [];
 
     public function mount(): void
     {
-        $this->availableInstruments = \App\Models\Instrument::orderBy('name')->pluck('name')->toArray();
-        $this->availableGenres      = \App\Models\Genre::orderBy('name')->pluck('name')->toArray();
+        $this->availableInstruments = Instrument::orderBy('name')->pluck('name')->toArray();
+        $this->availableGenres = Genre::orderBy('name')->pluck('name')->toArray();
     }
 
     #[On('open-filter-drawer')]
-    public function open(string $city = '', array $instruments = [], array $genres = []): void
+    public function open(?int $cityId = null, int $radius = 0, array $instruments = [], array $genres = [], bool $following = false): void
     {
-        $this->draftCity        = $city;
+        $this->draftCityId = $cityId;
+        $this->draftRadius = $radius;
         $this->draftInstruments = $instruments;
-        $this->draftGenres      = $genres;
-        $this->open             = true;
+        $this->draftGenres = $genres;
+        $this->draftFollowing = $following;
+        $this->open = true;
     }
 
     public function close(): void
@@ -48,23 +56,31 @@ new class extends Component {
 
     public function clear(): void
     {
-        $this->draftCity        = '';
+        $this->draftCityId = null;
+        $this->draftRadius = 0;
         $this->draftInstruments = [];
-        $this->draftGenres      = [];
+        $this->draftGenres = [];
+        $this->draftFollowing = false;
+        // This is for the reset of the input after "clear filters" button
+        $this->pickerKey++;
 
         $this->dispatch('filters-applied',
-            city:        '',
+            cityId: null,
+            radius: 0,
             instruments: [],
-            genres:      [],
+            genres: [],
+            following: false,
         );
     }
 
     public function apply(): void
     {
         $this->dispatch('filters-applied',
-            city:        $this->draftCity,
+            cityId: $this->draftCityId,
+            radius: $this->draftRadius,
             instruments: $this->draftInstruments,
-            genres:      $this->draftGenres,
+            genres: $this->draftGenres,
+            following: $this->draftFollowing,
         );
         $this->open = false;
     }
@@ -100,7 +116,7 @@ new class extends Component {
         x-transition:leave-start="translate-x-0"
         x-transition:leave-end="translate-x-full"
         @keydown.escape.window="$wire.close()"
-        class="fixed inset-y-0 right-0 z-50 flex flex-col w-full md:w-[420px] bg-bg shadow-2xl"
+        class="fixed inset-y-0 right-0 z-50 flex flex-col w-full md:w-105 bg-bg shadow-2xl"
         style="display: none"
         role="dialog"
         aria-modal="true"
@@ -110,9 +126,11 @@ new class extends Component {
         <div class="flex items-center justify-between px-6 py-5 border-b border-dark/10 shrink-0">
             <div class="flex items-center gap-3">
                 <h2 class="font-heading text-xl text-dark">{{ __('explore.filter_title') }}</h2>
-                @if (count($draftInstruments) + count($draftGenres) + ($draftCity ? 1 : 0) > 0)
-                    <span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-accent text-bg text-xs font-semibold">
-                        {{ count($draftInstruments) + count($draftGenres) + ($draftCity ? 1 : 0) }}
+                @php $activeDraft = count($draftInstruments) + count($draftGenres) + ($draftCityId !== null ? 1 : 0) + ($draftCityId !== null && $draftRadius > 0 ? 1 : 0) + ($draftFollowing ? 1 : 0); @endphp
+                @if ($activeDraft > 0)
+                    <span
+                        class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-accent text-bg text-xs font-semibold">
+                        {{ $activeDraft }}
                     </span>
                 @endif
             </div>
@@ -122,7 +140,7 @@ new class extends Component {
                 class="w-9 h-9 flex items-center justify-center rounded-lg text-dark/40 hover:text-dark hover:bg-dark/5 transition-colors duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
                 aria-label="{{ __('explore.filter_close') }}"
             >
-                <x-icon name="x-mark" class="w-5 h-5" />
+                <x-icon name="x-mark" class="w-5 h-5"/>
             </button>
         </div>
 
@@ -131,17 +149,61 @@ new class extends Component {
 
             {{-- Ville --}}
             <section>
-                <label for="drawer-city" class="block text-xs font-semibold uppercase tracking-widest text-dark/40 mb-3">
-                    {{ __('explore.filter_city') }}
-                </label>
-                <input
-                    id="drawer-city"
-                    type="text"
-                    wire:model.live.debounce.300ms="draftCity"
-                    placeholder="{{ __('explore.filter_city') }}"
-                    class="w-full px-4 py-3 rounded-[6px] bg-white border border-dark/15 text-base text-dark placeholder:text-dark/30 focus:outline-none focus:ring-2 focus:ring-accent/40 focus:border-accent transition-colors duration-150"
+                <livewire:parts.form.locality-picker
+                    wire:model.live="draftCityId"
+                    :label="__('explore.filter_city')"
+                    :required="false"
+                    :wire:key="'drawer-locality-' . $pickerKey"
                 />
             </section>
+
+            {{-- Rayon --}}
+            <section
+                x-data="{
+                    radius: $wire.entangle('draftRadius'),
+                    labelAny: @js(__('explore.filter_radius_any')),
+                }"
+                aria-labelledby="drawer-radius-heading"
+            >
+                <div class="flex items-center justify-between mb-3">
+                    <h3 id="drawer-radius-heading" class="text-xs font-semibold uppercase tracking-widest text-dark/40">
+                        {{ __('explore.filter_radius') }}
+                    </h3>
+                    <span
+                        class="text-xs font-semibold text-accent tabular-nums"
+                        x-text="radius === 0 ? labelAny : radius + ' km'"
+                        aria-live="polite"
+                    >&nbsp;</span>
+                </div>
+                <input
+                    type="range"
+                    min="0"
+                    max="200"
+                    step="10"
+                    x-model="radius"
+                    @if ($draftCityId === null) disabled @endif
+                    aria-labelledby="drawer-radius-heading"
+                    aria-valuemin="0"
+                    aria-valuemax="200"
+                    :aria-valuenow="radius"
+                    class="w-full accent-accent cursor-pointer disabled:cursor-not-allowed disabled:opacity-40 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40 focus-visible:ring-offset-2 rounded-full"
+                />
+                @if ($draftCityId === null)
+                    <p class="text-xs text-dark/40 italic mt-2">{{ __('explore.filter_radius_disabled_hint') }}</p>
+                @endif
+            </section>
+
+            @auth
+                {{-- Comptes suivis --}}
+                <section>
+                    <h3 class="text-xs font-semibold uppercase tracking-widest text-dark/40 mb-3">
+                        {{ __('explore.filter_following_label') }}
+                    </h3>
+                    <x-form.checkbox name="drawer-following" wire:model.live="draftFollowing">
+                        {{ __('explore.filter_following') }}
+                    </x-form.checkbox>
+                </section>
+            @endauth
 
             {{-- Instruments --}}
             <section>
@@ -199,11 +261,11 @@ new class extends Component {
 
         {{-- Footer --}}
         <div class="shrink-0 flex items-center gap-3 px-6 py-4 border-t border-dark/10 bg-bg">
-            @if ($draftCity || count($draftInstruments) > 0 || count($draftGenres) > 0)
+            @if ($draftCityId !== null || $draftRadius > 0 || count($draftInstruments) > 0 || count($draftGenres) > 0 || $draftFollowing)
                 <button
                     wire:click="clear"
                     type="button"
-                    class="h-11 px-5 rounded-[6px] border border-dark/20 text-sm font-medium text-dark/60 hover:text-dark hover:border-dark/40 transition-colors duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
+                    class="h-11 px-5 rounded-md border border-dark/20 text-sm font-medium text-dark/60 hover:text-dark hover:border-dark/40 transition-colors duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
                 >
                     {{ __('explore.filter_clear') }}
                 </button>
@@ -211,7 +273,7 @@ new class extends Component {
             <button
                 wire:click="apply"
                 type="button"
-                class="flex-1 h-11 rounded-[6px] bg-dark text-bg text-sm font-medium hover:opacity-80 transition-opacity duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
+                class="flex-1 h-11 rounded-md bg-dark text-bg text-sm font-medium hover:opacity-80 transition-opacity duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
             >
                 {{ __('explore.filter_apply') }}
             </button>

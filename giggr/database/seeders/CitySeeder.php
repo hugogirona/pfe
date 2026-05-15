@@ -95,6 +95,9 @@ class CitySeeder extends Seeder
             }
 
             [$postal, $name, $lng, $lat] = $row;
+            if (! is_numeric($lat) || ! is_numeric($lng)) {
+                continue;
+            }
             $postal = trim($postal);
             $name = trim($name);
             $alt = $aliases[$name] ?? null;
@@ -107,8 +110,8 @@ class CitySeeder extends Seeder
                 'country' => 'BE',
                 'postal_code' => $postal,
                 'searchable' => City::makeSearchable($name, $alt, $postal),
-                'latitude' => is_numeric($lat) ? (float) $lat : null,
-                'longitude' => is_numeric($lng) ? (float) $lng : null,
+                'latitude' => (float) $lat,
+                'longitude' => (float) $lng,
                 'created_at' => $now,
                 'updated_at' => $now,
             ];

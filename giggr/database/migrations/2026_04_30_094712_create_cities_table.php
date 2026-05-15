@@ -19,8 +19,8 @@ return new class extends Migration
             $table->string('country', 2)->default('BE');
             $table->string('postal_code', 4)->index();
             $table->string('searchable');
-            $table->decimal('latitude', total: 8, places: 5)->nullable();
-            $table->decimal('longitude', total: 8, places: 5)->nullable();
+            $table->decimal('latitude', total: 8, places: 5);
+            $table->decimal('longitude', total: 8, places: 5);
             $table->timestamps();
         });
     }

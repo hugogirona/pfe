@@ -78,6 +78,17 @@ class User extends Authenticatable
             ->count();
     }
 
+    /**
+     * @return array<int, int>
+     */
+    public function followedProfileIds(): array
+    {
+        return $this->follows()
+            ->where('followable_type', 'profile')
+            ->pluck('followable_id')
+            ->all();
+    }
+
     public function follow(Model $followable): Follow
     {
         return $this->follows()->firstOrCreate([

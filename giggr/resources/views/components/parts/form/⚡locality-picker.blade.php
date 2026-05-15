@@ -20,7 +20,7 @@ new class extends Component {
 
     public function mount(?string $label = null, ?string $placeholder = null): void
     {
-        $this->label       = $label ?? __('announcement.form_city_label');
+        $this->label = $label ?? __('announcement.form_city_label');
         $this->placeholder = $placeholder ?? __('announcement.form_city_placeholder');
 
         if ($this->cityId !== null) {
@@ -40,12 +40,12 @@ new class extends Component {
     public function selectCity(int $id): void
     {
         $city = City::find($id);
-        if (! $city) {
+        if (!$city) {
             return;
         }
 
-        $this->cityId  = $city->id;
-        $this->query   = $city->display_name;
+        $this->cityId = $city->id;
+        $this->query = $city->display_name;
         $this->results = [];
     }
 
@@ -64,11 +64,11 @@ new class extends Component {
         }
 
         $this->results = City::query()
-            ->where('searchable', 'like', '%'.$needle.'%')
+            ->where('searchable', 'like', '%' . $needle . '%')
             ->orderBy('name')
             ->limit(8)
             ->get(['id', 'name', 'postal_code'])
-            ->map(fn (City $c) => ['id' => $c->id, 'display' => $c->display_name])
+            ->map(fn(City $c) => ['id' => $c->id, 'display' => $c->display_name])
             ->all();
     }
 };
@@ -86,7 +86,7 @@ new class extends Component {
         id="locality-picker-input"
         type="text"
         wire:model.live.debounce.200ms="query"
-        placeholder="{{ $placeholder }}"
+        placeholder="{{ $placeholder }}"e
         autocomplete="off"
         role="combobox"
         aria-expanded="{{ count($results) > 0 ? 'true' : 'false' }}"
@@ -99,14 +99,14 @@ new class extends Component {
                 highlight = 0
             }
         "
-        class="w-full px-4 py-3 mt-1.5 rounded-[6px] bg-white border border-dark/15 text-base text-dark placeholder:text-dark/30 focus:outline-none focus:ring-2 focus:ring-accent/40 focus:border-accent transition-colors duration-150"
+        class="w-full px-4 py-3 mt-1.5 rounded-md bg-white border border-dark/15 text-base text-dark placeholder:text-dark/30 focus:outline-none focus:ring-2 focus:ring-accent/40 focus:border-accent transition-colors duration-150"
     />
 
     @if (count($results) > 0)
         <ul
             id="locality-picker-list"
             role="listbox"
-            class="absolute left-0 right-0 z-20 mt-1 max-h-72 overflow-y-auto rounded-[6px] bg-white border border-dark/15 shadow-lg"
+            class="absolute left-0 right-0 z-20 mt-1 max-h-72 overflow-y-auto rounded-md bg-white border border-dark/15 shadow-lg"
         >
             @foreach ($results as $i => $r)
                 <li
