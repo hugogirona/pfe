@@ -14,7 +14,7 @@ new class extends Component {
     #[Validate('required|min:5|max:100')]
     public string $title = '';
 
-    #[Validate('required|in:search,formation,session,course,event')]
+    #[Validate('required|in:musician_wanted,band_wanted,gig,lessons')]
     public string $type = '';
 
     #[Validate('required|exists:cities,id')]
