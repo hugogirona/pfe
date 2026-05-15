@@ -25,7 +25,7 @@
         min="0"
         max="200"
         step="10"
-        x-model="radius"
+        x-model.number="radius"
         @if ($disabled) disabled @endif
         aria-labelledby="drawer-radius-heading"
         aria-valuemin="0"

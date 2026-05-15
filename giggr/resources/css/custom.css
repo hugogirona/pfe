@@ -60,4 +60,7 @@
     .range-slider::-moz-range-thumb {
         @apply w-5 h-5 rounded-full bg-accent border-0 shadow-md cursor-pointer;
     }
+    .range-slider:focus-visible::-moz-range-thumb {
+        @apply ring-2 ring-accent/40 ring-offset-2;
+    }
 }
