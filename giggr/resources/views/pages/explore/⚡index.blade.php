@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Announcement;
+use App\Models\City;
 use App\Models\Follow;
 use App\Models\Profile;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -16,9 +17,16 @@ new #[Layout('layouts.app')] #[Title('Explorer — Giggr.')] class extends Compo
     use WithPagination;
 
     public ?int   $filterCityId      = null;
+    public int    $filterRadius      = 0;
     public array  $filterInstruments = [];
     public array  $filterGenres      = [];
     public bool   $filterFollowing   = false;
+
+    #[Computed]
+    public function targetCity(): ?City
+    {
+        return $this->filterCityId !== null ? City::find($this->filterCityId) : null;
+    }
 
     #[Computed]
     public function followedProfileIdsForFilter(): array
@@ -35,7 +43,14 @@ new #[Layout('layouts.app')] #[Title('Explorer — Giggr.')] class extends Compo
 
         return Profile::query()
             ->with(['user', 'city', 'instruments', 'genres'])
-            ->when($this->filterCityId, fn ($q) => $q->where('city_id', $this->filterCityId))
+            ->when($this->filterCityId !== null, function ($q) {
+                $target = $this->targetCity;
+                if ($this->filterRadius > 0 && $target !== null) {
+                    $q->whereHas('city', fn ($q2) => $q2->nearby($target->latitude, $target->longitude, $this->filterRadius));
+                } else {
+                    $q->where('city_id', $this->filterCityId);
+                }
+            })
             ->when($this->filterInstruments, fn ($q) => $q->whereHas(
                 'instruments', fn ($q2) => $q2->whereIn('name', $this->filterInstruments)
             ))
@@ -55,7 +70,14 @@ new #[Layout('layouts.app')] #[Title('Explorer — Giggr.')] class extends Compo
         return Announcement::query()
             ->with(['city', 'instruments', 'genres'])
             ->active()
-            ->when($this->filterCityId, fn ($q) => $q->where('city_id', $this->filterCityId))
+            ->when($this->filterCityId !== null, function ($q) {
+                $target = $this->targetCity;
+                if ($this->filterRadius > 0 && $target !== null) {
+                    $q->whereHas('city', fn ($q2) => $q2->nearby($target->latitude, $target->longitude, $this->filterRadius));
+                } else {
+                    $q->where('city_id', $this->filterCityId);
+                }
+            })
             ->when($this->filterInstruments, fn ($q) => $q->whereHas(
                 'instruments', fn ($q2) => $q2->whereIn('name', $this->filterInstruments)
             ))
@@ -92,9 +114,12 @@ new #[Layout('layouts.app')] #[Title('Explorer — Giggr.')] class extends Compo
     #[Computed]
     public function activeFiltersCount(): int
     {
+        $radiusActive = $this->filterCityId !== null && $this->filterRadius > 0;
+
         return count($this->filterInstruments)
             + count($this->filterGenres)
             + ($this->filterCityId !== null ? 1 : 0)
+            + ($radiusActive ? 1 : 0)
             + ($this->filterFollowing ? 1 : 0);
     }
 
@@ -102,6 +127,7 @@ new #[Layout('layouts.app')] #[Title('Explorer — Giggr.')] class extends Compo
     {
         $this->dispatch('open-filter-drawer',
             cityId:      $this->filterCityId,
+            radius:      $this->filterRadius,
             instruments: $this->filterInstruments,
             genres:      $this->filterGenres,
             following:   $this->filterFollowing,
@@ -109,9 +135,10 @@ new #[Layout('layouts.app')] #[Title('Explorer — Giggr.')] class extends Compo
     }
 
     #[On('filters-applied')]
-    public function applyFilters(?int $cityId, array $instruments, array $genres, bool $following = false): void
+    public function applyFilters(?int $cityId, int $radius, array $instruments, array $genres, bool $following = false): void
     {
         $this->filterCityId      = $cityId;
+        $this->filterRadius      = $radius;
         $this->filterInstruments = $instruments;
         $this->filterGenres      = $genres;
         $this->filterFollowing   = $following;

@@ -8,6 +8,7 @@ use Livewire\Component;
 new class extends Component {
     public bool $open = false;
     public ?int $draftCityId = null;
+    public int $draftRadius = 0;
     public array $draftInstruments = [];
     public array $draftGenres = [];
     public bool $draftFollowing = false;
@@ -24,9 +25,10 @@ new class extends Component {
     }
 
     #[On('open-filter-drawer')]
-    public function open(?int $cityId = null, array $instruments = [], array $genres = [], bool $following = false): void
+    public function open(?int $cityId = null, int $radius = 0, array $instruments = [], array $genres = [], bool $following = false): void
     {
         $this->draftCityId = $cityId;
+        $this->draftRadius = $radius;
         $this->draftInstruments = $instruments;
         $this->draftGenres = $genres;
         $this->draftFollowing = $following;
@@ -55,6 +57,7 @@ new class extends Component {
     public function clear(): void
     {
         $this->draftCityId = null;
+        $this->draftRadius = 0;
         $this->draftInstruments = [];
         $this->draftGenres = [];
         $this->draftFollowing = false;
@@ -63,6 +66,7 @@ new class extends Component {
 
         $this->dispatch('filters-applied',
             cityId: null,
+            radius: 0,
             instruments: [],
             genres: [],
             following: false,
@@ -73,6 +77,7 @@ new class extends Component {
     {
         $this->dispatch('filters-applied',
             cityId: $this->draftCityId,
+            radius: $this->draftRadius,
             instruments: $this->draftInstruments,
             genres: $this->draftGenres,
             following: $this->draftFollowing,
@@ -121,7 +126,7 @@ new class extends Component {
         <div class="flex items-center justify-between px-6 py-5 border-b border-dark/10 shrink-0">
             <div class="flex items-center gap-3">
                 <h2 class="font-heading text-xl text-dark">{{ __('explore.filter_title') }}</h2>
-                @php $activeDraft = count($draftInstruments) + count($draftGenres) + ($draftCityId !== null ? 1 : 0) + ($draftFollowing ? 1 : 0); @endphp
+                @php $activeDraft = count($draftInstruments) + count($draftGenres) + ($draftCityId !== null ? 1 : 0) + ($draftCityId !== null && $draftRadius > 0 ? 1 : 0) + ($draftFollowing ? 1 : 0); @endphp
                 @if ($activeDraft > 0)
                     <span
                         class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-accent text-bg text-xs font-semibold">
@@ -150,6 +155,42 @@ new class extends Component {
                     :required="false"
                     :wire:key="'drawer-locality-' . $pickerKey"
                 />
+            </section>
+
+            {{-- Rayon --}}
+            <section
+                x-data="{
+                    radius: $wire.entangle('draftRadius'),
+                    labelAny: @js(__('explore.filter_radius_any')),
+                }"
+                aria-labelledby="drawer-radius-heading"
+            >
+                <div class="flex items-center justify-between mb-3">
+                    <h3 id="drawer-radius-heading" class="text-xs font-semibold uppercase tracking-widest text-dark/40">
+                        {{ __('explore.filter_radius') }}
+                    </h3>
+                    <span
+                        class="text-xs font-semibold text-accent tabular-nums"
+                        x-text="radius === 0 ? labelAny : radius + ' km'"
+                        aria-live="polite"
+                    >&nbsp;</span>
+                </div>
+                <input
+                    type="range"
+                    min="0"
+                    max="200"
+                    step="10"
+                    x-model="radius"
+                    @if ($draftCityId === null) disabled @endif
+                    aria-labelledby="drawer-radius-heading"
+                    aria-valuemin="0"
+                    aria-valuemax="200"
+                    :aria-valuenow="radius"
+                    class="w-full accent-accent cursor-pointer disabled:cursor-not-allowed disabled:opacity-40 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40 focus-visible:ring-offset-2 rounded-full"
+                />
+                @if ($draftCityId === null)
+                    <p class="text-xs text-dark/40 italic mt-2">{{ __('explore.filter_radius_disabled_hint') }}</p>
+                @endif
             </section>
 
             @auth
@@ -220,7 +261,7 @@ new class extends Component {
 
         {{-- Footer --}}
         <div class="shrink-0 flex items-center gap-3 px-6 py-4 border-t border-dark/10 bg-bg">
-            @if ($draftCityId !== null || count($draftInstruments) > 0 || count($draftGenres) > 0 || $draftFollowing)
+            @if ($draftCityId !== null || $draftRadius > 0 || count($draftInstruments) > 0 || count($draftGenres) > 0 || $draftFollowing)
                 <button
                     wire:click="clear"
                     type="button"

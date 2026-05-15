@@ -14,6 +14,8 @@ return [
     'filter_following' => 'Seulement les personnes que je suis',
     'filter_radius' => 'Rayon',
     'filter_radius_km' => ':n km',
+    'filter_radius_any' => 'Ville exacte',
+    'filter_radius_disabled_hint' => 'Sélectionne d\'abord une ville.',
     'filter_instruments' => 'Instruments',
     'filter_genres' => 'Genres',
     'filter_clear' => 'Effacer les filtres',
