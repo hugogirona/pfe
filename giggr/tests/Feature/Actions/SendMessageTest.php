@@ -48,9 +48,9 @@ it('refuses to send when the recipient has blocked the sender', function () {
     $bob->block($alice);
 
     expect(fn () => app(SendMessage::class)->execute($alice, $bob, 'Hi'))
-        ->toThrow(InvalidArgumentException::class);
+        ->toThrow(InvalidArgumentException::class)
+        ->and(Message::count())->toBe(0);
 
-    expect(Message::count())->toBe(0);
 });
 
 it('refuses to send when the sender has blocked the recipient', function () {
@@ -59,9 +59,9 @@ it('refuses to send when the sender has blocked the recipient', function () {
     $alice->block($bob);
 
     expect(fn () => app(SendMessage::class)->execute($alice, $bob, 'Hi'))
-        ->toThrow(InvalidArgumentException::class);
+        ->toThrow(InvalidArgumentException::class)
+        ->and(Message::count())->toBe(0);
 
-    expect(Message::count())->toBe(0);
 });
 
 it('rejects sending a message to yourself', function () {

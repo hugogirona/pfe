@@ -51,8 +51,8 @@ it('isBlockedBy is the reverse perspective', function () {
 
     $bob->block($alice);
 
-    expect($alice->isBlockedBy($bob))->toBeTrue();
-    expect($alice->hasBlocked($bob))->toBeFalse();
+    expect($alice->isBlockedBy($bob))->toBeTrue()
+        ->and($alice->hasBlocked($bob))->toBeFalse();
 });
 
 it('blocking does not silently block from your side', function () {

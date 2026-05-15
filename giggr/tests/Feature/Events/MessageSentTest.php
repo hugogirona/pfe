@@ -18,7 +18,7 @@ it('broadcasts on a private conversation channel and the recipient user channel'
     $convo = Conversation::between($alice, $bob);
     $message = Message::factory()->for($convo)->for($alice, 'sender')->create();
 
-    $channels = (new MessageSent($message))->broadcastOn();
+    $channels = new MessageSent($message)->broadcastOn();
     $channelNames = collect($channels)->map(fn (PrivateChannel $c) => $c->name)->all();
 
     expect($channels)->toHaveCount(2)
@@ -36,7 +36,7 @@ it('broadcasts a serialised message payload', function () {
         ->for($alice, 'sender')
         ->create(['body' => 'Salut !']);
 
-    $payload = (new MessageSent($message))->broadcastWith();
+    $payload = new MessageSent($message)->broadcastWith();
 
     expect($payload)
         ->toHaveKeys(['id', 'conversation_id', 'sender_id', 'body', 'created_at', 'read_at'])
@@ -48,6 +48,6 @@ it('broadcasts a serialised message payload', function () {
 });
 
 it('uses a short broadcast event name', function () {
-    expect((new MessageSent(Message::factory()->make()))->broadcastAs())
+    expect(new MessageSent(Message::factory()->make())->broadcastAs())
         ->toBe('message.sent');
 });

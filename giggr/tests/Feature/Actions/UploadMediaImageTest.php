@@ -80,9 +80,9 @@ it('refuses to replace a non-image media', function () {
     $originalSource = $media->source;
 
     expect(fn () => app(UploadMediaImage::class)->replace($media, UploadedFile::fake()->image('photo.jpg')))
-        ->toThrow(InvalidArgumentException::class);
-
-    expect($media->fresh())
+        ->toThrow(InvalidArgumentException::class)
+        ->and($media->fresh())
         ->source->toBe($originalSource)
         ->type->toBe(MediaType::Youtube);
+
 });
