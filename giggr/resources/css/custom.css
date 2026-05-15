@@ -41,4 +41,26 @@
     .typing-dot {
         animation: typing-pulse 1.2s ease-in-out infinite;
     }
+
+    .range-slider {
+        @apply w-full appearance-none bg-transparent cursor-pointer disabled:cursor-not-allowed disabled:opacity-40 motion-reduce:transition-none focus-visible:outline-none;
+    }
+    .range-slider::-webkit-slider-runnable-track {
+        @apply h-1.5 rounded-full bg-dark/10;
+    }
+    .range-slider::-webkit-slider-thumb {
+        @apply appearance-none -mt-1.75 w-5 h-5 rounded-full bg-accent shadow-md cursor-pointer;
+    }
+    .range-slider:focus-visible::-webkit-slider-thumb {
+        @apply ring-2 ring-accent/40 ring-offset-2;
+    }
+    .range-slider::-moz-range-track {
+        @apply h-1.5 rounded-full bg-dark/10 border-0;
+    }
+    .range-slider::-moz-range-thumb {
+        @apply w-5 h-5 rounded-full bg-accent border-0 shadow-md cursor-pointer;
+    }
+    .range-slider:focus-visible::-moz-range-thumb {
+        @apply ring-2 ring-accent/40 ring-offset-2;
+    }
 }

@@ -31,5 +31,5 @@ it('broadcasts a payload with conversation, reader and message ids', function ()
 });
 
 it('uses messages.read as the broadcast name', function () {
-    expect((new MessagesRead(1, 2, []))->broadcastAs())->toBe('messages.read');
+    expect(new MessagesRead(1, 2, [])->broadcastAs())->toBe('messages.read');
 });

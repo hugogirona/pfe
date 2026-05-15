@@ -157,41 +157,10 @@ new class extends Component {
                 />
             </section>
 
-            {{-- Rayon --}}
-            <section
-                x-data="{
-                    radius: $wire.entangle('draftRadius'),
-                    labelAny: @js(__('explore.filter_radius_any')),
-                }"
-                aria-labelledby="drawer-radius-heading"
-            >
-                <div class="flex items-center justify-between mb-3">
-                    <h3 id="drawer-radius-heading" class="text-xs font-semibold uppercase tracking-widest text-dark/40">
-                        {{ __('explore.filter_radius') }}
-                    </h3>
-                    <span
-                        class="text-xs font-semibold text-accent tabular-nums"
-                        x-text="radius === 0 ? labelAny : radius + ' km'"
-                        aria-live="polite"
-                    >&nbsp;</span>
-                </div>
-                <input
-                    type="range"
-                    min="0"
-                    max="200"
-                    step="10"
-                    x-model="radius"
-                    @if ($draftCityId === null) disabled @endif
-                    aria-labelledby="drawer-radius-heading"
-                    aria-valuemin="0"
-                    aria-valuemax="200"
-                    :aria-valuenow="radius"
-                    class="w-full accent-accent cursor-pointer disabled:cursor-not-allowed disabled:opacity-40 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40 focus-visible:ring-offset-2 rounded-full"
-                />
-                @if ($draftCityId === null)
-                    <p class="text-xs text-dark/40 italic mt-2">{{ __('explore.filter_radius_disabled_hint') }}</p>
-                @endif
-            </section>
+            <x-parts.explore.radius-slider
+                model="draftRadius"
+                :disabled="$draftCityId === null"
+            />
 
             @auth
                 {{-- Comptes suivis --}}
