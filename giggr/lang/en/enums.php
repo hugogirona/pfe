@@ -2,11 +2,10 @@
 
 return [
     'announcement_type' => [
-        'search' => 'Search',
-        'formation' => 'Band Formation',
-        'session' => 'Jam Session',
-        'course' => 'Lessons',
-        'event' => 'Event',
+        'musician_wanted' => 'Looking for a musician',
+        'band_wanted' => 'Looking for a band',
+        'gig' => 'Gig session',
+        'lessons' => 'Music lessons',
     ],
     'profile_status' => [
         'looking_for_band' => 'Looking for a band',

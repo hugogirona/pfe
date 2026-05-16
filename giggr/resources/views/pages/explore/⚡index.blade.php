@@ -20,6 +20,7 @@ new #[Layout('layouts.app')] #[Title('Explorer — Giggr.')] class extends Compo
     public int    $filterRadius      = 0;
     public array  $filterInstruments = [];
     public array  $filterGenres      = [];
+    public array  $filterTypes       = [];
     public bool   $filterFollowing   = false;
 
     #[Computed]
@@ -84,6 +85,7 @@ new #[Layout('layouts.app')] #[Title('Explorer — Giggr.')] class extends Compo
             ->when($this->filterGenres, fn ($q) => $q->whereHas(
                 'genres', fn ($q2) => $q2->whereIn('name', $this->filterGenres)
             ))
+            ->when($this->filterTypes, fn ($q) => $q->whereIn('type', $this->filterTypes))
             ->when($followingActive, fn ($q) => $q->whereHas(
                 'user.profile', fn ($q2) => $q2->whereIn('id', $this->followedProfileIdsForFilter)
             ))
@@ -118,6 +120,7 @@ new #[Layout('layouts.app')] #[Title('Explorer — Giggr.')] class extends Compo
 
         return count($this->filterInstruments)
             + count($this->filterGenres)
+            + count($this->filterTypes)
             + ($this->filterCityId !== null ? 1 : 0)
             + ($radiusActive ? 1 : 0)
             + ($this->filterFollowing ? 1 : 0);
@@ -130,17 +133,19 @@ new #[Layout('layouts.app')] #[Title('Explorer — Giggr.')] class extends Compo
             radius:      $this->filterRadius,
             instruments: $this->filterInstruments,
             genres:      $this->filterGenres,
+            types:       $this->filterTypes,
             following:   $this->filterFollowing,
         );
     }
 
     #[On('filters-applied')]
-    public function applyFilters(?int $cityId, int $radius, array $instruments, array $genres, bool $following = false): void
+    public function applyFilters(?int $cityId, int $radius, array $instruments, array $genres, array $types, bool $following = false): void
     {
         $this->filterCityId      = $cityId;
         $this->filterRadius      = $radius;
         $this->filterInstruments = $instruments;
         $this->filterGenres      = $genres;
+        $this->filterTypes       = $types;
         $this->filterFollowing   = $following;
         $this->resetPage('musicians-page');
         $this->resetPage('announcements-page');

@@ -4,11 +4,10 @@ namespace App\Enums;
 
 enum AnnouncementType: string
 {
-    case Search = 'search';
-    case Formation = 'formation';
-    case Session = 'session';
-    case Course = 'course';
-    case Event = 'event';
+    case MusicianWanted = 'musician_wanted';
+    case BandWanted = 'band_wanted';
+    case Gig = 'gig';
+    case Lessons = 'lessons';
 
     public function label(): string
     {
@@ -18,11 +17,10 @@ enum AnnouncementType: string
     public function color(): string
     {
         return match ($this) {
-            self::Search => 'bg-accent text-bg',
-            self::Formation => 'bg-dark text-bg',
-            self::Session => 'bg-pastel-blue text-dark',
-            self::Course => 'bg-pastel-salmon text-dark',
-            self::Event => 'bg-pastel-taupe text-dark',
+            self::MusicianWanted => 'bg-accent text-bg',
+            self::BandWanted => 'bg-dark text-bg',
+            self::Gig => 'bg-pastel-blue text-dark',
+            self::Lessons => 'bg-pastel-salmon text-dark',
         };
     }
 }

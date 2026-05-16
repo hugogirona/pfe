@@ -19,13 +19,13 @@ it('can be created with required fields', function () {
         'city_id' => $city->id,
         'title' => 'Recherche guitariste',
         'description' => 'On cherche un guitariste pour notre groupe.',
-        'type' => AnnouncementType::Search,
+        'type' => AnnouncementType::MusicianWanted,
     ]);
 
     expect($announcement->fresh())
         ->toBeInstanceOf(Announcement::class)
         ->title->toBe('Recherche guitariste')
-        ->type->toBe(AnnouncementType::Search)
+        ->type->toBe(AnnouncementType::MusicianWanted)
         ->status->toBe(AnnouncementStatus::Open);
 });
 
@@ -36,9 +36,9 @@ it('has a default status of open', function () {
 });
 
 it('casts type to AnnouncementType enum', function () {
-    $announcement = Announcement::factory()->create(['type' => AnnouncementType::Course]);
+    $announcement = Announcement::factory()->create(['type' => AnnouncementType::Lessons]);
 
-    expect($announcement->fresh()->type)->toBe(AnnouncementType::Course);
+    expect($announcement->fresh()->type)->toBe(AnnouncementType::Lessons);
 });
 
 it('casts status to AnnouncementStatus enum', function () {

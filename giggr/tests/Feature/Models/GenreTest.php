@@ -47,8 +47,8 @@ it('belongs to many profiles', function () {
 it('belongs to many announcements', function () {
     $genre = Genre::factory()->create();
     $announcements = collect([
-        Announcement::create(['user_id' => User::factory()->create()->id, 'city_id' => City::factory()->create()->id, 'title' => 'A', 'description' => 'B', 'type' => AnnouncementType::Search]),
-        Announcement::create(['user_id' => User::factory()->create()->id, 'city_id' => City::factory()->create()->id, 'title' => 'C', 'description' => 'D', 'type' => AnnouncementType::Session]),
+        Announcement::create(['user_id' => User::factory()->create()->id, 'city_id' => City::factory()->create()->id, 'title' => 'A', 'description' => 'B', 'type' => AnnouncementType::MusicianWanted]),
+        Announcement::create(['user_id' => User::factory()->create()->id, 'city_id' => City::factory()->create()->id, 'title' => 'C', 'description' => 'D', 'type' => AnnouncementType::Gig]),
     ]);
 
     $announcements->each(fn ($a) => $a->genres()->attach($genre));
