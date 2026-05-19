@@ -2,8 +2,8 @@
 
 return [
     // Email verification
-    'verify_email_heading' => "Vérifie ton adresse",
-    'verify_email_subtitle' => "Un mail avec un code à 6 chiffres a été envoyé à :email pour confirmer ton inscription.",
+    'verify_email_heading' => 'Vérifie ton adresse',
+    'verify_email_subtitle' => 'Un mail avec un code à 6 chiffres a été envoyé à :email pour confirmer ton inscription.',
     'verify_email_input_aria' => 'Code de vérification à 6 chiffres',
     'verify_email_submit' => 'Vérifier',
     'verify_email_submitting' => 'Vérification…',
