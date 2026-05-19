@@ -26,6 +26,7 @@ new #[Layout('layouts.auth')] #[Title('Réinitialiser le mot de passe — Giggr.
 
     <form action="/reset-password" method="POST" novalidate aria-labelledby="reset-heading" class="space-y-5">
         @csrf
+        <x-honeypot/>
 
         <input type="hidden" name="token" value="{{ $token }}">
 

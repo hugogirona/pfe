@@ -19,6 +19,14 @@ return [
     'verify_email_expires_at' => 'Code valable jusqu\'à :time.',
     'verify_email_ignore' => "Si tu n'as pas créé de compte sur Giggr, ignore simplement ce mail.",
     'verify_email_salutation_html' => "Merci,<br>L'équipe Giggr.",
+
+    // Password reset
+    'password_reset_subject' => 'Réinitialiser ton mot de passe — Giggr.',
+    'password_reset_greeting' => 'Salut :name,',
+    'password_reset_intro' => 'Tu as demandé une réinitialisation du mot de passe de ton compte Giggr. Clique sur le bouton ci-dessous pour choisir un nouveau mot de passe.',
+    'password_reset_button' => 'Réinitialiser mon mot de passe',
+    'password_reset_expiry' => 'Ce lien expire dans :minutes minutes.',
+    'password_reset_ignore' => "Si tu n'es pas à l'origine de cette demande, ignore simplement ce mail — ton mot de passe ne sera pas changé.",
     'verify_email_already_verified' => 'Ton adresse est déjà vérifiée.',
 
     // Laravel defaults

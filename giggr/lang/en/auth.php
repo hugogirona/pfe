@@ -19,6 +19,14 @@ return [
     'verify_email_expires_at' => 'Code valid until :time.',
     'verify_email_ignore' => "If you didn't sign up for Giggr, just ignore this email.",
     'verify_email_salutation_html' => 'Thanks,<br>The Giggr team.',
+
+    // Password reset
+    'password_reset_subject' => 'Reset your password — Giggr.',
+    'password_reset_greeting' => 'Hi :name,',
+    'password_reset_intro' => 'You requested a password reset for your Giggr account. Click the button below to pick a new password.',
+    'password_reset_button' => 'Reset my password',
+    'password_reset_expiry' => 'This link expires in :minutes minutes.',
+    'password_reset_ignore' => "If you didn't request this, just ignore this email — your password won't be changed.",
     'verify_email_already_verified' => 'Your email is already verified.',
 
     // Laravel defaults
