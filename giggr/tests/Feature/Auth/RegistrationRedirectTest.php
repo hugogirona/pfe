@@ -2,7 +2,7 @@
 
 use App\Models\User;
 
-it('redirects to own profile after registration', function () {
+it('redirects an unverified new user to the verify-email page', function () {
     $response = $this->post('/register', [
         'first_name' => 'Hugo',
         'last_name' => 'Test',
@@ -10,7 +10,6 @@ it('redirects to own profile after registration', function () {
         'password' => 'password123',
     ]);
 
-    $user = User::where('email', 'newuser@example.com')->first();
-
-    $response->assertRedirect(route('profile', ['id' => $user->profile->id]));
+    $response->assertRedirect(route('verification.notice'));
+    expect(User::where('email', 'newuser@example.com')->exists())->toBeTrue();
 });

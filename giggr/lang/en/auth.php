@@ -1,6 +1,25 @@
 <?php
 
 return [
+    // Email verification
+    'verify_email_heading' => 'Verify your email',
+    'verify_email_subtitle' => "We sent a 6-digit code to :email to confirm your sign up.",
+    'verify_email_input_aria' => '6-digit verification code',
+    'verify_email_submit' => 'Verify',
+    'verify_email_submitting' => 'Verifying…',
+    'verify_email_resend' => 'Resend a code',
+    'verify_email_resend_throttled' => 'Wait :seconds seconds before resending.',
+    'verify_email_resend_sent' => 'A new code is on its way.',
+    'verify_email_invalid' => 'Incorrect or expired code.',
+    'verify_email_throttled' => 'Too many attempts. Try again in :seconds seconds.',
+    'verify_email_subject' => 'Welcome to Giggr. — Confirm your email',
+    'verify_email_greeting' => 'Hi :name,',
+    'verify_email_intro' => 'Here is your verification code:',
+    'verify_email_expiry' => 'This code is valid for 10 minutes.',
+    'verify_email_expires_at' => 'Code valid until :time.',
+    'verify_email_ignore' => "If you didn't sign up for Giggr, just ignore this email.",
+    'verify_email_salutation_html' => 'Thanks,<br>The Giggr team.',
+    'verify_email_already_verified' => 'Your email is already verified.',
 
     // Laravel defaults
     'failed' => 'These credentials do not match our records.',
