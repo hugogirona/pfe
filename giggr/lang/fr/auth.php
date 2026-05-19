@@ -1,6 +1,25 @@
 <?php
 
 return [
+    // Email verification
+    'verify_email_heading' => "Vérifie ton adresse",
+    'verify_email_subtitle' => "Un mail avec un code à 6 chiffres a été envoyé à :email pour confirmer ton inscription.",
+    'verify_email_input_aria' => 'Code de vérification à 6 chiffres',
+    'verify_email_submit' => 'Vérifier',
+    'verify_email_submitting' => 'Vérification…',
+    'verify_email_resend' => 'Renvoyer un code',
+    'verify_email_resend_throttled' => 'Patiente :seconds secondes avant de renvoyer.',
+    'verify_email_resend_sent' => 'Un nouveau code vient de partir.',
+    'verify_email_invalid' => 'Code incorrect ou expiré.',
+    'verify_email_throttled' => 'Trop de tentatives. Réessaie dans :seconds secondes.',
+    'verify_email_subject' => 'Bienvenue sur Giggr. — Confirme ton adresse',
+    'verify_email_greeting' => 'Bonjour :name,',
+    'verify_email_intro' => 'Voici ton code de vérification :',
+    'verify_email_expiry' => 'Ce code est valable 10 minutes.',
+    'verify_email_expires_at' => 'Code valable jusqu\'à :time.',
+    'verify_email_ignore' => "Si tu n'as pas créé de compte sur Giggr, ignore simplement ce mail.",
+    'verify_email_salutation_html' => "Merci,<br>L'équipe Giggr.",
+    'verify_email_already_verified' => 'Ton adresse est déjà vérifiée.',
 
     // Laravel defaults
     'failed' => 'Ces identifiants ne correspondent pas à nos enregistrements.',

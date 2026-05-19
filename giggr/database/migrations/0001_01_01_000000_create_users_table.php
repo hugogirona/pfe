@@ -1,5 +1,6 @@
 <?php
 
+use App\Actions\Fortify\CreateNewUser;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -17,6 +18,8 @@ return new class extends Migration
             $table->string('last_name');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
+            $table->string('email_verification_code', CreateNewUser::VERIFICATION_CODE_LENGTH)->nullable();
+            $table->timestamp('email_verification_code_expires_at')->nullable();
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();

@@ -31,8 +31,12 @@ class FortifyServiceProvider extends ServiceProvider
                 }
 
                 app()->setLocale($locale);
+                $user = auth()->user();
+                if ($user !== null && ! $user->hasVerifiedEmail()) {
+                    return redirect()->route('verification.notice');
+                }
 
-                return redirect()->route('profile', ['id' => auth()->user()->profile->id]);
+                return redirect()->route('profile', ['id' => $user->profile->id]);
             }
         });
     }

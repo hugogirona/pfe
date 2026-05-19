@@ -10,13 +10,14 @@ Route::group([
 
     Route::livewire('/', 'pages::home.index')->name('home');
     Route::livewire('/explorer', 'pages::explore.index')->name('explore');
-    Route::livewire('/profil/{id}', 'pages::profile.index')->name('profile')->middleware('auth');
-    Route::livewire('/annonces/{id}', 'pages::announcement.index')->name('announcement')->middleware('auth');
+    Route::livewire('/profil/{id}', 'pages::profile.index')->name('profile')->middleware(['auth', 'verified']);
+    Route::livewire('/annonces/{id}', 'pages::announcement.index')->name('announcement')->middleware(['auth', 'verified']);
     Route::livewire('/contact', 'pages::contact.index')->name('contact');
-    Route::livewire('/parametres/compte', 'pages::settings.account')->name('settings.account')->middleware('auth');
+    Route::livewire('/parametres/compte', 'pages::settings.account')->name('settings.account')->middleware(['auth', 'verified']);
     Route::livewire('/register', 'pages::auth.register')->name('register');
     Route::livewire('/login', 'pages::auth.login')->name('login');
     Route::livewire('/forgot-password', 'pages::auth.forgot-password')->name('password.request');
     Route::livewire('/reset-password/{token}', 'pages::auth.reset-password')->name('password.reset');
+    Route::livewire('/verify-email', 'pages::auth.verify-email')->name('verification.notice')->middleware('auth');
 
 });
