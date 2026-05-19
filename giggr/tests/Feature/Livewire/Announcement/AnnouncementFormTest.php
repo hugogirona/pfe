@@ -1,6 +1,7 @@
 <?php
 
 use App\Enums\AnnouncementStatus;
+use App\Enums\AnnouncementType;
 use App\Models\Announcement;
 use App\Models\City;
 use App\Models\Genre;
@@ -210,48 +211,6 @@ it('dispatches announcement-created with the new id', function () {
         ->assertDispatched('announcement-created');
 });
 
-it('toggleInstrument adds an instrument id', function () {
-    $user = User::factory()->create();
-    $instrument = Instrument::factory()->create();
-
-    Livewire::actingAs($user)
-        ->test('parts.announcement.form')
-        ->call('toggleInstrument', $instrument->id)
-        ->assertSet('selectedInstruments', [$instrument->id]);
-});
-
-it('toggleInstrument removes an already-selected instrument id', function () {
-    $user = User::factory()->create();
-    $instrument = Instrument::factory()->create();
-
-    Livewire::actingAs($user)
-        ->test('parts.announcement.form')
-        ->set('selectedInstruments', [$instrument->id])
-        ->call('toggleInstrument', $instrument->id)
-        ->assertSet('selectedInstruments', []);
-});
-
-it('toggleGenre adds a genre id', function () {
-    $user = User::factory()->create();
-    $genre = Genre::factory()->create();
-
-    Livewire::actingAs($user)
-        ->test('parts.announcement.form')
-        ->call('toggleGenre', $genre->id)
-        ->assertSet('selectedGenres', [$genre->id]);
-});
-
-it('toggleGenre removes an already-selected genre id', function () {
-    $user = User::factory()->create();
-    $genre = Genre::factory()->create();
-
-    Livewire::actingAs($user)
-        ->test('parts.announcement.form')
-        ->set('selectedGenres', [$genre->id])
-        ->call('toggleGenre', $genre->id)
-        ->assertSet('selectedGenres', []);
-});
-
 it('close dispatches close-modal', function () {
     $user = User::factory()->create();
 
@@ -259,4 +218,98 @@ it('close dispatches close-modal', function () {
         ->test('parts.announcement.form')
         ->call('close')
         ->assertDispatched('close-modal');
+});
+
+it('mounts with prefilled fields when given an owned announcement id', function () {
+    $this->seed([InstrumentSeeder::class, GenreSeeder::class]);
+    $owner = User::factory()->create();
+    $city = City::factory()->create();
+    $instruments = Instrument::factory()->count(2)->create();
+    $genres = Genre::factory()->count(1)->create();
+
+    $announcement = Announcement::factory()->for($owner)->create([
+        'city_id' => $city->id,
+        'title' => 'Trio jazz cherche bassiste',
+        'description' => 'Trois saxos en quête d\'une basse pour des sessions du soir.',
+        'type' => AnnouncementType::MusicianWanted,
+    ]);
+    $announcement->instruments()->sync($instruments->pluck('id')->all());
+    $announcement->genres()->sync($genres->pluck('id')->all());
+
+    Livewire::actingAs($owner)
+        ->test('parts.announcement.form', ['model_id' => (string) $announcement->id])
+        ->assertSet('title', 'Trio jazz cherche bassiste')
+        ->assertSet('type', 'musician_wanted')
+        ->assertSet('city_id', $city->id)
+        ->assertSet('description', 'Trois saxos en quête d\'une basse pour des sessions du soir.')
+        ->assertSet('selectedInstruments', $instruments->pluck('id')->all())
+        ->assertSet('selectedGenres', $genres->pluck('id')->all());
+});
+
+it('refuses to mount in edit mode for a non-owner', function () {
+    $owner = User::factory()->create();
+    $other = User::factory()->create();
+    $announcement = Announcement::factory()->for($owner)->create();
+
+    Livewire::actingAs($other)
+        ->test('parts.announcement.form', ['model_id' => (string) $announcement->id])
+        ->assertForbidden();
+});
+
+it('save updates the existing announcement when in edit mode', function () {
+    $this->seed([InstrumentSeeder::class, GenreSeeder::class]);
+    $owner = User::factory()->create();
+    $city = City::factory()->create();
+    $newCity = City::factory()->create();
+    $announcement = Announcement::factory()->for($owner)->create([
+        'city_id' => $city->id,
+        'title' => 'Original title here',
+        'description' => 'Original description with enough characters to validate.',
+    ]);
+
+    Livewire::actingAs($owner)
+        ->test('parts.announcement.form', ['model_id' => (string) $announcement->id])
+        ->set('title', 'Updated title goes here')
+        ->set('city_id', $newCity->id)
+        ->call('save')
+        ->assertHasNoErrors()
+        ->assertDispatched('announcement-updated');
+
+    expect($announcement->fresh())
+        ->title->toBe('Updated title goes here')
+        ->city_id->toBe($newCity->id)
+        ->and(Announcement::count())->toBe(1);
+});
+
+it('delete removes the announcement and dispatches the event', function () {
+    $owner = User::factory()->create();
+    $announcement = Announcement::factory()->for($owner)->create();
+
+    Livewire::actingAs($owner)
+        ->test('parts.announcement.form', ['model_id' => (string) $announcement->id])
+        ->call('delete')
+        ->assertDispatched('announcement-deleted')
+        ->assertDispatched('close-modal');
+
+    expect(Announcement::find($announcement->id))->toBeNull();
+});
+
+it('delete refuses to act when not in edit mode', function () {
+    $user = User::factory()->create();
+
+    Livewire::actingAs($user)
+        ->test('parts.announcement.form')
+        ->call('delete')
+        ->assertStatus(404);
+});
+
+it('delete refuses to act for a non-owner', function () {
+    $owner = User::factory()->create();
+    $other = User::factory()->create();
+    $announcement = Announcement::factory()->for($owner)->create();
+    Livewire::actingAs($other)
+        ->test('parts.announcement.form')
+        ->set('model_id', (string) $announcement->id)
+        ->call('delete')
+        ->assertForbidden();
 });

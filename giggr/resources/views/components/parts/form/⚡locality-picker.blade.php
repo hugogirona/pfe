@@ -138,7 +138,7 @@ new class extends Component {
 >
     <label for="locality-picker-input" @class([
         'block text-xs font-semibold uppercase tracking-widest text-dark/40 mb-3' => $filterStyle,
-        'text-sm font-medium text-dark/70' => !$filterStyle,
+        'block text-sm font-medium text-dark/70 mb-1.5' => !$filterStyle,
     ])>
         {{ $label }}
         @if ($required && !$filterStyle)
@@ -146,10 +146,7 @@ new class extends Component {
         @endif
     </label>
 
-    <div @class([
-        'relative',
-        'mt-1.5' => !$filterStyle,
-    ])>
+    <div class="relative">
         <input
             id="locality-picker-input"
             type="text"

@@ -101,6 +101,8 @@ class extends Component {
     }
 
     #[On('announcement-created')]
+    #[On('announcement-updated')]
+    #[On('announcement-deleted')]
     public function refreshAnnouncements(): void
     {
         $this->profile->load([

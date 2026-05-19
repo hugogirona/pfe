@@ -180,35 +180,12 @@ new class extends Component {
             @enderror
         </div>
 
-        <div class="flex justify-between items-center pt-2 border-t border-dark/10">
-            @if ($isEdit)
-                <button
-                    type="button"
-                    wire:click="delete"
-                    wire:confirm="{{ __('profile.delete_youtube_confirm') }}"
-                    wire:loading.attr="disabled"
-                    class="h-11 px-5 rounded-md text-sm font-medium text-accent border border-accent/40 hover:bg-accent/10 transition-colors duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
-                >
-                    {{ __('profile.delete_youtube_submit') }}
-                </button>
-            @else
-                <span></span>
-            @endif
-
-            <button
-                type="submit"
-                wire:loading.attr="disabled"
-                wire:loading.class="opacity-60 cursor-not-allowed"
-                class="h-11 px-6 rounded-md bg-dark text-bg text-sm font-medium hover:opacity-80 transition-opacity duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
-            >
-                <span wire:loading.remove wire:target="save">
-                    {{ $isEdit ? __('profile.update_youtube_submit') : __('profile.add_youtube_submit') }}
-                </span>
-                <span wire:loading wire:target="save">
-                    {{ $isEdit ? __('profile.update_youtube_submitting') : __('profile.add_youtube_submitting') }}
-                </span>
-            </button>
-        </div>
+        <x-parts.form-actions
+            :submit-label="$isEdit ? __('profile.update_youtube_submit') : __('profile.add_youtube_submit')"
+            :submitting-label="$isEdit ? __('profile.update_youtube_submitting') : __('profile.add_youtube_submitting')"
+            :show-delete="$isEdit"
+            :delete-label="__('profile.delete_youtube_submit')"
+        />
 
     </form>
 @endif
