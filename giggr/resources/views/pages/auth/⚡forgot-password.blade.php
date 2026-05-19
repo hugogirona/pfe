@@ -10,7 +10,7 @@ new #[Layout('layouts.auth')] #[Title('Mot de passe oublié — Giggr.')] class 
 
     public function mount(): void
     {
-        $this->sent = session('status') === 'passwords.sent';
+        $this->sent = session()->has('status');
     }
 };
 ?>
@@ -23,9 +23,10 @@ new #[Layout('layouts.auth')] #[Title('Mot de passe oublié — Giggr.')] class 
         </div>
         <form action="/forgot-password" method="POST" novalidate aria-labelledby="forgot-heading" class="space-y-5">
             @csrf
+            <x-honeypot/>
 
             @if ($errors->any())
-                <div class="rounded-[6px] bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-700">
+                <div class="rounded-md bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-700">
                     {{ $errors->first() }}
                 </div>
             @endif
@@ -39,7 +40,7 @@ new #[Layout('layouts.auth')] #[Title('Mot de passe oublié — Giggr.')] class 
                 :placeholder="__('auth.email_placeholder')"
                 :value="old('email')"
             />
-            <x-cta type="submit" size="lg" class="w-full min-h-[44px]">
+            <x-cta type="submit" size="lg" class="w-full min-h-11">
                 {{ __('auth.forgot_submit') }}
             </x-cta>
         </form>
@@ -57,11 +58,13 @@ new #[Layout('layouts.auth')] #[Title('Mot de passe oublié — Giggr.')] class 
             <h1 class="font-heading text-3xl text-dark mb-1.5">{{ __('auth.forgot_sent_heading') }}</h1>
             <p class="text-sm text-dark/50">{{ __('auth.forgot_sent_subtitle') }}</p>
         </div>
-        <div class="rounded-[6px] bg-dark/5 border border-dark/10 px-5 py-4 text-sm text-dark/70 leading-relaxed">
+        <div class="rounded-
+
+        [6px] bg-dark/5 border border-dark/10 px-5 py-4 text-sm text-dark/70 leading-relaxed">
             {{ __('auth.forgot_sent_spam') }}
         </div>
         <div class="mt-5">
-            <x-cta href="{{ route('login') }}" size="lg" class="w-full min-h-[44px]">
+            <x-cta href="{{ route('login') }}" size="lg" class="w-full min-h-11">
                 {{ __('auth.forgot_sent_back') }}
             </x-cta>
         </div>

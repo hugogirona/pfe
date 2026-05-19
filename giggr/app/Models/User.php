@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Notifications\PasswordResetLink;
 use App\Notifications\WelcomeWithVerificationCode;
 use Database\Factories\UserFactory;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -54,6 +55,13 @@ class User extends Authenticatable implements MustVerifyEmail
         $code = $this->email_verification_code;
         dispatch(function () use ($code) {
             $this->notify(new WelcomeWithVerificationCode($code));
+        })->afterResponse();
+    }
+
+    public function sendPasswordResetNotification($token): void
+    {
+        dispatch(function () use ($token) {
+            $this->notify(new PasswordResetLink($token));
         })->afterResponse();
     }
 
