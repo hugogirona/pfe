@@ -24,6 +24,7 @@ new #[Layout('layouts.auth')] #[Title('Créer un compte — Giggr.')] class exte
 
     <form action="/register" method="POST" novalidate aria-labelledby="register-heading" class="space-y-5">
         @csrf
+        <x-honeypot/>
 
         @if ($errors->any())
             <div class="rounded-[6px] bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-700">

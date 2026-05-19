@@ -11,6 +11,7 @@
         aria-labelledby="contact-form-heading"
         class="space-y-5">
         @csrf
+        <x-honeypot/>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
             <x-form.input
