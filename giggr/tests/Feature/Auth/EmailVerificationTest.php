@@ -1,9 +1,16 @@
 <?php
 
 use App\Actions\Fortify\CreateNewUser;
+use App\Models\Profile;
 use App\Models\User;
 use App\Notifications\WelcomeWithVerificationCode;
+use Database\Seeders\CitySeeder;
+use Database\Seeders\GenreSeeder;
+use Database\Seeders\InstrumentSeeder;
+use Illuminate\Auth\Events\Verified;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Notification;
+use Livewire\Livewire;
 
 it('generates a 6-digit code and stores its expiry on registration', function () {
     $user = app(CreateNewUser::class)->create([
@@ -54,7 +61,7 @@ it('verifies the user when a matching code is submitted', function () {
         'email_verification_code_expires_at' => now()->addMinutes(5),
     ]);
 
-    \Livewire\Livewire::actingAs($user)
+    Livewire::actingAs($user)
         ->test('pages::auth.verify-email')
         ->set('code', '123456')
         ->call('verify');
@@ -72,7 +79,7 @@ it('rejects an expired code', function () {
         'email_verification_code_expires_at' => now()->subMinute(),
     ]);
 
-    \Livewire\Livewire::actingAs($user)
+    Livewire::actingAs($user)
         ->test('pages::auth.verify-email')
         ->set('code', '123456')
         ->call('verify')
@@ -88,7 +95,7 @@ it('rejects a wrong code', function () {
         'email_verification_code_expires_at' => now()->addMinutes(5),
     ]);
 
-    \Livewire\Livewire::actingAs($user)
+    Livewire::actingAs($user)
         ->test('pages::auth.verify-email')
         ->set('code', '000000')
         ->call('verify')
@@ -100,7 +107,7 @@ it('rejects a wrong code', function () {
 it('redirects already-verified users away from the verify page', function () {
     $user = User::factory()->create(['email_verified_at' => now()]);
 
-    \Livewire\Livewire::actingAs($user)
+    Livewire::actingAs($user)
         ->test('pages::auth.verify-email')
         ->assertRedirect(config('fortify.home'));
 });
@@ -113,7 +120,7 @@ it('resend generates a new code and notifies the user', function () {
         'email_verification_code_expires_at' => now()->addMinutes(5),
     ]);
 
-    \Livewire\Livewire::actingAs($user)
+    Livewire::actingAs($user)
         ->test('pages::auth.verify-email')
         ->call('resend');
 
@@ -131,7 +138,7 @@ it('resend is rate-limited to once per minute', function () {
         'email_verification_code_expires_at' => now()->addMinutes(5),
     ]);
 
-    \Livewire\Livewire::actingAs($user)
+    Livewire::actingAs($user)
         ->test('pages::auth.verify-email')
         ->call('resend')
         ->call('resend')
@@ -139,19 +146,19 @@ it('resend is rate-limited to once per minute', function () {
 });
 
 it('dispatches the Verified event after a successful verification', function () {
-    \Illuminate\Support\Facades\Event::fake([\Illuminate\Auth\Events\Verified::class]);
+    Event::fake([Verified::class]);
     $user = User::factory()->create([
         'email_verified_at' => null,
         'email_verification_code' => '123456',
         'email_verification_code_expires_at' => now()->addMinutes(5),
     ]);
 
-    \Livewire\Livewire::actingAs($user)
+    Livewire::actingAs($user)
         ->test('pages::auth.verify-email')
         ->set('code', '123456')
         ->call('verify');
 
-    \Illuminate\Support\Facades\Event::assertDispatched(\Illuminate\Auth\Events\Verified::class);
+    Event::assertDispatched(Verified::class);
 });
 
 it('rate-limits verify attempts after 5 failed tries', function () {
@@ -161,7 +168,7 @@ it('rate-limits verify attempts after 5 failed tries', function () {
         'email_verification_code_expires_at' => now()->addMinutes(5),
     ]);
 
-    $component = \Livewire\Livewire::actingAs($user)
+    $component = Livewire::actingAs($user)
         ->test('pages::auth.verify-email');
 
     foreach (range(1, 5) as $_) {
@@ -175,7 +182,7 @@ it('rate-limits verify attempts after 5 failed tries', function () {
 
 it('redirects an unverified user away from a verified-only route', function () {
     $owner = User::factory()->create(['email_verified_at' => null]);
-    $profile = \App\Models\Profile::factory()->create(['user_id' => $owner->id]);
+    $profile = Profile::factory()->create(['user_id' => $owner->id]);
 
     $this->actingAs($owner)
         ->get(route('profile', ['id' => $profile->id]))
@@ -183,9 +190,9 @@ it('redirects an unverified user away from a verified-only route', function () {
 });
 
 it('lets a verified user access a verified-only route', function () {
-    $this->seed([\Database\Seeders\CitySeeder::class, \Database\Seeders\InstrumentSeeder::class, \Database\Seeders\GenreSeeder::class]);
+    $this->seed([CitySeeder::class, InstrumentSeeder::class, GenreSeeder::class]);
     $owner = User::factory()->create(['email_verified_at' => now()]);
-    $profile = \App\Models\Profile::factory()->create(['user_id' => $owner->id]);
+    $profile = Profile::factory()->create(['user_id' => $owner->id]);
 
     $this->actingAs($owner)
         ->get(route('profile', ['id' => $profile->id]))

@@ -4,7 +4,6 @@ namespace App\Actions\Fortify;
 
 use App\Models\Profile;
 use App\Models\User;
-use App\Notifications\WelcomeWithVerificationCode;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -17,6 +16,7 @@ class CreateNewUser implements CreatesNewUsers
     use PasswordValidationRules;
 
     public const int VERIFICATION_CODE_LENGTH = 6;
+
     public const int VERIFICATION_CODE_TTL_MINUTES = 10;
 
     /**

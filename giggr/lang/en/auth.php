@@ -3,7 +3,7 @@
 return [
     // Email verification
     'verify_email_heading' => 'Verify your email',
-    'verify_email_subtitle' => "We sent a 6-digit code to :email to confirm your sign up.",
+    'verify_email_subtitle' => 'We sent a 6-digit code to :email to confirm your sign up.',
     'verify_email_input_aria' => '6-digit verification code',
     'verify_email_submit' => 'Verify',
     'verify_email_submitting' => 'Verifying…',
