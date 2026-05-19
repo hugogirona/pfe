@@ -20,17 +20,17 @@ new class extends Component {
     #[Validate('required|exists:cities,id')]
     public ?int $city_id = null;
 
-    public array $selectedInstruments = [];
-    public array $selectedGenres = [];
-
     #[Validate('required|min:20|max:1000')]
     public string $description = '';
 
-    public bool $success = false;
+    public array $selectedInstruments = [];
+    public array $selectedGenres = [];
 
     public array $availableInstruments = [];
     public array $availableGenres = [];
     public array $availableTypes = [];
+
+    public bool $success = false;
 
     public function mount(?string $model_id = null): void
     {
@@ -40,20 +40,18 @@ new class extends Component {
         $this->availableTypes = collect(AnnouncementType::cases())
             ->map(fn($case) => ['value' => $case->value, 'label' => __($case->label())])
             ->toArray();
-    }
 
-    public function toggleInstrument(int $id): void
-    {
-        $this->selectedInstruments = in_array($id, $this->selectedInstruments)
-            ? array_values(array_filter($this->selectedInstruments, fn($i) => $i !== $id))
-            : [...$this->selectedInstruments, $id];
-    }
+        if ($model_id !== null) {
+            $announcement = Announcement::findOrFail((int)$model_id);
+            abort_unless(auth()->id() === $announcement->user_id, 403);
 
-    public function toggleGenre(int $id): void
-    {
-        $this->selectedGenres = in_array($id, $this->selectedGenres)
-            ? array_values(array_filter($this->selectedGenres, fn($g) => $g !== $id))
-            : [...$this->selectedGenres, $id];
+            $this->title = $announcement->title;
+            $this->type = $announcement->type->value;
+            $this->city_id = $announcement->city_id;
+            $this->description = $announcement->description;
+            $this->selectedInstruments = $announcement->instruments->pluck('id')->all();
+            $this->selectedGenres = $announcement->genres->pluck('id')->all();
+        }
     }
 
     public function save(): void
@@ -62,25 +60,51 @@ new class extends Component {
 
         $this->validate();
 
-        $announcement = Announcement::create([
-            'user_id'     => auth()->id(),
-            'city_id'     => $this->city_id,
-            'title'       => $this->title,
-            'description' => $this->description,
-            'type'        => $this->type,
-            'status'      => AnnouncementStatus::Open,
-        ]);
+        if ($this->model_id !== null) {
+            $announcement = Announcement::findOrFail((int)$this->model_id);
+            abort_unless(auth()->id() === $announcement->user_id, 403);
 
-        if ($this->selectedInstruments) {
+            $announcement->update([
+                'city_id' => $this->city_id,
+                'title' => $this->title,
+                'description' => $this->description,
+                'type' => $this->type,
+            ]);
+
             $announcement->instruments()->sync($this->selectedInstruments);
-        }
-
-        if ($this->selectedGenres) {
             $announcement->genres()->sync($this->selectedGenres);
+
+            $this->dispatch('announcement-updated', id: $announcement->id);
+        } else {
+            $announcement = Announcement::create([
+                'user_id' => auth()->id(),
+                'city_id' => $this->city_id,
+                'title' => $this->title,
+                'description' => $this->description,
+                'type' => $this->type,
+                'status' => AnnouncementStatus::Open,
+            ]);
+
+            $announcement->instruments()->sync($this->selectedInstruments);
+            $announcement->genres()->sync($this->selectedGenres);
+
+            $this->dispatch('announcement-created', id: $announcement->id);
         }
 
-        $this->dispatch('announcement-created', id: $announcement->id);
         $this->success = true;
+    }
+
+    public function delete(): void
+    {
+        abort_unless($this->model_id !== null, 404);
+
+        $announcement = Announcement::findOrFail((int)$this->model_id);
+        abort_unless(auth()->id() === $announcement->user_id, 403);
+
+        $announcement->delete();
+
+        $this->dispatch('announcement-deleted', id: (int)$this->model_id);
+        $this->dispatch('close-modal');
     }
 
     public function close(): void
@@ -91,129 +115,120 @@ new class extends Component {
 ?>
 
 <div>
-@if ($success)
-    <div class="flex flex-col items-center gap-4 py-4 text-center">
-        <div class="w-14 h-14 rounded-full bg-pastel-salmon flex items-center justify-center">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="w-7 h-7 text-accent" aria-hidden="true">
-                <polyline points="20 6 9 17 4 12"/>
-            </svg>
-        </div>
-        <div>
-            <h3 class="font-heading text-xl text-dark">{{ __('announcement.form_success_title') }}</h3>
-            <p class="text-sm text-dark/60 mt-1">{{ __('announcement.form_success_body') }}</p>
-        </div>
-        <button
-            wire:click="close"
-            type="button"
-            class="h-11 px-6 rounded-md bg-dark text-bg text-sm font-medium hover:opacity-80 transition-opacity duration-150 cursor-pointer"
-        >
-            {{ __('announcement.form_close') }}
-        </button>
-    </div>
-@else
-    <form wire:submit="save" class="space-y-5" novalidate>
-
-        {{-- Titre --}}
-        <div>
-            <x-form.input
-                name="title"
-                :label="__('announcement.form_title_label')"
-                wire:model.live.blur="title"
-                :placeholder="__('announcement.form_title_placeholder')"
-                required
-            />
-            @error('title')
-                <p class="text-xs text-accent mt-1.5" role="alert">{{ $message }}</p>
-            @enderror
-        </div>
-
-        {{-- Type + Ville --}}
-        <div class="grid grid-cols-2 gap-4">
+    @if ($success)
+        <div class="flex flex-col items-center gap-4 py-4 text-center">
+            <div class="w-14 h-14 rounded-full bg-pastel-salmon flex items-center justify-center">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                     stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="w-7 h-7 text-accent"
+                     aria-hidden="true">
+                    <polyline points="20 6 9 17 4 12"/>
+                </svg>
+            </div>
             <div>
-                <x-form.select name="type" :label="__('announcement.form_type_label')" wire:model.live.blur="type" required>
+                <h3 class="font-heading text-xl text-dark">
+                    {{ $model_id ? __('announcement.form_success_updated_title') : __('announcement.form_success_title') }}
+                </h3>
+                <p class="text-sm text-dark/60 mt-1">
+                    {{ $model_id ? __('announcement.form_success_updated_body') : __('announcement.form_success_body') }}
+                </p>
+            </div>
+            <button
+                wire:click="close"
+                type="button"
+                class="h-11 px-6 rounded-md bg-dark text-bg text-sm font-medium hover:opacity-80 transition-opacity duration-150 cursor-pointer"
+            >
+                {{ __('announcement.form_close') }}
+            </button>
+        </div>
+    @else
+        <form wire:submit="save" class="space-y-5" novalidate>
+
+            {{-- Titre --}}
+            <div>
+                <x-form.input
+                    name="title"
+                    :label="__('announcement.form_title_label')"
+                    wire:model.live.blur="title"
+                    :placeholder="__('announcement.form_title_placeholder')"
+                    required
+                />
+                @error('title')
+                <p class="text-xs text-accent mt-1.5" role="alert">{{ $message }}</p>
+                @enderror
+            </div>
+
+            {{-- Type --}}
+            <div>
+                <x-form.select name="type" :label="__('announcement.form_type_label')" wire:model.live.blur="type"
+                               required>
                     <option disabled selected value="">{{ __('announcement.form_type_placeholder') }}</option>
                     @foreach ($availableTypes as $typeOption)
                         <option value="{{ $typeOption['value'] }}">{{ $typeOption['label'] }}</option>
                     @endforeach
                 </x-form.select>
                 @error('type')
-                    <p class="text-xs text-accent mt-1.5" role="alert">{{ $message }}</p>
-                @enderror
-            </div>
-            <div>
-                <livewire:parts.form.locality-picker wire:model.live="city_id" />
-                @error('city_id')
-                    <p class="text-xs text-accent mt-1.5" role="alert">{{ $message }}</p>
-                @enderror
-            </div>
-        </div>
-
-        {{-- Instruments --}}
-        <div class="flex flex-col gap-2">
-            <span class="text-sm font-medium text-dark/70">{{ __('announcement.form_instruments_label') }}</span>
-            <div class="flex flex-wrap gap-2" role="group" aria-label="{{ __('announcement.form_instruments_label') }}">
-                @foreach ($availableInstruments as $instr)
-                    <button
-                        type="button"
-                        wire:click="toggleInstrument({{ $instr['id'] }})"
-                        @class([
-                            'h-9 px-4 rounded-full border text-sm font-medium transition-all duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent',
-                            'bg-dark text-bg border-dark'                                                => in_array($instr['id'], $selectedInstruments),
-                            'bg-white text-dark/60 border-dark/15 hover:border-dark/40 hover:text-dark' => !in_array($instr['id'], $selectedInstruments),
-                        ])
-                        aria-pressed="{{ in_array($instr['id'], $selectedInstruments) ? 'true' : 'false' }}"
-                    >{{ $instr['name'] }}</button>
-                @endforeach
-            </div>
-        </div>
-
-        {{-- Genres --}}
-        <div class="flex flex-col gap-2">
-            <span class="text-sm font-medium text-dark/70">{{ __('announcement.form_genres_label') }}</span>
-            <div class="flex flex-wrap gap-2" role="group" aria-label="{{ __('announcement.form_genres_label') }}">
-                @foreach ($availableGenres as $genre)
-                    <button
-                        type="button"
-                        wire:click="toggleGenre({{ $genre['id'] }})"
-                        @class([
-                            'h-9 px-4 rounded-full border text-sm font-medium transition-all duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent',
-                            'bg-accent text-bg border-accent'                                            => in_array($genre['id'], $selectedGenres),
-                            'bg-white text-dark/60 border-dark/15 hover:border-dark/40 hover:text-dark' => !in_array($genre['id'], $selectedGenres),
-                        ])
-                        aria-pressed="{{ in_array($genre['id'], $selectedGenres) ? 'true' : 'false' }}"
-                    >{{ $genre['name'] }}</button>
-                @endforeach
-            </div>
-        </div>
-
-        {{-- Description --}}
-        <div>
-            <x-form.textarea
-                name="description"
-                :label="__('announcement.form_description_label')"
-                wire:model.live.blur="description"
-                :placeholder="__('announcement.form_description_placeholder')"
-                :rows="4"
-                required
-            />
-            @error('description')
                 <p class="text-xs text-accent mt-1.5" role="alert">{{ $message }}</p>
-            @enderror
-        </div>
+                @enderror
+            </div>
 
-        {{-- Submit --}}
-        <div class="flex justify-end pt-2 border-t border-dark/10">
-            <button
-                type="submit"
-                wire:loading.attr="disabled"
-                wire:loading.class="opacity-60 cursor-not-allowed"
-                class="h-11 px-6 rounded-md bg-dark text-bg text-sm font-medium hover:opacity-80 transition-opacity duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
-            >
-                <span wire:loading.remove wire:target="save">{{ __('announcement.form_submit') }}</span>
-                <span wire:loading wire:target="save">{{ __('announcement.form_submitting') }}</span>
-            </button>
-        </div>
+            {{-- Ville --}}
+            <div>
+                <livewire:parts.form.locality-picker wire:model.live="city_id"/>
+                @error('city_id')
+                <p class="text-xs text-accent mt-1.5" role="alert">{{ $message }}</p>
+                @enderror
+            </div>
 
-    </form>
-@endif
+            {{-- Instruments --}}
+            <fieldset>
+                <legend
+                    class="block text-sm font-medium text-dark/70 mb-1.5">{{ __('announcement.form_instruments_label') }}</legend>
+                <div class="grid grid-cols-2 gap-x-4 gap-y-2">
+                    @foreach ($availableInstruments as $instr)
+                        <x-form.checkbox :name="'instrument_' . $instr['id']" wire:model="selectedInstruments"
+                                         value="{{ $instr['id'] }}">
+                            {{ $instr['name'] }}
+                        </x-form.checkbox>
+                    @endforeach
+                </div>
+            </fieldset>
+
+            {{-- Genres --}}
+            <fieldset>
+                <legend
+                    class="block text-sm font-medium text-dark/70 mb-1.5">{{ __('announcement.form_genres_label') }}</legend>
+                <div class="grid grid-cols-2 gap-x-4 gap-y-2">
+                    @foreach ($availableGenres as $genre)
+                        <x-form.checkbox :name="'genre_' . $genre['id']" wire:model="selectedGenres"
+                                         value="{{ $genre['id'] }}">
+                            {{ $genre['name'] }}
+                        </x-form.checkbox>
+                    @endforeach
+                </div>
+            </fieldset>
+
+            {{-- Description --}}
+            <div>
+                <x-form.textarea
+                    name="description"
+                    :label="__('announcement.form_description_label')"
+                    wire:model.live.blur="description"
+                    :placeholder="__('announcement.form_description_placeholder')"
+                    :rows="4"
+                    required
+                />
+                @error('description')
+                <p class="text-xs text-accent mt-1.5" role="alert">{{ $message }}</p>
+                @enderror
+            </div>
+
+            <x-parts.form-actions
+                :submit-label="$model_id ? __('announcement.form_update') : __('announcement.form_submit')"
+                :submitting-label="$model_id ? __('announcement.form_updating') : __('announcement.form_submitting')"
+                :show-delete="$model_id !== null"
+                :delete-label="__('announcement.form_delete')"
+            />
+
+        </form>
+    @endif
 </div>

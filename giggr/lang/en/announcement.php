@@ -10,6 +10,8 @@ return [
 
     // Actions
     'create_title' => 'Post a listing',
+    'edit_title' => 'Edit listing',
+    'edit_aria' => 'Edit this listing',
 
     // Hero / header
     'posted_on' => 'Posted on :date',
@@ -33,15 +35,22 @@ return [
     'form_type_label' => 'Type',
     'form_type_placeholder' => 'Choose…',
     'form_city_label' => 'City',
-    'form_city_placeholder' => 'e.g. Liège, Antwerpen, 4000…',
+    'form_city_placeholder' => 'e.g. Liège, 4000',
     'form_instruments_label' => 'Instruments',
     'form_genres_label' => 'Genres',
     'form_description_label' => 'Description',
     'form_description_placeholder' => 'Describe your project, level, availability…',
     'form_submit' => 'Publish the listing',
+    'form_update' => 'Update',
     'form_submitting' => 'Publishing…',
+    'form_updating' => 'Updating…',
     'form_close' => 'Close',
     'form_success_title' => 'Listing published!',
     'form_success_body' => 'Your listing is now visible to the community.',
+    'form_success_updated_title' => 'Listing updated!',
+    'form_success_updated_body' => 'Your changes have been saved.',
+    'form_delete' => 'Delete',
+    'form_delete_confirm' => 'Confirm deletion',
+    'form_delete_cancel' => 'Cancel',
 
 ];
