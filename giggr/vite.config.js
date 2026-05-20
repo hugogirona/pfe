@@ -8,6 +8,11 @@ export default defineConfig({
         laravel({
             input: ["resources/css/app.css", "resources/js/app.js"],
             refresh: true,
+            assets: [
+                "resources/img/**",
+                "resources/fonts/**",
+                "resources/favicon/**",
+            ],
         }),
         tailwindcss(),
         VitePluginSvgSpritemap("./resources/icons/*.svg", {
@@ -17,12 +22,10 @@ export default defineConfig({
             styles: "resources/css/spritemap.css",
         }),
     ],
+
     server: {
         watch: {
             ignored: ["**/storage/framework/views/**"],
-        },
-        proxy: {
-            "/fonts": "http://localhost:8000",
         },
     },
 });
