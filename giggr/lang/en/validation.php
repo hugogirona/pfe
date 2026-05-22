@@ -179,8 +179,9 @@ return [
     */
 
     'custom' => [
-        'attribute-name' => [
-            'rule-name' => 'custom-message',
+        'rgpd' => [
+            'accepted' => 'You must accept the privacy policy.',
+            'required' => 'You must accept the privacy policy.',
         ],
     ],
 
@@ -200,6 +201,24 @@ return [
         'type' => 'type',
         'city_id' => 'city',
         'description' => 'description',
+        'first_name' => 'first name',
+        'last_name' => 'last name',
+        'email' => 'email address',
+        'password' => 'password',
+        'password_confirmation' => 'password confirmation',
+        'subject' => 'subject',
+        'message' => 'message',
+        'body' => 'message',
+        'bio' => 'bio',
+        'caption' => 'caption',
+        'photo' => 'photo',
+        'rgpd' => 'privacy consent',
+        'birth_date' => 'date of birth',
+        'experience_years' => 'years of experience',
+        'status' => 'status',
+        'instruments' => 'instruments',
+        'genres' => 'music genres',
+        'phone' => 'phone',
     ],
 
 ];

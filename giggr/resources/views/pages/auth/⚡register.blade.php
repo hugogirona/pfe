@@ -26,16 +26,6 @@ new #[Layout('layouts.auth')] #[Title('Créer un compte — Giggr.')] class exte
         @csrf
         <x-honeypot/>
 
-        @if ($errors->any())
-            <div class="rounded-[6px] bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-700">
-                <ul class="space-y-1 list-disc list-inside">
-                    @foreach ($errors->all() as $error)
-                        <li>{!! $error !!}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
-
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
             <x-form.input
                 name="first_name"

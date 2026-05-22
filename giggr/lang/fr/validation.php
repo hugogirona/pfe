@@ -157,8 +157,9 @@ return [
     'uuid' => 'Le champ :attribute doit être un UUID valide.',
 
     'custom' => [
-        'attribute-name' => [
-            'rule-name' => 'custom-message',
+        'rgpd' => [
+            'accepted' => 'Vous devez accepter la politique de confidentialité.',
+            'required' => 'Vous devez accepter la politique de confidentialité.',
         ],
     ],
 
@@ -167,6 +168,24 @@ return [
         'type' => 'type',
         'city_id' => 'ville',
         'description' => 'description',
+        'first_name' => 'prénom',
+        'last_name' => 'nom',
+        'email' => 'e-mail',
+        'password' => 'mot de passe',
+        'password_confirmation' => 'confirmation du mot de passe',
+        'subject' => 'sujet',
+        'message' => 'message',
+        'body' => 'message',
+        'bio' => 'biographie',
+        'caption' => 'légende',
+        'photo' => 'photo',
+        'rgpd' => 'consentement RGPD',
+        'birth_date' => 'date de naissance',
+        'experience_years' => "années d'expérience",
+        'status' => 'statut',
+        'instruments' => 'instruments',
+        'genres' => 'genres musicaux',
+        'phone' => 'téléphone',
     ],
 
 ];

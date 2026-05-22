@@ -20,6 +20,7 @@ return [
     'subject_placeholder' => 'Choisissez un sujet',
     'subject_general' => 'Question générale',
     'subject_partnership' => 'Partenariat',
+    'subject_feature' => 'Proposition de fonctionnalité',
     'subject_bug' => 'Signaler un bug',
     'subject_other' => 'Autre',
 
@@ -28,6 +29,18 @@ return [
     'rgpd_required' => 'Vous devez accepter la politique de confidentialité.',
 
     'required_legend' => "Les champs marqués d'un * sont obligatoires.",
+
+    // Submission feedback
+    'form_success_title' => 'Message envoyé !',
+    'form_success_body' => 'Merci pour votre message, nous vous répondrons dans les plus brefs délais.',
+
+    // Email envoyé à l'équipe Giggr
+    'mail_subject' => 'Nouveau message de contact — :subject',
+    'mail_heading' => 'Nouveau message de contact',
+    'mail_intro' => 'Une personne a soumis le formulaire de contact avec le sujet « :subject ».',
+    'mail_from' => 'De la part de',
+    'mail_body_label' => 'Message',
+    'mail_reply_cta' => 'Répondre',
 
     // FAQ
     'faq_eyebrow' => 'On répond',
