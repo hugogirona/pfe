@@ -24,7 +24,7 @@ new #[Layout('layouts.auth')] #[Title('Vérifier ton email — Giggr.')] class e
             return;
         }
         if ($user->hasVerifiedEmail()) {
-            $this->redirect(config('fortify.home'), navigate: true);
+            $this->redirect(route('profile', ['id' => $user->profile->id]), navigate: true);
         }
     }
 
@@ -33,7 +33,7 @@ new #[Layout('layouts.auth')] #[Title('Vérifier ton email — Giggr.')] class e
         $user = auth()->user();
         abort_unless($user !== null, 403);
         if ($user->hasVerifiedEmail()) {
-            $this->redirect(config('fortify.home'), navigate: true);
+            $this->redirect(route('profile', ['id' => $user->profile->id]), navigate: true);
 
             return;
         }
@@ -72,7 +72,7 @@ new #[Layout('layouts.auth')] #[Title('Vérifier ton email — Giggr.')] class e
 
         $limiter->clear($throttleKey);
 
-        $this->redirect(config('fortify.home'), navigate: true);
+        $this->redirect(route('profile', ['id' => $user->profile->id]), navigate: true);
     }
 
     public function resend(RateLimiter $limiter): void
