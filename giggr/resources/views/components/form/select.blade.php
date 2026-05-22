@@ -13,11 +13,14 @@
             id="{{ $name }}"
             name="{{ $name }}"
             @if($required) required aria-required="true" @endif
+            @error($name) aria-invalid="true" aria-describedby="{{ $name }}-error" @enderror
             {{ $attributes->class([
                 'w-full appearance-none px-4 py-3 pr-10 rounded-[6px] bg-white border border-dark/15 text-base',
                 'text-dark',
                 'focus:outline-none focus:ring-2 focus:ring-accent/40 focus:border-accent',
                 'transition-colors duration-150 cursor-pointer',
+            ])->class([
+                'border-danger/60 focus:border-danger focus:ring-danger/30' => $errors->has($name),
             ]) }}>
             {{ $slot }}
         </select>
@@ -25,4 +28,7 @@
             <x-icon name="chevron-down" class="w-4 h-4 text-dark/40" />
         </div>
     </div>
+    @error($name)
+        <p id="{{ $name }}-error" role="alert" class="text-xs text-danger mt-0.5">{{ $message }}</p>
+    @enderror
 </div>

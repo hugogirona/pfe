@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ContactController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Vite;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
@@ -27,6 +28,8 @@ Route::get('/site.webmanifest', function () {
         'display' => 'standalone',
     ])->header('Content-Type', 'application/manifest+json');
 })->name('site.webmanifest');
+
+Route::post('/contact', ContactController::class)->name('contact.submit');
 
 Route::group([
     'prefix' => LaravelLocalization::setLocale(),

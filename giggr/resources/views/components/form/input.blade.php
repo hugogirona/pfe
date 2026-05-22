@@ -20,11 +20,17 @@
         placeholder="{{ $placeholder }}"
         @if($required) required aria-required="true" @endif
         @if($autocomplete) autocomplete="{{ $autocomplete }}" @endif
+        @error($name) aria-invalid="true" aria-describedby="{{ $name }}-error" @enderror
         {{ $attributes->class([
             'w-full px-4 py-3 rounded-[6px] bg-white border border-dark/15 text-base',
             'text-dark placeholder:text-dark/30',
             'focus:outline-none focus:ring-2 focus:ring-accent/40 focus:border-accent',
             'transition-colors duration-150',
+        ])->class([
+            'border-danger/60 focus:border-danger focus:ring-danger/30' => $errors->has($name),
         ]) }}
     />
+    @error($name)
+        <p id="{{ $name }}-error" role="alert" class="text-xs text-danger mt-0.5">{{ $message }}</p>
+    @enderror
 </div>
