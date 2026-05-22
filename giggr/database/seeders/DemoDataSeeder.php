@@ -43,7 +43,7 @@ class DemoDataSeeder extends Seeder
         ])->create([
             'first_name' => 'Hugo',
             'last_name' => 'Girona',
-            'email' => 'hugo@giggr.com',
+            'email' => 'hugo@giggr.be',
             'password' => 'change_this',
         ]);
 
@@ -54,7 +54,7 @@ class DemoDataSeeder extends Seeder
         ])->create([
             'first_name' => 'Valentina',
             'last_name' => 'Vuksani',
-            'email' => 'vali@giggr.com',
+            'email' => 'vali@giggr.be',
             'password' => 'change_this',
         ]);
 

@@ -44,7 +44,7 @@ it('seeds the developer account with a stable email', function () {
 
     $this->seed(DemoDataSeeder::class);
 
-    expect(User::where('email', 'hugo@giggr.com')->exists())->toBeTrue();
+    expect(User::where('email', 'hugo@giggr.be')->exists())->toBeTrue();
 });
 
 it('seeds a profile for every user', function () {
