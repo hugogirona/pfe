@@ -4,12 +4,24 @@
         {{ __('contact.form_title') }}
     </h2>
 
+    @if (session('contact_success'))
+        <div
+            role="status"
+            aria-live="polite"
+            class="mb-6 rounded-[6px] bg-pastel-salmon/40 border border-accent/30 px-4 py-3"
+        >
+            <p class="font-medium text-dark">{{ __('contact.form_success_title') }}</p>
+            <p class="text-sm text-dark/65 mt-0.5">{{ __('contact.form_success_body') }}</p>
+        </div>
+    @endif
+
     <form
-        action="#"
+        action="{{ route('contact.submit') }}"
         method="POST"
         novalidate
         aria-labelledby="contact-form-heading"
-        class="space-y-5">
+        class="space-y-5"
+    >
         @csrf
         <x-honeypot/>
 
@@ -19,7 +31,7 @@
                 type="text"
                 :label="__('contact.form_first_name')"
                 :required="true"
-                autocomplete="name"
+                autocomplete="given-name"
             />
 
             <x-form.input
@@ -27,29 +39,29 @@
                 type="text"
                 :label="__('contact.form_last_name')"
                 :required="true"
-                autocomplete="name"
+                autocomplete="family-name"
             />
-
         </div>
 
         <x-form.input
-                name="email"
-                type="email"
-                :label="__('contact.form_email')"
-                :required="true"
-                autocomplete="email"
-            />
+            name="email"
+            type="email"
+            :label="__('contact.form_email')"
+            :required="true"
+            autocomplete="email"
+        />
 
         <x-form.select
             name="subject"
             :label="__('contact.form_subject')"
-            :required="true">
-            <option value="" disabled selected>{{ __('contact.subject_placeholder') }}</option>
-            <option value="general">{{ __('contact.subject_general') }}</option>
-            <option value="partnership">{{ __('contact.subject_partnership') }}</option>
-            <option value="bug">{{ __('contact.subject_bug') }}</option>
-            <option value="other">{{ __('contact.subject_other') }}</option>
-            {{-- TODO: ajouter l'option feature proposal --}}
+            :required="true"
+        >
+            <option value="" disabled @selected(old('subject') === null)>{{ __('contact.subject_placeholder') }}</option>
+            <option value="general" @selected(old('subject') === 'general')>{{ __('contact.subject_general') }}</option>
+            <option value="partnership" @selected(old('subject') === 'partnership')>{{ __('contact.subject_partnership') }}</option>
+            <option value="feature" @selected(old('subject') === 'feature')>{{ __('contact.subject_feature') }}</option>
+            <option value="bug" @selected(old('subject') === 'bug')>{{ __('contact.subject_bug') }}</option>
+            <option value="other" @selected(old('subject') === 'other')>{{ __('contact.subject_other') }}</option>
         </x-form.select>
 
         <x-form.textarea
@@ -59,7 +71,7 @@
             :rows="5"
         />
 
-        <x-form.checkbox name="rgpd" :required="true">
+        <x-form.checkbox name="rgpd" :required="true" :checked="old('rgpd')" value="1">
             {!! __('contact.rgpd_label', [
                 'link' => '<a href="#"
                               class="text-accent underline underline-offset-2 hover:opacity-80 transition-opacity duration-150
@@ -75,6 +87,5 @@
             {{ __('contact.form_submit') }}
             <x-icon name="arrow-right" class="w-4 h-4" />
         </x-cta>
-
     </form>
 </section>

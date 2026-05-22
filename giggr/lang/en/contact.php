@@ -20,6 +20,7 @@ return [
     'subject_placeholder' => 'Choose a subject',
     'subject_general' => 'General question',
     'subject_partnership' => 'Partnership',
+    'subject_feature' => 'Feature proposal',
     'subject_bug' => 'Report a bug',
     'subject_other' => 'Other',
 
@@ -28,6 +29,18 @@ return [
     'rgpd_required' => 'You must accept the privacy policy.',
 
     'required_legend' => 'Fields marked with * are required.',
+
+    // Submission feedback
+    'form_success_title' => 'Message sent!',
+    'form_success_body' => 'Thanks for your message — we will get back to you as soon as possible.',
+
+    // Email sent to the Giggr team
+    'mail_subject' => 'New contact message — :subject',
+    'mail_heading' => 'New contact message',
+    'mail_intro' => 'Someone submitted the contact form with the subject ":subject".',
+    'mail_from' => 'From',
+    'mail_body_label' => 'Message',
+    'mail_reply_cta' => 'Reply',
 
     // FAQ
     'faq_eyebrow' => 'We answer',
