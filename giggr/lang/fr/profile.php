@@ -88,6 +88,7 @@ return [
     'gallery_edit_video_title' => 'Modifier la vidéo',
     'gallery_edit_hint_owner' => 'Clique sur un média pour le modifier.',
     'gallery_edit_item' => 'Modifier ce média',
+    'media_processing' => 'Traitement de l\'image en cours…',
 
     'update_image_submit' => 'Enregistrer',
     'update_image_submitting' => 'Enregistrement…',

@@ -1,27 +1,9 @@
-@props(['profile'])
-
-<div class="relative h-52 md:h-64 bg-dark overflow-hidden">
-
-    {{-- grid bg --}}
-    <div class="absolute inset-0 opacity-[0.04]" aria-hidden="true"
-         style="background-image: repeating-linear-gradient(0deg, currentColor, currentColor 1px, transparent 1px, transparent 40px), repeating-linear-gradient(90deg, currentColor, currentColor 1px, transparent 1px, transparent 40px); color: white;"></div>
-
-    {{-- Back link --}}
-    <div class="relative z-10 max-w-6xl mx-auto px-6 pt-6">
-        <a
-            href="{{ route('explore') }}?tab=musiciens"
-            class="inline-flex items-center gap-1.5 text-sm text-bg/60 hover:text-bg transition-colors duration-150 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-bg/50 rounded"
-        >
-            {{ __('profile.back_to_explore') }}
-        </a>
-    </div>
-
-    {{-- Name in banner --}}
-    <div class="absolute bottom-6 left-0 right-0">
-        <div class="max-w-6xl mx-auto px-6">
-            <p class="text-bg/40 text-xs font-medium uppercase tracking-widest mb-1">{{ $profile->city?->name }}</p>
-            <h1 class="font-heading text-3xl md:text-4xl text-bg leading-tight">{{ $profile->user->full_name }}</h1>
-        </div>
-    </div>
-
+<div class="max-w-6xl mx-auto px-6 pt-6">
+    <a
+        href="{{ route('explore') }}?tab=musiciens"
+        class="inline-flex items-center gap-1.5 text-sm text-dark/50 hover:text-dark transition-colors duration-150 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-dark/30 rounded"
+    >
+        <x-icon name="arrow-right" class="w-3.5 h-3.5 rotate-180"/>
+        {{ __('profile.back_to_explore') }}
+    </a>
 </div>

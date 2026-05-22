@@ -110,11 +110,18 @@ class DemoDataSeeder extends Seeder
 
         $file = new UploadedFile($tmpPath, 'demo-photo.jpg', 'image/jpeg', null, true);
 
-        $hugoImage = app(UploadMediaImage::class)->execute($hugoProfile, $file);
-        $this->attachYoutube($hugoProfile);
+        $originalConnection = config('queue.default');
+        config(['queue.default' => 'sync']);
 
-        app(UploadMediaImage::class)->execute($valentinaProfile, $file);
-        $this->attachYoutube($valentinaProfile);
+        try {
+            $hugoImage = app(UploadMediaImage::class)->execute($hugoProfile, $file);
+            $this->attachYoutube($hugoProfile);
+
+            app(UploadMediaImage::class)->execute($valentinaProfile, $file);
+            $this->attachYoutube($valentinaProfile);
+        } finally {
+            config(['queue.default' => $originalConnection]);
+        }
 
         foreach ($otherProfiles as $profile) {
             Media::create([
@@ -124,6 +131,7 @@ class DemoDataSeeder extends Seeder
                 'position' => 0,
                 'width' => self::DEMO_IMAGE_WIDTH,
                 'height' => self::DEMO_IMAGE_HEIGHT,
+                'processed_at' => now(),
             ]);
             $this->attachYoutube($profile);
         }
@@ -136,6 +144,7 @@ class DemoDataSeeder extends Seeder
             'type' => MediaType::Youtube,
             'source' => self::DEMO_YOUTUBE_ID,
             'position' => 1,
+            'processed_at' => now(),
         ]);
     }
 }

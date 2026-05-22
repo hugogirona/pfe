@@ -32,7 +32,7 @@ new class extends Component {
 
         app(UploadAvatarImage::class)->execute($this->profile, $this->photo);
 
-        $this->dispatch('avatar-saved', thumbnail: $this->profile->refresh()->thumbnail);
+        $this->dispatch('avatar-uploading');
         $this->dispatch('close-modal');
     }
 };

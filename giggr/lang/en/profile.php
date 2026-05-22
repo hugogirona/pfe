@@ -88,6 +88,7 @@ return [
     'gallery_edit_video_title' => 'Edit video',
     'gallery_edit_hint_owner' => 'Tap a media to edit it.',
     'gallery_edit_item' => 'Edit this media',
+    'media_processing' => 'Processing image…',
 
     'update_image_submit' => 'Save',
     'update_image_submitting' => 'Saving…',

@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Events\AvatarProcessed;
 use App\Models\Profile;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
@@ -14,9 +15,9 @@ class ProcessAvatarImage implements ShouldQueue
     use Queueable;
 
     public function __construct(
-        private readonly Profile $profile,
-        private readonly string $tmpPath,
-        private readonly string $stem,
+        public readonly Profile $profile,
+        public readonly string $tmpPath,
+        public readonly string $stem,
     ) {}
 
     public function handle(): void
@@ -38,6 +39,8 @@ class ProcessAvatarImage implements ShouldQueue
 
             $this->deleteOldVariants();
             $this->profile->update(['avatar_path' => $this->stem]);
+
+            broadcast(new AvatarProcessed($this->profile->fresh()));
         } finally {
             Storage::disk('local')->delete($this->tmpPath);
         }
