@@ -52,7 +52,7 @@ it('preserves relation counts when the avatar is refreshed', function () {
     expect($component->get('profile')->followers_count)->toBe(1)
         ->and($component->get('profile')->followed_count)->toBe(1);
 
-    $component->dispatch('avatar-saved');
+    $component->dispatch('echo-private:App.Models.User.'.$owner->id.',.avatar.processed');
 
     expect($component->get('profile')->followers_count)->toBe(1)
         ->and($component->get('profile')->followed_count)->toBe(1);

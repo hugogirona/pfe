@@ -110,7 +110,7 @@ class extends Component {
         ]);
     }
 
-    #[On('avatar-saved')]
+    #[On('echo-private:App.Models.User.{profile.user_id},.avatar.processed')]
     public function refreshAvatar(): void
     {
         $this->profile->refresh();
@@ -120,6 +120,7 @@ class extends Component {
     #[On('media-added')]
     #[On('media-updated')]
     #[On('media-deleted')]
+    #[On('echo-private:App.Models.User.{profile.user_id},.media.processed')]
     public function refreshMedia(): void
     {
         $this->profile->load('media');
@@ -146,7 +147,7 @@ class extends Component {
     <livewire:parts.social.relations-modal/>
     <livewire:parts.profile.media-lightbox/>
 
-    <x-parts.profile.hero :profile="$profile"/>
+    <x-parts.profile.hero/>
 
     <div class="max-w-6xl mx-auto px-6 py-10">
         <div class="flex flex-col lg:flex-row gap-8 lg:items-start">
