@@ -30,16 +30,6 @@ new #[Layout('layouts.auth')] #[Title('Réinitialiser le mot de passe — Giggr.
 
         <input type="hidden" name="token" value="{{ $token }}">
 
-        @if ($errors->any())
-            <div class="rounded-[6px] bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-700">
-                <ul class="space-y-1 list-disc list-inside">
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
-
         <x-form.input
             name="email"
             type="email"

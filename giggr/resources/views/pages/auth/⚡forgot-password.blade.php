@@ -25,12 +25,6 @@ new #[Layout('layouts.auth')] #[Title('Mot de passe oublié — Giggr.')] class 
             @csrf
             <x-honeypot/>
 
-            @if ($errors->any())
-                <div class="rounded-md bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-700">
-                    {{ $errors->first() }}
-                </div>
-            @endif
-
             <x-form.input
                 name="email"
                 type="email"

@@ -25,12 +25,6 @@ new #[Layout('layouts.auth')] #[Title('Se connecter — Giggr.')] class extends 
     <form action="/login" method="POST" novalidate aria-labelledby="login-heading" class="space-y-5">
         @csrf
 
-        @if ($errors->any())
-            <div class="rounded-[6px] bg-danger/5 border border-danger/50 px-4 py-3 text-sm text-danger/70">
-                {{ $errors->first() }}
-            </div>
-        @endif
-
         <x-form.input
             name="email"
             type="email"
