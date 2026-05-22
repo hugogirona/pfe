@@ -1,7 +1,9 @@
 <?php
 
+use App\Events\AvatarProcessed;
 use App\Jobs\ProcessAvatarImage;
 use App\Models\Profile;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Storage;
 
 function sampleJpegContent(): string
@@ -65,4 +67,38 @@ it('overwrites existing avatar variants when a new upload is processed', functio
         ->assertMissing('avatars/medium/old-stem.webp')
         ->assertExists('avatars/thumbnail/new-stem.webp')
         ->assertExists('avatars/medium/new-stem.webp');
+});
+
+it('broadcasts AvatarProcessed after a successful run', function () {
+    Storage::fake('local');
+    Storage::fake('public');
+    Event::fake([AvatarProcessed::class]);
+
+    $profile = Profile::factory()->create(['avatar_path' => null]);
+    Storage::disk('local')->put('avatars-tmp/original.jpg', sampleJpegContent());
+
+    ProcessAvatarImage::dispatchSync($profile, 'avatars-tmp/original.jpg', 'my-stem');
+
+    Event::assertDispatched(
+        AvatarProcessed::class,
+        fn (AvatarProcessed $e) => $e->profile->id === $profile->id
+            && $e->profile->avatar_path === 'my-stem',
+    );
+});
+
+it('does not broadcast AvatarProcessed if encoding fails', function () {
+    Storage::fake('local');
+    Storage::fake('public');
+    Event::fake([AvatarProcessed::class]);
+
+    $profile = Profile::factory()->create(['avatar_path' => null]);
+    Storage::disk('local')->put('avatars-tmp/bad.jpg', 'not-an-image');
+
+    try {
+        ProcessAvatarImage::dispatchSync($profile, 'avatars-tmp/bad.jpg', 'bad-stem');
+    } catch (Throwable) {
+        // expected
+    }
+
+    Event::assertNotDispatched(AvatarProcessed::class);
 });

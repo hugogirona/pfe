@@ -2,6 +2,8 @@
 
 namespace App\Jobs;
 
+use App\Events\MediaProcessed;
+use App\Models\Media;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\Storage;
@@ -13,8 +15,10 @@ class ProcessMediaImage implements ShouldQueue
     use Queueable;
 
     public function __construct(
-        private readonly string $tmpPath,
-        private readonly string $stem,
+        public readonly Media $media,
+        public readonly string $tmpPath,
+        public readonly string $stem,
+        public readonly ?string $replacedSource = null,
     ) {}
 
     public function handle(): void
@@ -33,6 +37,17 @@ class ProcessMediaImage implements ShouldQueue
                     (string) $encoded,
                 );
             }
+
+            $this->media->update([
+                'source' => $this->stem,
+                'processed_at' => now(),
+            ]);
+
+            if ($this->replacedSource !== null && $this->replacedSource !== $this->stem) {
+                Media::deleteVariantsForSource($this->replacedSource);
+            }
+
+            broadcast(new MediaProcessed($this->media->fresh()));
         } finally {
             Storage::disk('local')->delete($this->tmpPath);
         }

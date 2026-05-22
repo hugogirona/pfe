@@ -22,9 +22,9 @@ class UploadMediaImage
      */
     public function execute(Profile $profile, UploadedFile $file, ?string $caption = null): Media
     {
-        [$stem, $width, $height] = $this->processVariants($file);
+        [$stem, $tmpPath, $width, $height] = $this->storeTmp($file);
 
-        return DB::transaction(function () use ($profile, $stem, $caption, $width, $height): Media {
+        $media = DB::transaction(function () use ($profile, $stem, $caption, $width, $height): Media {
             $lockedProfile = Profile::query()->lockForUpdate()->findOrFail($profile->id);
             $nextPosition = ($lockedProfile->media()->max('position') ?? -1) + 1;
 
@@ -36,8 +36,13 @@ class UploadMediaImage
                 'position' => $nextPosition,
                 'width' => $width,
                 'height' => $height,
+                'processed_at' => null,
             ]);
         });
+
+        ProcessMediaImage::dispatch($media, $tmpPath, $stem);
+
+        return $media;
     }
 
     public function replace(Media $media, UploadedFile $file): void
@@ -48,23 +53,22 @@ class UploadMediaImage
             );
         }
 
-        [$newStem, $width, $height] = $this->processVariants($file);
-
+        [$newStem, $tmpPath, $width, $height] = $this->storeTmp($file);
         $oldSource = $media->source;
 
         $media->update([
-            'source' => $newStem,
             'width' => $width,
             'height' => $height,
+            'processed_at' => null,
         ]);
 
-        Media::deleteVariantsForSource($oldSource);
+        ProcessMediaImage::dispatch($media, $tmpPath, $newStem, $oldSource);
     }
 
     /**
-     * @return array{0: string, 1: int, 2: int}
+     * @return array{0: string, 1: string, 2: int, 3: int}
      */
-    private function processVariants(UploadedFile $file): array
+    private function storeTmp(UploadedFile $file): array
     {
         $dimensions = @getimagesize($file->getRealPath());
         if ($dimensions === false) {
@@ -81,8 +85,6 @@ class UploadMediaImage
             'local',
         );
 
-        ProcessMediaImage::dispatchSync($tmpPath, $stem);
-
-        return [$stem, $width, $height];
+        return [$stem, $tmpPath, $width, $height];
     }
 }

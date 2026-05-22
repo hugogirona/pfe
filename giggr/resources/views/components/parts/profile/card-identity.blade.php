@@ -6,7 +6,7 @@
 @endphp
 
 <section aria-labelledby="identity-name-heading" class="text-center px-6 pb-5 border-b border-dark/[0.07]">
-    <h2 id="identity-name-heading" class="font-heading text-2xl text-dark leading-tight">{{ $name }}</h2>
+    <h1 id="identity-name-heading" class="font-heading text-2xl text-dark leading-tight">{{ $name }}</h1>
 
     @if ($profile->city)
         <p class="text-sm text-dark/50 mt-1 flex items-center justify-center gap-1">

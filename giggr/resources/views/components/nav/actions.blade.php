@@ -8,7 +8,12 @@
         <div
             class="relative"
             x-data="{ open: false, thumbnail: {{ auth()->user()->profile?->thumbnail ? json_encode(auth()->user()->profile->thumbnail) : 'null' }} }"
-            @avatar-saved.window="thumbnail = $event.detail.thumbnail"
+            x-init="
+                if (window.Echo) {
+                    window.Echo.private('App.Models.User.{{ auth()->id() }}')
+                        .listen('.avatar.processed', e => thumbnail = e.thumbnail);
+                }
+            "
         >
             <button
                 type="button"

@@ -1,12 +1,15 @@
 <?php
 
+use App\Jobs\ProcessAvatarImage;
 use App\Models\Profile;
 use App\Models\User;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Livewire;
 
 it('owner can upload a valid image', function () {
+    Bus::fake();
     Storage::fake('local');
     Storage::fake('public');
 
@@ -16,9 +19,11 @@ it('owner can upload a valid image', function () {
         ->test('parts.profile.avatar-form', ['model_id' => (string) $profile->id])
         ->set('photo', UploadedFile::fake()->image('avatar.jpg', 400, 400))
         ->call('save')
-        ->assertDispatched('avatar-saved');
+        ->assertDispatched('avatar-uploading')
+        ->assertDispatched('close-modal');
 
-    expect($profile->fresh()->avatar_path)->not->toBeNull();
+    Bus::assertDispatched(ProcessAvatarImage::class);
+    expect($profile->fresh()->avatar_path)->toBeNull();
 });
 
 it('photo is required', function () {
@@ -51,6 +56,7 @@ it('photo cannot exceed 5 MB', function () {
 });
 
 it('non-owner cannot upload an avatar', function () {
+    Bus::fake();
     Storage::fake('local');
     Storage::fake('public');
 
@@ -63,5 +69,6 @@ it('non-owner cannot upload an avatar', function () {
         ->call('save')
         ->assertForbidden();
 
+    Bus::assertNotDispatched(ProcessAvatarImage::class);
     expect($profile->fresh()->avatar_path)->toBeNull();
 });
