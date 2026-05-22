@@ -29,6 +29,7 @@ class Media extends Model
         'caption',
         'width',
         'height',
+        'processed_at',
     ];
 
     protected function casts(): array
@@ -38,7 +39,13 @@ class Media extends Model
             'position' => 'integer',
             'width' => 'integer',
             'height' => 'integer',
+            'processed_at' => 'datetime',
         ];
+    }
+
+    public function isProcessing(): bool
+    {
+        return $this->type === MediaType::Image && $this->processed_at === null;
     }
 
     public function profile(): BelongsTo

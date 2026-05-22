@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('caption')->nullable();
             $table->unsignedSmallInteger('width')->nullable();
             $table->unsignedSmallInteger('height')->nullable();
+            $table->timestamp('processed_at')->nullable();
             $table->timestamps();
 
             $table->unique(['profile_id', 'position']);

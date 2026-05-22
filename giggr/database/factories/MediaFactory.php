@@ -25,7 +25,13 @@ class MediaFactory extends Factory
             'caption' => null,
             'width' => fake()->numberBetween(800, 2400),
             'height' => fake()->numberBetween(600, 1800),
+            'processed_at' => now(),
         ];
+    }
+
+    public function processing(): static
+    {
+        return $this->state(fn () => ['processed_at' => null]);
     }
 
     public function image(): static

@@ -1,14 +1,17 @@
 <?php
 
 use App\Enums\MediaType;
+use App\Jobs\ProcessMediaImage;
 use App\Models\Media;
 use App\Models\Profile;
 use App\Models\User;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Livewire;
 
 beforeEach(function () {
+    Bus::fake();
     Storage::fake('local');
     Storage::fake('public');
 });
@@ -36,7 +39,7 @@ it('owner can upload a JPEG image with a caption', function () {
         ->profile_id->toBe($profile->id);
 });
 
-it('generates thumbnail and medium variants on disk', function () {
+it('queues variant generation rather than running it synchronously', function () {
     $owner = User::factory()->create();
     $profile = Profile::factory()->create(['user_id' => $owner->id]);
 
@@ -45,10 +48,8 @@ it('generates thumbnail and medium variants on disk', function () {
         ->set('photo', UploadedFile::fake()->image('photo.jpg', 800, 600))
         ->call('save');
 
-    $media = Media::first();
-    Storage::disk('public')
-        ->assertExists("media/thumbnail/{$media->source}.webp")
-        ->assertExists("media/medium/{$media->source}.webp");
+    Bus::assertDispatched(ProcessMediaImage::class);
+    expect(Media::first()->processed_at)->toBeNull();
 });
 
 it('assigns the next position automatically (max + 1)', function () {
@@ -241,10 +242,7 @@ it('updates only the caption when no new photo is provided', function () {
         ->and($media->height)->toBe(800);
 });
 
-it('replaces the image and old variants when a new photo is uploaded', function () {
-    Storage::fake('local');
-    Storage::fake('public');
-
+it('replaces the image by queueing a job with the old source for cleanup', function () {
     $owner = User::factory()->create();
     $profile = Profile::factory()->create(['user_id' => $owner->id]);
     $media = Media::factory()->image()->create([
@@ -253,8 +251,6 @@ it('replaces the image and old variants when a new photo is uploaded', function 
         'caption' => 'Avant',
         'position' => 0,
     ]);
-    Storage::disk('public')->put('media/thumbnail/gallery-photo-old.webp', 'fake');
-    Storage::disk('public')->put('media/medium/gallery-photo-old.webp', 'fake');
 
     Livewire::actingAs($owner)
         ->test('parts.profile.add-image-form', ['media_id' => $media->id])
@@ -267,15 +263,16 @@ it('replaces the image and old variants when a new photo is uploaded', function 
     $media->refresh();
     expect($media)
         ->caption->toBe('Après')
+        ->source->toBe('gallery-photo-old')
         ->width->toBe(1600)
         ->and($media->height)->toBe(900)
-        ->and($media->source)->not->toBe('gallery-photo-old');
+        ->and($media->processed_at)->toBeNull();
 
-    Storage::disk('public')
-        ->assertMissing('media/thumbnail/gallery-photo-old.webp')
-        ->assertMissing('media/medium/gallery-photo-old.webp')
-        ->assertExists("media/thumbnail/{$media->source}.webp")
-        ->assertExists("media/medium/{$media->source}.webp");
+    Bus::assertDispatched(
+        ProcessMediaImage::class,
+        fn (ProcessMediaImage $job) => $job->media->id === $media->id
+            && $job->replacedSource === 'gallery-photo-old',
+    );
 });
 
 it('skips the cap check in edit mode (already counted)', function () {

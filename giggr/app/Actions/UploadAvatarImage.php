@@ -20,6 +20,6 @@ class UploadAvatarImage
             'local',
         );
 
-        ProcessAvatarImage::dispatchSync($profile, $tmpPath, $stem);
+        ProcessAvatarImage::dispatch($profile, $tmpPath, $stem);
     }
 }
