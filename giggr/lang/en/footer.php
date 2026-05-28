@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'tagline' => 'The platform that connects amateur musicians.',
+    'tagline' => 'The platform that brings music profiles together.',
     'nav_aria' => 'Footer navigation',
     'home' => 'Home',
     'explore' => 'Explore',

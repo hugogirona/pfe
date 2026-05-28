@@ -21,7 +21,7 @@
         class="block h-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-xl"
     >
         <article
-            data-card="musician"
+            data-card="profile"
             class="group flex flex-col w-full h-full rounded-xl overflow-hidden border border-dark/10 bg-white shadow-sm hover:shadow-md transition-shadow duration-200"
         >
             <div class="relative h-52 shrink-0 bg-dark/5">

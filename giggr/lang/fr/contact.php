@@ -52,11 +52,11 @@ return [
     'faq_q1' => 'La plateforme est-elle gratuite ?',
     'faq_a1' => "Oui, Giggr est entièrement gratuite. L'inscription et la publication d'annonces sont accessibles à tous sans abonnement.",
 
-    'faq_q2' => 'Comment créer mon profil musicien ?',
+    'faq_q2' => 'Comment créer mon profil ?',
     'faq_a2' => 'Après inscription, rendez-vous dans votre espace personnel. Vous pouvez y renseigner vos instruments, genres musicaux, ville et une courte biographie visible par les autres membres.',
 
     'faq_q3' => 'Comment fonctionne le système d\'annonces ?',
-    'faq_a3' => "N'importe quel utilisateur peut publier une annonce pour chercher des musiciens, proposer une session ou organiser un événement. Les annonces sont visibles par tous les membres de la plateforme.",
+    'faq_a3' => "N'importe quel utilisateur peut publier une annonce pour trouver des profils, proposer une session ou organiser un événement. Les annonces sont visibles par tous les membres de la plateforme.",
 
     'faq_q4' => 'Mes données personnelles sont-elles protégées ?',
     'faq_a4' => 'Oui. Nous ne partageons jamais vos données avec des tiers sans votre consentement. Consultez notre politique de confidentialité pour en savoir plus sur la manière dont nous traitons vos informations.',

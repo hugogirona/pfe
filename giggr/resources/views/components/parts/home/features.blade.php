@@ -31,7 +31,7 @@
         </div>
 
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <x-parts.home.feature-kpi value="12" :label="__('home.kpi_musicians')" />
+            <x-parts.home.feature-kpi value="12" :label="__('home.kpi_profiles')" />
             <x-parts.home.feature-kpi value="3" :label="__('home.kpi_ads')" />
 
             <div class="col-span-2 bg-accent/10 border border-accent/20 rounded-2xl py-7 px-6 flex flex-col items-center justify-center text-center gap-4">

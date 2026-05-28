@@ -28,7 +28,7 @@ it('explore shows an announcement from the database', function () {
     $this->seed([CitySeeder::class, InstrumentSeeder::class, GenreSeeder::class]);
     $announcement = Announcement::factory()->create();
 
-    $this->get(route('explore'))
+    $this->get(route('explore', ['tab' => 'annonces']))
         ->assertOk()
         ->assertSee($announcement->title);
 });
@@ -37,7 +37,7 @@ it('explore hides closed announcements', function () {
     $this->seed([CitySeeder::class, InstrumentSeeder::class, GenreSeeder::class]);
     $announcement = Announcement::factory()->create(['status' => AnnouncementStatus::Closed]);
 
-    $this->get(route('explore'))
+    $this->get(route('explore', ['tab' => 'annonces']))
         ->assertOk()
         ->assertDontSee($announcement->title);
 });
@@ -49,7 +49,7 @@ it('explore hides expired announcements', function () {
         'expires_at' => now()->subDay(),
     ]);
 
-    $this->get(route('explore'))
+    $this->get(route('explore', ['tab' => 'annonces']))
         ->assertOk()
         ->assertDontSee($announcement->title);
 });
@@ -69,7 +69,7 @@ it('explore paginates announcements and hides items beyond page one', function (
     Announcement::factory()->count(12)->create();
     $thirteenth = Announcement::factory()->create();
 
-    $this->get(route('explore'))
+    $this->get(route('explore', ['tab' => 'annonces']))
         ->assertOk()
         ->assertDontSee($thirteenth->title);
 });
@@ -85,7 +85,7 @@ it('following filter restricts musicians to profiles the viewer follows', functi
         ->test('pages::explore.index')
         ->set('filterFollowing', true);
 
-    $ids = $component->get('filteredMusicians')->pluck('id')->all();
+    $ids = $component->get('filteredProfiles')->pluck('id')->all();
     expect($ids)->toContain($followed->id)
         ->and($ids)->not->toContain($other->id);
 });
@@ -116,7 +116,7 @@ it('following filter is ignored for guests', function () {
     $component = Livewire::test('pages::explore.index')
         ->set('filterFollowing', true);
 
-    expect($component->get('filteredMusicians')->total())->toBe(3);
+    expect($component->get('filteredProfiles')->total())->toBe(3);
 });
 
 it('following filter counts toward activeFiltersCount when set', function () {
@@ -160,7 +160,7 @@ it('radius filter widens musicians to nearby cities of the selected one', functi
         ->set('filterCityId', $origin->id)
         ->set('filterRadius', 50);
 
-    $ids = $component->get('filteredMusicians')->pluck('id')->all();
+    $ids = $component->get('filteredProfiles')->pluck('id')->all();
     expect($ids)->toContain($hereProfile->id)
         ->and($ids)->toContain($nearProfile->id)
         ->and($ids)->not->toContain($farProfile->id);
@@ -198,7 +198,7 @@ it('radius filter falls back to exact city match when radius is 0', function () 
         ->set('filterCityId', $here->id)
         ->set('filterRadius', 0);
 
-    $ids = $component->get('filteredMusicians')->pluck('id')->all();
+    $ids = $component->get('filteredProfiles')->pluck('id')->all();
     expect($ids)->toContain($hereProfile->id)
         ->and($ids)->not->toContain($nearProfile->id);
 });
@@ -211,7 +211,7 @@ it('radius filter is ignored when no city is selected', function () {
         ->set('filterCityId', null)
         ->set('filterRadius', 25);
 
-    expect($component->get('filteredMusicians')->total())->toBe(3);
+    expect($component->get('filteredProfiles')->total())->toBe(3);
 });
 
 it('radius counts toward activeFiltersCount only when both city and radius are set', function () {
@@ -264,4 +264,40 @@ it('type filter counts toward activeFiltersCount per selected type', function ()
         ->assertSet('activeFiltersCount', 0)
         ->set('filterTypes', ['gig', 'lessons'])
         ->assertSet('activeFiltersCount', 2);
+});
+
+it('active tab defaults to profils when no segment is given', function () {
+    Livewire::test('pages::explore.index')
+        ->assertSet('activeTab', 'profils');
+});
+
+it('active tab initializes from the route segment', function () {
+    Livewire::test('pages::explore.index', ['tab' => 'annonces'])
+        ->assertSet('activeTab', 'annonces');
+});
+
+it('route generates a path-segment URL when tab is given', function () {
+    expect(route('explore', ['tab' => 'annonces']))->toEndWith('/explorer/annonces')
+        ->and(route('explore', ['tab' => 'profils']))->toEndWith('/explorer/profils');
+});
+
+it('route rejects an invalid tab segment with 404', function () {
+    $this->get('/explorer/bogus')->assertNotFound();
+});
+
+it('legacy /explorer/musiciens segment no longer matches after rename', function () {
+    $this->get('/explorer/musiciens')->assertNotFound();
+});
+
+it('switching the active tab renders only that tab section', function () {
+    $this->seed([CitySeeder::class, InstrumentSeeder::class, GenreSeeder::class]);
+    $profile = Profile::factory()->create();
+    $announcement = Announcement::factory()->create();
+
+    Livewire::test('pages::explore.index')
+        ->assertSee($profile->user->full_name)
+        ->assertDontSee($announcement->title)
+        ->set('activeTab', 'annonces')
+        ->assertSee($announcement->title)
+        ->assertDontSee($profile->user->full_name);
 });

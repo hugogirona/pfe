@@ -5,10 +5,9 @@ use App\Notifications\WelcomeWithVerificationCode;
 use Illuminate\Auth\Events\Verified;
 use Illuminate\Cache\RateLimiter;
 use Livewire\Attributes\Layout;
-use Livewire\Attributes\Title;
 use Livewire\Component;
 
-new #[Layout('layouts.auth')] #[Title('Vérifier ton email — Giggr.')] class extends Component {
+new #[Layout('layouts.auth')] class extends Component {
     public string $code = '';
 
     public ?string $error = null;

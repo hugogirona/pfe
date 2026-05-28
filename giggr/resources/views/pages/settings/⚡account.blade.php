@@ -4,10 +4,9 @@ use App\Models\User;
 use Illuminate\Support\Collection;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Layout;
-use Livewire\Attributes\Title;
 use Livewire\Component;
 
-new #[Layout('layouts.app')] #[Title('Paramètres — Giggr.')] class extends Component {
+new #[Layout('layouts.app')] class extends Component {
     /** @var array<int, int> */
     public array $initialUserIds = [];
 

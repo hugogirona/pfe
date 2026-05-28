@@ -36,8 +36,8 @@ new class extends Component {
     <div class="max-w-6xl mx-auto px-6">
 
         <div class="text-center mb-10">
-            <h2 class="font-heading text-4xl md:text-5xl text-dark">{{ __('home.musicians_title') }}</h2>
-            <p class="mt-4 text-base md:text-lg text-dark/55">{{ __('home.musicians_subtitle') }}</p>
+            <h2 class="font-heading text-4xl md:text-5xl text-dark">{{ __('home.profiles_title') }}</h2>
+            <p class="mt-4 text-base md:text-lg text-dark/55">{{ __('home.profiles_subtitle') }}</p>
         </div>
 
         <div
@@ -61,7 +61,7 @@ new class extends Component {
             >
                 @foreach ($profiles as $profile)
                     <div class="{{ $cardClass }}">
-                        <x-musician-card :profile="$profile" :followed-profile-ids="$followedProfileIds" />
+                        <x-profile-card :profile="$profile" :followed-profile-ids="$followedProfileIds" />
                     </div>
                 @endforeach
             </div>
