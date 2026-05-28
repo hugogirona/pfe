@@ -1,9 +1,10 @@
-@props(['musiciansCount' => 0, 'announcementsCount' => 0, 'activeFiltersCount' => 0])
+@props(['activeTab' => 'profils', 'profilesCount' => 0, 'announcementsCount' => 0, 'activeFiltersCount' => 0])
 
 <div class="flex items-center justify-between gap-4 flex-wrap">
     <x-parts.explore.tab-switcher
-        :musicians-count="$musiciansCount"
+        :active-tab="$activeTab"
+        :profiles-count="$profilesCount"
         :announcements-count="$announcementsCount"
     />
-    <x-parts.explore.toolbar :active-filters-count="$activeFiltersCount" />
+    <x-parts.explore.toolbar :active-tab="$activeTab" :active-filters-count="$activeFiltersCount" />
 </div>

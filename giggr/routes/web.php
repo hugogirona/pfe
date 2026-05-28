@@ -37,7 +37,9 @@ Route::group([
 ], function () {
 
     Route::livewire('/', 'pages::home.index')->name('home');
-    Route::livewire('/explorer', 'pages::explore.index')->name('explore');
+    Route::livewire('/explorer/{tab?}', 'pages::explore.index')
+        ->name('explore')
+        ->where('tab', 'profils|annonces');
     Route::livewire('/profil/{id}', 'pages::profile.index')->name('profile')->middleware(['auth', 'verified']);
     Route::livewire('/annonces/{id}', 'pages::announcement.index')->name('announcement')->middleware(['auth', 'verified']);
     Route::livewire('/contact', 'pages::contact.index')->name('contact');

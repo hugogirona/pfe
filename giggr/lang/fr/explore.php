@@ -2,10 +2,10 @@
 
 return [
     'title' => 'Explorer',
-    'subtitle' => 'Musiciens et annonces près de chez vous.',
+    'subtitle' => 'Profils et annonces près de chez vous.',
 
     // Tabs
-    'tab_musicians' => 'Musiciens',
+    'tab_profiles' => 'Profils',
     'tab_announcements' => 'Annonces',
 
     // Filters
@@ -23,11 +23,11 @@ return [
     'filter_title' => 'Filtres',
     'filter_close' => 'Fermer les filtres',
     'filter_see' => 'Voir',
-    'tab_musicians_lc' => 'musiciens',
+    'tab_profiles_lc' => 'profils',
     'tab_announcements_lc' => 'annonces',
 
     // Results
-    'results_musicians' => ':n musicien|:n musiciens',
+    'results_profiles' => ':n profil|:n profils',
     'results_announcements' => ':n annonce|:n annonces',
     'no_results_title' => 'Aucun résultat',
     'no_results_text' => 'Essayez d\'élargir votre recherche ou de retirer des filtres.',

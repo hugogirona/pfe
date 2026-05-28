@@ -16,12 +16,19 @@ new #[Layout('layouts.app')] #[Title('Explorer — Giggr.')] class extends Compo
 {
     use WithPagination;
 
+    public string $activeTab = 'profils';
+
     public ?int   $filterCityId      = null;
     public int    $filterRadius      = 0;
     public array  $filterInstruments = [];
     public array  $filterGenres      = [];
     public array  $filterTypes       = [];
     public bool   $filterFollowing   = false;
+
+    public function mount(?string $tab = null): void
+    {
+        $this->activeTab = $tab === 'annonces' ? 'annonces' : 'profils';
+    }
 
     #[Computed]
     public function targetCity(): ?City
@@ -38,7 +45,7 @@ new #[Layout('layouts.app')] #[Title('Explorer — Giggr.')] class extends Compo
     }
 
     #[Computed]
-    public function filteredMusicians(): LengthAwarePaginator
+    public function filteredProfiles(): LengthAwarePaginator
     {
         $followingActive = $this->filterFollowing && auth()->check();
 
@@ -60,7 +67,7 @@ new #[Layout('layouts.app')] #[Title('Explorer — Giggr.')] class extends Compo
             ))
             ->when($followingActive, fn ($q) => $q->whereIn('id', $this->followedProfileIdsForFilter))
             ->orderBy('profiles.id')
-            ->paginate(12, pageName: 'musicians-page');
+            ->paginate(12, pageName: 'profiles-page');
     }
 
     #[Computed]
@@ -101,7 +108,7 @@ new #[Layout('layouts.app')] #[Title('Explorer — Giggr.')] class extends Compo
             return [];
         }
 
-        $profileIds = $this->filteredMusicians->pluck('id')->all();
+        $profileIds = $this->filteredProfiles->pluck('id')->all();
         if ($profileIds === []) {
             return [];
         }
@@ -135,6 +142,7 @@ new #[Layout('layouts.app')] #[Title('Explorer — Giggr.')] class extends Compo
             genres:      $this->filterGenres,
             types:       $this->filterTypes,
             following:   $this->filterFollowing,
+            activeTab:   $this->activeTab,
         );
     }
 
@@ -147,13 +155,13 @@ new #[Layout('layouts.app')] #[Title('Explorer — Giggr.')] class extends Compo
         $this->filterGenres      = $genres;
         $this->filterTypes       = $types;
         $this->filterFollowing   = $following;
-        $this->resetPage('musicians-page');
+        $this->resetPage('profiles-page');
         $this->resetPage('announcements-page');
     }
 };
 ?>
 
-<div x-data="explorerTabs">
+<div>
 
     <x-page-header :title="__('explore.title')" :subtitle="__('explore.subtitle')" />
 
@@ -162,53 +170,45 @@ new #[Layout('layouts.app')] #[Title('Explorer — Giggr.')] class extends Compo
     <div class="max-w-6xl mx-auto px-6 py-8 space-y-6">
 
         <x-parts.explore.actions
-            :musicians-count="$this->filteredMusicians->total()"
+            :active-tab="$activeTab"
+            :profiles-count="$this->filteredProfiles->total()"
             :announcements-count="$this->filteredAnnouncements->total()"
             :active-filters-count="$this->activeFiltersCount"
         />
 
-        <section
-            x-show="activeTab === 'musiciens'"
-            x-transition:enter="transition ease-out duration-200"
-            x-transition:enter-start="opacity-0"
-            x-transition:enter-end="opacity-100"
-        >
-            <h2 class="sr-only">{{ __('explore.tab_musicians') }}</h2>
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                @foreach ($this->filteredMusicians as $profile)
-                    <x-musician-card :profile="$profile" :followed-profile-ids="$this->followedProfileIds" />
-                @endforeach
-            </div>
-            @if ($this->filteredMusicians->isEmpty())
-                <x-parts.explore.empty-state />
-            @else
-                <div class="mt-8">
-                    {{ $this->filteredMusicians->links() }}
+        @if ($activeTab === 'profils')
+            <section>
+                <h2 class="sr-only">{{ __('explore.tab_profiles') }}</h2>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    @foreach ($this->filteredProfiles as $profile)
+                        <x-profile-card :profile="$profile" :followed-profile-ids="$this->followedProfileIds" />
+                    @endforeach
                 </div>
-            @endif
-        </section>
-
-        <section
-            x-show="activeTab === 'annonces'"
-            style="display:none"
-            x-transition:enter="transition ease-out duration-200"
-            x-transition:enter-start="opacity-0"
-            x-transition:enter-end="opacity-100"
-        >
-            <h2 class="sr-only">{{ __('explore.tab_announcements') }}</h2>
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                @foreach ($this->filteredAnnouncements as $announcement)
-                    <x-parts.explore.announcement-card :announcement="$announcement" />
-                @endforeach
-            </div>
-            @if ($this->filteredAnnouncements->isEmpty())
-                <x-parts.explore.empty-state />
-            @else
-                <div class="mt-8">
-                    {{ $this->filteredAnnouncements->links() }}
+                @if ($this->filteredProfiles->isEmpty())
+                    <x-parts.explore.empty-state />
+                @else
+                    <div class="mt-8">
+                        {{ $this->filteredProfiles->links() }}
+                    </div>
+                @endif
+            </section>
+        @else
+            <section>
+                <h2 class="sr-only">{{ __('explore.tab_announcements') }}</h2>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    @foreach ($this->filteredAnnouncements as $announcement)
+                        <x-parts.explore.announcement-card :announcement="$announcement" />
+                    @endforeach
                 </div>
-            @endif
-        </section>
+                @if ($this->filteredAnnouncements->isEmpty())
+                    <x-parts.explore.empty-state />
+                @else
+                    <div class="mt-8">
+                        {{ $this->filteredAnnouncements->links() }}
+                    </div>
+                @endif
+            </section>
+        @endif
 
     </div>
 

@@ -24,7 +24,7 @@
 
         {{-- Back link --}}
         <a
-            href="{{ route('explore') }}?tab=annonces"
+            href="{{ route('explore', ['tab' => 'annonces']) }}"
             class="inline-flex items-center gap-1.5 text-sm text-bg/60 hover:text-bg transition-colors duration-150 mb-6 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-bg/50 rounded"
         >
             {{ __('announcement.back_to_explore') }}

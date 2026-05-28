@@ -8,6 +8,7 @@ use Livewire\Component;
 
 new class extends Component {
     public bool $open = false;
+    public string $activeTab = 'profils';
     public ?int $draftCityId = null;
     public int $draftRadius = 0;
     public array $draftInstruments = [];
@@ -32,7 +33,7 @@ new class extends Component {
     }
 
     #[On('open-filter-drawer')]
-    public function open(?int $cityId = null, int $radius = 0, array $instruments = [], array $genres = [], array $types = [], bool $following = false): void
+    public function open(?int $cityId = null, int $radius = 0, array $instruments = [], array $genres = [], array $types = [], bool $following = false, string $activeTab = 'profils'): void
     {
         $this->draftCityId = $cityId;
         $this->draftRadius = $radius;
@@ -40,6 +41,7 @@ new class extends Component {
         $this->draftGenres = $genres;
         $this->draftTypes = $types;
         $this->draftFollowing = $following;
+        $this->activeTab = $activeTab;
         $this->open = true;
     }
 
@@ -181,11 +183,12 @@ new class extends Component {
                 :disabled="$draftCityId === null"
             />
 
-            <x-parts.explore.type-filter
-                :types="$availableTypes"
-                :selected="$draftTypes"
-                visible-on="activeTab === 'annonces'"
-            />
+            @if ($activeTab === 'annonces')
+                <x-parts.explore.type-filter
+                    :types="$availableTypes"
+                    :selected="$draftTypes"
+                />
+            @endif
 
             @auth
                 {{-- Comptes suivis --}}
