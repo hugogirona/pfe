@@ -25,6 +25,8 @@ return [
     'filter_see' => 'Voir',
     'tab_profiles_lc' => 'profils',
     'tab_announcements_lc' => 'annonces',
+    'tab_profiles_slug' => 'profils',
+    'tab_announcements_slug' => 'annonces',
 
     // Results
     'results_profiles' => ':n profil|:n profils',

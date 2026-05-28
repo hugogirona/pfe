@@ -25,6 +25,8 @@ return [
     'filter_see' => 'See',
     'tab_profiles_lc' => 'profiles',
     'tab_announcements_lc' => 'listings',
+    'tab_profiles_slug' => 'profiles',
+    'tab_announcements_slug' => 'listings',
 
     // Results
     'results_profiles' => ':n profile|:n profiles',

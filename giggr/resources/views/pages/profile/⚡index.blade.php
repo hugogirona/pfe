@@ -5,11 +5,9 @@ use App\Models\Instrument;
 use App\Models\Profile;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\On;
-use Livewire\Attributes\Title;
 use Livewire\Component;
 
 new #[Layout('layouts.app')]
-#[Title('Profil — Giggr.')]
 class extends Component {
     public Profile $profile;
     public bool $isOwner = false;

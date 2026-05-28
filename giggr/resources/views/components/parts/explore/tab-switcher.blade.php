@@ -2,7 +2,7 @@
 
 <div class="inline-flex bg-dark/[0.06] rounded-xl p-1 gap-1" role="tablist">
     <a
-        href="{{ route('explore', ['tab' => 'profils']) }}"
+        href="{{ route('explore', ['tab' => __('explore.tab_profiles_slug')]) }}"
         wire:navigate
         @class([
             'px-5 py-2 rounded-lg text-sm font-medium transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent',
@@ -17,7 +17,7 @@
     </a>
 
     <a
-        href="{{ route('explore', ['tab' => 'annonces']) }}"
+        href="{{ route('explore', ['tab' => __('explore.tab_announcements_slug')]) }}"
         wire:navigate
         @class([
             'px-5 py-2 rounded-lg text-sm font-medium transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent',

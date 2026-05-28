@@ -8,11 +8,10 @@ use Illuminate\Pagination\LengthAwarePaginator;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\On;
-use Livewire\Attributes\Title;
 use Livewire\Component;
 use Livewire\WithPagination;
 
-new #[Layout('layouts.app')] #[Title('Explorer — Giggr.')] class extends Component
+new #[Layout('layouts.app')] class extends Component
 {
     use WithPagination;
 
@@ -27,7 +26,7 @@ new #[Layout('layouts.app')] #[Title('Explorer — Giggr.')] class extends Compo
 
     public function mount(?string $tab = null): void
     {
-        $this->activeTab = $tab === 'annonces' ? 'annonces' : 'profils';
+        $this->activeTab = in_array($tab, ['annonces', 'listings'], true) ? 'annonces' : 'profils';
     }
 
     #[Computed]
