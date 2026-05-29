@@ -4,6 +4,8 @@ use App\Enums\AnnouncementStatus;
 use App\Enums\AnnouncementType;
 use App\Models\Announcement;
 use App\Models\City;
+use App\Models\Genre;
+use App\Models\Instrument;
 use App\Models\Profile;
 use App\Models\User;
 use Database\Seeders\CitySeeder;
@@ -320,7 +322,7 @@ it('orders announcements newest first', function () {
 it('profile card renders a "+N" overflow pill when a profile has more than 2 instruments', function () {
     $this->seed([CitySeeder::class, InstrumentSeeder::class, GenreSeeder::class]);
     $profile = Profile::factory()->create();
-    $profile->instruments()->sync(\App\Models\Instrument::take(5)->pluck('id'));
+    $profile->instruments()->sync(Instrument::take(5)->pluck('id'));
 
     $this->get(route('explore'))
         ->assertOk()
@@ -330,11 +332,40 @@ it('profile card renders a "+N" overflow pill when a profile has more than 2 ins
 it('announcement card renders a "+N" overflow pill when an announcement has more than 2 genres', function () {
     $this->seed([CitySeeder::class, InstrumentSeeder::class, GenreSeeder::class]);
     $announcement = Announcement::factory()->create();
-    $announcement->genres()->sync(\App\Models\Genre::take(4)->pluck('id'));
+    $announcement->genres()->sync(Genre::take(4)->pluck('id'));
 
     $this->get(route('explore', ['tab' => 'annonces']))
         ->assertOk()
         ->assertSee('+2');
+});
+
+it('explore refreshes its announcement list when an announcement-updated event fires', function () {
+    $this->seed([CitySeeder::class, InstrumentSeeder::class, GenreSeeder::class]);
+    $announcement = Announcement::factory()->create(['title' => 'Original title']);
+
+    $component = Livewire::test('pages::explore.index', ['tab' => 'annonces'])
+        ->assertSee('Original title');
+
+    $announcement->update(['title' => 'Edited title']);
+
+    $component
+        ->dispatch('announcement-updated', id: $announcement->id)
+        ->assertSee('Edited title')
+        ->assertDontSee('Original title');
+});
+
+it('explore refreshes its announcement list when an announcement-deleted event fires', function () {
+    $this->seed([CitySeeder::class, InstrumentSeeder::class, GenreSeeder::class]);
+    $announcement = Announcement::factory()->create(['title' => 'Doomed title']);
+
+    $component = Livewire::test('pages::explore.index', ['tab' => 'annonces'])
+        ->assertSee('Doomed title');
+
+    $announcement->delete();
+
+    $component
+        ->dispatch('announcement-deleted', id: $announcement->id)
+        ->assertDontSee('Doomed title');
 });
 
 it('profile card truncates the bio with an ellipsis when too long', function () {
