@@ -4,6 +4,8 @@ use App\Enums\AnnouncementStatus;
 use App\Enums\AnnouncementType;
 use App\Models\Announcement;
 use App\Models\City;
+use App\Models\Genre;
+use App\Models\Instrument;
 use App\Models\Profile;
 use App\Models\User;
 use Database\Seeders\CitySeeder;
@@ -56,22 +58,22 @@ it('explore hides expired announcements', function () {
 
 it('explore paginates musicians and hides items beyond page one', function () {
     $this->seed([CitySeeder::class, InstrumentSeeder::class, GenreSeeder::class]);
+    $oldest = Profile::factory()->create(['created_at' => now()->subYear()]);
     Profile::factory()->count(12)->create();
-    $thirteenth = Profile::factory()->create();
 
     $this->get(route('explore'))
         ->assertOk()
-        ->assertDontSee($thirteenth->user->full_name);
+        ->assertDontSee($oldest->user->full_name);
 });
 
 it('explore paginates announcements and hides items beyond page one', function () {
     $this->seed([CitySeeder::class, InstrumentSeeder::class, GenreSeeder::class]);
+    $oldest = Announcement::factory()->create(['created_at' => now()->subYear()]);
     Announcement::factory()->count(12)->create();
-    $thirteenth = Announcement::factory()->create();
 
     $this->get(route('explore', ['tab' => 'annonces']))
         ->assertOk()
-        ->assertDontSee($thirteenth->title);
+        ->assertDontSee($oldest->title);
 });
 
 it('following filter restricts musicians to profiles the viewer follows', function () {
@@ -266,14 +268,14 @@ it('type filter counts toward activeFiltersCount per selected type', function ()
         ->assertSet('activeFiltersCount', 2);
 });
 
-it('active tab defaults to profils when no segment is given', function () {
+it('active tab defaults to profiles when no segment is given', function () {
     Livewire::test('pages::explore.index')
-        ->assertSet('activeTab', 'profils');
+        ->assertSet('activeTab', 'profiles');
 });
 
 it('active tab initializes from the route segment', function () {
     Livewire::test('pages::explore.index', ['tab' => 'annonces'])
-        ->assertSet('activeTab', 'annonces');
+        ->assertSet('activeTab', 'announcements');
 });
 
 it('route generates a path-segment URL when tab is given', function () {
@@ -289,6 +291,93 @@ it('legacy /explorer/musiciens segment no longer matches after rename', function
     $this->get('/explorer/musiciens')->assertNotFound();
 });
 
+it('orders profiles newest first', function () {
+    $this->seed([CitySeeder::class, InstrumentSeeder::class, GenreSeeder::class]);
+    $oldest = Profile::factory()->create(['created_at' => now()->subDays(3)]);
+    $middle = Profile::factory()->create(['created_at' => now()->subDay()]);
+    $newest = Profile::factory()->create(['created_at' => now()]);
+
+    $ids = Livewire::test('pages::explore.index')
+        ->get('filteredProfiles')
+        ->pluck('id')
+        ->all();
+
+    expect($ids)->toBe([$newest->id, $middle->id, $oldest->id]);
+});
+
+it('orders announcements newest first', function () {
+    $this->seed([CitySeeder::class, InstrumentSeeder::class, GenreSeeder::class]);
+    $oldest = Announcement::factory()->create(['created_at' => now()->subDays(3)]);
+    $middle = Announcement::factory()->create(['created_at' => now()->subDay()]);
+    $newest = Announcement::factory()->create(['created_at' => now()]);
+
+    $ids = Livewire::test('pages::explore.index')
+        ->get('filteredAnnouncements')
+        ->pluck('id')
+        ->all();
+
+    expect($ids)->toBe([$newest->id, $middle->id, $oldest->id]);
+});
+
+it('profile card renders a "+N" overflow pill when a profile has more than 2 instruments', function () {
+    $this->seed([CitySeeder::class, InstrumentSeeder::class, GenreSeeder::class]);
+    $profile = Profile::factory()->create();
+    $profile->instruments()->sync(Instrument::take(5)->pluck('id'));
+
+    $this->get(route('explore'))
+        ->assertOk()
+        ->assertSee('+3');
+});
+
+it('announcement card renders a "+N" overflow pill when an announcement has more than 2 genres', function () {
+    $this->seed([CitySeeder::class, InstrumentSeeder::class, GenreSeeder::class]);
+    $announcement = Announcement::factory()->create();
+    $announcement->genres()->sync(Genre::take(4)->pluck('id'));
+
+    $this->get(route('explore', ['tab' => 'annonces']))
+        ->assertOk()
+        ->assertSee('+2');
+});
+
+it('explore refreshes its announcement list when an announcement-updated event fires', function () {
+    $this->seed([CitySeeder::class, InstrumentSeeder::class, GenreSeeder::class]);
+    $announcement = Announcement::factory()->create(['title' => 'Original title']);
+
+    $component = Livewire::test('pages::explore.index', ['tab' => 'annonces'])
+        ->assertSee('Original title');
+
+    $announcement->update(['title' => 'Edited title']);
+
+    $component
+        ->dispatch('announcement-updated', id: $announcement->id)
+        ->assertSee('Edited title')
+        ->assertDontSee('Original title');
+});
+
+it('explore refreshes its announcement list when an announcement-deleted event fires', function () {
+    $this->seed([CitySeeder::class, InstrumentSeeder::class, GenreSeeder::class]);
+    $announcement = Announcement::factory()->create(['title' => 'Doomed title']);
+
+    $component = Livewire::test('pages::explore.index', ['tab' => 'annonces'])
+        ->assertSee('Doomed title');
+
+    $announcement->delete();
+
+    $component
+        ->dispatch('announcement-deleted', id: $announcement->id)
+        ->assertDontSee('Doomed title');
+});
+
+it('profile card truncates the bio with an ellipsis when too long', function () {
+    $this->seed([CitySeeder::class, InstrumentSeeder::class, GenreSeeder::class]);
+    $longBio = str_repeat('Lorem ipsum dolor sit amet consectetur adipiscing elit. ', 10);
+    $profile = Profile::factory()->create(['bio' => $longBio]);
+
+    $this->get(route('explore'))
+        ->assertOk()
+        ->assertDontSee($longBio, false);
+});
+
 it('switching the active tab renders only that tab section', function () {
     $this->seed([CitySeeder::class, InstrumentSeeder::class, GenreSeeder::class]);
     $profile = Profile::factory()->create();
@@ -297,7 +386,7 @@ it('switching the active tab renders only that tab section', function () {
     Livewire::test('pages::explore.index')
         ->assertSee($profile->user->full_name)
         ->assertDontSee($announcement->title)
-        ->set('activeTab', 'annonces')
+        ->set('activeTab', 'announcements')
         ->assertSee($announcement->title)
         ->assertDontSee($profile->user->full_name);
 });

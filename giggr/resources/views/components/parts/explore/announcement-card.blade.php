@@ -1,6 +1,13 @@
 @props(['announcement'])
 
-@php $isOwner = auth()->check() && auth()->id() === $announcement->user_id; @endphp
+@php
+    $isOwner           = auth()->check() && auth()->id() === $announcement->user_id;
+    $pillLimit         = 2;
+    $shownInstruments  = $announcement->instruments->take($pillLimit);
+    $extraInstruments  = max(0, $announcement->instruments->count() - $pillLimit);
+    $shownGenres       = $announcement->genres->take($pillLimit);
+    $extraGenres       = max(0, $announcement->genres->count() - $pillLimit);
+@endphp
 
 <div class="relative h-full">
     @if ($isOwner)
@@ -22,7 +29,6 @@
         class="block h-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-xl"
     >
         <article
-            data-card="announcement"
             class="group flex flex-col w-full h-full rounded-xl overflow-hidden border border-dark/10 bg-white shadow-sm hover:shadow-md transition-shadow duration-200"
         >
             {{-- Header --}}
@@ -38,15 +44,21 @@
 
             {{-- Content --}}
             <div class="flex-1 px-5 py-4 space-y-3">
-                <p class="text-sm text-dark/55 leading-relaxed line-clamp-3">{{ $announcement->description }}</p>
+                <p class="text-sm text-dark/55 leading-relaxed line-clamp-3">{{ Str::limit($announcement->description, 180) }}</p>
 
                 <div class="flex flex-wrap gap-1.5">
-                    @foreach ($announcement->instruments as $instrument)
+                    @foreach ($shownInstruments as $instrument)
                         <x-pill variant="instrument">{{ $instrument->name }}</x-pill>
                     @endforeach
-                    @foreach ($announcement->genres as $genre)
+                    @if ($extraInstruments > 0)
+                        <x-pill variant="instrument">+{{ $extraInstruments }}</x-pill>
+                    @endif
+                    @foreach ($shownGenres as $genre)
                         <x-pill variant="genre">{{ $genre->name }}</x-pill>
                     @endforeach
+                    @if ($extraGenres > 0)
+                        <x-pill variant="genre">+{{ $extraGenres }}</x-pill>
+                    @endif
                 </div>
             </div>
 
