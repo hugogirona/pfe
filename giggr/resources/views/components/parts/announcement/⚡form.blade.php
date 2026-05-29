@@ -75,23 +75,24 @@ new class extends Component {
             $announcement->genres()->sync($this->selectedGenres);
 
             $this->dispatch('announcement-updated', id: $announcement->id);
-        } else {
-            $announcement = Announcement::create([
-                'user_id' => auth()->id(),
-                'city_id' => $this->city_id,
-                'title' => $this->title,
-                'description' => $this->description,
-                'type' => $this->type,
-                'status' => AnnouncementStatus::Open,
-            ]);
+            $this->success = true;
 
-            $announcement->instruments()->sync($this->selectedInstruments);
-            $announcement->genres()->sync($this->selectedGenres);
-
-            $this->dispatch('announcement-created', id: $announcement->id);
+            return;
         }
 
-        $this->success = true;
+        $announcement = Announcement::create([
+            'user_id' => auth()->id(),
+            'city_id' => $this->city_id,
+            'title' => $this->title,
+            'description' => $this->description,
+            'type' => $this->type,
+            'status' => AnnouncementStatus::Open,
+        ]);
+
+        $announcement->instruments()->sync($this->selectedInstruments);
+        $announcement->genres()->sync($this->selectedGenres);
+
+        $this->redirectRoute('announcement', ['id' => $announcement->id], navigate: true);
     }
 
     public function delete(): void
