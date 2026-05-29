@@ -65,7 +65,8 @@ new #[Layout('layouts.app')] class extends Component
                 'genres', fn ($q2) => $q2->whereIn('name', $this->filterGenres)
             ))
             ->when($followingActive, fn ($q) => $q->whereIn('id', $this->followedProfileIdsForFilter))
-            ->orderBy('profiles.id')
+            ->orderByDesc('profiles.created_at')
+            ->orderByDesc('profiles.id')
             ->paginate(12, pageName: 'profiles-page');
     }
 
@@ -95,7 +96,8 @@ new #[Layout('layouts.app')] class extends Component
             ->when($followingActive, fn ($q) => $q->whereHas(
                 'user.profile', fn ($q2) => $q2->whereIn('id', $this->followedProfileIdsForFilter)
             ))
-            ->orderBy('announcements.id')
+            ->orderByDesc('announcements.created_at')
+            ->orderByDesc('announcements.id')
             ->paginate(12, pageName: 'announcements-page');
     }
 

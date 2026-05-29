@@ -56,22 +56,22 @@ it('explore hides expired announcements', function () {
 
 it('explore paginates musicians and hides items beyond page one', function () {
     $this->seed([CitySeeder::class, InstrumentSeeder::class, GenreSeeder::class]);
+    $oldest = Profile::factory()->create(['created_at' => now()->subYear()]);
     Profile::factory()->count(12)->create();
-    $thirteenth = Profile::factory()->create();
 
     $this->get(route('explore'))
         ->assertOk()
-        ->assertDontSee($thirteenth->user->full_name);
+        ->assertDontSee($oldest->user->full_name);
 });
 
 it('explore paginates announcements and hides items beyond page one', function () {
     $this->seed([CitySeeder::class, InstrumentSeeder::class, GenreSeeder::class]);
+    $oldest = Announcement::factory()->create(['created_at' => now()->subYear()]);
     Announcement::factory()->count(12)->create();
-    $thirteenth = Announcement::factory()->create();
 
     $this->get(route('explore', ['tab' => 'annonces']))
         ->assertOk()
-        ->assertDontSee($thirteenth->title);
+        ->assertDontSee($oldest->title);
 });
 
 it('following filter restricts musicians to profiles the viewer follows', function () {
@@ -287,6 +287,34 @@ it('route rejects an invalid tab segment with 404', function () {
 
 it('legacy /explorer/musiciens segment no longer matches after rename', function () {
     $this->get('/explorer/musiciens')->assertNotFound();
+});
+
+it('orders profiles newest first', function () {
+    $this->seed([CitySeeder::class, InstrumentSeeder::class, GenreSeeder::class]);
+    $oldest = Profile::factory()->create(['created_at' => now()->subDays(3)]);
+    $middle = Profile::factory()->create(['created_at' => now()->subDay()]);
+    $newest = Profile::factory()->create(['created_at' => now()]);
+
+    $ids = Livewire::test('pages::explore.index')
+        ->get('filteredProfiles')
+        ->pluck('id')
+        ->all();
+
+    expect($ids)->toBe([$newest->id, $middle->id, $oldest->id]);
+});
+
+it('orders announcements newest first', function () {
+    $this->seed([CitySeeder::class, InstrumentSeeder::class, GenreSeeder::class]);
+    $oldest = Announcement::factory()->create(['created_at' => now()->subDays(3)]);
+    $middle = Announcement::factory()->create(['created_at' => now()->subDay()]);
+    $newest = Announcement::factory()->create(['created_at' => now()]);
+
+    $ids = Livewire::test('pages::explore.index')
+        ->get('filteredAnnouncements')
+        ->pluck('id')
+        ->all();
+
+    expect($ids)->toBe([$newest->id, $middle->id, $oldest->id]);
 });
 
 it('switching the active tab renders only that tab section', function () {
