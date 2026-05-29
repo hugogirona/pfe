@@ -52,11 +52,11 @@ return [
     'faq_q1' => 'Is the platform free?',
     'faq_a1' => 'Yes, Giggr is completely free. Registration and posting announcements are available to everyone without a subscription.',
 
-    'faq_q2' => 'How do I create my musician profile?',
+    'faq_q2' => 'How do I create my profile?',
     'faq_a2' => 'After signing up, go to your personal space. You can fill in your instruments, music genres, city and a short bio visible to other members.',
 
     'faq_q3' => 'How does the announcement system work?',
-    'faq_a3' => 'Any user can post an announcement to find musicians, propose a session or organise an event. Announcements are visible to all members of the platform.',
+    'faq_a3' => 'Any user can post an announcement to find profiles, propose a session or organise an event. Announcements are visible to all members of the platform.',
 
     'faq_q4' => 'Is my personal data protected?',
     'faq_a4' => 'Yes. We never share your data with third parties without your consent. Read our privacy policy to learn more about how we handle your information.',

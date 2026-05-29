@@ -2,12 +2,9 @@
     'types',
     'selected',
     'toggleMethod' => 'toggleType',
-    'visibleOn' => null,
 ])
 
-<section
-    @if ($visibleOn) x-show="{{ $visibleOn }}" x-cloak @endif
->
+<section>
     <div class="flex items-center justify-between mb-3">
         <h3 class="text-xs font-semibold uppercase tracking-widest text-dark/40">
             {{ __('explore.filter_types') }}

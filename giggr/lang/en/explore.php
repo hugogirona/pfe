@@ -2,10 +2,10 @@
 
 return [
     'title' => 'Explore',
-    'subtitle' => 'Musicians and listings near you.',
+    'subtitle' => 'Profiles and listings near you.',
 
     // Tabs
-    'tab_musicians' => 'Musicians',
+    'tab_profiles' => 'Profiles',
     'tab_announcements' => 'Listings',
 
     // Filters
@@ -23,11 +23,13 @@ return [
     'filter_title' => 'Filters',
     'filter_close' => 'Close filters',
     'filter_see' => 'See',
-    'tab_musicians_lc' => 'musicians',
+    'tab_profiles_lc' => 'profiles',
     'tab_announcements_lc' => 'listings',
+    'tab_profiles_slug' => 'profiles',
+    'tab_announcements_slug' => 'listings',
 
     // Results
-    'results_musicians' => ':n musician|:n musicians',
+    'results_profiles' => ':n profile|:n profiles',
     'results_announcements' => ':n listing|:n listings',
     'no_results_title' => 'No results',
     'no_results_text' => 'Try broadening your search or removing some filters.',

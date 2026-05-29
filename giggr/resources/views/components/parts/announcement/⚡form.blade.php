@@ -185,7 +185,7 @@ new class extends Component {
                     class="block text-sm font-medium text-dark/70 mb-1.5">{{ __('announcement.form_instruments_label') }}</legend>
                 <div class="grid grid-cols-2 gap-x-4 gap-y-2">
                     @foreach ($availableInstruments as $instr)
-                        <x-form.checkbox :name="'instrument_' . $instr['id']" wire:model="selectedInstruments"
+                        <x-form.checkbox :name="'announcement_form_instrument_' . $instr['id']" wire:model="selectedInstruments"
                                          value="{{ $instr['id'] }}">
                             {{ $instr['name'] }}
                         </x-form.checkbox>
@@ -199,7 +199,7 @@ new class extends Component {
                     class="block text-sm font-medium text-dark/70 mb-1.5">{{ __('announcement.form_genres_label') }}</legend>
                 <div class="grid grid-cols-2 gap-x-4 gap-y-2">
                     @foreach ($availableGenres as $genre)
-                        <x-form.checkbox :name="'genre_' . $genre['id']" wire:model="selectedGenres"
+                        <x-form.checkbox :name="'announcement_form_genre_' . $genre['id']" wire:model="selectedGenres"
                                          value="{{ $genre['id'] }}">
                             {{ $genre['name'] }}
                         </x-form.checkbox>

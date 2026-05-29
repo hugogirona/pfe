@@ -3,10 +3,9 @@
 use App\Models\Announcement;
 use Illuminate\Support\Collection;
 use Livewire\Attributes\Layout;
-use Livewire\Attributes\Title;
 use Livewire\Component;
 
-new #[Layout('layouts.app')] #[Title('Annonce — Giggr.')] class extends Component
+new #[Layout('layouts.app')] class extends Component
 {
     public Announcement $announcement;
     public Collection $related;

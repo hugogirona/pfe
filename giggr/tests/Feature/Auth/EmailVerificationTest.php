@@ -55,7 +55,7 @@ it('leaves the user unverified on creation', function () {
 });
 
 it('verifies the user when a matching code is submitted', function () {
-    $user = User::factory()->create([
+    $user = User::factory()->withProfile()->create([
         'email_verified_at' => null,
         'email_verification_code' => '123456',
         'email_verification_code_expires_at' => now()->addMinutes(5),
@@ -70,6 +70,20 @@ it('verifies the user when a matching code is submitted', function () {
     expect($fresh->hasVerifiedEmail())->toBeTrue()
         ->and($fresh->email_verification_code)->toBeNull()
         ->and($fresh->email_verification_code_expires_at)->toBeNull();
+});
+
+it('redirects the user to their own profile after a successful verification', function () {
+    $user = User::factory()->withProfile()->create([
+        'email_verified_at' => null,
+        'email_verification_code' => '123456',
+        'email_verification_code_expires_at' => now()->addMinutes(5),
+    ]);
+
+    Livewire::actingAs($user)
+        ->test('pages::auth.verify-email')
+        ->set('code', '123456')
+        ->call('verify')
+        ->assertRedirect(route('profile', ['id' => $user->profile->id]));
 });
 
 it('rejects an expired code', function () {
@@ -104,12 +118,12 @@ it('rejects a wrong code', function () {
     expect($user->fresh()->hasVerifiedEmail())->toBeFalse();
 });
 
-it('redirects already-verified users away from the verify page', function () {
-    $user = User::factory()->create(['email_verified_at' => now()]);
+it('redirects already-verified users away from the verify page to their profile', function () {
+    $user = User::factory()->withProfile()->create(['email_verified_at' => now()]);
 
     Livewire::actingAs($user)
         ->test('pages::auth.verify-email')
-        ->assertRedirect(config('fortify.home'));
+        ->assertRedirect(route('profile', ['id' => $user->profile->id]));
 });
 
 it('resend generates a new code and notifies the user', function () {
@@ -147,7 +161,7 @@ it('resend is rate-limited to once per minute', function () {
 
 it('dispatches the Verified event after a successful verification', function () {
     Event::fake([Verified::class]);
-    $user = User::factory()->create([
+    $user = User::factory()->withProfile()->create([
         'email_verified_at' => null,
         'email_verification_code' => '123456',
         'email_verification_code_expires_at' => now()->addMinutes(5),

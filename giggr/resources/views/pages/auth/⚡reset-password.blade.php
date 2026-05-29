@@ -1,10 +1,9 @@
 <?php
 
 use Livewire\Attributes\Layout;
-use Livewire\Attributes\Title;
 use Livewire\Component;
 
-new #[Layout('layouts.auth')] #[Title('Réinitialiser le mot de passe — Giggr.')] class extends Component
+new #[Layout('layouts.auth')] class extends Component
 {
     public string $token = '';
     public string $email = '';
