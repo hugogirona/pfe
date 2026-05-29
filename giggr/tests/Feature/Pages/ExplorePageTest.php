@@ -317,6 +317,36 @@ it('orders announcements newest first', function () {
     expect($ids)->toBe([$newest->id, $middle->id, $oldest->id]);
 });
 
+it('profile card renders a "+N" overflow pill when a profile has more than 2 instruments', function () {
+    $this->seed([CitySeeder::class, InstrumentSeeder::class, GenreSeeder::class]);
+    $profile = Profile::factory()->create();
+    $profile->instruments()->sync(\App\Models\Instrument::take(5)->pluck('id'));
+
+    $this->get(route('explore'))
+        ->assertOk()
+        ->assertSee('+3');
+});
+
+it('announcement card renders a "+N" overflow pill when an announcement has more than 2 genres', function () {
+    $this->seed([CitySeeder::class, InstrumentSeeder::class, GenreSeeder::class]);
+    $announcement = Announcement::factory()->create();
+    $announcement->genres()->sync(\App\Models\Genre::take(4)->pluck('id'));
+
+    $this->get(route('explore', ['tab' => 'annonces']))
+        ->assertOk()
+        ->assertSee('+2');
+});
+
+it('profile card truncates the bio with an ellipsis when too long', function () {
+    $this->seed([CitySeeder::class, InstrumentSeeder::class, GenreSeeder::class]);
+    $longBio = str_repeat('Lorem ipsum dolor sit amet consectetur adipiscing elit. ', 10);
+    $profile = Profile::factory()->create(['bio' => $longBio]);
+
+    $this->get(route('explore'))
+        ->assertOk()
+        ->assertDontSee($longBio, false);
+});
+
 it('switching the active tab renders only that tab section', function () {
     $this->seed([CitySeeder::class, InstrumentSeeder::class, GenreSeeder::class]);
     $profile = Profile::factory()->create();
