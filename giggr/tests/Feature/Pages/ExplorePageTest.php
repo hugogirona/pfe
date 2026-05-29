@@ -266,14 +266,14 @@ it('type filter counts toward activeFiltersCount per selected type', function ()
         ->assertSet('activeFiltersCount', 2);
 });
 
-it('active tab defaults to profils when no segment is given', function () {
+it('active tab defaults to profiles when no segment is given', function () {
     Livewire::test('pages::explore.index')
-        ->assertSet('activeTab', 'profils');
+        ->assertSet('activeTab', 'profiles');
 });
 
 it('active tab initializes from the route segment', function () {
     Livewire::test('pages::explore.index', ['tab' => 'annonces'])
-        ->assertSet('activeTab', 'annonces');
+        ->assertSet('activeTab', 'announcements');
 });
 
 it('route generates a path-segment URL when tab is given', function () {
@@ -297,7 +297,7 @@ it('switching the active tab renders only that tab section', function () {
     Livewire::test('pages::explore.index')
         ->assertSee($profile->user->full_name)
         ->assertDontSee($announcement->title)
-        ->set('activeTab', 'annonces')
+        ->set('activeTab', 'announcements')
         ->assertSee($announcement->title)
         ->assertDontSee($profile->user->full_name);
 });

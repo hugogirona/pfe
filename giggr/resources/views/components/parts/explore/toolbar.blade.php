@@ -1,10 +1,10 @@
-@props(['activeTab' => 'profils', 'activeFiltersCount' => 0])
+@props(['activeTab' => 'profiles', 'activeFiltersCount' => 0])
 
 <div class="flex items-center gap-3">
 
     {{-- Publier une annonce --}}
     @auth
-        @if ($activeTab === 'annonces')
+        @if ($activeTab === 'announcements')
             <button
                 @click="$wire.dispatch('open-modal', { component: 'parts.announcement.form', title: 'Publier une annonce' })"
                 type="button"
