@@ -37,17 +37,19 @@
         <x-nav.mobile-link href="{{ route('contact') }}">{{ __('nav.contact') }}</x-nav.mobile-link>
 
         @auth
-            <div class="absolute bottom-10 left-6 right-6 flex flex-col gap-3">
-                <x-cta href="{{ route('profile', ['id' => auth()->user()->id]) }}" wire:navigate variant="outline" class="w-full min-h-11 text-base">
-                    {{ __('nav.view_profile') }}
-                </x-cta>
-                <form method="POST" action="/logout">
-                    @csrf
-                    <x-cta type="submit" variant="dark" class="w-full min-h-11 text-base">
-                        {{ __('nav.sign_out') }}
-                    </x-cta>
-                </form>
-            </div>
+            <x-nav.mobile-link href="{{ route('profile', ['id' => auth()->user()->id]) }}">{{ __('nav.profile') }}</x-nav.mobile-link>
+            <x-nav.mobile-link href="{{ route('settings.account') }}">{{ __('nav.settings') }}</x-nav.mobile-link>
+
+            <form method="POST" action="/logout" class="absolute bottom-10">
+                @csrf
+                <button
+                    type="submit"
+                    aria-label="{{ __('nav.sign_out') }}"
+                    class="text-danger/60 hover:text-danger transition-colors duration-150 p-3 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-danger rounded-lg"
+                >
+                    <x-icon name="arrow-right-on-rectangle" class="w-8 h-8"/>
+                </button>
+            </form>
         @endauth
 
         @guest
