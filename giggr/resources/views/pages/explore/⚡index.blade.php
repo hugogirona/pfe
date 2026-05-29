@@ -15,7 +15,7 @@ new #[Layout('layouts.app')] class extends Component
 {
     use WithPagination;
 
-    public string $activeTab = 'profils';
+    public string $activeTab = 'profiles';
 
     public ?int   $filterCityId      = null;
     public int    $filterRadius      = 0;
@@ -26,7 +26,7 @@ new #[Layout('layouts.app')] class extends Component
 
     public function mount(?string $tab = null): void
     {
-        $this->activeTab = in_array($tab, ['annonces', 'listings'], true) ? 'annonces' : 'profils';
+        $this->activeTab = in_array($tab, ['annonces', 'listings'], true) ? 'announcements' : 'profiles';
     }
 
     #[Computed]
@@ -175,7 +175,7 @@ new #[Layout('layouts.app')] class extends Component
             :active-filters-count="$this->activeFiltersCount"
         />
 
-        @if ($activeTab === 'profils')
+        @if ($activeTab === 'profiles')
             <section>
                 <h2 class="sr-only">{{ __('explore.tab_profiles') }}</h2>
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
