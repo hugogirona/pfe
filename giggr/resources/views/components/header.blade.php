@@ -8,7 +8,10 @@
         </a>
         <x-nav.links />
 
-        <div class="ml-auto flex items-center gap-3">
+        <div class="ml-auto flex items-center gap-2 md:gap-3">
+            @auth
+                <livewire:parts.layout.messaging-badge />
+            @endauth
             <x-nav.actions />
             <x-nav.mobile-menu />
         </div>

@@ -8,6 +8,7 @@ return [
     'sign_in' => 'Log in',
     'sign_out' => 'Log out',
     'view_profile' => 'View profile',
+    'profile' => 'Profile',
     'settings' => 'Settings',
     'aria_user_menu' => 'User menu',
     'aria_menu' => 'Menu',

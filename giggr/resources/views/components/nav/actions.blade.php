@@ -1,9 +1,5 @@
 <div class="hidden md:flex items-center gap-3">
     @auth
-        {{-- Messaging --}}
-        <livewire:parts.layout.messaging-badge />
-
-
         {{-- Profile dropdown --}}
         <div
             class="relative"
