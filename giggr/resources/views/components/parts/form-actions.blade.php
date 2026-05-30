@@ -22,7 +22,7 @@
                 type="button"
                 x-show="!confirming"
                 @click="confirming = true"
-                class="h-11 px-4 rounded-md text-sm font-medium text-danger/70 hover:text-danger hover:bg-danger/5 transition-colors duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-danger"
+                class="h-11 px-4 rounded-md text-sm font-medium text-danger/70 hover:text-danger hover:bg-danger/5 transition-colors duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
             >
                 {{ $deleteLabel }}
             </button>
@@ -44,7 +44,7 @@
                 <button
                     type="button"
                     wire:click="{{ $deleteAction }}"
-                    class="h-11 px-4 rounded-md text-sm font-medium bg-danger text-bg hover:opacity-90 transition-opacity duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-danger focus-visible:ring-offset-1"
+                    class="h-11 px-4 rounded-md text-sm font-medium bg-danger text-bg hover:opacity-90 transition-opacity duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
                 >
                     {{ $deleteConfirmLabel }}
                 </button>

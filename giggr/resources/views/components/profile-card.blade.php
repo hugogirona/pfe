@@ -14,15 +14,15 @@
     $extraGenres       = max(0, $profile->genres->count() - $pillLimit);
 @endphp
 
-<div class="relative h-full">
+<div class="relative">
     <a
         href="{{ $url }}"
         @guest x-data @click.prevent="$dispatch('open-auth-modal')" @endguest
         @auth wire:navigate @endauth
-        class="block h-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-xl"
+        class="block focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent rounded-xl"
     >
         <article
-            class="group flex flex-col w-full h-full rounded-xl overflow-hidden border border-dark/10 bg-white shadow-sm hover:shadow-md transition-shadow duration-200"
+            class="group flex flex-col w-full rounded-xl overflow-hidden border border-dark/10 bg-white shadow-sm hover:shadow-md transition-shadow duration-200"
         >
             <div class="relative h-52 shrink-0 bg-dark/5">
                 @if ($profile->medium)
@@ -42,7 +42,7 @@
             </div>
 
             {{-- Content --}}
-            <div class="flex-1 px-5 py-4 space-y-3">
+            <div class="px-5 py-4 space-y-3">
                 <div>
                     <h3 class="font-heading text-xl text-dark">{{ $name }}</h3>
                     <p class="text-sm text-dark/40 mt-0.5">
@@ -82,7 +82,7 @@
             <div
                 class="relative overflow-hidden flex items-center min-h-12 px-5 border-t border-dark/10 text-sm font-medium">
                 <span
-                    class="absolute inset-0 -translate-x-full bg-accent motion-safe:transition-transform motion-safe:duration-300 motion-safe:ease-out group-hover:translate-x-0"
+                    class="absolute inset-0 -translate-x-[101%] bg-accent motion-safe:transition-transform motion-safe:duration-300 motion-safe:ease-out group-hover:translate-x-0"
                     aria-hidden="true"></span>
                 <span
                     class="relative flex items-center gap-2 text-dark group-hover:text-bg motion-safe:transition-colors motion-safe:duration-100">

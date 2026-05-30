@@ -46,7 +46,7 @@
                 <button
                     type="submit"
                     aria-label="{{ __('nav.sign_out') }}"
-                    class="text-danger/60 hover:text-danger transition-colors duration-150 p-3 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-danger rounded-lg"
+                    class="text-danger/60 hover:text-danger transition-colors duration-150 p-3 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent rounded-lg"
                 >
                     <x-icon name="arrow-right-on-rectangle" class="w-8 h-8"/>
                 </button>

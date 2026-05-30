@@ -8,8 +8,8 @@
         aria-expanded="{{ $open ? 'true' : 'false' }}"
         :aria-expanded="open.toString()"
         class="flex items-baseline gap-4 w-full py-5 text-left cursor-pointer
-               focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40
-               focus-visible:ring-offset-2 rounded-sm">
+               focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent
+               rounded-sm">
 
         <span class="font-heading text-sm tabular-nums transition-colors duration-200 shrink-0"
               :class="open ? 'text-accent' : 'text-dark/20 group-hover:text-dark/40'">

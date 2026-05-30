@@ -123,7 +123,7 @@ new #[Layout('layouts.app')] class extends Component {
                                     type="button"
                                     wire:click="toggleBlock({{ $user->id }})"
                                     aria-label="{{ __('profile.block_name', ['name' => $user->full_name]) }}"
-                                    class="px-3 py-1.5 rounded-md text-xs font-medium text-danger/70 hover:text-danger hover:bg-danger/5 transition-colors duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-danger"
+                                    class="px-3 py-1.5 rounded-md text-xs font-medium text-danger/70 hover:text-danger hover:bg-danger/5 transition-colors duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
                                 >
                                     {{ __('settings.block') }}
                                 </button>

@@ -7,14 +7,13 @@
 
 @php
     $sectionClass = \Illuminate\Support\Arr::toCssClasses([
-        'relative px-6 pt-5 pb-5 transition-colors duration-200',
+        'relative px-6 pt-5 pb-5',
         'group/section' => $isOwner,
     ]);
 @endphp
 
 <section
     x-data="{ editing: false, snapshot: @js($selectedGenres) }"
-    :class="editing ? 'bg-pastel-salmon/8' : ''"
     class="{{ $sectionClass }}"
 >
 
@@ -28,7 +27,6 @@
                 size="icon-sm"
                 x-show="!editing"
                 @click="editing = true"
-                class="opacity-0 group-hover/section:opacity-100"
                 aria-label="{{ __('profile.edit_genres') }}"
             >
                 <x-icon name="pencil-square" class="w-3.5 h-3.5" />
@@ -37,10 +35,8 @@
     </article>
 
     @if ($isOwner)
-        <div
-            class="grid motion-safe:transition-[grid-template-rows] motion-safe:duration-200 motion-safe:ease-out"
-            :class="editing ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'"
-        >
+        <div class="grid motion-safe:transition-[grid-template-rows] motion-safe:duration-200 motion-safe:ease-out"
+             :class="editing ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'">
             <div class="overflow-hidden">
                 <div class="space-y-3 pb-1">
                     <div class="grid grid-cols-2 gap-x-4 gap-y-2">
@@ -48,22 +44,20 @@
                             <x-form.checkbox :name="'genre_' . $id" wire:model="selectedGenres" value="{{ $id }}">{{ $label }}</x-form.checkbox>
                         @endforeach
                     </div>
-                    <div class="flex items-center justify-end gap-2 pt-0.5">
-                        <x-cta variant="simple" size="xs" @click="$wire.set('selectedGenres', snapshot); editing = false">
+                    <x-parts.profile.inline-edit-actions>
+                        <x-slot:cancel @click="$wire.set('selectedGenres', snapshot); editing = false">
                             {{ __('profile.cancel') }}
-                        </x-cta>
-                        <x-cta variant="dark" size="xs" wire:click="saveGenres" @genres-saved.window="snapshot = [...$wire.selectedGenres]; editing = false">
+                        </x-slot:cancel>
+                        <x-slot:save wire:click="saveGenres" @genres-saved.window="snapshot = [...$wire.selectedGenres]; editing = false">
                             {{ __('profile.save') }}
-                        </x-cta>
-                    </div>
+                        </x-slot:save>
+                    </x-parts.profile.inline-edit-actions>
                 </div>
             </div>
         </div>
 
-        <div
-            class="grid motion-safe:transition-[grid-template-rows] motion-safe:duration-200 motion-safe:ease-out"
-            :class="!editing ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'"
-        >
+        <div class="grid motion-safe:transition-[grid-template-rows] motion-safe:duration-200 motion-safe:ease-out"
+             :class="!editing ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'">
             <div class="overflow-hidden">
                 @if ($profile->genres->isNotEmpty())
                     <ul class="flex flex-wrap gap-1.5">

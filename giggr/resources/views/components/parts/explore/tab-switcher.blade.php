@@ -5,7 +5,7 @@
         href="{{ route('explore', ['tab' => __('explore.tab_profiles_slug')]) }}"
         wire:navigate
         @class([
-            'px-5 py-2 rounded-lg text-sm font-medium transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent',
+            'px-5 py-2 rounded-lg text-sm font-medium transition-colors duration-200 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent',
             'bg-dark text-bg shadow-sm' => $activeTab === 'profiles',
             'text-dark/50 hover:text-dark' => $activeTab !== 'profiles',
         ])
@@ -20,7 +20,7 @@
         href="{{ route('explore', ['tab' => __('explore.tab_announcements_slug')]) }}"
         wire:navigate
         @class([
-            'px-5 py-2 rounded-lg text-sm font-medium transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent',
+            'px-5 py-2 rounded-lg text-sm font-medium transition-colors duration-200 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent',
             'bg-dark text-bg shadow-sm' => $activeTab === 'announcements',
             'text-dark/50 hover:text-dark' => $activeTab !== 'announcements',
         ])

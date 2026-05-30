@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\ProfileStatus;
 use App\Models\Genre;
 use App\Models\Instrument;
 use App\Models\Profile;
@@ -128,6 +129,79 @@ it('owner can toggle and save instruments', function () {
         ->assertDispatched('instruments-saved');
 
     expect($profile->fresh()->instruments->pluck('id')->contains($instrumentId))->toBeTrue();
+});
+
+it('owner can save status to any ProfileStatus case', function () {
+    $this->seed([CitySeeder::class, InstrumentSeeder::class, GenreSeeder::class]);
+    $profile = Profile::factory()->create(['status' => ProfileStatus::LookingForBand]);
+
+    Livewire::actingAs($profile->user)
+        ->test('pages::profile.index', ['id' => $profile->id])
+        ->set('selectedStatus', ProfileStatus::Teaching->value)
+        ->call('saveStatus')
+        ->assertDispatched('status-saved');
+
+    expect($profile->fresh()->status)->toBe(ProfileStatus::Teaching);
+});
+
+it('saveStatus rejects values outside the ProfileStatus enum', function () {
+    $this->seed([CitySeeder::class, InstrumentSeeder::class, GenreSeeder::class]);
+    $profile = Profile::factory()->create(['status' => ProfileStatus::LookingForBand]);
+
+    Livewire::actingAs($profile->user)
+        ->test('pages::profile.index', ['id' => $profile->id])
+        ->set('selectedStatus', 'rockstar_overlord')
+        ->call('saveStatus')
+        ->assertHasErrors(['selectedStatus']);
+
+    expect($profile->fresh()->status)->toBe(ProfileStatus::LookingForBand);
+});
+
+it('saveStatus accepts the new value as an argument', function () {
+    $this->seed([CitySeeder::class, InstrumentSeeder::class, GenreSeeder::class]);
+    $profile = Profile::factory()->create(['status' => ProfileStatus::LookingForBand]);
+
+    Livewire::actingAs($profile->user)
+        ->test('pages::profile.index', ['id' => $profile->id])
+        ->call('saveStatus', ProfileStatus::OpenToCollab->value)
+        ->assertSet('selectedStatus', ProfileStatus::OpenToCollab->value)
+        ->assertDispatched('status-saved');
+
+    expect($profile->fresh()->status)->toBe(ProfileStatus::OpenToCollab);
+});
+
+it('saveStatus preserves the followers and followed counts on the loaded profile', function () {
+    $this->seed([CitySeeder::class, InstrumentSeeder::class, GenreSeeder::class]);
+    $owner = User::factory()->withProfile()->create();
+    $follower = User::factory()->withProfile()->create();
+    $followed = User::factory()->withProfile()->create();
+    $follower->follow($owner->profile);
+    $owner->follow($followed->profile);
+
+    $component = Livewire::actingAs($owner)
+        ->test('pages::profile.index', ['id' => $owner->profile->id])
+        ->set('selectedStatus', ProfileStatus::Teaching->value)
+        ->call('saveStatus');
+
+    $profile = $component->get('profile');
+    expect($profile->followers_count)->toBe(1)
+        ->and($profile->followed_count)->toBe(1);
+});
+
+it('non-owner cannot save status', function () {
+    $this->seed([CitySeeder::class, InstrumentSeeder::class, GenreSeeder::class]);
+    $profile = Profile::factory()->create(['status' => ProfileStatus::LookingForBand]);
+    $visitor = User::factory()->create();
+
+    try {
+        Livewire::actingAs($visitor)
+            ->test('pages::profile.index', ['id' => $profile->id])
+            ->set('selectedStatus', ProfileStatus::Teaching->value)
+            ->call('saveStatus');
+    } catch (Throwable) {
+    }
+
+    expect($profile->fresh()->status)->toBe(ProfileStatus::LookingForBand);
 });
 
 it('owner can toggle and save genres', function () {
