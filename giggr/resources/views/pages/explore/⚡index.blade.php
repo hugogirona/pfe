@@ -189,7 +189,7 @@ class extends Component {
         @if ($activeTab === 'profiles')
             <section>
                 <h2 class="sr-only">{{ __('explore.tab_profiles') }}</h2>
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 items-start">
                     @foreach ($this->filteredProfiles as $profile)
                         <x-profile-card :profile="$profile" :followed-profile-ids="$this->followedProfileIds"/>
                     @endforeach
