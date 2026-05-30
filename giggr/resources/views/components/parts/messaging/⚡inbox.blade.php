@@ -149,6 +149,29 @@ new class extends Component {
     }
 
     #[Computed]
+    public function messagesCount(): int
+    {
+        $userId = (int) auth()->id();
+
+        return $this->conversations->filter(
+            fn (Conversation $c): bool => ($c->accepted_at !== null || (int) $c->requester_user_id === $userId)
+                && (int) $c->unread_count_for_me > 0,
+        )->count();
+    }
+
+    #[Computed]
+    public function requestsCount(): int
+    {
+        $userId = (int) auth()->id();
+
+        return $this->conversations->filter(
+            fn (Conversation $c): bool => $c->accepted_at === null
+                && (int) $c->requester_user_id !== $userId
+                && (int) $c->unread_count_for_me > 0,
+        )->count();
+    }
+
+    #[Computed]
     public function currentConversation(): ?Conversation
     {
         if ($this->currentConversationId === null) {
@@ -372,7 +395,11 @@ new class extends Component {
 
     @if ($view === 'list')
 
-        <x-parts.messaging.inbox-tabs :active-tab="$activeTab"/>
+        <x-parts.messaging.inbox-tabs
+            :active-tab="$activeTab"
+            :messages-count="$this->messagesCount"
+            :requests-count="$this->requestsCount"
+        />
 
         <x-parts.messaging.conversation-list
             :conversations="$this->visibleConversations"

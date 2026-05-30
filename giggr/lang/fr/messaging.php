@@ -2,7 +2,7 @@
 
 return [
     'title' => 'Messages',
-    'tab_messages' => 'Messages',
+    'tab_messages' => 'Conversations',
     'tab_requests' => 'Demandes',
     'aria_tabs' => 'Filtrer les conversations',
     'empty_messages' => 'Aucune conversation pour le moment.',
