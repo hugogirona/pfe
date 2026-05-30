@@ -92,7 +92,7 @@ new class extends Component {
                 type="button"
                 wire:click.stop="toggle"
                 @class([
-                    'w-full flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-dark/30 focus-visible:ring-offset-1',
+                    'w-full flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent',
                     'bg-dark text-bg hover:bg-dark/80' => $isFollowing,
                     'bg-transparent text-dark border border-dark/20 hover:border-dark/40 hover:bg-dark/5' => ! $isFollowing,
                 ])
@@ -107,7 +107,7 @@ new class extends Component {
                 type="button"
                 x-data
                 @click.stop.prevent="$dispatch('open-auth-modal')"
-                class="w-full flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium bg-transparent text-dark border border-dark/20 hover:border-dark/40 hover:bg-dark/5 transition-colors duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-dark/30 focus-visible:ring-offset-1"
+                class="w-full flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium bg-transparent text-dark border border-dark/20 hover:border-dark/40 hover:bg-dark/5 transition-colors duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
                 aria-label="{{ __('social.follow_aria', ['name' => $musicianName]) }}"
             >
                 <x-icon name="heart" class="w-4 h-4"/>

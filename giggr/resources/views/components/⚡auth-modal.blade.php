@@ -69,7 +69,7 @@ new class extends Component {
             <button
                 wire:click="close"
                 type="button"
-                class="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full text-bg/35 hover:text-bg hover:bg-white/10 transition-colors duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent/60"
+                class="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full text-bg/35 hover:text-bg hover:bg-white/10 transition-colors duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
                 aria-label="{{ __('Fermer') }}"
             >
                 <x-icon name="x-mark" class="w-4 h-4" />

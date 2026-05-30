@@ -3,7 +3,7 @@
     <nav class="max-w-6xl mx-auto px-6 py-4 flex items-center gap-10 relative"
          aria-label="{{ __('nav.aria_main_nav') }}">
         <h2 class="sr-only">{{ __('nav.aria_main_nav') }}</h2>
-        <a wire:navigate.hover href="{{route('home')}}">
+        <a wire:navigate.hover href="{{route('home')}}" class="focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent rounded-sm">
             <x-logo />
         </a>
         <x-nav.links />
