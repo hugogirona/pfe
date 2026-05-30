@@ -34,19 +34,14 @@
                     @error('bio')
                         <p class="mt-1.5 text-xs text-danger">{{ $message }}</p>
                     @enderror
-                    <div class="flex justify-end items-center gap-4 mt-4">
-                        <x-cta
-                            variant="dark"
-                            size="xs"
-                            wire:click="saveBio"
-                            @bio-saved.window="editing = false"
-                        >{{ __('profile.save') }}</x-cta>
-                        <x-cta
-                            variant="simple"
-                            size="xs"
-                            @click="$wire.set('bio', snapshot); editing = false"
-                        >{{ __('profile.cancel') }}</x-cta>
-                    </div>
+                    <x-parts.profile.inline-edit-actions class="mt-4">
+                        <x-slot:cancel @click="$wire.set('bio', snapshot); editing = false">
+                            {{ __('profile.cancel') }}
+                        </x-slot:cancel>
+                        <x-slot:save wire:click="saveBio" @bio-saved.window="editing = false">
+                            {{ __('profile.save') }}
+                        </x-slot:save>
+                    </x-parts.profile.inline-edit-actions>
                 </div>
             </div>
         </div>

@@ -183,7 +183,7 @@ it('syncs selected genres on save', function () {
     expect(Announcement::first()->genres)->toHaveCount(3);
 });
 
-it('shows success state after save', function () {
+it('redirects to the new announcement page after creating it', function () {
     $user = User::factory()->create();
     $city = City::factory()->create();
 
@@ -194,21 +194,18 @@ it('shows success state after save', function () {
         ->set('city_id', $city->id)
         ->set('description', 'Groupe de jazz en quête d\'un bassiste expérimenté pour sessions régulières.')
         ->call('save')
-        ->assertSet('success', true);
+        ->assertRedirect(route('announcement', ['id' => Announcement::first()->id]));
 });
 
-it('dispatches announcement-created with the new id', function () {
-    $user = User::factory()->create();
-    $city = City::factory()->create();
+it('shows the success state after updating an existing announcement', function () {
+    $owner = User::factory()->create();
+    $announcement = Announcement::factory()->for($owner)->create();
 
-    Livewire::actingAs($user)
-        ->test('parts.announcement.form')
-        ->set('title', 'Cherche bassiste pour trio jazz')
-        ->set('type', 'musician_wanted')
-        ->set('city_id', $city->id)
-        ->set('description', 'Groupe de jazz en quête d\'un bassiste expérimenté pour sessions régulières.')
+    Livewire::actingAs($owner)
+        ->test('parts.announcement.form', ['model_id' => (string) $announcement->id])
+        ->set('title', 'Updated title for this announcement')
         ->call('save')
-        ->assertDispatched('announcement-created');
+        ->assertSet('success', true);
 });
 
 it('close dispatches close-modal', function () {

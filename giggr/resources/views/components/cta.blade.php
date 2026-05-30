@@ -24,7 +24,7 @@ $variants = [
 
 $base = [
     'inline-flex items-center justify-center rounded-[6px] border cursor-pointer',
-    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-dark/40 focus-visible:ring-offset-2',
+    'focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent',
     $sizes[(string) $size],
     $variants[(string) $variant],
 ];

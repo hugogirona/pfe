@@ -33,7 +33,7 @@
                 x-show="confirm === 'delete'"
                 wire:click="deleteConversation({{ $conversationId }})"
                 @click="confirm = null"
-                class="px-3 py-1.5 rounded-md text-xs font-medium bg-danger text-bg hover:opacity-90 transition-opacity duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-danger focus-visible:ring-offset-1"
+                class="px-3 py-1.5 rounded-md text-xs font-medium bg-danger text-bg hover:opacity-90 transition-opacity duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
             >
                 {{ __('messaging.delete') }}
             </button>
@@ -42,7 +42,7 @@
                 x-show="confirm === 'block'"
                 wire:click="blockCorrespondent"
                 @click="confirm = null"
-                class="px-3 py-1.5 rounded-md text-xs font-medium bg-danger text-bg hover:opacity-90 transition-opacity duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-danger focus-visible:ring-offset-1"
+                class="px-3 py-1.5 rounded-md text-xs font-medium bg-danger text-bg hover:opacity-90 transition-opacity duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
             >
                 {{ __('profile.block') }}
             </button>

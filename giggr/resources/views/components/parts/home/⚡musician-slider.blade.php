@@ -46,7 +46,7 @@ new class extends Component {
         >
             <button
                 @click="prev()"
-                class="hidden md:flex absolute -left-5 top-[calc(50%-2rem)] -translate-y-1/2 z-10 w-11 h-11 items-center justify-center rounded-full bg-bg border border-dark/15 shadow-sm text-dark hover:bg-dark hover:text-bg transition-colors duration-200 cursor-pointer"
+                class="hidden md:flex absolute -left-5 top-[calc(50%-2rem)] -translate-y-1/2 z-10 w-11 h-11 items-center justify-center rounded-full bg-bg border border-dark/15 shadow-sm text-dark hover:bg-dark hover:text-bg transition-colors duration-200 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
                 aria-label="{{ __('home.carousel_prev') }}"
             >
                 <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
@@ -57,7 +57,7 @@ new class extends Component {
             <div
                 x-ref="track"
                 @scroll.passive="onScroll()"
-                class="flex gap-6 overflow-x-auto snap-x snap-mandatory scroll-smooth scrollbar-none overscroll-x-contain pb-2"
+                class="flex gap-6 overflow-x-auto snap-x snap-mandatory scroll-smooth scrollbar-none overscroll-x-contain py-2"
             >
                 @foreach ($profiles as $profile)
                     <div class="{{ $cardClass }}">
@@ -68,7 +68,7 @@ new class extends Component {
 
             <button
                 @click="next()"
-                class="hidden md:flex absolute -right-5 top-[calc(50%-2rem)] -translate-y-1/2 z-10 w-11 h-11 items-center justify-center rounded-full bg-bg border border-dark/15 shadow-sm text-dark hover:bg-dark hover:text-bg transition-colors duration-200 cursor-pointer"
+                class="hidden md:flex absolute -right-5 top-[calc(50%-2rem)] -translate-y-1/2 z-10 w-11 h-11 items-center justify-center rounded-full bg-bg border border-dark/15 shadow-sm text-dark hover:bg-dark hover:text-bg transition-colors duration-200 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
                 aria-label="{{ __('home.carousel_next') }}"
             >
                 <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
@@ -82,7 +82,7 @@ new class extends Component {
                         @click="goTo(i - 1)"
                         :aria-label="`{{ __('home.carousel_goto') }}${i}`"
                         :aria-selected="current === i - 1"
-                        class="h-2 rounded-full transition-all duration-300 cursor-pointer motion-reduce:transition-none"
+                        class="h-2 rounded-full transition-all duration-300 cursor-pointer motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
                         :class="current === i - 1 ? 'w-6 bg-accent' : 'w-2 bg-dark/25 hover:bg-dark/45'"
                     ></button>
                 </template>

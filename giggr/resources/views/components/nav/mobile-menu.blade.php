@@ -12,13 +12,13 @@
             :aria-expanded="open"
             class="relative z-50 text-dark/60 hover:text-dark transition-colors duration-150 p-2 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent rounded-[6px]"
             aria-label="{{ __('nav.aria_menu') }}">
-        <span class="flex flex-col justify-center gap-1.25 w-5 h-5">
-            <span class="block h-0.5 w-5 bg-current rounded-full transition-all duration-300 ease-in-out origin-center"
-                  :class="open ? 'rotate-45 translate-y-1.75' : ''"></span>
-            <span class="block h-0.5 w-5 bg-current rounded-full transition-all duration-300 ease-in-out"
+        <span class="flex flex-col justify-center gap-2 w-8 h-8">
+            <span class="block h-[3px] w-8 bg-current rounded-full transition-all duration-300 ease-in-out origin-center"
+                  :class="open ? 'rotate-45 translate-y-[11px]' : ''"></span>
+            <span class="block h-[3px] w-8 bg-current rounded-full transition-all duration-300 ease-in-out"
                   :class="open ? 'opacity-0 scale-x-0' : ''"></span>
-            <span class="block h-0.5 w-5 bg-current rounded-full transition-all duration-300 ease-in-out origin-center"
-                  :class="open ? '-rotate-45 -translate-y-1.75' : ''"></span>
+            <span class="block h-[3px] w-8 bg-current rounded-full transition-all duration-300 ease-in-out origin-center"
+                  :class="open ? '-rotate-45 -translate-y-[11px]' : ''"></span>
         </span>
     </button>
 
@@ -37,17 +37,19 @@
         <x-nav.mobile-link href="{{ route('contact') }}">{{ __('nav.contact') }}</x-nav.mobile-link>
 
         @auth
-            <div class="absolute bottom-10 left-6 right-6 flex flex-col gap-3">
-                <x-cta href="{{ route('profile', ['id' => auth()->user()->id]) }}" wire:navigate variant="outline" class="w-full min-h-11 text-base">
-                    {{ __('nav.view_profile') }}
-                </x-cta>
-                <form method="POST" action="/logout">
-                    @csrf
-                    <x-cta type="submit" variant="dark" class="w-full min-h-11 text-base">
-                        {{ __('nav.sign_out') }}
-                    </x-cta>
-                </form>
-            </div>
+            <x-nav.mobile-link href="{{ route('profile', ['id' => auth()->user()->id]) }}">{{ __('nav.profile') }}</x-nav.mobile-link>
+            <x-nav.mobile-link href="{{ route('settings.account') }}">{{ __('nav.settings') }}</x-nav.mobile-link>
+
+            <form method="POST" action="/logout" class="absolute bottom-10">
+                @csrf
+                <button
+                    type="submit"
+                    aria-label="{{ __('nav.sign_out') }}"
+                    class="text-danger/60 hover:text-danger transition-colors duration-150 p-3 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent rounded-lg"
+                >
+                    <x-icon name="arrow-right-on-rectangle" class="w-8 h-8"/>
+                </button>
+            </form>
         @endauth
 
         @guest

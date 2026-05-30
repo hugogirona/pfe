@@ -16,7 +16,7 @@
             <div @class([
                 'absolute inset-0 rounded-sm border-2 bg-white',
                 'peer-checked:bg-accent peer-checked:border-accent',
-                'peer-focus-visible:ring-2 peer-focus-visible:ring-offset-1 peer-focus-visible:ring-accent/50',
+                'peer-focus-visible:ring-1 peer-focus-visible:ring-accent',
                 'group-hover:border-dark/40 peer-checked:group-hover:border-accent',
                 'transition-all duration-150 pointer-events-none',
                 'border-danger/60' => $errors->has($name),

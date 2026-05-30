@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\ProfileStatus;
 use App\Models\Genre;
 use App\Models\Instrument;
 use App\Models\Profile;
@@ -13,8 +14,10 @@ class extends Component {
     public bool $isOwner = false;
 
     public string $bio = '';
+    public string $selectedStatus = '';
     public array $selectedInstruments = [];
     public array $selectedGenres = [];
+    public array $allStatuses = [];
     public array $allInstruments = [];
     public array $allGenres = [];
 
@@ -43,8 +46,12 @@ class extends Component {
 
         if ($this->isOwner) {
             $this->bio = $this->profile->bio ?? '';
+            $this->selectedStatus = $this->profile->status->value;
             $this->selectedInstruments = $this->profile->instruments->pluck('id')->toArray();
             $this->selectedGenres = $this->profile->genres->pluck('id')->toArray();
+            $this->allStatuses = collect(ProfileStatus::cases())
+                ->map(fn($case) => ['value' => $case->value, 'label' => __($case->label())])
+                ->all();
             $this->allInstruments = Instrument::orderBy('name')->pluck('name', 'id')->toArray();
             $this->allGenres = Genre::orderBy('name')->pluck('name', 'id')->toArray();
         }
@@ -56,6 +63,19 @@ class extends Component {
         $this->validate(['bio' => ['required', 'string', 'min:10', 'max:1000']]);
         $this->profile->update(['bio' => $this->bio]);
         $this->dispatch('bio-saved');
+    }
+
+    public function saveStatus(?string $value = null): void
+    {
+        abort_unless($this->isOwner, 403);
+        if ($value !== null) {
+            $this->selectedStatus = $value;
+        }
+        $this->validate([
+            'selectedStatus' => ['required', 'in:'.implode(',', array_column(ProfileStatus::cases(), 'value'))],
+        ]);
+        $this->profile->update(['status' => $this->selectedStatus]);
+        $this->dispatch('status-saved');
     }
 
     public function toggleInstrument(int $id): void
@@ -155,6 +175,8 @@ class extends Component {
                 <x-parts.profile.identity-card
                     :profile="$profile"
                     :isOwner="$isOwner"
+                    :allStatuses="$allStatuses"
+                    :selectedStatus="$selectedStatus"
                     :allInstruments="$allInstruments"
                     :allGenres="$allGenres"
                     :selectedInstruments="$selectedInstruments"

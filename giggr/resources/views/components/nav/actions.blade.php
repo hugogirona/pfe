@@ -1,9 +1,5 @@
 <div class="hidden md:flex items-center gap-3">
     @auth
-        {{-- Messaging --}}
-        <livewire:parts.layout.messaging-badge />
-
-
         {{-- Profile dropdown --}}
         <div
             class="relative"
@@ -22,7 +18,7 @@
                 :aria-expanded="open"
                 aria-haspopup="true"
                 aria-label="{{ __('nav.aria_user_menu') }}"
-                class="w-8 h-8 rounded-full overflow-hidden bg-dark/60 text-bg flex items-center justify-center text-sm font-semibold uppercase cursor-pointer hover:opacity-90 transition-opacity duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
+                class="w-8 h-8 rounded-full overflow-hidden bg-dark/60 text-bg flex items-center justify-center text-sm font-semibold uppercase cursor-pointer hover:opacity-90 transition-opacity duration-150 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
             >
                 <img
                     x-show="thumbnail"
