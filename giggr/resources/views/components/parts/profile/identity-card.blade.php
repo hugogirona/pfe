@@ -1,6 +1,8 @@
 @props([
     'profile',
     'isOwner'             => false,
+    'allStatuses'         => [],
+    'selectedStatus'      => '',
     'allInstruments'      => [],
     'allGenres'           => [],
     'selectedInstruments' => [],
@@ -13,7 +15,12 @@
 
     <x-parts.profile.card-avatar :profile="$profile" :isOwner="$isOwner" />
 
-    <x-parts.profile.card-identity :profile="$profile" />
+    <x-parts.profile.card-identity
+        :profile="$profile"
+        :isOwner="$isOwner"
+        :allStatuses="$allStatuses"
+        :selectedStatus="$selectedStatus"
+    />
 
     <x-parts.profile.card-relations
         :profile="$profile"
