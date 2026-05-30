@@ -26,7 +26,7 @@
         href="{{ route('announcement', ['id' => $announcement->id]) }}"
         @guest x-data @click.prevent="$dispatch('open-auth-modal')" @endguest
         @auth wire:navigate @endauth
-        class="block h-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-xl"
+        class="block h-full focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent rounded-xl"
     >
         <article
             class="group flex flex-col w-full h-full rounded-xl overflow-hidden border border-dark/10 bg-white shadow-sm hover:shadow-md transition-shadow duration-200"

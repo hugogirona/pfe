@@ -41,7 +41,7 @@ new class extends Component {
             type="button"
             wire:click="toggle"
             aria-label="{{ __('profile.unblock_name', ['name' => $name]) }}"
-            class="w-full inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium text-danger/70 hover:text-danger hover:bg-danger/5 transition-colors duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-danger"
+            class="w-full inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium text-danger/70 hover:text-danger hover:bg-danger/5 transition-colors duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
         >
             <x-icon name="no-symbol" class="w-3.5 h-3.5"/>
             <span>{{ __('profile.unblock') }}</span>
@@ -52,7 +52,7 @@ new class extends Component {
             x-show="!confirming"
             @click="confirming = true"
             aria-label="{{ __('profile.block_name', ['name' => $name]) }}"
-            class="w-full inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium text-danger/70 hover:text-danger hover:bg-danger/5 transition-colors duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-danger"
+            class="w-full inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium text-danger/70 hover:text-danger hover:bg-danger/5 transition-colors duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
         >
             <x-icon name="no-symbol" class="w-3.5 h-3.5"/>
             <span>{{ __('profile.block') }}</span>
@@ -79,7 +79,7 @@ new class extends Component {
                     type="button"
                     wire:click="toggle"
                     @click="confirming = false"
-                    class="px-2.5 py-1 rounded text-xs font-medium bg-danger text-bg hover:opacity-90 transition-opacity duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-danger focus-visible:ring-offset-1"
+                    class="px-2.5 py-1 rounded text-xs font-medium bg-danger text-bg hover:opacity-90 transition-opacity duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
                 >
                     {{ __('profile.block') }}
                 </button>

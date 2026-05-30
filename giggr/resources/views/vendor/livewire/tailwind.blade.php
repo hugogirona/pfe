@@ -31,7 +31,7 @@ $scrollIntoViewJsSnippet = ($scrollTo !== false)
                     x-on:click="{{ $scrollIntoViewJsSnippet }}"
                     wire:loading.attr="disabled"
                     aria-label="{{ __('pagination.previous') }}"
-                    class="w-9 h-9 flex items-center justify-center rounded-full text-dark/50 hover:text-dark hover:bg-dark/5 transition-colors duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40"
+                    class="w-9 h-9 flex items-center justify-center rounded-full text-dark/50 hover:text-dark hover:bg-dark/5 transition-colors duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
                 >
                     <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
@@ -59,7 +59,7 @@ $scrollIntoViewJsSnippet = ($scrollTo !== false)
                                     wire:click="gotoPage({{ $page }}, '{{ $paginator->getPageName() }}')"
                                     x-on:click="{{ $scrollIntoViewJsSnippet }}"
                                     aria-label="{{ __('Go to page :page', ['page' => $page]) }}"
-                                    class="w-9 h-9 flex items-center justify-center rounded-full text-sm text-dark/60 hover:text-dark hover:bg-dark/5 transition-colors duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40"
+                                    class="w-9 h-9 flex items-center justify-center rounded-full text-sm text-dark/60 hover:text-dark hover:bg-dark/5 transition-colors duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
                                 >{{ $page }}</button>
                             @endif
                         </span>
@@ -75,7 +75,7 @@ $scrollIntoViewJsSnippet = ($scrollTo !== false)
                     x-on:click="{{ $scrollIntoViewJsSnippet }}"
                     wire:loading.attr="disabled"
                     aria-label="{{ __('pagination.next') }}"
-                    class="w-9 h-9 flex items-center justify-center rounded-full text-dark/50 hover:text-dark hover:bg-dark/5 transition-colors duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40"
+                    class="w-9 h-9 flex items-center justify-center rounded-full text-dark/50 hover:text-dark hover:bg-dark/5 transition-colors duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
                 >
                     <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
                         <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />

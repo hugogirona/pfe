@@ -16,7 +16,7 @@
                     title: '{{ __('profile.avatar_upload_title') }}',
                     model_id: '{{ $profile->id }}'
                 })"
-                class="group relative {{ $circle }} cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
+                class="group relative {{ $circle }} cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
                 aria-label="{{ __('profile.avatar_edit') }}"
             >
                 <x-parts.profile.card-avatar-inner :profile="$profile" :name="$name"/>
@@ -33,6 +33,5 @@
             </div>
         @endif
 
-        <span class="absolute bottom-1 right-1 w-4 h-4 rounded-full bg-accent ring-2 ring-bg" aria-hidden="true"></span>
     </div>
 </div>

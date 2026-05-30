@@ -83,7 +83,7 @@
                 type="submit"
                 wire:loading.attr="disabled"
                 aria-label="{{ __('messaging.send') }}"
-                class="w-10 h-10 shrink-0 rounded-full bg-accent text-bg flex items-center justify-center hover:opacity-90 transition-opacity duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-1 disabled:opacity-40 disabled:cursor-not-allowed"
+                class="w-10 h-10 shrink-0 rounded-full bg-accent text-bg flex items-center justify-center hover:opacity-90 transition-opacity duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent disabled:opacity-40 disabled:cursor-not-allowed"
             >
                 <x-icon name="arrow-right" class="w-4 h-4 -rotate-45"/>
             </button>
