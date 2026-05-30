@@ -1,10 +1,11 @@
-@props(['author', 'name'])
+@props(['announcement', 'author', 'name'])
 
 @php
     $image = $author->thumbnail;
     $cityName = $author->city?->name;
     $instruments = $author->instruments->pluck('name');
     $genres = $author->genres->pluck('name');
+    $isOwner = auth()->check() && auth()->id() === $announcement->user_id;
 @endphp
 
 <div class="bg-white rounded-2xl border border-dark/10 shadow-sm overflow-hidden">
@@ -57,10 +58,28 @@
 
     {{-- Actions --}}
     <div class="px-6 py-5 space-y-2.5">
-        <x-cta variant="accent" class="w-full gap-2">
-            <x-icon name="chat-bubble" class="w-4 h-4" />
-            {{ __('announcement.author_contact', ['name' => $name]) }}
-        </x-cta>
+        @if ($isOwner)
+            {{-- Owner: editing is the primary action; contacting yourself makes no sense --}}
+            <x-cta
+                variant="accent"
+                class="w-full gap-2"
+                @click="Livewire.dispatch('open-modal', { component: 'parts.announcement.form', title: {{ json_encode(__('announcement.edit_title')) }}, model_id: '{{ $announcement->id }}' })"
+                aria-label="{{ __('announcement.edit_aria') }}"
+            >
+                <x-icon name="pencil-square" class="w-4 h-4" />
+                {{ __('announcement.author_edit') }}
+            </x-cta>
+        @else
+            <x-cta
+                variant="accent"
+                class="w-full gap-2"
+                aria-label="{{ __('announcement.author_contact') }}"
+                @click="Livewire.dispatchTo('modal', 'open-modal', { component: 'parts.messaging.inbox', title: {{ json_encode(__('messaging.title')) }}, model_id: '{{ $announcement->user_id }}' })"
+            >
+                <x-icon name="chat-bubble" class="w-4 h-4" />
+                {{ __('announcement.author_contact') }}
+            </x-cta>
+        @endif
 
         <a
             href="{{ route('profile', ['id' => $author->id]) }}"

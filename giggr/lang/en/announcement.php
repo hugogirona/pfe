@@ -26,7 +26,8 @@ return [
 
     // Author card
     'author_title' => 'Posted by',
-    'author_contact' => 'Contact :name',
+    'author_contact' => 'Contact',
+    'author_edit' => 'Edit listing',
     'author_see_profile' => 'View profile',
 
     // Form (creation modal)
