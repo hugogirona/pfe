@@ -17,7 +17,7 @@ return [
     'verify_email_intro' => 'Voici ton code de vérification :',
     'verify_email_expiry' => 'Ce code est valable 10 minutes.',
     'verify_email_expires_at' => 'Code valable jusqu\'à :time.',
-    'verify_email_ignore' => "Si tu n'as pas créé de compte sur Giggr, ignore simplement ce mail.",
+    'verify_email_ignore' => "Si tu n'es pas à l'origine de cette demande, ignore simplement ce message.",
     'verify_email_salutation_html' => "Merci,<br>L'équipe Giggr.",
 
     // Password reset

@@ -26,6 +26,10 @@ class SendMessage
             throw new InvalidArgumentException('Messages cannot be exchanged between blocked users.');
         }
 
+        if (! $recipient->canBeContactedBy($sender) && ! $this->hasAcceptedConversation($sender, $recipient)) {
+            throw new InvalidArgumentException('The recipient does not accept contact from this user.');
+        }
+
         Validator::make(['body' => $body], [
             'body' => ['required', 'string', 'min:1', 'max:2000'],
         ])->validate();
@@ -77,5 +81,16 @@ class SendMessage
         }
 
         return $sender->profile !== null && $recipient->isFollowing($sender->profile);
+    }
+
+    private function hasAcceptedConversation(User $a, User $b): bool
+    {
+        [$low, $high] = $a->id < $b->id ? [$a->id, $b->id] : [$b->id, $a->id];
+
+        return Conversation::query()
+            ->where('user_a_id', $low)
+            ->where('user_b_id', $high)
+            ->whereNotNull('accepted_at')
+            ->exists();
     }
 }

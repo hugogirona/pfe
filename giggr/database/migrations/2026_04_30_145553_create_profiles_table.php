@@ -19,6 +19,7 @@ return new class extends Migration
             $table->date('birth_date')->nullable();
             $table->string('avatar_path')->nullable();
             $table->string('status')->default('looking_for_band');
+            $table->string('contact_preference')->default('everyone');
             $table->smallInteger('experience_years')->default(0);
             $table->softDeletes();
             $table->timestamps();

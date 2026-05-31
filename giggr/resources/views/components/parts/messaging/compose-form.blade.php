@@ -1,16 +1,21 @@
 @props([
     'conversationId' => null,
-    'blockState' => null,
+    'lock' => null,
 ])
 
-@if ($blockState !== null)
+@if ($lock !== null)
     <div class="px-6 py-5 border-t border-dark/10 shrink-0 bg-dark/3 text-center" role="status">
         <p class="text-sm text-dark/60 italic leading-relaxed">
-            @if ($blockState === 'blocked-by-me')
-                {{ __('messaging.blocked_by_you') }}
-            @else
-                {{ __('messaging.blocked_by_them') }}
-            @endif
+            @switch($lock)
+                @case('blocked-by-me')
+                    {{ __('messaging.blocked_by_you') }}
+                    @break
+                @case('contact-closed')
+                    {{ __('messaging.contact_closed') }}
+                    @break
+                @default
+                    {{ __('messaging.blocked_by_them') }}
+            @endswitch
         </p>
     </div>
 @else

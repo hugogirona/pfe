@@ -6,6 +6,7 @@
     $instruments = $author->instruments->pluck('name');
     $genres = $author->genres->pluck('name');
     $isOwner = auth()->check() && auth()->id() === $announcement->user_id;
+    $canContact = auth()->check() && ! $isOwner && $announcement->user->canBeContactedBy(auth()->user());
 @endphp
 
 <div class="bg-white rounded-2xl border border-dark/10 shadow-sm overflow-hidden">
@@ -59,7 +60,6 @@
     {{-- Actions --}}
     <div class="px-6 py-5 space-y-2.5">
         @if ($isOwner)
-            {{-- Owner: editing is the primary action; contacting yourself makes no sense --}}
             <x-cta
                 variant="accent"
                 class="w-full gap-2"
@@ -69,7 +69,7 @@
                 <x-icon name="pencil-square" class="w-4 h-4" />
                 {{ __('announcement.author_edit') }}
             </x-cta>
-        @else
+        @elseif ($canContact)
             <x-cta
                 variant="accent"
                 class="w-full gap-2"

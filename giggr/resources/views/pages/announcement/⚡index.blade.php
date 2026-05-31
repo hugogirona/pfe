@@ -3,6 +3,7 @@
 use App\Models\Announcement;
 use Illuminate\Support\Collection;
 use Livewire\Attributes\Layout;
+use Livewire\Attributes\On;
 use Livewire\Component;
 
 new #[Layout('layouts.app')] class extends Component
@@ -33,6 +34,12 @@ new #[Layout('layouts.app')] class extends Component
             })
             ->limit(3)
             ->get();
+    }
+
+    #[On('echo:profile.{announcement.user.profile.id},.contact-preference.updated')]
+    public function refreshContactState(): void
+    {
+        $this->announcement->user->unsetRelation('profile');
     }
 
     public function render(): \Illuminate\Contracts\View\View
