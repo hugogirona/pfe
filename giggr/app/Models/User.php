@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Enums\ContactPreference;
+use App\Events\ConversationClosed;
 use App\Notifications\PasswordResetLink;
 use App\Notifications\WelcomeWithVerificationCode;
 use Database\Factories\UserFactory;
@@ -142,6 +144,17 @@ class User extends Authenticatable implements MustVerifyEmail
             ->exists();
     }
 
+    public function canBeContactedBy(User $viewer): bool
+    {
+        $preference = $this->profile?->contact_preference ?? ContactPreference::Everyone;
+
+        return match ($preference) {
+            ContactPreference::Everyone => true,
+            ContactPreference::FollowersOnly => $viewer->profile !== null && $this->isFollowing($viewer->profile),
+            ContactPreference::Nobody => false,
+        };
+    }
+
     public function blockedUsers(): BelongsToMany
     {
         return $this->belongsToMany(
@@ -166,6 +179,12 @@ class User extends Authenticatable implements MustVerifyEmail
             $this->conversations()->updateExistingPivot($existing->id, [
                 'hidden_at' => now(),
             ]);
+
+            try {
+                broadcast(new ConversationClosed((int) $existing->id));
+            } catch (\Throwable $e) {
+                report($e);
+            }
         }
     }
 

@@ -1,6 +1,7 @@
 <?php
 
 use App\Actions\SendMessage;
+use App\Enums\ContactPreference;
 use App\Events\MessageSent;
 use App\Models\Conversation;
 use App\Models\Message;
@@ -85,6 +86,49 @@ it('rejects a body longer than 2000 characters', function () {
 
     expect(fn () => app(SendMessage::class)->execute($alice, $bob, str_repeat('a', 2001)))
         ->toThrow(ValidationException::class);
+});
+
+it('refuses unsolicited contact when the recipient accepts nobody', function () {
+    $alice = User::factory()->withProfile()->create();
+    $bob = User::factory()->withProfile()->create();
+    $bob->profile->update(['contact_preference' => ContactPreference::Nobody]);
+
+    expect(fn () => app(SendMessage::class)->execute($alice, $bob, 'Hi'))
+        ->toThrow(InvalidArgumentException::class)
+        ->and(Message::count())->toBe(0);
+});
+
+it('allows contact from a followed user when the recipient accepts only followers', function () {
+    $alice = User::factory()->withProfile()->create();
+    $bob = User::factory()->withProfile()->create();
+    $bob->profile->update(['contact_preference' => ContactPreference::FollowersOnly]);
+    $bob->follow($alice->profile);
+
+    expect(app(SendMessage::class)->execute($alice, $bob, 'Hi'))
+        ->toBeInstanceOf(Message::class);
+});
+
+it('refuses contact from a non-followed user when the recipient accepts only followers', function () {
+    $alice = User::factory()->withProfile()->create();
+    $bob = User::factory()->withProfile()->create();
+    $bob->profile->update(['contact_preference' => ContactPreference::FollowersOnly]);
+
+    expect(fn () => app(SendMessage::class)->execute($alice, $bob, 'Hi'))
+        ->toThrow(InvalidArgumentException::class)
+        ->and(Message::count())->toBe(0);
+});
+
+it('still allows replies in an accepted conversation even if the recipient now accepts nobody', function () {
+    $alice = User::factory()->withProfile()->create();
+    $bob = User::factory()->withProfile()->create();
+    $action = app(SendMessage::class);
+
+    $action->execute($alice, $bob, 'Hi');
+    $action->execute($bob, $alice, 'Hey'); // auto-accepts the conversation
+    $bob->profile->update(['contact_preference' => ContactPreference::Nobody]);
+
+    expect($action->execute($alice, $bob, 'Still around?'))
+        ->toBeInstanceOf(Message::class);
 });
 
 it('auto-accepts when the recipient already follows the sender profile', function () {

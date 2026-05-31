@@ -220,6 +220,27 @@ new class extends Component {
         return null;
     }
 
+    #[Computed]
+    public function composerLock(): ?string
+    {
+        if ($this->blockState !== null) {
+            return $this->blockState;
+        }
+
+        $correspondent = $this->correspondent;
+        if ($correspondent === null) {
+            return null;
+        }
+
+        $alreadyAccepted = $this->currentConversation?->accepted_at !== null;
+
+        if (! $alreadyAccepted && ! $correspondent->canBeContactedBy(auth()->user())) {
+            return 'contact-closed';
+        }
+
+        return null;
+    }
+
     public function switchTab(string $tab): void
     {
         if (in_array($tab, ['messages', 'requests'], true)) {
@@ -369,7 +390,13 @@ new class extends Component {
         $correspondent = $this->correspondent;
         abort_unless($correspondent !== null, 404);
 
-        $message = app(SendMessage::class)->execute(auth()->user(), $correspondent, $this->body);
+        try {
+            $message = app(SendMessage::class)->execute(auth()->user(), $correspondent, $this->body);
+        } catch (\InvalidArgumentException) {
+            unset($this->currentConversation, $this->correspondent, $this->conversations, $this->visibleConversations);
+
+            return;
+        }
 
         if ($this->draftRecipientId !== null) {
             $this->currentConversationId = $message->conversation_id;
@@ -443,7 +470,7 @@ new class extends Component {
 
             <x-parts.messaging.compose-form
                 :conversation-id="$convo?->id"
-                :block-state="$this->blockState"
+                :lock="$this->composerLock"
             />
         </div>
 

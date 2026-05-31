@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\ContactPreference;
 use App\Enums\ProfileStatus;
 use Database\Factories\ProfileFactory;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -26,6 +27,7 @@ class Profile extends Model
         'birth_date',
         'avatar_path',
         'status',
+        'contact_preference',
         'experience_years',
     ];
 
@@ -33,6 +35,7 @@ class Profile extends Model
     {
         return [
             'status' => ProfileStatus::class,
+            'contact_preference' => ContactPreference::class,
             'birth_date' => 'date',
         ];
     }

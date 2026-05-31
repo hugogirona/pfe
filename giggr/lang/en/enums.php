@@ -18,4 +18,9 @@ return [
         'image' => 'Photo',
         'youtube' => 'YouTube video',
     ],
+    'contact_preference' => [
+        'everyone' => 'Everyone',
+        'followers_only' => 'Only people I follow',
+        'nobody' => 'Nobody',
+    ],
 ];

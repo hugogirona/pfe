@@ -1,9 +1,45 @@
 <?php
 
+use App\Enums\ContactPreference;
 use App\Models\Conversation;
 use App\Models\Message;
 use App\Models\User;
 use Livewire\Livewire;
+
+it('locks the composer instead of erroring when the recipient closes contact', function () {
+    $alice = User::factory()->withProfile()->create();
+    $bob = User::factory()->withProfile()->create();
+
+    $component = Livewire::actingAs($alice)
+        ->test('parts.messaging.inbox', ['model_id' => (string) $bob->id]);
+
+    // Bob closes contact after Alice's window was opened.
+    $bob->profile->update(['contact_preference' => ContactPreference::Nobody]);
+
+    $component->set('body', 'Hello?')
+        ->call('send')
+        ->assertHasNoErrors()
+        ->assertSeeHtml(__('messaging.contact_closed'));
+
+    expect(Message::count())->toBe(0);
+});
+
+it('locks the composer instead of erroring when the recipient blocks the sender', function () {
+    $alice = User::factory()->withProfile()->create();
+    $bob = User::factory()->withProfile()->create();
+
+    $component = Livewire::actingAs($alice)
+        ->test('parts.messaging.inbox', ['model_id' => (string) $bob->id]);
+
+    $bob->block($alice);
+
+    $component->set('body', 'Hi')
+        ->call('send')
+        ->assertHasNoErrors()
+        ->assertSeeHtml(__('messaging.blocked_by_them'));
+
+    expect(Message::count())->toBe(0);
+});
 
 it('lists accepted conversations in the messages tab by default', function () {
     $alice = User::factory()->withProfile()->create();
