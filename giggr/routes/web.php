@@ -43,6 +43,7 @@ Route::group([
     Route::livewire(LaravelLocalization::transRoute('routes.profile'), 'pages::profile.index')->name('profile')->middleware(['auth', 'verified']);
     Route::livewire(LaravelLocalization::transRoute('routes.announcement'), 'pages::announcement.index')->name('announcement')->middleware(['auth', 'verified']);
     Route::livewire(LaravelLocalization::transRoute('routes.contact'), 'pages::contact.index')->name('contact');
+    Route::livewire(LaravelLocalization::transRoute('routes.privacy'), 'pages::legal.privacy')->name('privacy');
     Route::livewire(LaravelLocalization::transRoute('routes.settings_account'), 'pages::settings.account')->name('settings.account')->middleware(['auth', 'verified']);
     Route::livewire(LaravelLocalization::transRoute('routes.register'), 'pages::auth.register')->name('register');
     Route::livewire(LaravelLocalization::transRoute('routes.login'), 'pages::auth.login')->name('login');

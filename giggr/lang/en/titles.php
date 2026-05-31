@@ -3,6 +3,7 @@
 return [
     'explore' => 'Explore',
     'contact' => 'Contact',
+    'privacy' => 'Privacy policy',
     'settings.account' => 'Settings',
     'register' => 'Sign up',
     'login' => 'Sign in',
