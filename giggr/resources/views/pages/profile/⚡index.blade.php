@@ -57,6 +57,11 @@ class extends Component {
         }
     }
 
+    public function render(): \Illuminate\Contracts\View\View
+    {
+        return $this->view()->title($this->profile->user->full_name);
+    }
+
     public function saveBio(): void
     {
         abort_unless($this->isOwner, 403);

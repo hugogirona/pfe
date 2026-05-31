@@ -13,6 +13,11 @@ new #[Layout('layouts.auth')] class extends Component
         $this->token = $token;
         $this->email = request()->query('email', '');
     }
+
+    public function render(): \Illuminate\Contracts\View\View
+    {
+        return $this->view()->title(__('titles.password.reset'));
+    }
 };
 ?>
 

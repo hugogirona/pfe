@@ -11,6 +11,11 @@ new #[Layout('layouts.auth')] class extends Component
             $this->redirect(config('fortify.home'), navigate: true);
         }
     }
+
+    public function render(): \Illuminate\Contracts\View\View
+    {
+        return $this->view()->title(__('titles.register'));
+    }
 };
 ?>
 

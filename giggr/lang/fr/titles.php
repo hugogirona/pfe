@@ -1,10 +1,7 @@
 <?php
 
 return [
-    'home' => 'Accueil',
     'explore' => 'Explorer',
-    'profile' => 'Profil',
-    'announcement' => 'Annonce',
     'contact' => 'Contact',
     'settings.account' => 'Paramètres',
     'register' => 'Créer un compte',

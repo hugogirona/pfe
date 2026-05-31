@@ -27,6 +27,11 @@ new #[Layout('layouts.app')] class extends Component {
         }
     }
 
+    public function render(): \Illuminate\Contracts\View\View
+    {
+        return $this->view()->title(__('titles.settings.account'));
+    }
+
     #[Computed]
     public function rows(): Collection
     {

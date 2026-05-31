@@ -34,6 +34,11 @@ new #[Layout('layouts.app')] class extends Component
             ->limit(3)
             ->get();
     }
+
+    public function render(): \Illuminate\Contracts\View\View
+    {
+        return $this->view()->title($this->announcement->title);
+    }
 };
 ?>
 
