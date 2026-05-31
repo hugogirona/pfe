@@ -170,6 +170,7 @@ return [
         'description' => 'description',
         'first_name' => 'prénom',
         'last_name' => 'nom',
+        'birth_date' => 'date de naissance',
         'email' => 'e-mail',
         'password' => 'mot de passe',
         'password_confirmation' => 'confirmation du mot de passe',

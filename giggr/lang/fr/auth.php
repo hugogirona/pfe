@@ -55,6 +55,7 @@ return [
     'register_first_name_ph' => 'Marie',
     'register_last_name' => 'Nom',
     'register_last_name_ph' => 'Dupont',
+    'register_birth_date' => 'Date de naissance',
     'register_password_ph' => '8 caractères minimum',
     'register_submit' => 'Rejoindre Giggr.',
     'register_login_prompt' => 'Déjà un compte ?',

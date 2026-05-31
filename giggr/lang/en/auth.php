@@ -55,6 +55,7 @@ return [
     'register_first_name_ph' => 'Marie',
     'register_last_name' => 'Last name',
     'register_last_name_ph' => 'Dupont',
+    'register_birth_date' => 'Date of birth',
     'register_password_ph' => 'At least 8 characters',
     'register_submit' => 'Join Giggr.',
     'register_login_prompt' => 'Already have an account?',

@@ -29,6 +29,7 @@ class CreateNewUser implements CreatesNewUsers
             'last_name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', Rule::unique(User::class)],
             'password' => $this->passwordRules(),
+            'birth_date' => ['nullable', 'date_format:Y-m-d', 'before:today', 'after:1900-01-01'],
         ], [
             'email.unique' => __('auth.email_taken', ['url' => route('login')]),
         ])->validate();
@@ -46,7 +47,10 @@ class CreateNewUser implements CreatesNewUsers
                 'email_verification_code_expires_at' => now()->addMinutes(self::VERIFICATION_CODE_TTL_MINUTES),
             ]);
 
-            Profile::create(['user_id' => $user->id]);
+            Profile::create([
+                'user_id' => $user->id,
+                'birth_date' => $input['birth_date'] ?? null,
+            ]);
 
             return $user;
         });
