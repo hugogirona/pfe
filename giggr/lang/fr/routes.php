@@ -5,6 +5,7 @@ return [
     'profile' => 'profil/{id}',
     'announcement' => 'annonces/{id}',
     'contact' => 'contact',
+    'privacy' => 'politique-de-confidentialite',
     'settings_account' => 'parametres/compte',
     'register' => 'inscription',
     'login' => 'connexion',

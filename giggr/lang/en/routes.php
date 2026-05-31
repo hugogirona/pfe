@@ -5,6 +5,7 @@ return [
     'profile' => 'profile/{id}',
     'announcement' => 'listings/{id}',
     'contact' => 'contact',
+    'privacy' => 'privacy-policy',
     'settings_account' => 'settings/account',
     'register' => 'register',
     'login' => 'login',

@@ -15,6 +15,7 @@
                     <a href="{{ route('home') }}" wire:navigate.hover class="text-base text-bg/70 hover:text-bg transition-colors duration-150 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent rounded-sm">{{ __('footer.home') }}</a>
                     <a href="{{ route('explore') }}" wire:navigate.hover class="text-base text-bg/70 hover:text-bg transition-colors duration-150 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent rounded-sm">{{ __('footer.explore') }}</a>
                     <a href="{{ route('contact') }}" wire:navigate.hover class="text-base text-bg/70 hover:text-bg transition-colors duration-150 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent rounded-sm">{{ __('footer.contact') }}</a>
+                    <a href="{{ route('privacy') }}" wire:navigate.hover class="text-base text-bg/70 hover:text-bg transition-colors duration-150 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent rounded-sm">{{ __('footer.privacy') }}</a>
                 </nav>
 
                 <x-footer.socials />

@@ -73,7 +73,7 @@
 
         <x-form.checkbox name="rgpd" :required="true" :checked="old('rgpd')" value="1">
             {!! __('contact.rgpd_label', [
-                'link' => '<a href="#"
+                'link' => '<a href="'.route('privacy').'" wire:navigate
                               class="text-accent underline underline-offset-2 hover:opacity-80 transition-opacity duration-150
                               focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent rounded-sm">'
                         . __('contact.rgpd_policy')

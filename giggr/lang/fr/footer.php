@@ -6,5 +6,6 @@ return [
     'home' => 'Accueil',
     'explore' => 'Explorer',
     'contact' => 'Contact',
+    'privacy' => 'Confidentialité',
     'copyright' => '© :year Giggr. Tous droits réservés.',
 ];
