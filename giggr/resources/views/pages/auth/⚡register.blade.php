@@ -50,6 +50,14 @@ new #[Layout('layouts.auth')] class extends Component
         </div>
 
         <x-form.input
+            name="birth_date"
+            type="date"
+            :label="__('auth.register_birth_date')"
+            autocomplete="bday"
+            :max="now()->format('Y-m-d')"
+        />
+
+        <x-form.input
             name="email"
             type="email"
             :label="__('auth.email_label')"

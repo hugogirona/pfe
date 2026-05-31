@@ -203,6 +203,7 @@ return [
         'description' => 'description',
         'first_name' => 'first name',
         'last_name' => 'last name',
+        'birth_date' => 'date of birth',
         'email' => 'email address',
         'password' => 'password',
         'password_confirmation' => 'password confirmation',
