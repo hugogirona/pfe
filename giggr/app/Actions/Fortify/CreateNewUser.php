@@ -30,8 +30,10 @@ class CreateNewUser implements CreatesNewUsers
             'email' => ['required', 'string', 'email', 'max:255', Rule::unique(User::class)],
             'password' => $this->passwordRules(),
             'birth_date' => ['nullable', 'date_format:Y-m-d', 'before:today', 'after:1900-01-01'],
+            'rgpd' => ['accepted'],
         ], [
             'email.unique' => __('auth.email_taken', ['url' => route('login')]),
+            'rgpd.accepted' => __('auth.register_rgpd_required'),
         ])->validate();
 
         $max = (10 ** self::VERIFICATION_CODE_LENGTH) - 1;

@@ -3,6 +3,7 @@
 return [
     'explore' => 'Explorer',
     'contact' => 'Contact',
+    'privacy' => 'Politique de confidentialité',
     'settings.account' => 'Paramètres',
     'register' => 'Créer un compte',
     'login' => 'Se connecter',

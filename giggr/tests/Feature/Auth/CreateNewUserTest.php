@@ -14,6 +14,7 @@ function validRegistrationInput(array $overrides = []): array
         'password' => 'password',
         'password_confirmation' => 'password',
         'birth_date' => '1998-06-15',
+        'rgpd' => true,
     ], $overrides);
 }
 
@@ -62,4 +63,22 @@ it('renders an ISO date input for the birth date on the register form', function
     Livewire::test('pages::auth.register')
         ->assertSeeHtml('name="birth_date"')
         ->assertSeeHtml('type="date"');
+});
+
+it('renders a privacy-policy consent checkbox on the register form', function () {
+    Livewire::test('pages::auth.register')
+        ->assertSeeHtml('name="rgpd"');
+});
+
+it('requires accepting the privacy policy', function () {
+    $input = validRegistrationInput();
+    unset($input['rgpd']);
+
+    expect(fn () => app(CreatesNewUsers::class)->create($input))
+        ->toThrow(ValidationException::class);
+});
+
+it('rejects registration when the privacy policy is declined', function () {
+    expect(fn () => app(CreatesNewUsers::class)->create(validRegistrationInput(['rgpd' => false])))
+        ->toThrow(ValidationException::class);
 });

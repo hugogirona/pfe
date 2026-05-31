@@ -19,6 +19,7 @@ it('generates a 6-digit code and stores its expiry on registration', function ()
         'email' => 'hugo@example.com',
         'password' => 'password123',
         'birth_date' => '1998-06-15',
+        'rgpd' => '1',
     ]);
 
     expect($user->email_verification_code)->toMatch('/^\d{6}$/')
@@ -36,6 +37,7 @@ it('sends the WelcomeWithVerificationCode notification on full registration HTTP
         'email' => 'hugo@example.com',
         'password' => 'password123',
         'birth_date' => '1998-06-15',
+        'rgpd' => '1',
     ]);
 
     $user = User::where('email', 'hugo@example.com')->firstOrFail();
@@ -51,6 +53,7 @@ it('leaves the user unverified on creation', function () {
         'email' => 'hugo@example.com',
         'password' => 'password123',
         'birth_date' => '1998-06-15',
+        'rgpd' => '1',
     ]);
 
     expect($user->email_verified_at)->toBeNull()

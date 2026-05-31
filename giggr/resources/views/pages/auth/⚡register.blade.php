@@ -74,6 +74,16 @@ new #[Layout('layouts.auth')] class extends Component
             :placeholder="__('auth.register_password_ph')"
         />
 
+        <x-form.checkbox name="rgpd" :required="true" :checked="old('rgpd')" value="1">
+            {!! __('auth.register_rgpd_label', [
+                'link' => '<a href="'.route('privacy').'" wire:navigate
+                              class="text-accent underline underline-offset-2 hover:opacity-80 transition-opacity duration-150
+                              focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent rounded-sm">'
+                        . __('auth.register_rgpd_policy')
+                        . '</a>',
+            ]) !!}
+        </x-form.checkbox>
+
         <p class="text-xs text-dark/40">
             {{ __('auth.required_legend') }}
         </p>
