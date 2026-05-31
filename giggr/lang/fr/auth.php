@@ -64,6 +64,7 @@ return [
     'login_heading' => 'Se connecter',
     'login_subtitle' => 'Content de te revoir.',
     'login_forgot' => 'Mot de passe oublié ?',
+    'login_remember' => 'Se souvenir de moi',
     'login_submit' => 'Se connecter',
     'login_register_prompt' => 'Pas encore de compte ?',
     'login_register_link' => 'Créer un compte',
