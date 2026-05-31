@@ -64,6 +64,7 @@ return [
     'login_heading' => 'Sign in',
     'login_subtitle' => 'Good to see you again.',
     'login_forgot' => 'Forgot your password?',
+    'login_remember' => 'Remember me',
     'login_submit' => 'Sign in',
     'login_register_prompt' => 'No account yet?',
     'login_register_link' => 'Create an account',

@@ -46,7 +46,10 @@ new #[Layout('layouts.auth')] class extends Component
             autocomplete="current-password"
         />
 
-        <div class="flex justify-end -mt-2">
+        <div class="flex items-center justify-between gap-4 -mt-2">
+            <x-form.checkbox name="remember" :checked="old('remember')">
+                {{ __('auth.login_remember') }}
+            </x-form.checkbox>
             <a href="{{ route('password.request') }}"
                class="text-xs text-dark/50 hover:text-accent transition-colors duration-150
                       focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent rounded-sm">
