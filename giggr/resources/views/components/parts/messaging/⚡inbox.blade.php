@@ -149,6 +149,29 @@ new class extends Component {
     }
 
     #[Computed]
+    public function messagesCount(): int
+    {
+        $userId = (int) auth()->id();
+
+        return $this->conversations->filter(
+            fn (Conversation $c): bool => ($c->accepted_at !== null || (int) $c->requester_user_id === $userId)
+                && (int) $c->unread_count_for_me > 0,
+        )->count();
+    }
+
+    #[Computed]
+    public function requestsCount(): int
+    {
+        $userId = (int) auth()->id();
+
+        return $this->conversations->filter(
+            fn (Conversation $c): bool => $c->accepted_at === null
+                && (int) $c->requester_user_id !== $userId
+                && (int) $c->unread_count_for_me > 0,
+        )->count();
+    }
+
+    #[Computed]
     public function currentConversation(): ?Conversation
     {
         if ($this->currentConversationId === null) {
@@ -192,6 +215,27 @@ new class extends Component {
         }
         if ($correspondent->hasBlocked($me)) {
             return 'blocked-by-them';
+        }
+
+        return null;
+    }
+
+    #[Computed]
+    public function composerLock(): ?string
+    {
+        if ($this->blockState !== null) {
+            return $this->blockState;
+        }
+
+        $correspondent = $this->correspondent;
+        if ($correspondent === null) {
+            return null;
+        }
+
+        $alreadyAccepted = $this->currentConversation?->accepted_at !== null;
+
+        if (! $alreadyAccepted && ! $correspondent->canBeContactedBy(auth()->user())) {
+            return 'contact-closed';
         }
 
         return null;
@@ -346,7 +390,13 @@ new class extends Component {
         $correspondent = $this->correspondent;
         abort_unless($correspondent !== null, 404);
 
-        $message = app(SendMessage::class)->execute(auth()->user(), $correspondent, $this->body);
+        try {
+            $message = app(SendMessage::class)->execute(auth()->user(), $correspondent, $this->body);
+        } catch (\InvalidArgumentException) {
+            unset($this->currentConversation, $this->correspondent, $this->conversations, $this->visibleConversations);
+
+            return;
+        }
 
         if ($this->draftRecipientId !== null) {
             $this->currentConversationId = $message->conversation_id;
@@ -372,7 +422,11 @@ new class extends Component {
 
     @if ($view === 'list')
 
-        <x-parts.messaging.inbox-tabs :active-tab="$activeTab"/>
+        <x-parts.messaging.inbox-tabs
+            :active-tab="$activeTab"
+            :messages-count="$this->messagesCount"
+            :requests-count="$this->requestsCount"
+        />
 
         <x-parts.messaging.conversation-list
             :conversations="$this->visibleConversations"
@@ -416,7 +470,7 @@ new class extends Component {
 
             <x-parts.messaging.compose-form
                 :conversation-id="$convo?->id"
-                :block-state="$this->blockState"
+                :lock="$this->composerLock"
             />
         </div>
 

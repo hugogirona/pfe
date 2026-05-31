@@ -2,7 +2,7 @@
 
 return [
     'title' => 'Messages',
-    'tab_messages' => 'Messages',
+    'tab_messages' => 'Conversations',
     'tab_requests' => 'Requests',
     'aria_tabs' => 'Filter conversations',
     'empty_messages' => 'No conversations yet.',
@@ -32,4 +32,5 @@ return [
     'block_correspondent_aria' => 'Block :name',
     'blocked_by_you' => "You've blocked this user. Unblock them from settings to message again.",
     'blocked_by_them' => "You can't send messages to this user.",
+    'contact_closed' => 'This person no longer wishes to be contacted.',
 ];

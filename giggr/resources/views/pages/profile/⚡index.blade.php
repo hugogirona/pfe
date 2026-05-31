@@ -57,6 +57,11 @@ class extends Component {
         }
     }
 
+    public function render(): \Illuminate\Contracts\View\View
+    {
+        return $this->view()->title($this->profile->user->full_name);
+    }
+
     public function saveBio(): void
     {
         abort_unless($this->isOwner, 403);
@@ -148,6 +153,12 @@ class extends Component {
     public function refreshCounts(): void
     {
         $this->reloadRelationCounts();
+    }
+
+    #[On('echo:profile.{profile.id},.contact-preference.updated')]
+    public function refreshContactState(): void
+    {
+        $this->profile->user->unsetRelation('profile');
     }
 
     private function reloadRelationCounts(): void

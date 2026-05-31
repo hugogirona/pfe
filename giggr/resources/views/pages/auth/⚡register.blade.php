@@ -11,6 +11,11 @@ new #[Layout('layouts.auth')] class extends Component
             $this->redirect(config('fortify.home'), navigate: true);
         }
     }
+
+    public function render(): \Illuminate\Contracts\View\View
+    {
+        return $this->view()->title(__('titles.register'));
+    }
 };
 ?>
 
@@ -43,6 +48,14 @@ new #[Layout('layouts.auth')] class extends Component
                 :placeholder="__('auth.register_last_name_ph')"
             />
         </div>
+
+        <x-form.input
+            name="birth_date"
+            type="date"
+            :label="__('auth.register_birth_date')"
+            autocomplete="bday"
+            :max="now()->format('Y-m-d')"
+        />
 
         <x-form.input
             name="email"

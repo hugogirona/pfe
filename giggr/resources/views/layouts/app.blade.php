@@ -4,18 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    @php
-        $routeName = Route::currentRouteName();
-        $brand = config('app.name');
-        if ($routeName === 'home') {
-            $pageTitle = $brand;
-        } elseif ($routeName && trans()->has('titles.'.$routeName)) {
-            $pageTitle = __('titles.'.$routeName).' — '.$brand;
-        } else {
-            $pageTitle = $title ?? $brand;
-        }
-    @endphp
-    <title>{{ $pageTitle }}</title>
+    <title>{{ filled($title ?? null) ? $title.' — '.config('app.name') : config('app.name') }}</title>
 
     <link rel="icon" type="image/png" href="{{ Vite::asset('resources/favicon/favicon-96x96.png') }}" sizes="96x96">
     <link rel="icon" type="image/svg+xml" href="{{ Vite::asset('resources/favicon/favicon.svg') }}">

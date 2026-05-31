@@ -17,7 +17,7 @@ return [
     'verify_email_intro' => 'Voici ton code de vérification :',
     'verify_email_expiry' => 'Ce code est valable 10 minutes.',
     'verify_email_expires_at' => 'Code valable jusqu\'à :time.',
-    'verify_email_ignore' => "Si tu n'as pas créé de compte sur Giggr, ignore simplement ce mail.",
+    'verify_email_ignore' => "Si tu n'es pas à l'origine de cette demande, ignore simplement ce message.",
     'verify_email_salutation_html' => "Merci,<br>L'équipe Giggr.",
 
     // Password reset
@@ -55,6 +55,7 @@ return [
     'register_first_name_ph' => 'Marie',
     'register_last_name' => 'Nom',
     'register_last_name_ph' => 'Dupont',
+    'register_birth_date' => 'Date de naissance',
     'register_password_ph' => '8 caractères minimum',
     'register_submit' => 'Rejoindre Giggr.',
     'register_login_prompt' => 'Déjà un compte ?',
@@ -64,6 +65,7 @@ return [
     'login_heading' => 'Se connecter',
     'login_subtitle' => 'Content de te revoir.',
     'login_forgot' => 'Mot de passe oublié ?',
+    'login_remember' => 'Se souvenir de moi',
     'login_submit' => 'Se connecter',
     'login_register_prompt' => 'Pas encore de compte ?',
     'login_register_link' => 'Créer un compte',

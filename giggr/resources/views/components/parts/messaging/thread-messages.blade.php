@@ -12,6 +12,7 @@
         channel: null,
         readHandler: null,
         typingHandler: null,
+        closedHandler: null,
         isTyping: false,
         typingTimer: null,
         scrollToBottom() { this.$nextTick(() => { this.$el.scrollTop = this.$el.scrollHeight; }); },
@@ -27,12 +28,15 @@
             this.channel = window.Echo.private('conversation.' + id);
             this.readHandler = (e) => $wire.readReceiptReceived(e);
             this.typingHandler = () => this.showTyping();
+            this.closedHandler = () => $wire.$refresh();
             this.channel.listen('.messages.read', this.readHandler);
+            this.channel.listen('.conversation.closed', this.closedHandler);
             this.channel.listenForWhisper('typing', this.typingHandler);
         },
         destroy() {
             if (this.channel) {
                 if (this.readHandler) this.channel.stopListening('.messages.read', this.readHandler);
+                if (this.closedHandler) this.channel.stopListening('.conversation.closed', this.closedHandler);
                 if (this.typingHandler) this.channel.stopListeningForWhisper('typing', this.typingHandler);
             }
             clearTimeout(this.typingTimer);

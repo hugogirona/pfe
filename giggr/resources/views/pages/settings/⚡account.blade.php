@@ -27,6 +27,11 @@ new #[Layout('layouts.app')] class extends Component {
         }
     }
 
+    public function render(): \Illuminate\Contracts\View\View
+    {
+        return $this->view()->title(__('titles.settings.account'));
+    }
+
     #[Computed]
     public function rows(): Collection
     {
@@ -62,26 +67,23 @@ new #[Layout('layouts.app')] class extends Component {
 ?>
 
 <div>
-    <div class="max-w-3xl mx-auto px-6 py-10">
+    <div class="max-w-3xl mx-auto px-6 py-10 space-y-6">
 
-        <header class="mb-8">
+        <header>
             <h1 class="font-heading text-3xl text-dark">{{ __('settings.title') }}</h1>
             <p class="text-sm text-dark/50 mt-1 uppercase tracking-wider">{{ __('settings.account_section') }}</p>
         </header>
 
-        <section
-            aria-labelledby="blocked-users-heading"
-            class="bg-white rounded-2xl border border-dark/10 shadow-sm p-6 md:p-8"
-        >
-            <header class="mb-5">
-                <h2 id="blocked-users-heading" class="font-heading text-xl text-dark">
-                    {{ __('settings.blocked_users_title') }}
-                </h2>
-                <p class="text-sm text-dark/55 mt-1.5 leading-relaxed">
-                    {{ __('settings.blocked_users_description') }}
-                </p>
-            </header>
+        <livewire:parts.settings.update-email />
+        <livewire:parts.settings.update-password />
+        <livewire:parts.settings.personal-info />
+        <livewire:parts.settings.privacy />
 
+        <x-settings.section
+            labelledby="blocked-users-heading"
+            :title="__('settings.blocked_users_title')"
+            :description="__('settings.blocked_users_description')"
+        >
             @if ($this->rows->isEmpty())
                 <div class="flex flex-col items-center justify-center py-10 text-center">
                     <div class="w-14 h-14 rounded-full bg-dark/5 flex items-center justify-center mb-3" aria-hidden="true">
@@ -132,7 +134,7 @@ new #[Layout('layouts.app')] class extends Component {
                     @endforeach
                 </ul>
             @endif
-        </section>
+        </x-settings.section>
 
     </div>
 </div>

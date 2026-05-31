@@ -165,8 +165,11 @@ class extends Component {
     #[On('announcement-deleted')]
     public function refreshAnnouncements(): void
     {
-        // Re-render is enough: filteredAnnouncements is a #[Computed] property
-        // and its cache is reset for each new component request.
+    }
+
+    public function render(): \Illuminate\Contracts\View\View
+    {
+        return $this->view()->title(__('titles.explore'));
     }
 };
 ?>

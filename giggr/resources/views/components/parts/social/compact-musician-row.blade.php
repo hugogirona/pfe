@@ -42,10 +42,8 @@
             wire:click="toggleFollow({{ $profile->id }})"
             @if ($isFollowing) x-data="{ hover: false }" @mouseenter="hover = true" @mouseleave="hover = false" @endif
             @class([
-                'h-8 px-3 rounded-full text-xs font-medium transition-colors duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent shrink-0 inline-flex items-center justify-center gap-1',
-                // Following: quiet "done" state with min-width for the longer hover label
-                'min-w-[7.5rem] bg-dark/5 text-dark/55 hover:bg-accent/10 hover:text-accent' => $isFollowing,
-                // Not following: outline invitation, warm pastel hover
+                'h-8 px-5 min-w-[7.5rem] rounded-full text-xs font-medium transition-colors duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent shrink-0 inline-flex items-center justify-center gap-1',
+                'bg-dark/5 text-dark/55 hover:bg-accent/10 hover:text-accent' => $isFollowing,
                 'border border-dark/20 text-dark hover:border-dark/40 hover:bg-pastel-salmon/40' => ! $isFollowing,
             ])
             aria-pressed="{{ $isFollowing ? 'true' : 'false' }}"

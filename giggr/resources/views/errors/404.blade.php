@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>404 — {{ config('app.name') }}</title>
-    <link rel="preload" href="/fonts/dm-sans-regular.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="{{ Vite::asset('resources/fonts/dm-sans-regular.woff2') }}" as="font" type="font/woff2" crossorigin>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
 </head>
@@ -14,7 +14,7 @@
     <main class="flex-1 flex flex-col items-center justify-center px-6 py-16 md:py-24">
         <div class="flex items-center justify-center" role="img" aria-label="404">
             <img
-                src="{{ asset('img/404.svg') }}"
+                src="{{ Vite::asset('resources/img/404.svg') }}"
                 alt=""
                 aria-hidden="true"
                 class="relative z-10 h-[28vw] md:h-[22vw] lg:h-[18vw] w-auto -mx-3 md:-mx-6"

@@ -26,7 +26,8 @@ return [
 
     // Author card
     'author_title' => 'Publié par',
-    'author_contact' => 'Contacter :name',
+    'author_contact' => 'Contacter',
+    'author_edit' => 'Modifier l\'annonce',
     'author_see_profile' => 'Voir le profil',
 
     // Form (creation modal)

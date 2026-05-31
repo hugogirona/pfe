@@ -1,10 +1,7 @@
 <?php
 
 return [
-    'home' => 'Home',
     'explore' => 'Explore',
-    'profile' => 'Profile',
-    'announcement' => 'Listing',
     'contact' => 'Contact',
     'settings.account' => 'Settings',
     'register' => 'Sign up',

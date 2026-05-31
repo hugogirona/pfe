@@ -18,4 +18,9 @@ return [
         'image' => 'Photo',
         'youtube' => 'Vidéo YouTube',
     ],
+    'contact_preference' => [
+        'everyone' => 'Tout le monde',
+        'followers_only' => 'Seulement les personnes que je suis',
+        'nobody' => 'Personne',
+    ],
 ];

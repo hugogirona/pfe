@@ -45,7 +45,7 @@
             <div class="px-5 py-4 space-y-3">
                 <div>
                     <h3 class="font-heading text-xl text-dark">{{ $name }}</h3>
-                    <p class="text-sm text-dark/40 mt-0.5">
+                    <p class="text-sm text-dark/40 mt-0.5 min-h-lh">
                         @if($profile->age)
                             {{ __('explore.card_years', ['n' => $profile->age]) }}
                         @endif
@@ -58,31 +58,33 @@
                     </p>
                 </div>
 
-                @if ($profile->instruments->isNotEmpty() || $profile->genres->isNotEmpty())
-                    <div class="flex flex-wrap gap-1.5">
-                        @foreach ($shownInstruments as $instrument)
-                            <x-pill variant="instrument">{{ $instrument }}</x-pill>
-                        @endforeach
-                        @if ($extraInstruments > 0)
-                            <x-pill variant="instrument">+{{ $extraInstruments }}</x-pill>
-                        @endif
-                        @foreach ($shownGenres as $genre)
-                            <x-pill variant="genre">{{ $genre }}</x-pill>
-                        @endforeach
-                        @if ($extraGenres > 0)
-                            <x-pill variant="genre">+{{ $extraGenres }}</x-pill>
-                        @endif
-                    </div>
-                @endif
+                <div class="flex flex-wrap content-start gap-1.5 min-h-13.5">
+                    @foreach ($shownInstruments as $instrument)
+                        <x-pill variant="instrument">{{ $instrument }}</x-pill>
+                    @endforeach
+                    @if ($extraInstruments > 0)
+                        <x-pill variant="instrument">+{{ $extraInstruments }}</x-pill>
+                    @endif
+                    @foreach ($shownGenres as $genre)
+                        <x-pill variant="genre">{{ $genre }}</x-pill>
+                    @endforeach
+                    @if ($extraGenres > 0)
+                        <x-pill variant="genre">+{{ $extraGenres }}</x-pill>
+                    @endif
+                </div>
 
-                <p class="text-sm text-dark/55 leading-relaxed line-clamp-2">{{ Str::limit($profile->bio, 120) }}</p>
+                <div class="text-sm leading-relaxed min-h-[2lh]">
+                    @if (filled($profile->bio))
+                        <p class="text-dark/55 line-clamp-2">{{ Str::limit($profile->bio, 120) }}</p>
+                    @endif
+                </div>
             </div>
 
             {{-- CTA --}}
             <div
                 class="relative overflow-hidden flex items-center min-h-12 px-5 border-t border-dark/10 text-sm font-medium">
                 <span
-                    class="absolute inset-0 -translate-x-[101%] bg-accent motion-safe:transition-transform motion-safe:duration-300 motion-safe:ease-out group-hover:translate-x-0"
+                    class="absolute inset-0 translate-x-[-101%] bg-accent motion-safe:transition-transform motion-safe:duration-300 motion-safe:ease-out group-hover:translate-x-0"
                     aria-hidden="true"></span>
                 <span
                     class="relative flex items-center gap-2 text-dark group-hover:text-bg motion-safe:transition-colors motion-safe:duration-100">

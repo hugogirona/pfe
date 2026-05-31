@@ -23,6 +23,7 @@
     </button>
 
     <nav x-show="open"
+         x-cloak
          x-transition:enter="transition ease-out duration-300"
          x-transition:enter-start="-translate-y-full"
          x-transition:enter-end="translate-y-0"

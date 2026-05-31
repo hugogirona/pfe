@@ -17,7 +17,7 @@ return [
     'verify_email_intro' => 'Here is your verification code:',
     'verify_email_expiry' => 'This code is valid for 10 minutes.',
     'verify_email_expires_at' => 'Code valid until :time.',
-    'verify_email_ignore' => "If you didn't sign up for Giggr, just ignore this email.",
+    'verify_email_ignore' => "If you didn't request this, you can safely ignore this email.",
     'verify_email_salutation_html' => 'Thanks,<br>The Giggr team.',
 
     // Password reset
@@ -55,6 +55,7 @@ return [
     'register_first_name_ph' => 'Marie',
     'register_last_name' => 'Last name',
     'register_last_name_ph' => 'Dupont',
+    'register_birth_date' => 'Date of birth',
     'register_password_ph' => 'At least 8 characters',
     'register_submit' => 'Join Giggr.',
     'register_login_prompt' => 'Already have an account?',
@@ -64,6 +65,7 @@ return [
     'login_heading' => 'Sign in',
     'login_subtitle' => 'Good to see you again.',
     'login_forgot' => 'Forgot your password?',
+    'login_remember' => 'Remember me',
     'login_submit' => 'Sign in',
     'login_register_prompt' => 'No account yet?',
     'login_register_link' => 'Create an account',

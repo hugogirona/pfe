@@ -8,6 +8,7 @@ it('redirects an unverified new user to the verify-email page', function () {
         'last_name' => 'Test',
         'email' => 'newuser@example.com',
         'password' => 'password123',
+        'birth_date' => '1998-06-15',
     ]);
 
     $response->assertRedirect(route('verification.notice'));

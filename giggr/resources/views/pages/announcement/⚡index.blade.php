@@ -3,6 +3,7 @@
 use App\Models\Announcement;
 use Illuminate\Support\Collection;
 use Livewire\Attributes\Layout;
+use Livewire\Attributes\On;
 use Livewire\Component;
 
 new #[Layout('layouts.app')] class extends Component
@@ -34,6 +35,17 @@ new #[Layout('layouts.app')] class extends Component
             ->limit(3)
             ->get();
     }
+
+    #[On('echo:profile.{announcement.user.profile.id},.contact-preference.updated')]
+    public function refreshContactState(): void
+    {
+        $this->announcement->user->unsetRelation('profile');
+    }
+
+    public function render(): \Illuminate\Contracts\View\View
+    {
+        return $this->view()->title($this->announcement->title);
+    }
 };
 ?>
 
@@ -54,7 +66,7 @@ new #[Layout('layouts.app')] class extends Component
 
             {{-- Sidebar --}}
             <aside class="w-full lg:w-72 shrink-0 lg:sticky lg:top-24 order-1 lg:order-2">
-                <x-parts.announcement.author-card :author="$announcement->user->profile" :name="$announcement->user->full_name" />
+                <x-parts.announcement.author-card :announcement="$announcement" :author="$announcement->user->profile" :name="$announcement->user->full_name" />
             </aside>
 
         </div>

@@ -11,6 +11,11 @@ new #[Layout('layouts.auth')] class extends Component
     {
         $this->sent = session()->has('status');
     }
+
+    public function render(): \Illuminate\Contracts\View\View
+    {
+        return $this->view()->title(__('titles.password.request'));
+    }
 };
 ?>
 

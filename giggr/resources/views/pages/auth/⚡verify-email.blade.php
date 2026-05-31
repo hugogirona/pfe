@@ -27,6 +27,11 @@ new #[Layout('layouts.auth')] class extends Component {
         }
     }
 
+    public function render(): \Illuminate\Contracts\View\View
+    {
+        return $this->view()->title(__('titles.verification.notice'));
+    }
+
     public function verify(RateLimiter $limiter): void
     {
         $user = auth()->user();
