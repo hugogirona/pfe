@@ -126,7 +126,6 @@ new class extends Component {
             aria-pressed="{{ $isFollowing ? 'true' : 'false' }}"
             aria-label="{{ $isFollowing ? __('social.unfollow_aria', ['name' => $musicianName]) : __('social.follow_aria', ['name' => $musicianName]) }}"
         >
-            <span class="sr-only">{{ $isFollowing ? __('social.following') : __('social.follow') }}</span>
             <x-icon name="heart" class="w-5 h-5"/>
         </button>
     @else
@@ -137,7 +136,6 @@ new class extends Component {
             class="w-10 h-10 flex items-center justify-center rounded-full bg-white/75 backdrop-blur-sm text-dark/40 hover:text-accent hover:bg-white/90 transition-colors duration-200 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
             aria-label="{{ __('social.follow_aria', ['name' => $musicianName]) }}"
         >
-            <span class="sr-only">{{ __('social.follow') }}</span>
             <x-icon name="heart" class="w-5 h-5"/>
         </button>
     @endif
