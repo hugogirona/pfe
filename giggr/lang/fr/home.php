@@ -13,7 +13,7 @@ return [
     'partners_title' => 'Ils nous font confiance',
 
     // Features
-    'features_eyebrow' => 'Rejoins les',
+    'features_eyebrow' => 'Comment ça marche',
     'features_title' => "Tout ce qu'il te faut, au même endroit",
     'feature_find_title' => 'Trouve ton partenaire',
     'feature_find_desc' => "Filtre par instrument, style musical et ville. Trouve exactement le profil qu'il te faut en quelques secondes.",
@@ -21,8 +21,6 @@ return [
     'feature_post_desc' => 'En quelques minutes, ton annonce atteint des centaines de profils près de chez toi. Gratuit et sans prise de tête.',
     'feature_community_title' => 'Rejoins la communauté',
     'feature_community_desc' => 'Intègre des groupes, participe à des jam sessions et échange avec des passionnés comme toi.',
-    'kpi_profiles' => 'profils inscrits',
-    'kpi_ads' => 'annonces actives',
     'cta_join' => "Prêt·e·s à rejoindre l'aventure\u{00A0}?",
 
     // Text-image sections
@@ -33,12 +31,14 @@ return [
     'text_image_2_content' => "Crée ton profil en 2 minutes, décris ton univers musical et laisse la communauté venir à toi. C'est gratuit, c'est local, c'est fait pour toi.",
     'text_image_2_cta' => 'Explorer les profils',
 
-    // Profiles section
+    // Sliders
     'profiles_title' => 'Ils sont déjà sur Giggr.',
     'profiles_subtitle' => 'Découvre des profils près de chez toi.',
+    'announcements_title' => 'Les annonces du moment',
+    'announcements_subtitle' => 'Trouve ton prochain projet musical.',
     'profile_contact' => 'Contacter',
-    'carousel_prev' => 'Profil précédent',
-    'carousel_next' => 'Profil suivant',
+    'carousel_prev' => 'Précédent',
+    'carousel_next' => 'Suivant',
     'carousel_aria' => 'Navigation du carrousel',
-    'carousel_goto' => 'Aller au profil ',
+    'carousel_goto' => 'Aller à la diapositive ',
 ];

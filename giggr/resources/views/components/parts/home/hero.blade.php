@@ -12,11 +12,6 @@
         <p class="mt-6 text-base md:text-lg leading-relaxed text-dark/55 max-w-sm">
             {{ __('home.hero_subtitle') }}
         </p>
-
-{{--        <form class="mt-8 flex flex-col sm:flex-row gap-2 sm:gap-3 w-full max-w-lg" role="search">--}}
-{{--            <x-search-bar class="min-w-0" />--}}
-{{--            <x-cta variant="dark" size="lg" href="#" class="shrink-0 w-full sm:w-auto">{{ __('home.hero_cta') }}</x-cta>--}}
-{{--        </form>--}}
     </div>
 
     <div class="flex-1 flex justify-center md:justify-end">

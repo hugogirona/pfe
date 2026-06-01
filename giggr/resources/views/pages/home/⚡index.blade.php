@@ -25,6 +25,8 @@ new #[Layout('layouts.app')] class extends Component
         bg="bg-pastel-salmon"
     />
 
+    <livewire:parts.home.slider type="announcements" bg="bg-bg" />
+
     <x-parts.home.features />
 
     <x-text-image
@@ -37,7 +39,7 @@ new #[Layout('layouts.app')] class extends Component
         orientation="left"
         bg="bg-pastel-blue"
     />
-    
-    <livewire:parts.home.musician-slider />
+
+    <livewire:parts.home.slider type="profiles" bg="bg-bg" />
 
 </div>
