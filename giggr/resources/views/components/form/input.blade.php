@@ -17,8 +17,8 @@
         id="{{ $name }}"
         name="{{ $name }}"
         value="{{ old($name, $value) }}"
-        placeholder="{{ $placeholder }}"
-        @if($required) required aria-required="true" @endif
+        @if($placeholder) placeholder="{{ $placeholder }}" @endif
+        @if($required) required @endif
         @if($autocomplete) autocomplete="{{ $autocomplete }}" @endif
         @error($name) aria-invalid="true" aria-describedby="{{ $name }}-error" @enderror
         {{ $attributes->class([

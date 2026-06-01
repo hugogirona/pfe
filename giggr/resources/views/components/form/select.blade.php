@@ -12,7 +12,7 @@
         <select
             id="{{ $name }}"
             name="{{ $name }}"
-            @if($required) required aria-required="true" @endif
+            @if($required) required @endif
             @error($name) aria-invalid="true" aria-describedby="{{ $name }}-error" @enderror
             {{ $attributes->class([
                 'w-full appearance-none px-4 py-3 pr-10 rounded-[6px] bg-white border border-dark/15 text-base',
