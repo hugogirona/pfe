@@ -35,9 +35,10 @@
             <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wide {{ $badgeClass }}">
                 {{ $label }}
             </span>
-            <span class="flex items-center gap-1.5 text-sm text-bg/50">
+            <span class="flex items-center gap-1.5 text-sm text-bg/50"
+                  itemprop="location" itemscope itemtype="https://schema.org/Place">
                 <x-icon name="map-pin" class="w-3.5 h-3.5" />
-                {{ $cityName }}
+                <span itemprop="address" itemscope itemtype="https://schema.org/PostalAddress"><span itemprop="addressLocality">{{ $cityName }}</span></span>
             </span>
             <span class="flex items-center gap-1.5 text-sm text-bg/50">
                 <x-icon name="calendar" class="w-3.5 h-3.5" />
@@ -46,7 +47,7 @@
         </div>
 
         {{-- Title --}}
-        <h1 class="font-heading text-3xl md:text-5xl text-bg leading-tight max-w-3xl">
+        <h1 class="font-heading text-3xl md:text-5xl text-bg leading-tight max-w-3xl" itemprop="name">
             {{ $announcement->title }}
         </h1>
 

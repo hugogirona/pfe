@@ -11,12 +11,13 @@
 @endphp
 
 <section aria-labelledby="identity-name-heading" class="text-center px-6 pb-5 border-b border-dark/[0.07]">
-    <h1 id="identity-name-heading" class="font-heading text-2xl text-dark leading-tight">{{ $name }}</h1>
+    <h1 id="identity-name-heading" class="font-heading text-2xl text-dark leading-tight" itemprop="name">{{ $name }}</h1>
 
     @if ($profile->city)
-        <p class="text-sm text-dark/50 mt-1 flex items-center justify-center gap-1">
+        <p class="text-sm text-dark/50 mt-1 flex items-center justify-center gap-1"
+           itemprop="address" itemscope itemtype="https://schema.org/PostalAddress">
             <x-icon name="map-pin" class="w-3.5 h-3.5"/>
-            {{ $profile->city->name }}
+            <span itemprop="addressLocality">{{ $profile->city->name }}</span>
         </p>
     @endif
 

@@ -14,7 +14,8 @@
     $extraGenres       = max(0, $profile->genres->count() - $pillLimit);
 @endphp
 
-<div class="relative">
+<div class="relative" itemscope itemtype="https://schema.org/Person">
+    <link itemprop="url" href="{{ $url }}">
     <a
         href="{{ $url }}"
         @guest x-data @click.prevent="$dispatch('open-auth-modal')" @endguest
@@ -31,6 +32,7 @@
                         alt="Photo de {{ $name }}"
                         class="absolute inset-0 w-full h-full object-cover object-center"
                         loading="lazy"
+                        itemprop="image"
                     />
                 @else
                     <div class="absolute inset-0 flex items-center justify-center bg-pastel-taupe">
@@ -44,7 +46,7 @@
             {{-- Content --}}
             <div class="px-5 py-4 space-y-3">
                 <div>
-                    <h3 class="font-heading text-xl text-dark">{{ $name }}</h3>
+                    <h3 class="font-heading text-xl text-dark" itemprop="name">{{ $name }}</h3>
                     <p class="text-sm text-dark/40 mt-0.5 min-h-lh">
                         @if($profile->age)
                             {{ __('explore.card_years', ['n' => $profile->age]) }}
@@ -53,7 +55,7 @@
                             {{' . '}}
                         @endif
                         @if($profile->city)
-                            {{  $profile->city->name }}
+                            <span itemprop="address" itemscope itemtype="https://schema.org/PostalAddress"><span itemprop="addressLocality">{{ $profile->city->name }}</span></span>
                         @endif
                     </p>
                 </div>

@@ -49,7 +49,8 @@ new #[Layout('layouts.app')] class extends Component
 };
 ?>
 
-<div>
+<div itemscope itemtype="https://schema.org/Event">
+    <link itemprop="url" href="{{ route('announcement', ['id' => $announcement->id]) }}">
 
     <x-parts.announcement.hero :announcement="$announcement" />
 

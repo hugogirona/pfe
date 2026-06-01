@@ -9,7 +9,8 @@
     $extraGenres       = max(0, $announcement->genres->count() - $pillLimit);
 @endphp
 
-<div class="relative h-full">
+<div class="relative h-full" itemscope itemtype="https://schema.org/Event">
+    <link itemprop="url" href="{{ route('announcement', ['id' => $announcement->id]) }}">
     @if ($isOwner)
         <x-cta
             variant="simple"
@@ -39,12 +40,12 @@
                 <h3 @class([
                     'font-heading text-xl text-dark mt-3 leading-snug',
                     'pr-10' => $isOwner,
-                ])>{{ $announcement->title }}</h3>
+                ]) itemprop="name">{{ $announcement->title }}</h3>
             </div>
 
             {{-- Content --}}
             <div class="flex-1 px-5 py-4 space-y-3">
-                <p class="text-sm text-dark/55 leading-relaxed line-clamp-3">{{ Str::limit($announcement->description, 180) }}</p>
+                <p class="text-sm text-dark/55 leading-relaxed line-clamp-3" itemprop="description">{{ Str::limit($announcement->description, 180) }}</p>
 
                 <div class="flex flex-wrap gap-1.5">
                     @foreach ($shownInstruments as $instrument)
@@ -66,9 +67,10 @@
             <div class="px-5 pb-4 flex items-center justify-between gap-3">
                 <div class="flex items-center gap-3 text-xs text-dark/45 min-w-0">
                     @if ($announcement->city)
-                        <span class="inline-flex items-center gap-1 min-w-0">
+                        <span class="inline-flex items-center gap-1 min-w-0"
+                              itemprop="location" itemscope itemtype="https://schema.org/Place">
                             <x-icon name="map-pin" class="w-3 h-3 shrink-0"/>
-                            <span class="truncate">{{ $announcement->city->name }}</span>
+                            <span class="truncate" itemprop="address" itemscope itemtype="https://schema.org/PostalAddress"><span itemprop="addressLocality">{{ $announcement->city->name }}</span></span>
                         </span>
                     @endif
                     <span class="inline-flex items-center gap-1 shrink-0">

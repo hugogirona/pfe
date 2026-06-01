@@ -1,10 +1,13 @@
-<footer class="bg-dark text-bg">
+<footer class="bg-dark text-bg" itemscope itemtype="https://schema.org/Organization">
+    <meta itemprop="name" content="{{ config('app.name') }}">
+    <link itemprop="url" href="{{ url('/') }}">
+    <meta itemprop="logo" content="{{ Vite::asset('resources/favicon/web-app-manifest-512x512.png') }}">
     <div class="max-w-6xl mx-auto px-6 py-12">
         <div class="flex flex-col md:flex-row items-center md:items-start gap-8">
 
             <div class="flex flex-col items-center md:items-start">
                 <x-logo class="text-bg" />
-                <p class="mt-3 text-base text-bg/60 max-w-xs text-center md:text-left">
+                <p class="mt-3 text-base text-bg/60 max-w-xs text-center md:text-left" itemprop="description">
                     {{ __('footer.tagline') }}
                 </p>
             </div>

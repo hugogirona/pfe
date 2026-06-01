@@ -19,13 +19,15 @@
     </div>
 
     {{-- Identity --}}
-    <div class="px-6 py-5 flex items-center gap-4 border-b border-dark/[0.07]">
+    <div class="px-6 py-5 flex items-center gap-4 border-b border-dark/[0.07]"
+         itemprop="organizer" itemscope itemtype="https://schema.org/Person">
         <div class="shrink-0 w-14 h-14 rounded-full overflow-hidden bg-pastel-blue ring-2 ring-bg shadow-sm">
             @if ($image)
                 <img
                     src="{{ $image }}"
                     alt="{{ __('profile.avatar_alt', ['name' => $name]) }}"
                     class="w-full h-full object-cover"
+                    itemprop="image"
                 />
             @else
                 <div class="w-full h-full flex items-center justify-center">
@@ -35,7 +37,7 @@
         </div>
 
         <div class="min-w-0">
-            <p class="font-heading text-xl text-dark leading-tight truncate">{{ $name }}</p>
+            <p class="font-heading text-xl text-dark leading-tight truncate" itemprop="name">{{ $name }}</p>
             <p class="text-sm text-dark/45 mt-0.5 flex items-center gap-1">
                 <x-icon name="map-pin" class="w-3 h-3 shrink-0" />
                 {{ $cityName }}

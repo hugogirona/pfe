@@ -8,7 +8,7 @@
         </h2>
 
         <div class="prose-custom">
-            <p class="text-dark/65 leading-relaxed text-[15px] whitespace-pre-line">{{ $announcement->description }}</p>
+            <p class="text-dark/65 leading-relaxed text-[15px] whitespace-pre-line" itemprop="description">{{ $announcement->description }}</p>
         </div>
 
     </section>

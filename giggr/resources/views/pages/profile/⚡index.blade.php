@@ -179,7 +179,14 @@ class extends Component {
     <x-parts.profile.hero/>
 
     <div class="max-w-6xl mx-auto px-6 py-10">
-        <div class="flex flex-col lg:flex-row gap-8 lg:items-start">
+        <div class="flex flex-col lg:flex-row gap-8 lg:items-start" itemscope itemtype="https://schema.org/Person">
+            <link itemprop="url" href="{{ route('profile', ['id' => $profile->id]) }}">
+            @foreach ($profile->instruments as $instrument)
+                <meta itemprop="knowsAbout" content="{{ $instrument->name }}">
+            @endforeach
+            @foreach ($profile->genres as $genre)
+                <meta itemprop="knowsAbout" content="{{ $genre->name }}">
+            @endforeach
 
             {{-- Sidebar --}}
             <aside class="w-full lg:w-80 shrink-0 lg:sticky lg:top-24" aria-label="{{ $profile->user->full_name }}">

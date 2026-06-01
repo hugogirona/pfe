@@ -3,6 +3,7 @@
         src="{{ $profile->thumbnail }}"
         alt="{{ __('profile.avatar_alt', ['name' => $name]) }}"
         class="w-full h-full object-cover object-center"
+        itemprop="image"
     />
 @else
     <div class="w-full h-full flex items-center justify-center">
