@@ -39,7 +39,7 @@ Route::group([
     Route::livewire('/', 'pages::home.index')->name('home');
     Route::livewire(LaravelLocalization::transRoute('routes.explore'), 'pages::explore.index')
         ->name('explore')
-        ->where('tab', 'profils|annonces|profiles|listings');
+        ->where('tab', __('explore.tab_profiles_slug').'|'.__('explore.tab_announcements_slug'));
     Route::livewire(LaravelLocalization::transRoute('routes.profile'), 'pages::profile.index')->name('profile')->middleware(['auth', 'verified']);
     Route::livewire(LaravelLocalization::transRoute('routes.announcement'), 'pages::announcement.index')->name('announcement')->middleware(['auth', 'verified']);
     Route::livewire(LaravelLocalization::transRoute('routes.contact'), 'pages::contact.index')->name('contact');

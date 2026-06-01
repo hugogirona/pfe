@@ -26,7 +26,7 @@ class extends Component {
 
     public function mount(?string $tab = null): void
     {
-        $this->activeTab = in_array($tab, ['annonces', 'listings'], true) ? 'announcements' : 'profiles';
+        $this->activeTab = $tab === __('explore.tab_announcements_slug') ? 'announcements' : 'profiles';
     }
 
     #[Computed]
