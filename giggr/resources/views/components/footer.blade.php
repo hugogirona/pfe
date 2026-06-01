@@ -1,6 +1,6 @@
 <footer class="bg-dark text-bg">
     <div class="max-w-6xl mx-auto px-6 py-12">
-        <div class="flex flex-col md:flex-row items-center gap-8">
+        <div class="flex flex-col md:flex-row items-center md:items-start gap-8">
 
             <div class="flex flex-col items-center md:items-start">
                 <x-logo class="text-bg" />
