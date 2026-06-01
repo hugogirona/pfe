@@ -1,9 +1,12 @@
+import { homeSlider as config } from '../settings.js';
+
 document.addEventListener('alpine:init', () => {
-    window.Alpine.data('musiciansSlider', (count) => ({
-        current:   0,
+    window.Alpine.data('homeSlider', (count) => ({
+        current: 0,
         count,
         pageCount: count,
-        _resizeObserver:       null,
+        _resizeObserver: null,
+        _scrollFrame: null,
 
         init() {
             this._sync();
@@ -13,12 +16,13 @@ document.addEventListener('alpine:init', () => {
 
         destroy() {
             this._resizeObserver?.disconnect();
+            if (this._scrollFrame) cancelAnimationFrame(this._scrollFrame);
         },
 
         _visible() {
             const track = this.$refs.track;
             if (!track.children.length) return 1;
-            const gap = parseFloat(getComputedStyle(track).columnGap) || 24;
+            const gap = parseFloat(getComputedStyle(track).columnGap) || config.fallbackGap;
             return Math.max(1, Math.round((track.offsetWidth + gap) / (track.children[0].offsetWidth + gap)));
         },
 
@@ -35,16 +39,19 @@ document.addEventListener('alpine:init', () => {
 
         prev() { this.go((this.current - 1 + this.pageCount) % this.pageCount); },
         next() { this.go((this.current + 1) % this.pageCount); },
-        goTo(i) { this.go(i); },
 
         onScroll() {
-            const track = this.$refs.track;
-            let closest = 0, minDist = Infinity;
-            Array.from(track.children).forEach((item, i) => {
-                const d = Math.abs(item.offsetLeft - track.scrollLeft);
-                if (d < minDist) { minDist = d; closest = i; }
+            if (this._scrollFrame) return;
+            this._scrollFrame = requestAnimationFrame(() => {
+                this._scrollFrame = null;
+                const track = this.$refs.track;
+                let closest = 0, minDist = Infinity;
+                Array.from(track.children).forEach((item, i) => {
+                    const d = Math.abs(item.offsetLeft - track.scrollLeft);
+                    if (d < minDist) { minDist = d; closest = i; }
+                });
+                this.current = Math.min(closest, this.pageCount - 1);
             });
-            this.current = Math.min(closest, this.pageCount - 1);
         },
     }));
 });

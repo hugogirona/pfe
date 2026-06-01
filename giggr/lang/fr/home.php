@@ -33,12 +33,14 @@ return [
     'text_image_2_content' => "Crée ton profil en 2 minutes, décris ton univers musical et laisse la communauté venir à toi. C'est gratuit, c'est local, c'est fait pour toi.",
     'text_image_2_cta' => 'Explorer les profils',
 
-    // Profiles section
+    // Sliders
     'profiles_title' => 'Ils sont déjà sur Giggr.',
     'profiles_subtitle' => 'Découvre des profils près de chez toi.',
+    'announcements_title' => 'Les annonces du moment',
+    'announcements_subtitle' => 'Trouve ton prochain projet musical.',
     'profile_contact' => 'Contacter',
-    'carousel_prev' => 'Profil précédent',
-    'carousel_next' => 'Profil suivant',
+    'carousel_prev' => 'Précédent',
+    'carousel_next' => 'Suivant',
     'carousel_aria' => 'Navigation du carrousel',
-    'carousel_goto' => 'Aller au profil ',
+    'carousel_goto' => 'Aller à la diapositive ',
 ];

@@ -33,12 +33,14 @@ return [
     'text_image_2_content' => "Create your profile in 2 minutes, describe your musical world and let the community come to you. It's free, it's local, it's made for you.",
     'text_image_2_cta' => 'Explore profiles',
 
-    // Profiles section
+    // Sliders
     'profiles_title' => "They're already on Giggr.",
     'profiles_subtitle' => 'Discover profiles near you.',
+    'announcements_title' => 'Fresh listings',
+    'announcements_subtitle' => 'Find your next musical project.',
     'profile_contact' => 'Contact',
-    'carousel_prev' => 'Previous profile',
-    'carousel_next' => 'Next profile',
+    'carousel_prev' => 'Previous',
+    'carousel_next' => 'Next',
     'carousel_aria' => 'Carousel navigation',
-    'carousel_goto' => 'Go to profile ',
+    'carousel_goto' => 'Go to slide ',
 ];

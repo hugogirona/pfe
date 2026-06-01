@@ -1,2 +1,2 @@
-import './components/musicians-slider.js';
+import './components/home-slider.js';
 import './echo';
