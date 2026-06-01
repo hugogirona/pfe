@@ -3,16 +3,16 @@
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 
-new #[Layout('layouts.app')] class extends Component
-{
+new #[Layout('layouts.app')]
+class extends Component {
 
 };
 ?>
 
 <div>
-    <x-parts.home.hero />
+    <x-parts.home.hero/>
 
-    <x-parts.home.partners />
+    <x-parts.home.partners/>
 
     <x-text-image
         :title="__('home.text_image_1_title')"
@@ -25,9 +25,9 @@ new #[Layout('layouts.app')] class extends Component
         bg="bg-pastel-salmon"
     />
 
-    <livewire:parts.home.slider type="announcements" bg="bg-bg" />
+    <livewire:parts.home.slider type="announcements" bg="bg-bg"/>
 
-    <x-parts.home.features />
+    <x-parts.home.features/>
 
     <x-text-image
         :title="__('home.text_image_2_title')"
@@ -40,6 +40,5 @@ new #[Layout('layouts.app')] class extends Component
         bg="bg-pastel-blue"
     />
 
-    <livewire:parts.home.slider type="profiles" bg="bg-bg" />
-
+    <livewire:parts.home.slider type="profiles" bg="bg-bg"/>
 </div>

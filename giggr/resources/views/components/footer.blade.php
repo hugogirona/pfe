@@ -22,7 +22,7 @@
             </div>
 
         </div>
-        <div class="mt-12 pt-6 border-t border-bg/10 flex items-center justify-between">
+        <div class="mt-12 pt-6 border-t border-bg/10 flex items-start justify-between">
             <span class="text-xs text-bg/40">{{ __('footer.copyright', ['year' => date('Y')]) }}</span>
             <x-footer.lang-switcher />
         </div>
