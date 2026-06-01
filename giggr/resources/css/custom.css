@@ -1,5 +1,39 @@
 [x-cloak] { display: none !important; }
 
+.feature-stack {
+    --stack-gap: 6rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+@media (min-width: 768px) {
+    .feature-stack {
+        --stack-gap: 9rem;
+    }
+}
+
+.feature-stack-card {
+    --card-index: 0;
+}
+
+.is-stacking {
+    min-height: 100vh;
+    overflow: hidden;
+}
+
+.is-stacking .feature-stack {
+    display: block;
+    position: relative;
+}
+
+.is-stacking .feature-stack-card {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: calc(var(--card-index) * var(--stack-gap));
+}
+
 @media (prefers-reduced-motion: reduce) {
     [x-transition] { transition-duration: 0ms !important; }
     .animate-marquee  { animation: none !important; }

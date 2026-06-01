@@ -13,7 +13,7 @@ return [
     'partners_title' => 'They trust us',
 
     // Features
-    'features_eyebrow' => 'Join the',
+    'features_eyebrow' => 'How it works',
     'features_title' => 'Everything you need, all in one place',
     'feature_find_title' => 'Find your partner',
     'feature_find_desc' => 'Filter by instrument, musical style and city. Find exactly the profile you need in seconds.',
@@ -21,8 +21,6 @@ return [
     'feature_post_desc' => 'In just a few minutes, your listing reaches hundreds of profiles near you. Free and hassle-free.',
     'feature_community_title' => 'Join the community',
     'feature_community_desc' => 'Join bands, take part in jam sessions and connect with people who share your passion.',
-    'kpi_profiles' => 'registered profiles',
-    'kpi_ads' => 'active listings',
     'cta_join' => 'Ready to join the adventure?',
 
     // Text-image sections
