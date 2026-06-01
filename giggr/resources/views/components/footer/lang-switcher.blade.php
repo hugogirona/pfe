@@ -27,9 +27,8 @@
         <a href="{{ $localizedUrl($locale) }}"
            class="{{ app()->getLocale() === $locale ? $active : $inactive }} text-sm font-medium tracking-widest uppercase transition-colors duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent rounded-sm"
            hreflang="{{ $locale }}"
-           aria-label="{{ $ariaLabel }}"
            @if(app()->getLocale() === $locale) aria-current="true" @endif>
-            {{ strtoupper($locale) }}
+            {{ strtoupper($locale) }}<span class="sr-only"> — {{ $ariaLabel }}</span>
         </a>
 
         @if(! $loop->last)
