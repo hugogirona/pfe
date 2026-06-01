@@ -26,6 +26,7 @@ return [
 
     // Author card
     'author_title' => 'Geplaatst door',
+    'author_aria' => 'Plaatser van de aankondiging',
     'author_contact' => 'Contact opnemen',
     'author_edit' => 'Advertentie bewerken',
     'author_see_profile' => 'Profiel bekijken',

@@ -26,6 +26,7 @@ return [
 
     // Author card
     'author_title' => 'Posted by',
+    'author_aria' => 'Announcement author',
     'author_contact' => 'Contact',
     'author_edit' => 'Edit listing',
     'author_see_profile' => 'View profile',

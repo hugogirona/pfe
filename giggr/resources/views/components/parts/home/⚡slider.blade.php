@@ -92,7 +92,7 @@ new class extends Component {
                     </svg>
                 </button>
 
-                <nav class="flex justify-center items-center gap-2 mt-8" aria-label="{{ __('home.carousel_aria', ['section' => __('home.'.$type.'_title')]) }}">
+                <div role="group" class="flex justify-center items-center gap-2 mt-8" aria-label="{{ __('home.carousel_aria', ['section' => __('home.'.$type.'_title')]) }}">
                     <template x-for="i in pageCount" :key="i">
                         <a
                             :href="`#{{ $sliderId }}-${i - 1}`"
@@ -103,7 +103,7 @@ new class extends Component {
                             :class="current === i - 1 ? 'w-6 bg-accent' : 'w-2 bg-dark/25 hover:bg-dark/45'"
                         ></a>
                     </template>
-                </nav>
+                </div>
             </div>
         @endif
 

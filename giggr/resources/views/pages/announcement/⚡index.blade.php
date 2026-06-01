@@ -66,7 +66,7 @@ new #[Layout('layouts.app')] class extends Component
             </div>
 
             {{-- Sidebar --}}
-            <aside class="w-full lg:w-72 shrink-0 lg:sticky lg:top-24 order-1 lg:order-2">
+            <aside class="w-full lg:w-72 shrink-0 lg:sticky lg:top-24 order-1 lg:order-2" aria-label="{{ __('announcement.author_aria') }}">
                 <x-parts.announcement.author-card :announcement="$announcement" :author="$announcement->user->profile" :name="$announcement->user->full_name" />
             </aside>
 
