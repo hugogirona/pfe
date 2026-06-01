@@ -5,11 +5,26 @@ import { featureStack as config } from '../settings.js';
 gsap.registerPlugin(ScrollTrigger);
 
 let timeline = null;
+let enabled = false;
+let resizeTimer = null;
 
-function buildFeatureStack() {
+function canStack() {
+    return !window.matchMedia('(prefers-reduced-motion: reduce)').matches
+        && window.innerHeight >= config.minViewportHeight;
+}
+
+function teardown() {
+    timeline?.scrollTrigger?.kill();
+    timeline?.kill();
+    timeline = null;
+    document.querySelectorAll('[data-stack-pin]').forEach((pin) => pin.classList.remove('is-stacking'));
+    gsap.set('[data-stack-card]', { clearProps: 'transform,opacity,visibility' });
+    enabled = false;
+}
+
+function build() {
     const section = document.querySelector('[data-stack]');
-    if (!section) return;
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    if (!section || !canStack()) return;
 
     const pin = section.querySelector('[data-stack-pin]');
     const cards = gsap.utils.toArray('[data-stack-card]', section);
@@ -18,30 +33,36 @@ function buildFeatureStack() {
     const incoming = cards.slice(1);
     pin.classList.add('is-stacking');
     cards.forEach((card) => gsap.set(card, { rotation: parseFloat(card.dataset.rot) || 0 }));
-    gsap.set(incoming, { autoAlpha: 0, yPercent: config.incomingOffset });
+    gsap.set(incoming, { yPercent: config.incomingOffset });
 
     timeline = gsap.timeline({
         defaults: { ease: config.ease },
         scrollTrigger: {
             trigger: section,
             start: 'top top',
-            end: () => '+=' + window.innerHeight * incoming.length,
+            end: () => `+=${window.innerHeight * incoming.length}`,
             scrub: config.scrub,
-            pin: pin,
+            pin,
             anticipatePin: config.anticipatePin,
             invalidateOnRefresh: true,
         },
     });
 
-    incoming.forEach((card) => timeline.to(card, { autoAlpha: 1, yPercent: 0, duration: config.cardDuration }));
+    incoming.forEach((card) => timeline.to(card, { yPercent: 0, duration: config.cardDuration }));
+    enabled = true;
 }
 
-function refresh() {
-    timeline?.scrollTrigger?.kill();
-    timeline?.kill();
-    timeline = null;
-    buildFeatureStack();
+function rebuild() {
+    teardown();
+    build();
 }
 
-document.addEventListener('DOMContentLoaded', buildFeatureStack);
-document.addEventListener('livewire:navigated', refresh);
+function onResize() {
+    if (canStack() === enabled) return;
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(rebuild, config.resizeDebounce);
+}
+
+document.addEventListener('DOMContentLoaded', build);
+document.addEventListener('livewire:navigated', rebuild);
+window.addEventListener('resize', onResize);

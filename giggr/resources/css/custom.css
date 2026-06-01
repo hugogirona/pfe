@@ -4,13 +4,7 @@
     --stack-gap: 6rem;
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
-}
-
-@media (min-width: 768px) {
-    .feature-stack {
-        --stack-gap: 9rem;
-    }
+    gap: 2.5rem;
 }
 
 .feature-stack-card {
@@ -18,8 +12,14 @@
 }
 
 .is-stacking {
-    min-height: 100vh;
+    min-height: 100svh;
     overflow: hidden;
+    padding-top: 5rem;
+    padding-bottom: 2rem;
+}
+
+.is-stacking [data-stack-head] {
+    margin-bottom: 1.5rem;
 }
 
 .is-stacking .feature-stack {

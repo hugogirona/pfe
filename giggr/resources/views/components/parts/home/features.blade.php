@@ -1,18 +1,18 @@
-<section data-stack class="bg-bg">
-    <div data-stack-pin class="flex flex-col pt-20 md:pt-28 pb-20 md:pb-16">
+<section data-stack class="bg-bg" aria-labelledby="features-title">
+    <div data-stack-pin class="flex flex-col py-16 md:py-20">
 
-        <div class="shrink-0 max-w-2xl mx-auto px-6 text-center my-8 md:mb-14">
+        <div data-stack-head class="shrink-0 max-w-2xl mx-auto px-6 text-center my-8 md:mb-14">
             <p class="inline-flex items-center gap-3 text-accent text-xs md:text-sm font-medium tracking-[0.3em] uppercase mb-4 md:mb-5">
                 <span class="w-6 md:w-8 h-px bg-accent"></span>
                 {{ __('home.features_eyebrow') }}
                 <span class="w-6 md:w-8 h-px bg-accent"></span>
             </p>
-            <h2 class="font-heading text-[1.75rem] leading-tight md:text-5xl md:leading-[1.1] text-dark">
+            <h2 id="features-title" class="font-heading text-[1.75rem] leading-tight md:text-5xl md:leading-[1.1] text-dark">
                 {{ __('home.features_title') }}
             </h2>
         </div>
 
-        <div class="feature-stack relative flex-1 w-full max-w-sm md:max-w-md mx-auto px-6">
+        <div class="feature-stack flex-1 w-full max-w-sm md:max-w-md mx-auto px-6">
             <x-parts.home.feature-card :index="0" bg="bg-pastel-salmon" :rotate="-3" icon="users" :title="__('home.feature_community_title')">
                 {{ __('home.feature_community_desc') }}
             </x-parts.home.feature-card>
