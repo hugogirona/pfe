@@ -12,12 +12,11 @@ $scrollIntoViewJsSnippet = ($scrollTo !== false)
 
 <div>
     @if ($paginator->hasPages())
-        <nav role="navigation" aria-label="Pagination Navigation" class="flex items-center justify-center gap-1">
+        <nav aria-label="{{ __('pagination.aria_label') }}" class="flex items-center justify-center gap-1">
 
             {{-- Previous --}}
             @if ($paginator->onFirstPage())
                 <span
-                    aria-disabled="true"
                     class="w-9 h-9 flex items-center justify-center rounded-full text-dark/20 cursor-not-allowed"
                 >
                     <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
@@ -58,7 +57,7 @@ $scrollIntoViewJsSnippet = ($scrollTo !== false)
                                     type="button"
                                     wire:click="gotoPage({{ $page }}, '{{ $paginator->getPageName() }}')"
                                     x-on:click="{{ $scrollIntoViewJsSnippet }}"
-                                    aria-label="{{ __('Go to page :page', ['page' => $page]) }}"
+                                    aria-label="{{ __('pagination.goto_page', ['page' => $page]) }}"
                                     class="w-9 h-9 flex items-center justify-center rounded-full text-sm text-dark/60 hover:text-dark hover:bg-dark/5 transition-colors duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
                                 >{{ $page }}</button>
                             @endif
@@ -83,7 +82,6 @@ $scrollIntoViewJsSnippet = ($scrollTo !== false)
                 </button>
             @else
                 <span
-                    aria-disabled="true"
                     class="w-9 h-9 flex items-center justify-center rounded-full text-dark/20 cursor-not-allowed"
                 >
                     <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">

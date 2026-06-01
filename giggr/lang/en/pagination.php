@@ -15,5 +15,7 @@ return [
 
     'previous' => '&laquo; Previous',
     'next' => 'Next &raquo;',
+    'aria_label' => 'Pagination navigation',
+    'goto_page' => 'Go to page :page',
 
 ];
