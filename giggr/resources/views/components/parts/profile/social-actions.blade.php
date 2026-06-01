@@ -27,8 +27,12 @@
         </div>
     </div>
 
-    <livewire:parts.profile.block-toggle
-        :target-user-id="$profile->user->id"
-        :wire:key="'block-toggle-'.$profile->user->id"
-    />
+    @auth
+        @if (auth()->id() !== $profile->user->id)
+            <livewire:parts.profile.block-toggle
+                :target-user-id="$profile->user->id"
+                :wire:key="'block-toggle-'.$profile->user->id"
+            />
+        @endif
+    @endauth
 </div>
