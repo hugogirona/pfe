@@ -1,5 +1,5 @@
 export const featureStack = {
-    minViewportHeight: 750,
+    minViewportHeight: 800,
     incomingOffset: 500,
     scrub: 0.5,
     cardDuration: 1,

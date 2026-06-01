@@ -1,5 +1,5 @@
 <section data-stack class="bg-bg" aria-labelledby="features-title">
-    <div data-stack-pin class="flex flex-col py-16 md:py-20">
+    <div data-stack-pin class="flex flex-col py-12 md:py-24">
 
         <div data-stack-head class="shrink-0 max-w-2xl mx-auto px-6 text-center my-8 md:mb-14">
             <p class="inline-flex items-center gap-3 text-accent text-xs md:text-sm font-medium tracking-[0.3em] uppercase mb-4 md:mb-5">

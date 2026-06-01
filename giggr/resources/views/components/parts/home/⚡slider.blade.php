@@ -46,7 +46,7 @@ new class extends Component {
     $cardClass = 'snap-start shrink-0 flex flex-col min-w-[250px] w-[85%] sm:w-[calc(50%-12px)] md:w-[calc(33.333%-16px)]';
 @endphp
 
-<section class="py-16 md:py-20 {{ $bg }}">
+<section class="py-12 md:py-24 {{ $bg }}">
     <div class="max-w-6xl mx-auto px-6">
 
         @if ($items->isNotEmpty())

@@ -9,7 +9,7 @@ $logos = [
 ];
 @endphp
 
-<section class="py-12 md:py-20">
+<section class="py-12 md:py-24">
 
     <h2 class="text-center font-heading text-base tracking-[0.3em] uppercase text-dark/40 mb-14 mx-6">
         {{ __('home.partners_title') }}
