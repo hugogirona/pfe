@@ -92,7 +92,7 @@ new class extends Component {
                     </svg>
                 </button>
 
-                <nav class="flex justify-center items-center gap-2 mt-8" aria-label="{{ __('home.carousel_aria') }}">
+                <nav class="flex justify-center items-center gap-2 mt-8" aria-label="{{ __('home.carousel_aria', ['section' => __('home.'.$type.'_title')]) }}">
                     <template x-for="i in pageCount" :key="i">
                         <a
                             :href="`#{{ $sliderId }}-${i - 1}`"

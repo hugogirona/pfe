@@ -39,6 +39,6 @@ return [
     'profile_contact' => 'Contact opnemen',
     'carousel_prev' => 'Vorige',
     'carousel_next' => 'Volgende',
-    'carousel_aria' => 'Carrouselnavigatie',
+    'carousel_aria' => 'Carrouselnavigatie: :section',
     'carousel_goto' => 'Ga naar dia ',
 ];

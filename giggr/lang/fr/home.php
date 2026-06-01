@@ -39,6 +39,6 @@ return [
     'profile_contact' => 'Contacter',
     'carousel_prev' => 'Précédent',
     'carousel_next' => 'Suivant',
-    'carousel_aria' => 'Navigation du carrousel',
+    'carousel_aria' => 'Navigation du carrousel : :section',
     'carousel_goto' => 'Aller à la diapositive ',
 ];

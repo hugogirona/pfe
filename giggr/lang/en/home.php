@@ -39,6 +39,6 @@ return [
     'profile_contact' => 'Contact',
     'carousel_prev' => 'Previous',
     'carousel_next' => 'Next',
-    'carousel_aria' => 'Carousel navigation',
+    'carousel_aria' => 'Carousel navigation: :section',
     'carousel_goto' => 'Go to slide ',
 ];
