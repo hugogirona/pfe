@@ -17,4 +17,27 @@
         </div>
 
     </nav>
+
+    <noscript>
+        <nav class="border-t border-dark/10 bg-bg" aria-label="{{ __('nav.aria_mobile_nav') }}">
+            <ul class="max-w-6xl mx-auto px-6 py-3 flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-dark/70">
+                <li><a href="{{ route('home') }}" class="hover:text-dark hover:underline underline-offset-4">{{ __('nav.home') }}</a></li>
+                <li><a href="{{ route('explore') }}" class="hover:text-dark hover:underline underline-offset-4">{{ __('nav.explore') }}</a></li>
+                <li><a href="{{ route('contact') }}" class="hover:text-dark hover:underline underline-offset-4">{{ __('nav.contact') }}</a></li>
+                @auth
+                    <li><a href="{{ route('profile', ['id' => auth()->id()]) }}" class="hover:text-dark hover:underline underline-offset-4">{{ __('nav.profile') }}</a></li>
+                    <li><a href="{{ route('settings.account') }}" class="hover:text-dark hover:underline underline-offset-4">{{ __('nav.settings') }}</a></li>
+                    <li>
+                        <form method="POST" action="/logout">
+                            @csrf
+                            <button type="submit" class="text-danger/70 hover:text-danger hover:underline underline-offset-4 cursor-pointer">{{ __('nav.sign_out') }}</button>
+                        </form>
+                    </li>
+                @else
+                    <li><a href="{{ route('login') }}" class="hover:text-dark hover:underline underline-offset-4">{{ __('nav.sign_in') }}</a></li>
+                    <li><a href="{{ route('register') }}" class="hover:text-dark hover:underline underline-offset-4">{{ __('nav.sign_up') }}</a></li>
+                @endauth
+            </ul>
+        </nav>
+    </noscript>
 </header>

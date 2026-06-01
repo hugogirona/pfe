@@ -19,6 +19,10 @@
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
+    
+    <noscript>
+        <style>[data-js-only] { display: none !important; }</style>
+    </noscript>
 </head>
 <body class="bg-bg text-dark font-sans antialiased flex flex-col min-h-screen">
 

@@ -24,11 +24,11 @@ return [
     'cta_join' => "Prêt·e·s à rejoindre l'aventure\u{00A0}?",
 
     // Text-image sections
-    'text_image_1_title' => "Trouve le profil qu'il te manque",
-    'text_image_1_content' => 'Guitariste, batteur, claviériste ou chanteur — parcours des centaines de profils près de chez toi et connecte-toi avec celles et ceux qui partagent ta passion.',
+    'text_image_1_title' => "Le projet qui t'attend est déjà en ligne",
+    'text_image_1_content' => "Groupes en quête d'un membre, musiciens prêts à jammer, projets à monter — parcours les annonces près de chez toi et trouve celle qui te correspond.",
     'text_image_1_cta' => 'Explorer les annonces',
-    'text_image_2_title' => 'Ta prochaine aventure musicale commence ici',
-    'text_image_2_content' => "Crée ton profil en 2 minutes, décris ton univers musical et laisse la communauté venir à toi. C'est gratuit, c'est local, c'est fait pour toi.",
+    'text_image_2_title' => "Trouve le profil qu'il te manque",
+    'text_image_2_content' => 'Guitariste, batteur, claviériste ou chanteur — découvre des centaines de profils près de chez toi et connecte-toi avec celles et ceux qui partagent ta passion.',
     'text_image_2_cta' => 'Explorer les profils',
 
     // Sliders

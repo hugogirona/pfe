@@ -24,11 +24,11 @@ return [
     'cta_join' => 'Ready to join the adventure?',
 
     // Text-image sections
-    'text_image_1_title' => "Find the profile you're missing",
-    'text_image_1_content' => 'Guitarist, drummer, keyboardist or vocalist — browse hundreds of profiles near you and connect with those who share your passion.',
+    'text_image_1_title' => 'The project waiting for you is already online',
+    'text_image_1_content' => 'Bands looking for a member, musicians ready to jam, projects taking shape — browse the listings near you and find the one that fits.',
     'text_image_1_cta' => 'Browse listings',
-    'text_image_2_title' => 'Your next musical adventure starts here',
-    'text_image_2_content' => "Create your profile in 2 minutes, describe your musical world and let the community come to you. It's free, it's local, it's made for you.",
+    'text_image_2_title' => "Find the profile you're missing",
+    'text_image_2_content' => 'Guitarist, drummer, keyboardist or vocalist — discover hundreds of profiles near you and connect with those who share your passion.',
     'text_image_2_cta' => 'Explore profiles',
 
     // Sliders

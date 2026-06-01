@@ -1,4 +1,5 @@
 <div class="md:hidden"
+     data-js-only
      x-data="{ open: false }"
      x-init="$watch('open', val => {
          if (val) {
