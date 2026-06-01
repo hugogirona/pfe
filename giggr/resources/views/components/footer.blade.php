@@ -10,8 +10,8 @@
             </div>
 
             <div class="md:ml-auto flex flex-col md:flex-row items-center md:items-start gap-8">
-                <nav class="flex flex-col gap-3 items-center md:items-start">
-                    <h2 class="sr-only">{{ __('footer.nav_aria') }}</h2>
+                <nav class="flex flex-col gap-3 items-center md:items-start" aria-labelledby="footer-nav-heading">
+                    <h2 id="footer-nav-heading" class="sr-only">{{ __('footer.nav_aria') }}</h2>
                     <a href="{{ route('home') }}" wire:navigate.hover class="text-base text-bg/70 hover:text-bg transition-colors duration-150 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent rounded-sm">{{ __('footer.home') }}</a>
                     <a href="{{ route('explore') }}" wire:navigate.hover class="text-base text-bg/70 hover:text-bg transition-colors duration-150 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent rounded-sm">{{ __('footer.explore') }}</a>
                     <a href="{{ route('contact') }}" wire:navigate.hover class="text-base text-bg/70 hover:text-bg transition-colors duration-150 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent rounded-sm">{{ __('footer.contact') }}</a>

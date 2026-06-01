@@ -3,7 +3,7 @@
     <nav class="max-w-6xl mx-auto px-6 py-4 flex items-center gap-10 relative"
          aria-label="{{ __('nav.aria_main_nav') }}">
         <h2 class="sr-only">{{ __('nav.aria_main_nav') }}</h2>
-        <a wire:navigate.hover href="{{route('home')}}" class="focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent rounded-sm">
+        <a wire:navigate.hover href="{{route('home')}}" aria-label="{{ __('nav.aria_logo_home') }}" class="focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent rounded-sm">
             <x-logo />
         </a>
         <x-nav.links />
@@ -19,7 +19,7 @@
     </nav>
 
     <noscript>
-        <nav class="border-t border-dark/10 bg-bg" aria-label="{{ __('nav.aria_mobile_nav') }}">
+        <nav class="border-t border-dark/10 bg-bg" aria-label="{{ __('nav.aria_fallback_nav') }}">
             <ul class="max-w-6xl mx-auto px-6 py-3 flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-dark/70">
                 <li><a href="{{ route('home') }}" class="hover:text-dark hover:underline underline-offset-4">{{ __('nav.home') }}</a></li>
                 <li><a href="{{ route('explore') }}" class="hover:text-dark hover:underline underline-offset-4">{{ __('nav.explore') }}</a></li>

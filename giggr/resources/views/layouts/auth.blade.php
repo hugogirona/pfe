@@ -6,21 +6,18 @@
 
     <title>{{ filled($title ?? null) ? $title.' — '.config('app.name') : config('app.name') }}</title>
 
-    <link rel="icon" type="image/png" href="/favicon/favicon-96x96.png" sizes="96x96">
-    <link rel="icon" type="image/svg+xml" href="/favicon/favicon.svg">
-    <link rel="shortcut icon" href="/favicon.ico">
-    <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
-    <meta name="apple-mobile-web-app-title" content="Giggr.">
-    <link rel="manifest" href="/favicon/site.webmanifest">
-
-    @production
-        <link rel="preload" href="/fonts/dm-sans-regular.woff2" as="font" type="font/woff2" crossorigin>
-    @endproduction
+    <x-layout.head-icons />
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
 </head>
 <body class="bg-bg text-dark font-sans antialiased">
+
+    <a href="#main"
+       class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:px-4 focus:py-2 focus:rounded-lg focus:bg-dark focus:text-bg focus:outline-none focus:ring-2 focus:ring-accent">
+        {{ __('nav.skip_to_content') }}
+    </a>
+
     <div class="min-h-screen flex flex-col md:flex-row-reverse">
 
         <div class="flex-1 flex flex-col relative">
@@ -35,7 +32,7 @@
                 </a>
             </div>
 
-            <main class="flex-1 flex items-start justify-center md:justify-start px-8 md:px-14 lg:px-16 py-10 md:pt-[22vh]">
+            <main id="main" class="flex-1 flex items-start justify-center md:justify-start px-8 md:px-14 lg:px-16 py-10 md:pt-[22vh]">
                 <div class="w-full max-w-112.5">
                     {{ $slot }}
                 </div>
@@ -45,9 +42,7 @@
 
          <div class="hidden md:flex md:w-[42%] bg-dark/5 flex-col min-h-screen top-0 relative" aria-hidden="true">
             <div class="absolute top-0 left-0 p-10">
-                <a href="{{ route('home') }}" aria-label="Giggr.">
-                    <x-logo class="h-7 w-auto text-dark" />
-                </a>
+                <x-logo class="h-7 w-auto text-dark" />
             </div>
             <div class="flex-1 flex flex-col px-8 md:px-14 lg:px-16 pt-[22.5vh] pb-10">
                 <div class="text-right">
@@ -58,6 +53,7 @@
                 </div>
             </div>
         </div>
+    </div>
     @livewireScripts
 </body>
 </html>
