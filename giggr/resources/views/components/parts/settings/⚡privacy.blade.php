@@ -66,10 +66,10 @@ new class extends Component {
     :title="__('settings.privacy_title')"
     :description="__('settings.privacy_description')"
 >
-    <fieldset>
+    <fieldset class="min-w-0">
         <legend class="sr-only">{{ __('settings.privacy_title') }}</legend>
 
-        <div class="space-y-3" role="radiogroup" aria-labelledby="settings-privacy-heading">
+        <div class="space-y-3">
             <x-form.radio
                 name="contact_preference"
                 :value="\App\Enums\ContactPreference::Everyone->value"

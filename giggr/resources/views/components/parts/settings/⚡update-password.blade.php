@@ -49,7 +49,10 @@ new class extends Component {
     :title="__('settings.password_title')"
     :description="__('settings.password_description')"
 >
-    <form wire:submit="save" class="space-y-4" novalidate>
+    <form wire:submit="save" novalidate>
+        <fieldset class="space-y-4 min-w-0">
+        <legend class="sr-only">{{ __('settings.password_title') }}</legend>
+
         <div>
             <x-form.password
                 name="current_password"
@@ -96,5 +99,6 @@ new class extends Component {
                 {{ __('settings.password_submit') }}
             </x-cta>
         </div>
+        </fieldset>
     </form>
 </x-settings.section>

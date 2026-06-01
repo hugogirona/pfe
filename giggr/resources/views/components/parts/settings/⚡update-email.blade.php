@@ -32,34 +32,39 @@ new class extends Component {
     :title="__('settings.email_title')"
     :description="__('settings.email_description')"
 >
-    <form wire:submit="save" class="space-y-4" novalidate>
-        <x-form.input
-            name="email"
-            type="email"
-            :label="__('settings.email_label')"
-            wire:model="email"
-            :value="$email"
-            :required="true"
-            autocomplete="email"
-        />
+    <form wire:submit="save" novalidate>
+        <fieldset class="space-y-4 min-w-0">
+            <legend class="sr-only">{{ __('settings.email_title') }}</legend>
 
-        <div>
-            <x-form.password
-                name="current_password"
-                :label="__('settings.current_password_label')"
-                wire:model="current_password"
+            <x-form.input
+                name="email"
+                type="email"
+                :label="__('settings.email_label')"
+                wire:model="email"
+                :value="$email"
                 :required="true"
-                autocomplete="current-password"
+                autocomplete="email"
             />
-            @error('current_password')
-                <p class="text-xs text-danger mt-1" role="alert">{{ $message }}</p>
-            @enderror
-        </div>
 
-        <div class="flex justify-end pt-1">
-            <x-cta type="submit" variant="dark" wire:loading.attr="disabled">
-                {{ __('settings.email_submit') }}
-            </x-cta>
-        </div>
+            <div>
+                <x-form.password
+                    name="current_password"
+                    id="email_current_password"
+                    :label="__('settings.current_password_label')"
+                    wire:model="current_password"
+                    :required="true"
+                    autocomplete="current-password"
+                />
+                @error('current_password')
+                    <p class="text-xs text-danger mt-1" role="alert">{{ $message }}</p>
+                @enderror
+            </div>
+
+            <div class="flex justify-end pt-1">
+                <x-cta type="submit" variant="dark" wire:loading.attr="disabled">
+                    {{ __('settings.email_submit') }}
+                </x-cta>
+            </div>
+        </fieldset>
     </form>
 </x-settings.section>
