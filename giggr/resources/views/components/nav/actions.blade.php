@@ -80,6 +80,6 @@
             </div>
         </div>
     @else
-        <x-cta href="{{ route('login') }}" wire:navigate variant="dark">{{ __('nav.sign_in') }}</x-cta>
+        <x-cta href="{{ route('login') }}" wire:navigate variant="outline">{{ __('nav.sign_in') }}</x-cta>
     @endauth
 </div>

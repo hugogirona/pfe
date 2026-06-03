@@ -92,16 +92,20 @@ new class extends Component {
                     </svg>
                 </button>
 
-                <div role="group" class="flex justify-center items-center gap-2 mt-8" aria-label="{{ __('home.carousel_aria', ['section' => __('home.'.$type.'_title')]) }}">
+                <div role="group" class="flex justify-center items-center mt-8" aria-label="{{ __('home.carousel_aria', ['section' => __('home.'.$type.'_title')]) }}">
                     <template x-for="i in pageCount" :key="i">
                         <a
                             :href="`#{{ $sliderId }}-${i - 1}`"
                             @click.prevent="go(i - 1)"
                             :aria-label="`{{ __('home.carousel_goto') }}${i}`"
                             :aria-current="current === i - 1 ? 'true' : false"
-                            class="h-2 rounded-full transition-all duration-300 cursor-pointer motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
-                            :class="current === i - 1 ? 'w-6 bg-accent' : 'w-2 bg-dark/25 hover:bg-dark/45'"
-                        ></a>
+                            class="group flex items-center justify-center h-6 px-2 cursor-pointer rounded-full focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
+                        >
+                            <span
+                                class="h-2 rounded-full transition-all duration-300 motion-reduce:transition-none"
+                                :class="current === i - 1 ? 'w-6 bg-accent' : 'w-2 bg-dark/25 group-hover:bg-dark/45'"
+                            ></span>
+                        </a>
                     </template>
                 </div>
             </div>
