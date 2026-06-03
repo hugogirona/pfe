@@ -1,11 +1,11 @@
 @php
 $logos = [
-    ['file' => 'apple-music-logo.svg', 'alt' => 'Logo Apple Music'],
-    ['file' => 'soundcloud-logo.svg',  'alt' => 'Logo SoundCloud'],
-    ['file' => 'spotify-logo.svg',     'alt' => 'Logo Spotify'],
-    ['file' => 'gibson-logo.svg',      'alt' => 'Logo Gibson'],
-    ['file' => 'fender-logo.svg',      'alt' => 'Logo Fender'],
-    ['file' => 'deezer-logo.svg',      'alt' => 'Logo Deezer'],
+    ['file' => 'apple-music-logo.svg', 'alt' => 'Logo Apple Music', 'w' => 151, 'h' => 37],
+    ['file' => 'soundcloud-logo.svg',  'alt' => 'Logo SoundCloud',  'w' => 75,  'h' => 43],
+    ['file' => 'spotify-logo.svg',     'alt' => 'Logo Spotify',     'w' => 140, 'h' => 48],
+    ['file' => 'gibson-logo.svg',      'alt' => 'Logo Gibson',      'w' => 77,  'h' => 49],
+    ['file' => 'fender-logo.svg',      'alt' => 'Logo Fender',      'w' => 143, 'h' => 54],
+    ['file' => 'deezer-logo.svg',      'alt' => 'Logo Deezer',      'w' => 51,  'h' => 50],
 ];
 @endphp
 
@@ -29,6 +29,10 @@ $logos = [
                         <img
                             src="{{ Vite::asset('resources/img/partners/' . $logo['file']) }}"
                             alt="{{ $logo['alt'] }}"
+                            width="{{ $logo['w'] }}"
+                            height="{{ $logo['h'] }}"
+                            loading="lazy"
+                            decoding="async"
                             @if ($series > 0) aria-hidden="true" @endif
                             class="h-8 w-auto grayscale opacity-40 hover:grayscale-0 hover:opacity-100 transition-all duration-300 cursor-pointer"
                         />
