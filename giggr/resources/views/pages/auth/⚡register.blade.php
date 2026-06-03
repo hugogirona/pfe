@@ -22,8 +22,8 @@ new #[Layout('layouts.auth')] class extends Component
 <div>
 
     <div class="mb-8">
-        <h1 id="register-heading" class="font-heading text-3xl text-dark mb-1.5">{{ __('auth.register_heading') }}</h1>
-        <p class="text-sm text-dark/50">{{ __('auth.register_subtitle') }}</p>
+        <h1 id="register-heading" class="font-heading text-3xl text-heading mb-1.5">{{ __('auth.register_heading') }}</h1>
+        <p class="text-sm text-subtle">{{ __('auth.register_subtitle') }}</p>
     </div>
 
     <form action="/register" method="POST" novalidate aria-labelledby="register-heading" class="space-y-5">
@@ -84,7 +84,7 @@ new #[Layout('layouts.auth')] class extends Component
             ]) !!}
         </x-form.checkbox>
 
-        <p class="text-xs text-dark/40">
+        <p class="text-xs text-caption">
             {{ __('auth.required_legend') }}
         </p>
 
@@ -94,10 +94,10 @@ new #[Layout('layouts.auth')] class extends Component
 
     </form>
 
-    <p class="text-sm text-dark/50 mt-6">
+    <p class="text-sm text-subtle mt-6">
         {{ __('auth.register_login_prompt') }}
         <a href="{{ route('login') }}"
-           class="text-dark font-medium underline underline-offset-2
+           class="text-body font-medium underline underline-offset-2
                   hover:text-accent transition-colors duration-150
                   focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent rounded-sm">
             {{ __('auth.register_login_link') }}

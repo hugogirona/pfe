@@ -41,12 +41,12 @@
         ])>
             <div class="w-8 h-0.5 bg-accent rounded-full"></div>
 
-            <h2 id="{{ $sectionId }}" class="font-heading text-3xl md:text-4xl leading-tight text-dark">
+            <h2 id="{{ $sectionId }}" class="font-heading text-3xl md:text-4xl leading-tight text-heading">
                 {{ $title }}
             </h2>
 
             @if ($content)
-                <p class="text-base md:text-lg leading-relaxed text-dark/60 max-w-sm">
+                <p class="text-base md:text-lg leading-relaxed text-subtle max-w-sm">
                     {{ $content }}
                 </p>
             @endif

@@ -24,9 +24,9 @@
     </span>
 
     <span class="min-w-0">
-        <span class="block text-sm font-medium text-dark">{{ $label }}</span>
+        <span class="block text-sm font-medium text-body">{{ $label }}</span>
         @if ($description)
-            <span class="block text-xs text-dark/50 mt-0.5 leading-relaxed">{{ $description }}</span>
+            <span class="block text-xs text-subtle mt-0.5 leading-relaxed">{{ $description }}</span>
         @endif
     </span>
 </label>

@@ -66,12 +66,12 @@ new class extends Component {
             aria-live="polite"
             class="rounded-md border border-danger/15 bg-danger/5 px-3 py-2.5 space-y-2"
         >
-            <p class="text-xs text-dark/80 leading-relaxed">{{ __('profile.block_confirm', ['name' => $name]) }}</p>
+            <p class="text-xs text-subtle leading-relaxed">{{ __('profile.block_confirm', ['name' => $name]) }}</p>
             <div class="flex items-center justify-end gap-1.5">
                 <button
                     type="button"
                     @click="confirming = false"
-                    class="px-2.5 py-1 rounded text-xs font-medium text-dark/60 hover:text-dark hover:bg-dark/5 transition-colors duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
+                    class="px-2.5 py-1 rounded text-xs font-medium text-subtle hover:text-body hover:bg-dark/5 transition-colors duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
                 >
                     {{ __('profile.cancel') }}
                 </button>
@@ -79,7 +79,7 @@ new class extends Component {
                     type="button"
                     wire:click="toggle"
                     @click="confirming = false"
-                    class="px-2.5 py-1 rounded text-xs font-medium bg-danger text-bg hover:opacity-90 transition-opacity duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
+                    class="px-2.5 py-1 rounded text-xs font-medium bg-danger text-on-dark hover:opacity-90 transition-opacity duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
                 >
                     {{ __('profile.block') }}
                 </button>

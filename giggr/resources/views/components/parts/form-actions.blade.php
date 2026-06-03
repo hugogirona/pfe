@@ -37,14 +37,14 @@
                 <button
                     type="button"
                     @click="confirming = false"
-                    class="h-11 px-3 rounded-md text-sm font-medium text-dark/60 hover:text-dark hover:bg-dark/5 transition-colors duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
+                    class="h-11 px-3 rounded-md text-sm font-medium text-subtle hover:text-body hover:bg-dark/5 transition-colors duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
                 >
                     {{ $cancelLabel }}
                 </button>
                 <button
                     type="button"
                     wire:click="{{ $deleteAction }}"
-                    class="h-11 px-4 rounded-md text-sm font-medium bg-danger text-bg hover:opacity-90 transition-opacity duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
+                    class="h-11 px-4 rounded-md text-sm font-medium bg-danger text-on-dark hover:opacity-90 transition-opacity duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
                 >
                     {{ $deleteConfirmLabel }}
                 </button>
@@ -58,7 +58,7 @@
         type="submit"
         wire:loading.attr="disabled"
         wire:loading.class="opacity-60 cursor-not-allowed"
-        class="h-11 px-6 rounded-md bg-dark text-bg text-sm font-medium hover:opacity-80 transition-opacity duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
+        class="h-11 px-6 rounded-md bg-dark text-on-dark text-sm font-medium hover:opacity-80 transition-opacity duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent-on-dark"
     >
         <span wire:loading.remove wire:target="{{ $submitTarget }}">{{ $submitLabel }}</span>
         <span wire:loading wire:target="{{ $submitTarget }}">{{ $submittingLabel }}</span>

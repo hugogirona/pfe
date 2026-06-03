@@ -15,10 +15,10 @@ $sizes = [
 ];
 
 $variants = [
-    'simple'  => 'border-transparent text-dark/40 hover:text-dark hover:bg-dark/5 transition-colors duration-150',
-    'outline' => 'border-dark/30 text-dark hover:border-dark hover:bg-dark/5 transition-colors duration-150',
-    'dark'    => 'border-transparent bg-dark text-bg hover:opacity-80 transition-opacity duration-150',
-    'accent'  => 'border-transparent bg-accent text-bg hover:opacity-90 transition-opacity duration-150',
+    'simple'  => 'border-transparent text-caption hover:text-body hover:bg-dark/5 transition-colors duration-150',
+    'outline' => 'border-dark/30 text-body hover:border-dark hover:bg-dark/5 transition-colors duration-150',
+    'dark'    => 'border-transparent bg-dark text-on-dark hover:opacity-80 transition-opacity duration-150',
+    'accent'  => 'border-transparent bg-accent text-on-dark hover:opacity-90 transition-opacity duration-150',
     'danger'  => 'border-transparent text-danger hover:bg-danger/10 transition-colors duration-150',
 ];
 

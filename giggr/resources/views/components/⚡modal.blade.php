@@ -67,11 +67,11 @@ new class extends Component {
         :aria-label="$wire.title"
     >
         <div class="flex items-center justify-between px-6 py-5 border-b border-dark/10 shrink-0">
-            <h2 class="font-heading text-xl text-dark">{{ $title }}</h2>
+            <h2 class="font-heading text-xl text-heading">{{ $title }}</h2>
             <button
                 wire:click="close"
                 type="button"
-                class="w-9 h-9 flex items-center justify-center rounded-full text-dark/40 hover:text-dark hover:bg-dark/5 transition-colors duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
+                class="w-9 h-9 flex items-center justify-center rounded-full text-caption hover:text-body hover:bg-dark/5 transition-colors duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
                 aria-label="{{ __('Fermer') }}"
             >
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5" aria-hidden="true">

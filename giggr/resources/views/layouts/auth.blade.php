@@ -13,10 +13,10 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
 </head>
-<body class="bg-bg text-dark font-sans antialiased">
+<body class="bg-bg text-body font-sans antialiased">
 
     <a href="#main"
-       class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:px-4 focus:py-2 focus:rounded-lg focus:bg-dark focus:text-bg focus:outline-none focus:ring-2 focus:ring-accent">
+       class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:px-4 focus:py-2 focus:rounded-lg focus:bg-dark focus:text-on-dark focus:outline-none focus:ring-2 focus:ring-accent-on-dark">
         {{ __('nav.skip_to_content') }}
     </a>
 
@@ -30,7 +30,7 @@
 
             <div class="md:hidden px-6 pt-10 pb-2">
                 <a href="{{ route('home') }}" aria-label="Giggr.">
-                    <x-logo class="h-7 w-auto text-dark" />
+                    <x-logo class="h-7 w-auto text-body" />
                 </a>
             </div>
 
@@ -44,13 +44,15 @@
 
          <div class="hidden md:flex md:w-[42%] bg-dark/5 flex-col min-h-screen top-0 relative" aria-hidden="true">
             <div class="absolute top-0 left-0 p-10">
-                <x-logo class="h-7 w-auto text-dark" />
+                <a href="{{ route('home') }}" aria-label="Giggr.">
+                    <x-logo class="h-7 w-auto text-body" />
+                </a>
             </div>
             <div class="flex-1 flex flex-col px-8 md:px-14 lg:px-16 pt-[22.5vh] pb-10">
                 <div class="text-right">
                     <section>
                         <h2 class="text-accent text-sm font-medium uppercase tracking-widest mb-5">{{ __('auth.panel_eyebrow') }}</h2>
-                        <p class="text-dark/50 text-base leading-relaxed mb-5">{{ __('auth.panel_subtitle') }}</p>
+                        <p class="text-subtle text-base leading-relaxed mb-5">{{ __('auth.panel_subtitle') }}</p>
                     </section>
                 </div>
             </div>

@@ -7,7 +7,7 @@
 >
 
     <div class="flex items-center justify-between mb-6">
-        <h2 id="gallery-heading" class="font-heading text-2xl text-dark">
+        <h2 id="gallery-heading" class="font-heading text-2xl text-heading">
             {{ __('profile.gallery_title') }}
         </h2>
         @if ($isOwner && $profile->media->isNotEmpty())
@@ -37,7 +37,7 @@
     @endif
 
     @if ($profile->media->isEmpty())
-        <p class="text-sm text-dark/40 italic">
+        <p class="text-sm text-caption italic">
             {{ $isOwner ? __('profile.gallery_empty_owner') : __('profile.gallery_empty') }}
         </p>
     @else

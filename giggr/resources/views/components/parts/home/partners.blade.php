@@ -11,7 +11,7 @@ $logos = [
 
 <section class="py-12 md:py-24">
 
-    <h2 class="text-center font-heading text-base tracking-[0.3em] uppercase text-dark/40 mb-14 mx-6">
+    <h2 class="text-center font-heading text-base tracking-[0.3em] uppercase text-caption mb-14 mx-6">
         {{ __('home.partners_title') }}
     </h2>
 

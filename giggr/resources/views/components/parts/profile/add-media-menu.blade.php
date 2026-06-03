@@ -37,9 +37,9 @@
                         model_id: '{{ $profile->id }}',
                     });
                 "
-                class="w-full flex items-center gap-2.5 px-4 py-3 text-sm text-dark hover:bg-dark/5 transition-colors duration-150 cursor-pointer focus-visible:outline-none focus-visible:bg-dark/5"
+                class="w-full flex items-center gap-2.5 px-4 py-3 text-sm text-body hover:bg-dark/5 transition-colors duration-150 cursor-pointer focus-visible:outline-none focus-visible:bg-dark/5"
             >
-                <x-icon name="photo" class="w-4 h-4 text-dark/40"/>
+                <x-icon name="photo" class="w-4 h-4 text-caption"/>
                 <span>{{ __('profile.gallery_add_image') }}</span>
             </button>
         </li>
@@ -56,9 +56,9 @@
                         model_id: '{{ $profile->id }}',
                     });
                 "
-                class="w-full flex items-center gap-2.5 px-4 py-3 text-sm text-dark hover:bg-dark/5 transition-colors duration-150 cursor-pointer focus-visible:outline-none focus-visible:bg-dark/5"
+                class="w-full flex items-center gap-2.5 px-4 py-3 text-sm text-body hover:bg-dark/5 transition-colors duration-150 cursor-pointer focus-visible:outline-none focus-visible:bg-dark/5"
             >
-                <x-icon name="play" class="w-4 h-4 text-dark/40"/>
+                <x-icon name="play" class="w-4 h-4 text-caption"/>
                 <span>{{ __('profile.gallery_add_video') }}</span>
             </button>
         </li>

@@ -18,7 +18,7 @@
 >
 
     <div class="flex items-center justify-between mb-3">
-        <h2 class="text-[11px] font-semibold uppercase tracking-widest text-dark/35">
+        <h2 class="text-[11px] font-semibold uppercase tracking-widest text-caption">
             {{ __('profile.genres_label') }}
         </h2>
         @if ($isOwner)
@@ -66,7 +66,7 @@
                         @endforeach
                     </ul>
                 @else
-                    <p class="text-xs text-dark/30 italic">{{ __('profile.genres_empty_owner') }}</p>
+                    <p class="text-xs text-caption italic">{{ __('profile.genres_empty_owner') }}</p>
                 @endif
             </div>
         </div>

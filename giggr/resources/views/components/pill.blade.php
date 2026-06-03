@@ -5,8 +5,8 @@
 
 @php
 $variants = [
-    'instrument' => 'bg-dark/12 text-dark/80',
-    'genre'      => 'bg-dark/6 text-dark/60',
+    'instrument' => 'bg-dark/12 text-subtle',
+    'genre'      => 'bg-dark/6 text-subtle',
 ];
 
 $sizes = [

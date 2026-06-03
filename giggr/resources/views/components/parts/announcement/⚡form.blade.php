@@ -126,17 +126,17 @@ new class extends Component {
                 </svg>
             </div>
             <div>
-                <h3 class="font-heading text-xl text-dark">
+                <h3 class="font-heading text-xl text-heading">
                     {{ $model_id ? __('announcement.form_success_updated_title') : __('announcement.form_success_title') }}
                 </h3>
-                <p class="text-sm text-dark/60 mt-1">
+                <p class="text-sm text-subtle mt-1">
                     {{ $model_id ? __('announcement.form_success_updated_body') : __('announcement.form_success_body') }}
                 </p>
             </div>
             <button
                 wire:click="close"
                 type="button"
-                class="h-11 px-6 rounded-md bg-dark text-bg text-sm font-medium hover:opacity-80 transition-opacity duration-150 cursor-pointer"
+                class="h-11 px-6 rounded-md bg-dark text-on-dark text-sm font-medium hover:opacity-80 transition-opacity duration-150 cursor-pointer"
             >
                 {{ __('announcement.form_close') }}
             </button>
@@ -183,7 +183,7 @@ new class extends Component {
             {{-- Instruments --}}
             <fieldset>
                 <legend
-                    class="block text-sm font-medium text-dark/70 mb-1.5">{{ __('announcement.form_instruments_label') }}</legend>
+                    class="block text-sm font-medium text-subtle mb-1.5">{{ __('announcement.form_instruments_label') }}</legend>
                 <div class="grid grid-cols-2 gap-x-4 gap-y-2">
                     @foreach ($availableInstruments as $instr)
                         <x-form.checkbox :name="'announcement_form_instrument_' . $instr['id']" wire:model="selectedInstruments"
@@ -197,7 +197,7 @@ new class extends Component {
             {{-- Genres --}}
             <fieldset>
                 <legend
-                    class="block text-sm font-medium text-dark/70 mb-1.5">{{ __('announcement.form_genres_label') }}</legend>
+                    class="block text-sm font-medium text-subtle mb-1.5">{{ __('announcement.form_genres_label') }}</legend>
                 <div class="grid grid-cols-2 gap-x-4 gap-y-2">
                     @foreach ($availableGenres as $genre)
                         <x-form.checkbox :name="'announcement_form_genre_' . $genre['id']" wire:model="selectedGenres"

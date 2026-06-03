@@ -93,8 +93,8 @@ new class extends Component {
                 wire:click.stop="toggle"
                 @class([
                     'w-full flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent',
-                    'bg-dark text-bg hover:bg-dark/80' => $isFollowing,
-                    'bg-transparent text-dark border border-dark/20 hover:border-dark/40 hover:bg-dark/5' => ! $isFollowing,
+                    'bg-dark text-on-dark hover:bg-dark/80' => $isFollowing,
+                    'bg-transparent text-body border border-dark/20 hover:border-dark/40 hover:bg-dark/5' => ! $isFollowing,
                 ])
                 aria-pressed="{{ $isFollowing ? 'true' : 'false' }}"
                 aria-label="{{ $isFollowing ? __('social.unfollow_aria', ['name' => $musicianName]) : __('social.follow_aria', ['name' => $musicianName]) }}"
@@ -107,7 +107,7 @@ new class extends Component {
                 type="button"
                 x-data
                 @click.stop.prevent="$dispatch('open-auth-modal')"
-                class="w-full flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium bg-transparent text-dark border border-dark/20 hover:border-dark/40 hover:bg-dark/5 transition-colors duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
+                class="w-full flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium bg-transparent text-body border border-dark/20 hover:border-dark/40 hover:bg-dark/5 transition-colors duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
                 aria-label="{{ __('social.follow_aria', ['name' => $musicianName]) }}"
             >
                 <x-icon name="heart" class="w-4 h-4"/>
@@ -121,7 +121,7 @@ new class extends Component {
             @class([
                 'w-10 h-10 flex items-center justify-center rounded-full backdrop-blur-sm transition-colors duration-200 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent',
                 'bg-white/90 text-accent hover:bg-white' => $isFollowing,
-                'bg-white/75 text-dark/40 hover:text-accent hover:bg-white/90' => ! $isFollowing,
+                'bg-white/75 text-caption hover:text-accent hover:bg-white/90' => ! $isFollowing,
             ])
             aria-pressed="{{ $isFollowing ? 'true' : 'false' }}"
             aria-label="{{ $isFollowing ? __('social.unfollow_aria', ['name' => $musicianName]) : __('social.follow_aria', ['name' => $musicianName]) }}"
@@ -133,7 +133,7 @@ new class extends Component {
             type="button"
             x-data
             @click.stop.prevent="$dispatch('open-auth-modal')"
-            class="w-10 h-10 flex items-center justify-center rounded-full bg-white/75 backdrop-blur-sm text-dark/40 hover:text-accent hover:bg-white/90 transition-colors duration-200 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
+            class="w-10 h-10 flex items-center justify-center rounded-full bg-white/75 backdrop-blur-sm text-caption hover:text-accent hover:bg-white/90 transition-colors duration-200 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
             aria-label="{{ __('social.follow_aria', ['name' => $musicianName]) }}"
         >
             <x-icon name="heart" class="w-5 h-5"/>

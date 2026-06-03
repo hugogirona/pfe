@@ -7,7 +7,7 @@
                 {{ __('home.features_eyebrow') }}
                 <span class="w-6 md:w-8 h-px bg-accent"></span>
             </p>
-            <h2 id="features-title" class="font-heading text-[1.75rem] leading-tight md:text-5xl md:leading-[1.1] text-dark">
+            <h2 id="features-title" class="font-heading text-[1.75rem] leading-tight md:text-5xl md:leading-[1.1] text-heading">
                 {{ __('home.features_title') }}
             </h2>
         </div>

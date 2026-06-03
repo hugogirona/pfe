@@ -3,7 +3,7 @@
 @if ($suggestions->isNotEmpty())
     <section aria-labelledby="related-heading" class="border-t border-dark/10 pt-10">
 
-        <h2 id="related-heading" class="font-heading text-2xl md:text-3xl text-dark mb-6">
+        <h2 id="related-heading" class="font-heading text-2xl md:text-3xl text-heading mb-6">
             {{ __('announcement.related_title') }}
         </h2>
 

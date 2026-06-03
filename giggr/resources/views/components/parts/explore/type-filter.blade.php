@@ -6,7 +6,7 @@
 
 <section>
     <div class="flex items-center justify-between mb-3">
-        <h3 class="text-xs font-semibold uppercase tracking-widest text-dark/40">
+        <h3 class="text-xs font-semibold uppercase tracking-widest text-caption">
             {{ __('explore.filter_types') }}
         </h3>
         @if (count($selected) > 0)
@@ -21,8 +21,8 @@
                 wire:click="{{ $toggleMethod }}('{{ $type['value'] }}')"
                 @class([
                     'h-9 px-4 rounded-full border text-sm font-medium transition-all duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent',
-                    'bg-accent text-bg border-accent' => in_array($type['value'], $selected),
-                    'bg-white text-dark/60 border-dark/15 hover:border-dark/40 hover:text-dark' => !in_array($type['value'], $selected),
+                    'bg-accent text-on-dark border-accent' => in_array($type['value'], $selected),
+                    'bg-white text-subtle border-dark/15 hover:border-dark/40 hover:text-body' => !in_array($type['value'], $selected),
                 ])
                 aria-pressed="{{ in_array($type['value'], $selected) ? 'true' : 'false' }}"
             >{{ $type['label'] }}</button>

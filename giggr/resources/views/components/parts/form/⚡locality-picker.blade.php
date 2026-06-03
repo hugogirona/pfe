@@ -137,8 +137,8 @@ new class extends Component {
     @keydown.escape.window="$wire.set('results', [])"
 >
     <label for="locality-picker-input" @class([
-        'block text-xs font-semibold uppercase tracking-widest text-dark/40 mb-3' => $filterStyle,
-        'block text-sm font-medium text-dark/70 mb-1.5' => !$filterStyle,
+        'block text-xs font-semibold uppercase tracking-widest text-caption mb-3' => $filterStyle,
+        'block text-sm font-medium text-subtle mb-1.5' => !$filterStyle,
     ])>
         {{ $label }}
         @if ($required && !$filterStyle)
@@ -164,7 +164,7 @@ new class extends Component {
                     highlight = 0
                 }
             "
-            class="w-full px-4 py-3 pr-12 rounded-md bg-white border border-dark/15 text-base text-dark placeholder:text-dark/30 focus:outline-none focus:ring-2 focus:ring-accent/40 focus:border-accent transition-colors duration-150"
+            class="w-full px-4 py-3 pr-12 rounded-md bg-white border border-dark/15 text-base text-body placeholder:text-placeholder focus:outline-none focus:ring-2 focus:ring-accent/40 focus:border-accent transition-colors duration-150"
         />
 
         <button
@@ -173,7 +173,7 @@ new class extends Component {
             :disabled="locating"
             :aria-busy="locating"
             aria-label="{{ __('locality.geolocate_aria') }}"
-            class="absolute inset-y-0 right-2 my-auto w-9 h-9 flex items-center justify-center rounded-md text-dark/50 hover:text-accent hover:bg-dark/5 transition-colors duration-150 cursor-pointer disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
+            class="absolute inset-y-0 right-2 my-auto w-9 h-9 flex items-center justify-center rounded-md text-subtle hover:text-accent hover:bg-dark/5 transition-colors duration-150 cursor-pointer disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
         >
             <span x-show="!locating" class="inline-flex motion-reduce:!animate-none">
                 <x-icon name="map-pin" class="w-5 h-5"/>
@@ -214,7 +214,7 @@ new class extends Component {
                     :aria-selected="highlight === {{ $i }}"
                     @click="$wire.call('selectCity', {{ $r['id'] }})"
                     @mouseenter="highlight = {{ $i }}"
-                    :class="highlight === {{ $i }} ? 'bg-pastel-salmon text-dark' : 'text-dark/80'"
+                    :class="highlight === {{ $i }} ? 'bg-pastel-salmon text-body' : 'text-subtle'"
                     class="px-4 py-2.5 text-sm cursor-pointer hover:bg-pastel-salmon/60"
                 >{{ $r['display'] }}</li>
             @endforeach

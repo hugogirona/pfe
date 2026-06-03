@@ -1,6 +1,6 @@
 <section>
     <h2 id="contact-form-heading"
-        class="font-heading text-3xl md:text-4xl text-dark mb-8">
+        class="font-heading text-3xl md:text-4xl text-heading mb-8">
         {{ __('contact.form_title') }}
     </h2>
 
@@ -10,8 +10,8 @@
             aria-live="polite"
             class="mb-6 rounded-[6px] bg-pastel-salmon/40 border border-accent/30 px-4 py-3"
         >
-            <p class="font-medium text-dark">{{ __('contact.form_success_title') }}</p>
-            <p class="text-sm text-dark/65 mt-0.5">{{ __('contact.form_success_body') }}</p>
+            <p class="font-medium text-body">{{ __('contact.form_success_title') }}</p>
+            <p class="text-sm text-subtle mt-0.5">{{ __('contact.form_success_body') }}</p>
         </div>
     @endif
 
@@ -81,7 +81,7 @@
             ]) !!}
         </x-form.checkbox>
 
-        <p class="text-xs text-dark/40">{{ __('contact.required_legend') }}</p>
+        <p class="text-xs text-caption">{{ __('contact.required_legend') }}</p>
 
         <x-cta type="submit" size="lg" class="w-full min-h-[44px] gap-2 mt-1">
             {{ __('contact.form_submit') }}

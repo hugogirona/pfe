@@ -31,7 +31,7 @@
             </span>
         </span>
 
-        <span class="text-sm text-dark/60 leading-relaxed select-none">
+        <span class="text-sm text-subtle leading-relaxed select-none">
             {!! $slot !!}
         </span>
     </label>

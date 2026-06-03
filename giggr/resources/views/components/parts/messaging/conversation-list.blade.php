@@ -9,9 +9,9 @@
     @if ($conversations->isEmpty())
         <div class="h-full flex flex-col items-center justify-center px-8 py-12 text-center" role="status">
             <div class="w-16 h-16 rounded-full bg-dark/5 flex items-center justify-center mb-4" aria-hidden="true">
-                <x-icon name="chat-bubble" class="w-8 h-8 text-dark/30"/>
+                <x-icon name="chat-bubble" class="w-8 h-8 text-caption"/>
             </div>
-            <p class="text-sm text-dark/50 italic">
+            <p class="text-sm text-subtle italic">
                 {{ $activeTab === 'messages' ? __('messaging.empty_messages') : __('messaging.empty_requests') }}
             </p>
         </div>

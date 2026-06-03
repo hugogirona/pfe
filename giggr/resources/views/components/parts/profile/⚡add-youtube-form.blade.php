@@ -130,17 +130,17 @@ new class extends Component {
             </svg>
         </div>
         <div>
-            <h3 class="font-heading text-xl text-dark">
+            <h3 class="font-heading text-xl text-heading">
                 {{ $isEdit ? __('profile.update_youtube_success_title') : __('profile.add_youtube_success_title') }}
             </h3>
-            <p class="text-sm text-dark/60 mt-1">
+            <p class="text-sm text-subtle mt-1">
                 {{ $isEdit ? __('profile.update_youtube_success_body') : __('profile.add_youtube_success_body') }}
             </p>
         </div>
         <button
             wire:click="close"
             type="button"
-            class="h-11 px-6 rounded-md bg-dark text-bg text-sm font-medium hover:opacity-80 transition-opacity duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
+            class="h-11 px-6 rounded-md bg-dark text-on-dark text-sm font-medium hover:opacity-80 transition-opacity duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent-on-dark"
         >
             {{ __('profile.add_youtube_close') }}
         </button>
@@ -148,8 +148,8 @@ new class extends Component {
 @else
     <form wire:submit="save" class="space-y-5" novalidate>
 
-        <div class="bg-pastel-blue/40 border border-pastel-blue rounded-md p-4 text-sm text-dark/75 leading-relaxed">
-            <p class="font-medium text-dark mb-1">{{ __('profile.add_youtube_help_title') }}</p>
+        <div class="bg-pastel-blue/40 border border-pastel-blue rounded-md p-4 text-sm text-subtle leading-relaxed">
+            <p class="font-medium text-body mb-1">{{ __('profile.add_youtube_help_title') }}</p>
             <p>
                 {!! __('profile.add_youtube_help_body') !!}
             </p>

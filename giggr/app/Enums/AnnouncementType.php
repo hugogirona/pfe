@@ -17,10 +17,10 @@ enum AnnouncementType: string
     public function color(): string
     {
         return match ($this) {
-            self::MusicianWanted => 'bg-accent text-bg',
-            self::BandWanted => 'bg-dark text-bg',
-            self::Gig => 'bg-pastel-blue text-dark',
-            self::Lessons => 'bg-pastel-salmon text-dark',
+            self::MusicianWanted => 'bg-accent text-on-dark',
+            self::BandWanted => 'bg-dark text-on-dark',
+            self::Gig => 'bg-pastel-blue text-body',
+            self::Lessons => 'bg-pastel-salmon text-body',
         };
     }
 }

@@ -85,7 +85,7 @@
             @endforeach
         </ol>
     @else
-        <p class="h-full flex items-center justify-center text-sm text-dark/40 italic">
+        <p class="h-full flex items-center justify-center text-sm text-caption italic">
             {{ __('messaging.no_messages_yet') }}
         </p>
     @endif

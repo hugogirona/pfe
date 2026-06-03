@@ -1,7 +1,7 @@
 @props(['user'])
 
 <div
-    {{ $attributes->merge(['class' => 'rounded-full overflow-hidden bg-pastel-taupe text-dark flex items-center justify-center font-semibold uppercase shrink-0']) }}
+    {{ $attributes->merge(['class' => 'rounded-full overflow-hidden bg-pastel-taupe text-body flex items-center justify-center font-semibold uppercase shrink-0']) }}
     aria-hidden="true"
 >
     @if ($user?->profile?->thumbnail)

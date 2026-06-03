@@ -17,7 +17,7 @@ $scrollIntoViewJsSnippet = ($scrollTo !== false)
             {{-- Previous --}}
             @if ($paginator->onFirstPage())
                 <span
-                    class="w-9 h-9 flex items-center justify-center rounded-full text-dark/20 cursor-not-allowed"
+                    class="w-9 h-9 flex items-center justify-center rounded-full text-caption cursor-not-allowed"
                 >
                     <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
@@ -30,7 +30,7 @@ $scrollIntoViewJsSnippet = ($scrollTo !== false)
                     x-on:click="{{ $scrollIntoViewJsSnippet }}"
                     wire:loading.attr="disabled"
                     aria-label="{{ __('pagination.previous') }}"
-                    class="w-9 h-9 flex items-center justify-center rounded-full text-dark/50 hover:text-dark hover:bg-dark/5 transition-colors duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
+                    class="w-9 h-9 flex items-center justify-center rounded-full text-subtle hover:text-body hover:bg-dark/5 transition-colors duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
                 >
                     <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
@@ -41,7 +41,7 @@ $scrollIntoViewJsSnippet = ($scrollTo !== false)
             {{-- Pages --}}
             @foreach ($elements as $element)
                 @if (is_string($element))
-                    <span class="w-9 h-9 flex items-center justify-center text-sm text-dark/30 select-none">{{ $element }}</span>
+                    <span class="w-9 h-9 flex items-center justify-center text-sm text-subtle select-none">{{ $element }}</span>
                 @endif
 
                 @if (is_array($element))
@@ -58,7 +58,7 @@ $scrollIntoViewJsSnippet = ($scrollTo !== false)
                                     wire:click="gotoPage({{ $page }}, '{{ $paginator->getPageName() }}')"
                                     x-on:click="{{ $scrollIntoViewJsSnippet }}"
                                     aria-label="{{ __('pagination.goto_page', ['page' => $page]) }}"
-                                    class="w-9 h-9 flex items-center justify-center rounded-full text-sm text-dark/60 hover:text-dark hover:bg-dark/5 transition-colors duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
+                                    class="w-9 h-9 flex items-center justify-center rounded-full text-sm text-subtle hover:text-body hover:bg-dark/5 transition-colors duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
                                 >{{ $page }}</button>
                             @endif
                         </span>
@@ -74,7 +74,7 @@ $scrollIntoViewJsSnippet = ($scrollTo !== false)
                     x-on:click="{{ $scrollIntoViewJsSnippet }}"
                     wire:loading.attr="disabled"
                     aria-label="{{ __('pagination.next') }}"
-                    class="w-9 h-9 flex items-center justify-center rounded-full text-dark/50 hover:text-dark hover:bg-dark/5 transition-colors duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
+                    class="w-9 h-9 flex items-center justify-center rounded-full text-subtle hover:text-body hover:bg-dark/5 transition-colors duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
                 >
                     <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
                         <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
@@ -82,7 +82,7 @@ $scrollIntoViewJsSnippet = ($scrollTo !== false)
                 </button>
             @else
                 <span
-                    class="w-9 h-9 flex items-center justify-center rounded-full text-dark/20 cursor-not-allowed"
+                    class="w-9 h-9 flex items-center justify-center rounded-full text-caption cursor-not-allowed"
                 >
                     <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
                         <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />

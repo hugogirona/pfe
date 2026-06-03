@@ -10,7 +10,7 @@
     aria-labelledby="drawer-radius-heading"
 >
     <div class="flex items-center justify-between mb-3">
-        <h3 id="drawer-radius-heading" class="text-xs font-semibold uppercase tracking-widest text-dark/40">
+        <h3 id="drawer-radius-heading" class="text-xs font-semibold uppercase tracking-widest text-caption">
             {{ __('explore.filter_radius') }}
         </h3>
         <span
@@ -35,6 +35,6 @@
     />
 
     @if ($disabled)
-        <p class="text-xs text-dark/40 italic mt-2">{{ __('explore.filter_radius_disabled_hint') }}</p>
+        <p class="text-xs text-caption italic mt-2">{{ __('explore.filter_radius_disabled_hint') }}</p>
     @endif
 </section>

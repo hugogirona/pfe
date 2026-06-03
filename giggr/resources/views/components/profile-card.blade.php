@@ -36,7 +36,7 @@
                     />
                 @else
                     <div class="absolute inset-0 flex items-center justify-center bg-pastel-taupe">
-                        <span class="font-heading text-4xl text-dark/30 select-none">
+                        <span class="font-heading text-4xl text-subtle select-none">
                             {{ mb_substr($name, 0, 1) }}
                         </span>
                     </div>
@@ -46,8 +46,8 @@
             {{-- Content --}}
             <div class="px-5 py-4 space-y-3">
                 <div>
-                    <h3 class="font-heading text-xl text-dark" itemprop="name">{{ $name }}</h3>
-                    <p class="text-sm text-dark/40 mt-0.5 min-h-lh">
+                    <h3 class="font-heading text-xl text-heading" itemprop="name">{{ $name }}</h3>
+                    <p class="text-sm text-caption mt-0.5 min-h-lh">
                         @if($profile->age)
                             {{ __('explore.card_years', ['n' => $profile->age]) }}
                         @endif
@@ -77,7 +77,7 @@
 
                 <div class="text-sm leading-relaxed min-h-[2lh]">
                     @if (filled($profile->bio))
-                        <p class="text-dark/55 line-clamp-2">{{ Str::limit($profile->bio, 120) }}</p>
+                        <p class="text-subtle line-clamp-2">{{ Str::limit($profile->bio, 120) }}</p>
                     @endif
                 </div>
             </div>
@@ -89,7 +89,7 @@
                     class="absolute inset-0 translate-x-[-101%] bg-accent motion-safe:transition-transform motion-safe:duration-300 motion-safe:ease-out group-hover:translate-x-0"
                     aria-hidden="true"></span>
                 <span
-                    class="relative flex items-center gap-2 text-dark group-hover:text-bg motion-safe:transition-colors motion-safe:duration-100">
+                    class="relative flex items-center gap-2 text-body group-hover:text-on-dark motion-safe:transition-colors motion-safe:duration-100">
                     {{ __('explore.card_see_profile') }}
                     <x-icon name="arrow-right" class="w-4 h-4" />
                 </span>

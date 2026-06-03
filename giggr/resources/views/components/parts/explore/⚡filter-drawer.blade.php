@@ -145,11 +145,11 @@ new class extends Component {
         {{-- Header --}}
         <div class="flex items-center justify-between px-6 py-5 border-b border-dark/10 shrink-0">
             <div class="flex items-center gap-3">
-                <h2 class="font-heading text-xl text-dark">{{ __('explore.filter_title') }}</h2>
+                <h2 class="font-heading text-xl text-heading">{{ __('explore.filter_title') }}</h2>
                 @php $activeDraft = count($draftInstruments) + count($draftGenres) + count($draftTypes) + ($draftCityId !== null ? 1 : 0) + ($draftCityId !== null && $draftRadius > 0 ? 1 : 0) + ($draftFollowing ? 1 : 0); @endphp
                 @if ($activeDraft > 0)
                     <span
-                        class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-accent text-bg text-xs font-semibold">
+                        class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-accent text-on-dark text-xs font-semibold">
                         {{ $activeDraft }}
                     </span>
                 @endif
@@ -157,7 +157,7 @@ new class extends Component {
             <button
                 wire:click="close"
                 type="button"
-                class="w-9 h-9 flex items-center justify-center rounded-lg text-dark/40 hover:text-dark hover:bg-dark/5 transition-colors duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
+                class="w-9 h-9 flex items-center justify-center rounded-lg text-caption hover:text-body hover:bg-dark/5 transition-colors duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
                 aria-label="{{ __('explore.filter_close') }}"
             >
                 <x-icon name="x-mark" class="w-5 h-5"/>
@@ -193,7 +193,7 @@ new class extends Component {
             @auth
                 {{-- Comptes suivis --}}
                 <section>
-                    <h3 class="text-xs font-semibold uppercase tracking-widest text-dark/40 mb-3">
+                    <h3 class="text-xs font-semibold uppercase tracking-widest text-caption mb-3">
                         {{ __('explore.filter_following_label') }}
                     </h3>
                     <x-form.checkbox name="drawer-following" wire:model.live="draftFollowing">
@@ -205,7 +205,7 @@ new class extends Component {
             {{-- Instruments --}}
             <section>
                 <div class="flex items-center justify-between mb-3">
-                    <h3 class="text-xs font-semibold uppercase tracking-widest text-dark/40">
+                    <h3 class="text-xs font-semibold uppercase tracking-widest text-caption">
                         {{ __('explore.filter_instruments') }}
                     </h3>
                     @if (count($draftInstruments) > 0)
@@ -219,8 +219,8 @@ new class extends Component {
                             wire:click="toggleInstrument('{{ $instr }}')"
                             @class([
                                 'h-9 px-4 rounded-full border text-sm font-medium transition-all duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent',
-                                'bg-dark text-bg border-dark'                                                => in_array($instr, $draftInstruments),
-                                'bg-white text-dark/60 border-dark/15 hover:border-dark/40 hover:text-dark' => !in_array($instr, $draftInstruments),
+                                'bg-dark text-on-dark border-dark'                                                => in_array($instr, $draftInstruments),
+                                'bg-white text-subtle border-dark/15 hover:border-dark/40 hover:text-body' => !in_array($instr, $draftInstruments),
                             ])
                             aria-pressed="{{ in_array($instr, $draftInstruments) ? 'true' : 'false' }}"
                         >{{ $instr }}</button>
@@ -231,7 +231,7 @@ new class extends Component {
             {{-- Genres --}}
             <section>
                 <div class="flex items-center justify-between mb-3">
-                    <h3 class="text-xs font-semibold uppercase tracking-widest text-dark/40">
+                    <h3 class="text-xs font-semibold uppercase tracking-widest text-caption">
                         {{ __('explore.filter_genres') }}
                     </h3>
                     @if (count($draftGenres) > 0)
@@ -245,8 +245,8 @@ new class extends Component {
                             wire:click="toggleGenre('{{ $genre }}')"
                             @class([
                                 'h-9 px-4 rounded-full border text-sm font-medium transition-all duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent',
-                                'bg-accent text-bg border-accent'                                            => in_array($genre, $draftGenres),
-                                'bg-white text-dark/60 border-dark/15 hover:border-dark/40 hover:text-dark' => !in_array($genre, $draftGenres),
+                                'bg-accent text-on-dark border-accent'                                            => in_array($genre, $draftGenres),
+                                'bg-white text-subtle border-dark/15 hover:border-dark/40 hover:text-body' => !in_array($genre, $draftGenres),
                             ])
                             aria-pressed="{{ in_array($genre, $draftGenres) ? 'true' : 'false' }}"
                         >{{ $genre }}</button>
@@ -262,7 +262,7 @@ new class extends Component {
                 <button
                     wire:click="clear"
                     type="button"
-                    class="h-11 px-5 rounded-md border border-dark/20 text-sm font-medium text-dark/60 hover:text-dark hover:border-dark/40 transition-colors duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
+                    class="h-11 px-5 rounded-md border border-dark/20 text-sm font-medium text-subtle hover:text-body hover:border-dark/40 transition-colors duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
                 >
                     {{ __('explore.filter_clear') }}
                 </button>
@@ -270,7 +270,7 @@ new class extends Component {
             <button
                 wire:click="apply"
                 type="button"
-                class="flex-1 h-11 rounded-md bg-dark text-bg text-sm font-medium hover:opacity-80 transition-opacity duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
+                class="flex-1 h-11 rounded-md bg-dark text-on-dark text-sm font-medium hover:opacity-80 transition-opacity duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent-on-dark"
             >
                 {{ __('explore.filter_apply') }}
             </button>

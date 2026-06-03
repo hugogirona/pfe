@@ -13,7 +13,7 @@
 
     {{-- Header label --}}
     <div class="px-6 pt-6 pb-4 border-b border-dark/[0.07]">
-        <p class="text-[11px] font-semibold uppercase tracking-widest text-dark/35">
+        <p class="text-[11px] font-semibold uppercase tracking-widest text-caption">
             {{ __('announcement.author_title') }}
         </p>
     </div>
@@ -31,14 +31,14 @@
                 />
             @else
                 <div class="w-full h-full flex items-center justify-center">
-                    <span class="font-heading text-xl text-dark/30 select-none">{{ mb_substr($name, 0, 1) }}</span>
+                    <span class="font-heading text-xl text-subtle select-none">{{ mb_substr($name, 0, 1) }}</span>
                 </div>
             @endif
         </div>
 
         <div class="min-w-0">
-            <p class="font-heading text-xl text-dark leading-tight truncate" itemprop="name">{{ $name }}</p>
-            <p class="text-sm text-dark/45 mt-0.5 flex items-center gap-1">
+            <p class="font-heading text-xl text-heading leading-tight truncate" itemprop="name">{{ $name }}</p>
+            <p class="text-sm text-caption mt-0.5 flex items-center gap-1">
                 <x-icon name="map-pin" class="w-3 h-3 shrink-0" />
                 {{ $cityName }}
             </p>
@@ -85,7 +85,7 @@
 
         <a
             href="{{ route('profile', ['id' => $author->id]) }}"
-            class="group w-full flex items-center justify-center gap-1.5 py-2 text-sm font-medium text-dark/55 hover:text-dark transition-colors duration-150 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent rounded-lg"
+            class="group w-full flex items-center justify-center gap-1.5 py-2 text-sm font-medium text-subtle hover:text-body transition-colors duration-150 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent rounded-lg"
         >
             {{ __('announcement.author_see_profile') }}
             <x-icon name="arrow-right" class="w-3.5 h-3.5 motion-safe:transition-transform motion-safe:duration-150 group-hover:translate-x-0.5" />

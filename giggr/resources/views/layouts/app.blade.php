@@ -17,10 +17,10 @@
         <style>[data-js-only] { display: none !important; }</style>
     </noscript>
 </head>
-<body class="bg-bg text-dark font-sans antialiased flex flex-col min-h-screen">
+<body class="bg-bg text-body font-sans antialiased flex flex-col min-h-screen">
 
 <a href="#main"
-   class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:px-4 focus:py-2 focus:rounded-lg focus:bg-dark focus:text-bg focus:outline-none focus:ring-2 focus:ring-accent">
+   class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:px-4 focus:py-2 focus:rounded-lg focus:bg-dark focus:text-on-dark focus:outline-none focus:ring-2 focus:ring-accent-on-dark">
     {{ __('nav.skip_to_content') }}
 </a>
 

@@ -193,12 +193,12 @@ new class extends Component {
                     wire:click="setTab('followers')"
                     @class([
                         'flex-1 px-4 py-3 text-sm font-medium transition-colors duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent rounded-md',
-                        'text-dark border-b-2 border-accent -mb-px' => $activeTab === 'followers',
-                        'text-dark/40 hover:text-dark/70 border-b-2 border-transparent -mb-px' => $activeTab !== 'followers',
+                        'text-body border-b-2 border-accent -mb-px' => $activeTab === 'followers',
+                        'text-caption hover:text-subtle border-b-2 border-transparent -mb-px' => $activeTab !== 'followers',
                     ])
                 >
                     {{ __('social.tab_followers') }}
-                    <span class="ml-1 text-dark/40">{{ $this->followers->count() }}</span>
+                    <span class="ml-1 text-caption">{{ $this->followers->count() }}</span>
                 </button>
                 <button
                     type="button"
@@ -208,19 +208,19 @@ new class extends Component {
                     wire:click="setTab('followed')"
                     @class([
                         'flex-1 px-4 py-3 text-sm font-medium transition-colors duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent rounded-md',
-                        'text-dark border-b-2 border-accent -mb-px' => $activeTab === 'followed',
-                        'text-dark/40 hover:text-dark/70 border-b-2 border-transparent -mb-px' => $activeTab !== 'followed',
+                        'text-body border-b-2 border-accent -mb-px' => $activeTab === 'followed',
+                        'text-caption hover:text-subtle border-b-2 border-transparent -mb-px' => $activeTab !== 'followed',
                     ])
                 >
                     {{ __('social.tab_followed') }}
-                    <span class="ml-1 text-dark/40">{{ $this->followed->count() }}</span>
+                    <span class="ml-1 text-caption">{{ $this->followed->count() }}</span>
                 </button>
             </div>
 
             <button
                 wire:click="close"
                 type="button"
-                class="w-11 h-11 flex items-center justify-center rounded-full text-dark/40 hover:text-dark hover:bg-dark/5 transition-colors duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent shrink-0"
+                class="w-11 h-11 flex items-center justify-center rounded-full text-caption hover:text-body hover:bg-dark/5 transition-colors duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent shrink-0"
                 aria-label="{{ __('social.close_relations') }}"
             >
                 <x-icon name="x-mark" class="w-5 h-5"/>
@@ -253,7 +253,7 @@ new class extends Component {
                     };
                 @endphp
                 <div class="p-12 text-center">
-                    <p class="text-sm text-dark/50 leading-relaxed max-w-xs mx-auto">
+                    <p class="text-sm text-subtle leading-relaxed max-w-xs mx-auto">
                         {{ __($emptyKey) }}
                     </p>
                 </div>

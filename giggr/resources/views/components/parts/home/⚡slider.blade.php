@@ -51,14 +51,14 @@ new class extends Component {
 
         @if ($items->isNotEmpty())
             <div class="text-center mb-10">
-                <h2 class="font-heading text-4xl md:text-5xl text-dark">{{ __('home.'.$type.'_title') }}</h2>
-                <p class="mt-4 text-base md:text-lg text-dark/55">{{ __('home.'.$type.'_subtitle') }}</p>
+                <h2 class="font-heading text-4xl md:text-5xl text-heading">{{ __('home.'.$type.'_title') }}</h2>
+                <p class="mt-4 text-base md:text-lg text-subtle">{{ __('home.'.$type.'_subtitle') }}</p>
             </div>
 
             <div class="relative" x-data="homeSlider({{ $items->count() }})">
                 <button
                     @click="prev()"
-                    class="hidden md:flex absolute -left-5 top-[calc(50%-2rem)] -translate-y-1/2 z-10 w-11 h-11 items-center justify-center rounded-full bg-bg border border-dark/15 shadow-sm text-dark hover:bg-dark hover:text-bg transition-colors duration-200 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
+                    class="hidden md:flex absolute -left-5 top-[calc(50%-2rem)] -translate-y-1/2 z-10 w-11 h-11 items-center justify-center rounded-full bg-bg border border-dark/15 shadow-sm text-body hover:bg-dark hover:text-on-dark transition-colors duration-200 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
                     aria-label="{{ __('home.carousel_prev') }}"
                 >
                     <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
@@ -84,7 +84,7 @@ new class extends Component {
 
                 <button
                     @click="next()"
-                    class="hidden md:flex absolute -right-5 top-[calc(50%-2rem)] -translate-y-1/2 z-10 w-11 h-11 items-center justify-center rounded-full bg-bg border border-dark/15 shadow-sm text-dark hover:bg-dark hover:text-bg transition-colors duration-200 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
+                    class="hidden md:flex absolute -right-5 top-[calc(50%-2rem)] -translate-y-1/2 z-10 w-11 h-11 items-center justify-center rounded-full bg-bg border border-dark/15 shadow-sm text-body hover:bg-dark hover:text-on-dark transition-colors duration-200 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
                     aria-label="{{ __('home.carousel_next') }}"
                 >
                     <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
