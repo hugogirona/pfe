@@ -1,23 +1,37 @@
 @props([
-    'title'       => '',
-    'content'     => '',
+    'title' => '',
+    'content' => '',
     'buttonLabel' => '',
-    'url'         => '#',
-    'image'       => '',
-    'alt'         => '',
+    'url' => '#',
+    'image' => '',
+    'alt' => '',
+    'width' => null,
+    'height' => null,
+    'srcsetWidths' => [],
     'orientation' => 'left',
-    'bg'          => 'bg-pastel-blue',
+    'bg' => 'bg-pastel-blue',
 ])
 
 @php
-    $isLeft    = $orientation === 'left';
+    $isLeft = $orientation === 'left';
     $sectionId = 'ti-' . uniqid();
+
+    $base = pathinfo($image, PATHINFO_FILENAME);
+    $ext = pathinfo($image, PATHINFO_EXTENSION);
+    $sources = collect($srcsetWidths)
+        ->map(fn ($w) => Vite::asset("resources/img/{$base}-{$w}w.{$ext}") . " {$w}w");
+
+    if ($width) {
+        $sources->push(Vite::asset("resources/img/{$image}") . " {$width}w");
+    }
+
+    $srcset = $sources->implode(', ');
 @endphp
 
 <div class="max-w-6xl mx-auto px-6 py-12 md:py-24">
     <section @class([
         'flex rounded-3xl overflow-hidden shadow-sm',
-        'flex-col-reverse md:flex-row'         => !$isLeft,
+        'flex-col-reverse md:flex-row' => !$isLeft,
         'flex-col-reverse md:flex-row-reverse' => $isLeft,
     ]) aria-labelledby="{{ $sectionId }}">
 
@@ -46,7 +60,15 @@
         <figure class="relative h-64 md:h-auto md:w-1/2 shrink-0">
             <img
                 src="{{ Vite::asset('resources/img/' . $image) }}"
+                @if ($srcsetWidths)
+                    srcset="{{ $srcset }}"
+                sizes="(min-width: 768px) 50vw, 100vw"
+                @endif
                 alt="{{ $alt }}"
+                @if ($width) width="{{ $width }}" @endif
+                @if ($height) height="{{ $height }}" @endif
+                loading="lazy"
+                decoding="async"
                 class="absolute inset-0 w-full h-full object-cover"
             />
             <figcaption class="sr-only">{{ $alt }}</figcaption>

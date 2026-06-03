@@ -16,11 +16,15 @@
 
     <div class="flex-1 flex justify-center md:justify-end">
         <img
-            src="{{ Vite::asset('resources/img/hero-guy.svg') }}"
+            src="{{ Vite::asset('resources/img/hero-guy.webp') }}"
+            srcset="{{ Vite::asset('resources/img/hero-guy-512w.webp') }} 512w, {{ Vite::asset('resources/img/hero-guy.webp') }} 1024w"
+            sizes="(min-width: 768px) 512px, 100vw"
             alt="Musicien entouré d'instruments de musique"
             class="w-full max-w-md md:max-w-lg"
             width="723"
             height="636"
+            fetchpriority="high"
+            decoding="async"
         />
     </div>
 

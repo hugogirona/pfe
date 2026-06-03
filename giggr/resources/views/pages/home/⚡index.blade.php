@@ -21,6 +21,9 @@ class extends Component {
         :url="route('explore', ['tab' => __('explore.tab_announcements_slug')])"
         image="home2.webp"
         alt="Instruments de musique et matériel audio"
+        :width="1200"
+        :height="800"
+        :srcset-widths="[600]"
         orientation="right"
         bg="bg-pastel-salmon"
     />
@@ -36,6 +39,9 @@ class extends Component {
         :url="route('explore', ['tab' => __('explore.tab_profiles_slug')])"
         image="home1.webp"
         alt="Un chanteur sur scène"
+        :width="687"
+        :height="1032"
+        :srcset-widths="[600]"
         orientation="left"
         bg="bg-pastel-blue"
     />
