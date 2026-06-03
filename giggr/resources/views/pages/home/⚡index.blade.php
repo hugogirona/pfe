@@ -23,7 +23,7 @@ class extends Component {
         alt="Instruments de musique et matériel audio"
         :width="1200"
         :height="800"
-        :srcset-widths="[600]"
+        :srcset-widths="[600, 768]"
         orientation="right"
         bg="bg-pastel-salmon"
     />
