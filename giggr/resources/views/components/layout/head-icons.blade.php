@@ -6,5 +6,6 @@
 <link rel="manifest" href="{{ route('site.webmanifest') }}">
 
 @production
+    <link rel="preload" href="{{ Vite::asset('resources/fonts/antic-didone-regular.woff2') }}" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="{{ Vite::asset('resources/fonts/dm-sans-regular.woff2') }}" as="font" type="font/woff2" crossorigin>
 @endproduction

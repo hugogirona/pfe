@@ -20,6 +20,6 @@
 @source '../**/*.js';
 
 @theme {
-    --font-sans: 'DM Sans', ui-sans-serif, system-ui, sans-serif;
-    --font-heading: 'Antic Didone', ui-serif, serif;
+    --font-sans: 'DM Sans', 'DM Sans Fallback', ui-sans-serif, system-ui, sans-serif;
+    --font-heading: 'Antic Didone', 'Antic Didone Fallback', ui-serif, serif;
 }
