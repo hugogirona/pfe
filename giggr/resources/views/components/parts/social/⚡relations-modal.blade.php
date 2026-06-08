@@ -217,14 +217,16 @@ new class extends Component {
                 </button>
             </div>
 
-            <button
-                wire:click="close"
+            <x-cta
+                variant="simple"
+                size="icon-round"
+                class="shrink-0"
                 type="button"
-                class="w-11 h-11 flex items-center justify-center rounded-full text-caption hover:text-body hover:bg-dark/5 transition-colors duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent shrink-0"
+                wire:click="close"
                 aria-label="{{ __('social.close_relations') }}"
             >
                 <x-icon name="x-mark" class="w-5 h-5"/>
-            </button>
+            </x-cta>
         </header>
 
         {{-- Panel --}}

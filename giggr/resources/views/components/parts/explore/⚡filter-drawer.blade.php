@@ -149,14 +149,15 @@ new class extends Component {
                     </span>
                 @endif
             </div>
-            <button
-                wire:click="close"
+            <x-cta
+                variant="simple"
+                size="icon-round"
                 type="button"
-                class="w-9 h-9 flex items-center justify-center rounded-lg text-caption hover:text-body hover:bg-dark/5 transition-colors duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
+                wire:click="close"
                 aria-label="{{ __('explore.filter_close') }}"
             >
                 <x-icon name="x-mark" class="w-5 h-5"/>
-            </button>
+            </x-cta>
         </div>
 
         {{-- Body --}}
@@ -249,21 +250,25 @@ new class extends Component {
         {{-- Footer --}}
         <div class="shrink-0 flex items-center gap-3 px-6 py-4 border-t border-dark/10 bg-bg">
             @if ($draftCityId !== null || count($draftInstruments) > 0 || count($draftGenres) > 0 || count($draftTypes) > 0 || $draftFollowing)
-                <button
-                    wire:click="clear"
+                <x-cta
+                    variant="outline"
+                    size="form"
+                    class="px-5"
                     type="button"
-                    class="h-11 px-5 rounded-md border border-dark/20 text-sm font-medium text-subtle hover:text-body hover:border-dark/40 transition-colors duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
+                    wire:click="clear"
                 >
                     {{ __('explore.filter_clear') }}
-                </button>
+                </x-cta>
             @endif
-            <button
-                wire:click="apply"
+            <x-cta
+                variant="dark"
+                size="form"
+                class="flex-1"
                 type="button"
-                class="flex-1 h-11 rounded-md bg-dark text-on-dark text-sm font-medium hover:opacity-80 transition-opacity duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent-on-dark"
+                wire:click="apply"
             >
                 {{ __('explore.filter_apply') }}
-            </button>
+            </x-cta>
         </div>
     </div>
 </div>

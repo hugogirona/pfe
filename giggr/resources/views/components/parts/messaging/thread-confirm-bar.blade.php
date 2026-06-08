@@ -21,31 +21,34 @@
                 <span x-show="confirm === 'delete'">{{ __('messaging.delete_confirm') }}</span>
                 <span x-show="confirm === 'block'">{{ __('profile.block_confirm', ['name' => $otherName]) }}</span>
             </p>
-            <button
+            <x-cta
+                variant="simple"
+                size="sm"
                 type="button"
                 @click="confirm = null"
-                class="px-3 py-1.5 rounded-md text-xs font-medium text-subtle hover:text-body hover:bg-dark/5 transition-colors duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
             >
                 {{ __('profile.cancel') }}
-            </button>
-            <button
+            </x-cta>
+            <x-cta
+                variant="danger-solid"
+                size="sm"
                 type="button"
                 x-show="confirm === 'delete'"
                 wire:click="deleteConversation({{ $conversationId }})"
                 @click="confirm = null"
-                class="px-3 py-1.5 rounded-md text-xs font-medium bg-danger text-on-dark hover:opacity-90 transition-opacity duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
             >
                 {{ __('messaging.delete') }}
-            </button>
-            <button
+            </x-cta>
+            <x-cta
+                variant="danger-solid"
+                size="sm"
                 type="button"
                 x-show="confirm === 'block'"
                 wire:click="blockCorrespondent"
                 @click="confirm = null"
-                class="px-3 py-1.5 rounded-md text-xs font-medium bg-danger text-on-dark hover:opacity-90 transition-opacity duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
             >
                 {{ __('profile.block') }}
-            </button>
+            </x-cta>
         </div>
     </div>
 </div>

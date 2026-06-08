@@ -84,16 +84,17 @@ new class extends Component {
             <h2 x-show="current" class="font-heading text-xl text-heading">{{ $title }}</h2>
             <div x-show="!current" class="skeleton h-5 w-32 rounded-full" aria-hidden="true"></div>
 
-            <button
-                @click="close()"
+            <x-cta
+                variant="simple"
+                size="icon-round"
                 type="button"
-                class="w-9 h-9 flex items-center justify-center rounded-full text-caption hover:text-body hover:bg-dark/5 transition-colors duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
+                @click="close()"
                 aria-label="{{ __('Fermer') }}"
             >
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5" aria-hidden="true">
                     <path d="M18 6 6 18M6 6l12 12"/>
                 </svg>
-            </button>
+            </x-cta>
         </div>
 
         {{-- Loading state: accent progress sweep + breathing content skeleton --}}
