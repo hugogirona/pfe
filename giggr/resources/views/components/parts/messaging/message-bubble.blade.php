@@ -15,7 +15,7 @@
         'justify-end text-on-dark-subtle' => $isMine,
         'justify-start text-caption' => ! $isMine,
     ])>
-        <time datetime="{{ $message->created_at->toIso8601String() }}">
+        <time data-local-time datetime="{{ $message->created_at->toIso8601String() }}">
             {{ $message->created_at->format('H:i') }}
         </time>
         @if ($isMine)
