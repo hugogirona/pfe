@@ -75,7 +75,7 @@
                     wire:model="body"
                     rows="1"
                     placeholder="{{ __('messaging.compose_placeholder') }}"
-                    class="block w-full resize-none scrollbar-none bg-transparent px-4 py-2.5 text-sm leading-5 text-body placeholder-dark/40 focus:outline-none"
+                    class="block w-full resize-none scrollbar-none bg-transparent px-4 py-2.5 text-base sm:text-sm leading-5 text-body placeholder-dark/40 focus:outline-none"
                     style="overflow-y: hidden;"
                     x-ref="textarea"
                     @keydown.enter.prevent="if (! $event.shiftKey) $wire.send()"
