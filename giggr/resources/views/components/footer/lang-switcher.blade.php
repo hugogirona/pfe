@@ -1,7 +1,7 @@
 @props(['variant' => 'dark'])
 
 @php
-    $active   = $variant === 'light' ? 'text-body' : 'text-on-dark';
+    $active   = $variant === 'light' ? 'text-accent' : 'text-on-dark';
     $inactive = $variant === 'light' ? 'text-caption hover:text-subtle' : 'text-on-dark-caption hover:text-on-dark-subtle';
     $sep      = $variant === 'light' ? 'text-caption' : 'text-on-dark-caption';
     $locales = [

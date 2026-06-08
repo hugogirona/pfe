@@ -3,6 +3,7 @@
         {{-- Profile dropdown --}}
         <div
             class="relative"
+            data-js-only
             x-data="{ open: false, thumbnail: {{ auth()->user()->profile?->thumbnail ? json_encode(auth()->user()->profile->thumbnail) : 'null' }} }"
             x-init="
                 if (window.Echo) {
