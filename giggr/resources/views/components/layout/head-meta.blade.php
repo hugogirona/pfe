@@ -1,11 +1,17 @@
-@props(['title' => null])
+@props(['title' => null, 'description' => null])
 
 @php
     use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
     $siteName = config('app.name');
     $fullTitle = filled($title) ? $title.' — '.$siteName : $siteName;
-    $description = __('seo.description');
+
+    $routeName = request()->route()?->getName();
+    $byRoute = __('seo.descriptions');
+    $description = $description
+        ?? (is_array($byRoute) ? ($byRoute[$routeName] ?? null) : null)
+        ?? __('seo.description');
+
     $keywords = __('seo.keywords');
     $image = asset('images/summary_image.jpg');
 

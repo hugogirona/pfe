@@ -6,7 +6,7 @@
 
     <title>{{ filled($title ?? null) ? $title.' — '.config('app.name') : config('app.name') }}</title>
 
-    <x-layout.head-meta :title="$title ?? null" />
+    <x-layout.head-meta :title="$title ?? null" :description="$description ?? null" />
 
     <x-layout.head-icons />
 

@@ -1,7 +1,9 @@
 <?php
 
 use App\Models\Announcement;
+use Illuminate\Contracts\View\View;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\On;
 use Livewire\Component;
@@ -9,6 +11,7 @@ use Livewire\Component;
 new #[Layout('layouts.app')] class extends Component
 {
     public Announcement $announcement;
+
     public Collection $related;
 
     public function mount(int $id): void
@@ -42,9 +45,15 @@ new #[Layout('layouts.app')] class extends Component
         $this->announcement->user->unsetRelation('profile');
     }
 
-    public function render(): \Illuminate\Contracts\View\View
+    public function render(): View
     {
-        return $this->view()->title($this->announcement->title);
+        $description = filled($this->announcement->description)
+            ? Str::limit(strip_tags($this->announcement->description), 155)
+            : __('seo.descriptions.announcement', ['title' => $this->announcement->title]);
+
+        return $this->view()
+            ->title($this->announcement->title)
+            ->layout('layouts.app', ['description' => $description]);
     }
 };
 ?>

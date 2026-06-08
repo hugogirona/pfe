@@ -4,21 +4,31 @@ use App\Enums\ProfileStatus;
 use App\Models\Genre;
 use App\Models\Instrument;
 use App\Models\Profile;
+use Illuminate\Contracts\View\View;
+use Illuminate\Support\Str;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\On;
 use Livewire\Component;
 
 new #[Layout('layouts.app')]
-class extends Component {
+class extends Component
+{
     public Profile $profile;
+
     public bool $isOwner = false;
 
     public string $bio = '';
+
     public string $selectedStatus = '';
+
     public array $selectedInstruments = [];
+
     public array $selectedGenres = [];
+
     public array $allStatuses = [];
+
     public array $allInstruments = [];
+
     public array $allGenres = [];
 
     public function hydrate(): void
@@ -34,7 +44,7 @@ class extends Component {
             'instruments',
             'genres',
             'media',
-            'user.announcements' => fn($q) => $q->active()->with(['city', 'instruments', 'genres']),
+            'user.announcements' => fn ($q) => $q->active()->with(['city', 'instruments', 'genres']),
         ])
             ->withCount([
                 'followers',
@@ -50,16 +60,22 @@ class extends Component {
             $this->selectedInstruments = $this->profile->instruments->pluck('id')->toArray();
             $this->selectedGenres = $this->profile->genres->pluck('id')->toArray();
             $this->allStatuses = collect(ProfileStatus::cases())
-                ->map(fn($case) => ['value' => $case->value, 'label' => __($case->label())])
+                ->map(fn ($case) => ['value' => $case->value, 'label' => __($case->label())])
                 ->all();
             $this->allInstruments = Instrument::orderBy('name')->pluck('name', 'id')->toArray();
             $this->allGenres = Genre::orderBy('name')->pluck('name', 'id')->toArray();
         }
     }
 
-    public function render(): \Illuminate\Contracts\View\View
+    public function render(): View
     {
-        return $this->view()->title($this->profile->user->full_name);
+        $description = filled($this->profile->bio)
+            ? Str::limit(strip_tags($this->profile->bio), 155)
+            : __('seo.descriptions.profile', ['name' => $this->profile->user->full_name]);
+
+        return $this->view()
+            ->title($this->profile->user->full_name)
+            ->layout('layouts.app', ['description' => $description]);
     }
 
     public function saveBio(): void
@@ -87,7 +103,7 @@ class extends Component {
     {
         abort_unless($this->isOwner, 403);
         $this->selectedInstruments = in_array($id, $this->selectedInstruments)
-            ? array_values(array_filter($this->selectedInstruments, fn($i) => $i !== $id))
+            ? array_values(array_filter($this->selectedInstruments, fn ($i) => $i !== $id))
             : [...$this->selectedInstruments, $id];
     }
 
@@ -107,7 +123,7 @@ class extends Component {
     {
         abort_unless($this->isOwner, 403);
         $this->selectedGenres = in_array($id, $this->selectedGenres)
-            ? array_values(array_filter($this->selectedGenres, fn($g) => $g !== $id))
+            ? array_values(array_filter($this->selectedGenres, fn ($g) => $g !== $id))
             : [...$this->selectedGenres, $id];
     }
 
@@ -129,7 +145,7 @@ class extends Component {
     public function refreshAnnouncements(): void
     {
         $this->profile->load([
-            'user.announcements' => fn($q) => $q->active()->with(['city', 'instruments', 'genres']),
+            'user.announcements' => fn ($q) => $q->active()->with(['city', 'instruments', 'genres']),
         ]);
     }
 
