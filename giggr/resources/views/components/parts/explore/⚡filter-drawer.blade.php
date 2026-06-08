@@ -10,7 +10,6 @@ new class extends Component {
     public bool $open = false;
     public string $activeTab = 'profiles';
     public ?int $draftCityId = null;
-    public int $draftRadius = 0;
     public array $draftInstruments = [];
     public array $draftGenres = [];
     public array $draftTypes = [];
@@ -33,10 +32,9 @@ new class extends Component {
     }
 
     #[On('open-filter-drawer')]
-    public function open(?int $cityId = null, int $radius = 0, array $instruments = [], array $genres = [], array $types = [], bool $following = false, string $activeTab = 'profiles'): void
+    public function open(?int $cityId = null, array $instruments = [], array $genres = [], array $types = [], bool $following = false, string $activeTab = 'profiles'): void
     {
         $this->draftCityId = $cityId;
-        $this->draftRadius = $radius;
         $this->draftInstruments = $instruments;
         $this->draftGenres = $genres;
         $this->draftTypes = $types;
@@ -74,7 +72,6 @@ new class extends Component {
     public function clear(): void
     {
         $this->draftCityId = null;
-        $this->draftRadius = 0;
         $this->draftInstruments = [];
         $this->draftGenres = [];
         $this->draftTypes = [];
@@ -84,7 +81,6 @@ new class extends Component {
 
         $this->dispatch('filters-applied',
             cityId: null,
-            radius: 0,
             instruments: [],
             genres: [],
             types: [],
@@ -96,7 +92,6 @@ new class extends Component {
     {
         $this->dispatch('filters-applied',
             cityId: $this->draftCityId,
-            radius: $this->draftRadius,
             instruments: $this->draftInstruments,
             genres: $this->draftGenres,
             types: $this->draftTypes,
@@ -146,7 +141,7 @@ new class extends Component {
         <div class="flex items-center justify-between px-6 py-5 border-b border-dark/10 shrink-0">
             <div class="flex items-center gap-3">
                 <h2 class="font-heading text-xl text-heading">{{ __('explore.filter_title') }}</h2>
-                @php $activeDraft = count($draftInstruments) + count($draftGenres) + count($draftTypes) + ($draftCityId !== null ? 1 : 0) + ($draftCityId !== null && $draftRadius > 0 ? 1 : 0) + ($draftFollowing ? 1 : 0); @endphp
+                @php $activeDraft = count($draftInstruments) + count($draftGenres) + count($draftTypes) + ($draftCityId !== null ? 1 : 0) + ($draftFollowing ? 1 : 0); @endphp
                 @if ($activeDraft > 0)
                     <span
                         class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-accent text-on-dark text-xs font-semibold">
@@ -177,11 +172,6 @@ new class extends Component {
                     :wire:key="'drawer-locality-' . $pickerKey"
                 />
             </section>
-
-            <x-parts.explore.radius-slider
-                model="draftRadius"
-                :disabled="$draftCityId === null"
-            />
 
             @if ($activeTab === 'announcements')
                 <x-parts.explore.type-filter
@@ -258,7 +248,7 @@ new class extends Component {
 
         {{-- Footer --}}
         <div class="shrink-0 flex items-center gap-3 px-6 py-4 border-t border-dark/10 bg-bg">
-            @if ($draftCityId !== null || $draftRadius > 0 || count($draftInstruments) > 0 || count($draftGenres) > 0 || count($draftTypes) > 0 || $draftFollowing)
+            @if ($draftCityId !== null || count($draftInstruments) > 0 || count($draftGenres) > 0 || count($draftTypes) > 0 || $draftFollowing)
                 <button
                     wire:click="clear"
                     type="button"

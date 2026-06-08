@@ -1,7 +1,6 @@
 <?php
 
 use App\Models\Announcement;
-use App\Models\City;
 use App\Models\Follow;
 use App\Models\Profile;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -22,7 +21,6 @@ class extends Component {
     public string $search = '';
 
     public ?int $filterCityId = null;
-    public int $filterRadius = 0;
     public array $filterInstruments = [];
     public array $filterGenres = [];
     public array $filterTypes = [];
@@ -47,12 +45,6 @@ class extends Component {
     }
 
     #[Computed]
-    public function targetCity(): ?City
-    {
-        return $this->filterCityId !== null ? City::find($this->filterCityId) : null;
-    }
-
-    #[Computed]
     public function followedProfileIdsForFilter(): array
     {
         return auth()->check()
@@ -67,14 +59,7 @@ class extends Component {
 
         return Profile::query()
             ->with(['user', 'city', 'instruments', 'genres'])
-            ->when($this->filterCityId !== null, function ($q) {
-                $target = $this->targetCity;
-                if ($this->filterRadius > 0 && $target !== null) {
-                    $q->whereHas('city', fn($q2) => $q2->nearby($target->latitude, $target->longitude, $this->filterRadius));
-                } else {
-                    $q->where('city_id', $this->filterCityId);
-                }
-            })
+            ->when($this->filterCityId !== null, fn($q) => $q->where('city_id', $this->filterCityId))
             ->when($this->filterInstruments, fn($q) => $q->whereHas('instruments', fn($q2) => $q2->whereIn('name', $this->filterInstruments)))
             ->when($this->filterGenres, fn($q) => $q->whereHas('genres', fn($q2) => $q2->whereIn('name', $this->filterGenres)))
             ->when($this->hasSearch(), fn($q) => $q->search($this->search))
@@ -92,14 +77,7 @@ class extends Component {
         return Announcement::query()
             ->with(['city', 'instruments', 'genres'])
             ->active()
-            ->when($this->filterCityId !== null, function ($q) {
-                $target = $this->targetCity;
-                if ($this->filterRadius > 0 && $target !== null) {
-                    $q->whereHas('city', fn($q2) => $q2->nearby($target->latitude, $target->longitude, $this->filterRadius));
-                } else {
-                    $q->where('city_id', $this->filterCityId);
-                }
-            })
+            ->when($this->filterCityId !== null, fn($q) => $q->where('city_id', $this->filterCityId))
             ->when($this->filterInstruments, fn($q) => $q->whereHas('instruments', fn($q2) => $q2->whereIn('name', $this->filterInstruments)))
             ->when($this->filterGenres, fn($q) => $q->whereHas('genres', fn($q2) => $q2->whereIn('name', $this->filterGenres)))
             ->when($this->filterTypes, fn($q) => $q->whereIn('type', $this->filterTypes))
@@ -135,13 +113,10 @@ class extends Component {
     #[Computed]
     public function activeFiltersCount(): int
     {
-        $radiusActive = $this->filterCityId !== null && $this->filterRadius > 0;
-
         return count($this->filterInstruments)
             + count($this->filterGenres)
             + count($this->filterTypes)
             + ($this->filterCityId !== null ? 1 : 0)
-            + ($radiusActive ? 1 : 0)
             + ($this->filterFollowing ? 1 : 0);
     }
 
@@ -149,7 +124,6 @@ class extends Component {
     {
         $this->dispatch('open-filter-drawer',
             cityId: $this->filterCityId,
-            radius: $this->filterRadius,
             instruments: $this->filterInstruments,
             genres: $this->filterGenres,
             types: $this->filterTypes,
@@ -159,10 +133,9 @@ class extends Component {
     }
 
     #[On('filters-applied')]
-    public function applyFilters(?int $cityId, int $radius, array $instruments, array $genres, array $types, bool $following = false): void
+    public function applyFilters(?int $cityId, array $instruments, array $genres, array $types, bool $following = false): void
     {
         $this->filterCityId = $cityId;
-        $this->filterRadius = $radius;
         $this->filterInstruments = $instruments;
         $this->filterGenres = $genres;
         $this->filterTypes = $types;

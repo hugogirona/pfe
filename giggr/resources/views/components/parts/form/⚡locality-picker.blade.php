@@ -6,8 +6,6 @@ use Livewire\Attributes\Modelable;
 use Livewire\Component;
 
 new class extends Component {
-    private const int GEOLOC_MAX_RADIUS_KM = 50;
-
     #[Modelable]
     public ?int $cityId = null;
 
@@ -20,8 +18,6 @@ new class extends Component {
     public bool $filterStyle = false;
 
     public string $query = '';
-
-    public bool $tooFar = false;
 
     /** @var array<int, array{id:int, display:string}> */
     public array $results = [];
@@ -56,26 +52,6 @@ new class extends Component {
         $this->cityId = $city->id;
         $this->query = $city->display_name;
         $this->results = [];
-        $this->tooFar = false;
-    }
-
-    public function selectFromCoords(float $lat, float $lng): void
-    {
-        $nearest = City::query()
-            ->nearby($lat, $lng, self::GEOLOC_MAX_RADIUS_KM)
-            ->orderByDistance($lat, $lng)
-            ->first();
-
-        if ($nearest === null) {
-            $this->tooFar = true;
-
-            return;
-        }
-
-        $this->cityId = $nearest->id;
-        $this->query = $nearest->display_name;
-        $this->results = [];
-        $this->tooFar = false;
     }
 
     private function loadResults(): void
@@ -105,35 +81,7 @@ new class extends Component {
 
 <div
     class="relative"
-    x-data="{
-        highlight: 0,
-        locating: false,
-        geoError: null,
-        async geolocate() {
-            if (! navigator.geolocation) {
-                this.geoError = @js(__('locality.geoloc_unavailable'));
-                return;
-            }
-            this.geoError = null;
-            this.locating = true;
-            navigator.geolocation.getCurrentPosition(
-                async (pos) => {
-                    try {
-                        await $wire.selectFromCoords(pos.coords.latitude, pos.coords.longitude);
-                    } finally {
-                        this.locating = false;
-                    }
-                },
-                (err) => {
-                    this.locating = false;
-                    if (err.code === 1) this.geoError = @js(__('locality.geoloc_permission_denied'));
-                    else if (err.code === 2) this.geoError = @js(__('locality.geoloc_unavailable'));
-                    else this.geoError = @js(__('locality.geoloc_timeout'));
-                },
-                { enableHighAccuracy: false, timeout: 8000, maximumAge: 60000 },
-            );
-        },
-    }"
+    x-data="{ highlight: 0 }"
     @keydown.escape.window="$wire.set('results', [])"
 >
     <label for="locality-picker-input" @class([
@@ -164,43 +112,9 @@ new class extends Component {
                     highlight = 0
                 }
             "
-            class="w-full px-4 py-3 pr-12 rounded-md bg-white border border-dark/15 text-base text-body placeholder:text-placeholder focus:outline-none focus:ring-2 focus:ring-accent/40 focus:border-accent transition-colors duration-150"
+            class="w-full px-4 py-3 rounded-md bg-white border border-dark/15 text-base text-body placeholder:text-placeholder focus:outline-none focus:ring-2 focus:ring-accent/40 focus:border-accent transition-colors duration-150"
         />
-
-        <button
-            type="button"
-            @click="geolocate"
-            :disabled="locating"
-            :aria-busy="locating"
-            aria-label="{{ __('locality.geolocate_aria') }}"
-            class="absolute inset-y-0 right-2 my-auto w-9 h-9 flex items-center justify-center rounded-md text-subtle hover:text-accent hover:bg-dark/5 transition-colors duration-150 cursor-pointer disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
-        >
-            <span x-show="!locating" class="inline-flex motion-reduce:!animate-none">
-                <x-icon name="map-pin" class="w-5 h-5"/>
-            </span>
-            <span
-                x-show="locating"
-                x-cloak
-                class="inline-block w-4 h-4 border-2 border-dark/20 border-t-accent rounded-full animate-spin motion-reduce:animate-none"
-                role="status"
-                aria-label="{{ __('locality.geolocating') }}"
-            ></span>
-        </button>
     </div>
-
-    <p
-        x-show="geoError"
-        x-cloak
-        x-text="geoError"
-        role="alert"
-        class="text-xs text-danger mt-1.5"
-    ></p>
-
-    @if ($tooFar)
-        <p role="alert" class="text-xs text-danger mt-1.5">
-            {{ __('locality.geoloc_too_far') }}
-        </p>
-    @endif
 
     @if (count($results) > 0)
         <ul

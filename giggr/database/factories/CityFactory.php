@@ -25,8 +25,6 @@ class CityFactory extends Factory
             'country' => 'BE',
             'postal_code' => $postalCode,
             'searchable' => City::makeSearchable($name, null, $postalCode),
-            'latitude' => fake()->randomFloat(5, 49.5, 51.5),
-            'longitude' => fake()->randomFloat(5, 2.5, 6.5),
         ];
     }
 }
