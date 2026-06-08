@@ -21,22 +21,3 @@
     font-display: optional;
     src: url('../fonts/dm-sans-italic.woff2') format('woff2');
 }
-
-
-@font-face {
-    font-family: 'DM Sans Fallback';
-    src: local('Arial');
-    size-adjust: 106.7044%;
-    ascent-override: 92.9671%;
-    descent-override: 29.0522%;
-    line-gap-override: 0%;
-}
-
-@font-face {
-    font-family: 'Antic Didone Fallback';
-    src: local('Times New Roman');
-    size-adjust: 118.2789%;
-    ascent-override: 79.4732%;
-    descent-override: 21.1365%;
-    line-gap-override: 0%;
-}
