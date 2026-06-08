@@ -39,19 +39,11 @@ class extends Component {
         $this->resetPage('announcements-page');
     }
 
-    /**
-     * The search query split into individual words; every word must match
-     * (AND), so "marie sax" narrows to results matching both terms.
-     *
-     * @return list<string>
-     */
-    private function searchTerms(): array
+    private function hasSearch(): bool
     {
         return $this->search
-                |> trim(...)
-                |> (fn($x) => preg_split('/\s+/', $x))
-                |> array_filter(...)
-                |> array_values(...);
+            |> trim(...)
+            |> filled(...);
     }
 
     #[Computed]
@@ -83,23 +75,9 @@ class extends Component {
                     $q->where('city_id', $this->filterCityId);
                 }
             })
-            ->when($this->filterInstruments, fn($q) => $q->whereHas(
-                'instruments', fn($q2) => $q2->whereIn('name', $this->filterInstruments)
-            ))
-            ->when($this->filterGenres, fn($q) => $q->whereHas(
-                'genres', fn($q2) => $q2->whereIn('name', $this->filterGenres)
-            ))
-            ->when($this->searchTerms(), function ($q, $terms) {
-                foreach ($terms as $term) {
-                    $like = '%'.$term.'%';
-                    $q->where(fn($q2) => $q2
-                        ->whereHas('user', fn($u) => $u
-                            ->where('first_name', 'like', $like)
-                            ->orWhere('last_name', 'like', $like))
-                        ->orWhereHas('instruments', fn($i) => $i->where('name', 'like', $like))
-                        ->orWhereHas('genres', fn($g) => $g->where('name', 'like', $like)));
-                }
-            })
+            ->when($this->filterInstruments, fn($q) => $q->whereHas('instruments', fn($q2) => $q2->whereIn('name', $this->filterInstruments)))
+            ->when($this->filterGenres, fn($q) => $q->whereHas('genres', fn($q2) => $q2->whereIn('name', $this->filterGenres)))
+            ->when($this->hasSearch(), fn($q) => $q->search($this->search))
             ->when($followingActive, fn($q) => $q->whereIn('id', $this->followedProfileIdsForFilter))
             ->orderByDesc('profiles.created_at')
             ->orderByDesc('profiles.id')
@@ -122,22 +100,10 @@ class extends Component {
                     $q->where('city_id', $this->filterCityId);
                 }
             })
-            ->when($this->filterInstruments, fn($q) => $q->whereHas(
-                'instruments', fn($q2) => $q2->whereIn('name', $this->filterInstruments)
-            ))
-            ->when($this->filterGenres, fn($q) => $q->whereHas(
-                'genres', fn($q2) => $q2->whereIn('name', $this->filterGenres)
-            ))
+            ->when($this->filterInstruments, fn($q) => $q->whereHas('instruments', fn($q2) => $q2->whereIn('name', $this->filterInstruments)))
+            ->when($this->filterGenres, fn($q) => $q->whereHas('genres', fn($q2) => $q2->whereIn('name', $this->filterGenres)))
             ->when($this->filterTypes, fn($q) => $q->whereIn('type', $this->filterTypes))
-            ->when($this->searchTerms(), function ($q, $terms) {
-                foreach ($terms as $term) {
-                    $like = '%'.$term.'%';
-                    $q->where(fn($q2) => $q2
-                        ->where('title', 'like', $like)
-                        ->orWhereHas('instruments', fn($i) => $i->where('name', 'like', $like))
-                        ->orWhereHas('genres', fn($g) => $g->where('name', 'like', $like)));
-                }
-            })
+            ->when($this->hasSearch(), fn($q) => $q->search($this->search))
             ->when($followingActive, fn($q) => $q->whereHas(
                 'user.profile', fn($q2) => $q2->whereIn('id', $this->followedProfileIdsForFilter)
             ))
