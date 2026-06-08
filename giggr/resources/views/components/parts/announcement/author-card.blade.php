@@ -76,7 +76,7 @@
                 variant="accent"
                 class="w-full gap-2"
                 aria-label="{{ __('announcement.author_contact') }}"
-                @click="Livewire.dispatchTo('modal', 'open-modal', { component: 'parts.messaging.inbox', title: {{ json_encode(__('messaging.title')) }}, model_id: '{{ $announcement->user_id }}' })"
+                @click="Livewire.dispatch('open-modal', { component: 'parts.messaging.inbox', title: {{ json_encode(__('messaging.title')) }}, model_id: '{{ $announcement->user_id }}' })"
             >
                 <x-icon name="chat-bubble" class="w-4 h-4" />
                 {{ __('announcement.author_contact') }}

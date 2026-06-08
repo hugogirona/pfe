@@ -28,7 +28,7 @@ new class extends Component {
 
 <button
     type="button"
-    @click="Livewire.dispatchTo('modal', 'open-modal', { component: 'parts.messaging.inbox', title: @js(__('messaging.title')) })"
+    @click="Livewire.dispatch('open-modal', { component: 'parts.messaging.inbox', title: @js(__('messaging.title')) })"
     class="relative text-subtle hover:text-accent transition-colors duration-150 p-2 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent rounded-[6px] flex items-center justify-center"
     aria-label="{{ __('nav.aria_messaging') }}{{ $count > 0 ? ' ('.$count.')' : '' }}"
 >
