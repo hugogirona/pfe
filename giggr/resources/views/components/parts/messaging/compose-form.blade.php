@@ -5,7 +5,7 @@
 
 @if ($lock !== null)
     <div class="px-6 py-5 border-t border-dark/10 shrink-0 bg-dark/3 text-center" role="status">
-        <p class="text-sm text-dark/60 italic leading-relaxed">
+        <p class="text-sm text-subtle italic leading-relaxed">
             @switch($lock)
                 @case('blocked-by-me')
                     {{ __('messaging.blocked_by_you') }}
@@ -75,7 +75,7 @@
                     wire:model="body"
                     rows="1"
                     placeholder="{{ __('messaging.compose_placeholder') }}"
-                    class="block w-full resize-none scrollbar-none bg-transparent px-4 py-2.5 text-sm leading-5 text-dark placeholder-dark/40 focus:outline-none"
+                    class="block w-full resize-none scrollbar-none bg-transparent px-4 py-2.5 text-base sm:text-sm leading-5 text-body placeholder-dark/40 focus:outline-none"
                     style="overflow-y: hidden;"
                     x-ref="textarea"
                     @keydown.enter.prevent="if (! $event.shiftKey) $wire.send()"
@@ -84,14 +84,16 @@
                 ></textarea>
             </div>
 
-            <button
+            <x-cta
+                variant="accent"
+                size="icon-round"
+                class="w-10 h-10 shrink-0 disabled:opacity-40 disabled:cursor-not-allowed"
                 type="submit"
                 wire:loading.attr="disabled"
                 aria-label="{{ __('messaging.send') }}"
-                class="w-10 h-10 shrink-0 rounded-full bg-accent text-bg flex items-center justify-center hover:opacity-90 transition-opacity duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent disabled:opacity-40 disabled:cursor-not-allowed"
             >
                 <x-icon name="arrow-right" class="w-4 h-4 -rotate-45"/>
-            </button>
+            </x-cta>
         </div>
     </form>
 @endif

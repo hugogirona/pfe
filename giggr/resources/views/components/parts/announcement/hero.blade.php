@@ -25,7 +25,7 @@
         {{-- Back link --}}
         <a
             href="{{ route('explore', ['tab' => __('explore.tab_announcements_slug')]) }}"
-            class="inline-flex items-center gap-1.5 text-sm text-bg/60 hover:text-bg transition-colors duration-150 mb-6 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent rounded"
+            class="inline-flex items-center gap-1.5 text-sm text-on-dark-subtle hover:text-on-dark transition-colors duration-150 mb-6 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent rounded"
         >
             {{ __('announcement.back_to_explore') }}
         </a>
@@ -35,18 +35,19 @@
             <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wide {{ $badgeClass }}">
                 {{ $label }}
             </span>
-            <span class="flex items-center gap-1.5 text-sm text-bg/50">
+            <span class="flex items-center gap-1.5 text-sm text-on-dark-caption"
+                  itemprop="location" itemscope itemtype="https://schema.org/Place">
                 <x-icon name="map-pin" class="w-3.5 h-3.5" />
-                {{ $cityName }}
+                <span itemprop="address" itemscope itemtype="https://schema.org/PostalAddress"><span itemprop="addressLocality">{{ $cityName }}</span></span>
             </span>
-            <span class="flex items-center gap-1.5 text-sm text-bg/50">
+            <span class="flex items-center gap-1.5 text-sm text-on-dark-caption">
                 <x-icon name="calendar" class="w-3.5 h-3.5" />
                 {{ __('announcement.posted_on', ['date' => $date]) }}
             </span>
         </div>
 
         {{-- Title --}}
-        <h1 class="font-heading text-3xl md:text-5xl text-bg leading-tight max-w-3xl">
+        <h1 class="font-heading text-3xl md:text-5xl text-on-dark leading-tight max-w-3xl" itemprop="name">
             {{ $announcement->title }}
         </h1>
 

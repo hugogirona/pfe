@@ -148,90 +148,51 @@ it('filter drawer hides the following toggle from guests', function () {
         ->assertDontSee(__('explore.filter_following'));
 });
 
-it('radius filter widens musicians to nearby cities of the selected one', function () {
+it('city filter narrows musicians to the selected city only', function () {
     $this->seed([CitySeeder::class, InstrumentSeeder::class, GenreSeeder::class]);
-    $origin = City::factory()->create(['latitude' => 50.0, 'longitude' => 5.0]);
-    $close = City::factory()->create(['latitude' => 50.05, 'longitude' => 5.05]); // ~6 km
-    $far = City::factory()->create(['latitude' => 51.0, 'longitude' => 6.0]); // ~131 km
-
-    $hereProfile = Profile::factory()->create(['city_id' => $origin->id]);
-    $nearProfile = Profile::factory()->create(['city_id' => $close->id]);
-    $farProfile = Profile::factory()->create(['city_id' => $far->id]);
-
-    $component = Livewire::test('pages::explore.index')
-        ->set('filterCityId', $origin->id)
-        ->set('filterRadius', 50);
-
-    $ids = $component->get('filteredProfiles')->pluck('id')->all();
-    expect($ids)->toContain($hereProfile->id)
-        ->and($ids)->toContain($nearProfile->id)
-        ->and($ids)->not->toContain($farProfile->id);
-});
-
-it('radius filter widens announcements to nearby cities of the selected one', function () {
-    $this->seed([CitySeeder::class, InstrumentSeeder::class, GenreSeeder::class]);
-    $origin = City::factory()->create(['latitude' => 50.0, 'longitude' => 5.0]);
-    $close = City::factory()->create(['latitude' => 50.05, 'longitude' => 5.05]);
-    $far = City::factory()->create(['latitude' => 51.0, 'longitude' => 6.0]);
-
-    $hereAnnouncement = Announcement::factory()->create(['city_id' => $origin->id]);
-    $nearAnnouncement = Announcement::factory()->create(['city_id' => $close->id]);
-    $farAnnouncement = Announcement::factory()->create(['city_id' => $far->id]);
-
-    $component = Livewire::test('pages::explore.index')
-        ->set('filterCityId', $origin->id)
-        ->set('filterRadius', 50);
-
-    $titles = $component->get('filteredAnnouncements')->pluck('title')->all();
-    expect($titles)->toContain($hereAnnouncement->title)
-        ->and($titles)->toContain($nearAnnouncement->title)
-        ->and($titles)->not->toContain($farAnnouncement->title);
-});
-
-it('radius filter falls back to exact city match when radius is 0', function () {
-    $this->seed([CitySeeder::class, InstrumentSeeder::class, GenreSeeder::class]);
-    $here = City::factory()->create(['latitude' => 50.0, 'longitude' => 5.0]);
-    $near = City::factory()->create(['latitude' => 50.05, 'longitude' => 5.05]);
+    $here = City::factory()->create();
+    $elsewhere = City::factory()->create();
 
     $hereProfile = Profile::factory()->create(['city_id' => $here->id]);
-    $nearProfile = Profile::factory()->create(['city_id' => $near->id]);
+    $otherProfile = Profile::factory()->create(['city_id' => $elsewhere->id]);
 
-    $component = Livewire::test('pages::explore.index')
+    $ids = Livewire::test('pages::explore.index')
         ->set('filterCityId', $here->id)
-        ->set('filterRadius', 0);
+        ->get('filteredProfiles')
+        ->pluck('id')
+        ->all();
 
-    $ids = $component->get('filteredProfiles')->pluck('id')->all();
     expect($ids)->toContain($hereProfile->id)
-        ->and($ids)->not->toContain($nearProfile->id);
+        ->and($ids)->not->toContain($otherProfile->id);
 });
 
-it('radius filter is ignored when no city is selected', function () {
+it('city filter narrows announcements to the selected city only', function () {
     $this->seed([CitySeeder::class, InstrumentSeeder::class, GenreSeeder::class]);
-    Profile::factory()->count(3)->create();
+    $here = City::factory()->create();
+    $elsewhere = City::factory()->create();
 
-    $component = Livewire::test('pages::explore.index')
-        ->set('filterCityId', null)
-        ->set('filterRadius', 25);
+    $hereAnnouncement = Announcement::factory()->create(['city_id' => $here->id]);
+    $otherAnnouncement = Announcement::factory()->create(['city_id' => $elsewhere->id]);
 
-    expect($component->get('filteredProfiles')->total())->toBe(3);
+    $titles = Livewire::test('pages::explore.index')
+        ->set('filterCityId', $here->id)
+        ->get('filteredAnnouncements')
+        ->pluck('title')
+        ->all();
+
+    expect($titles)->toContain($hereAnnouncement->title)
+        ->and($titles)->not->toContain($otherAnnouncement->title);
 });
 
-it('radius counts toward activeFiltersCount only when both city and radius are set', function () {
+it('city counts toward activeFiltersCount when set', function () {
     $this->seed([CitySeeder::class, InstrumentSeeder::class, GenreSeeder::class]);
     $city = City::factory()->create();
 
     Livewire::test('pages::explore.index')
         ->set('filterCityId', null)
-        ->set('filterRadius', 50)
         ->assertSet('activeFiltersCount', 0)
         ->set('filterCityId', $city->id)
-        ->assertSet('activeFiltersCount', 2);
-});
-
-it('filter drawer exposes the radius slider', function () {
-    $this->get(route('explore'))
-        ->assertOk()
-        ->assertSee(__('explore.filter_radius'));
+        ->assertSet('activeFiltersCount', 1);
 });
 
 it('type filter narrows announcements to selected types only', function () {

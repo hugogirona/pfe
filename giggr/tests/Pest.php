@@ -16,7 +16,7 @@ use Tests\TestCase;
 
 pest()->extend(TestCase::class)
     ->use(RefreshDatabase::class)
-    ->in('Feature');
+    ->in('Feature', 'Browser');
 
 /*
 |--------------------------------------------------------------------------
@@ -47,4 +47,9 @@ expect()->extend('toBeOne', function () {
 function something()
 {
     // ..
+}
+
+function path(string $name, array $parameters = []): string
+{
+    return parse_url(route($name, $parameters), PHP_URL_PATH);
 }

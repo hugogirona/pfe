@@ -14,6 +14,9 @@ return [
     'aria_menu' => 'Menu',
     'aria_messaging' => 'Messagerie',
     'aria_mobile_nav' => 'Navigation mobile',
+    'aria_fallback_nav' => 'Navigation de secours',
     'aria_main_nav' => 'Navigation principale',
+    'aria_logo_home' => "Giggr, retour à l'accueil",
+    'skip_to_content' => 'Aller au contenu principal',
     'site_title' => 'Bienvenue sur Giggr',
 ];

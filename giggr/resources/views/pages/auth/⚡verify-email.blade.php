@@ -118,17 +118,17 @@ new #[Layout('layouts.auth')] class extends Component {
 
 <div>
     <div class="mb-8">
-        <h1 id="verify-email-heading" class="font-heading text-3xl text-dark mb-1.5">
+        <h1 id="verify-email-heading" class="font-heading text-3xl text-heading mb-1.5">
             {{ __('auth.verify_email_heading') }}
         </h1>
-        <p class="text-sm text-dark/60">
-            {!! __('auth.verify_email_subtitle', ['email' => '<strong class="text-dark">'.e(auth()->user()->email).'</strong>']) !!}
+        <p class="text-sm text-subtle">
+            {!! __('auth.verify_email_subtitle', ['email' => '<strong class="text-body">'.e(auth()->user()->email).'</strong>']) !!}
         </p>
     </div>
 
     <form wire:submit="verify" aria-labelledby="verify-email-heading" class="space-y-5" novalidate>
         <div>
-            <label for="code" class="block text-sm font-medium text-dark/70 mb-2">
+            <label for="code" class="block text-sm font-medium text-subtle mb-2">
                 {{ __('auth.verify_email_input_aria') }}
             </label>
             <input
@@ -142,11 +142,11 @@ new #[Layout('layouts.auth')] class extends Component {
                 required
                 autofocus
                 placeholder="{{ str_repeat('·', CreateNewUser::VERIFICATION_CODE_LENGTH) }}"
-                class="w-full px-4 py-4 text-center text-2xl font-semibold tracking-[0.5em] rounded-md bg-white border border-dark/15 text-dark placeholder:text-dark/20 focus:outline-none focus:ring-2 focus:ring-accent/40 focus:border-accent transition-colors duration-150"
+                class="w-full px-4 py-4 text-center text-2xl font-semibold tracking-[0.5em] rounded-md bg-white border border-dark/15 text-body placeholder:text-placeholder focus:outline-none focus:ring-2 focus:ring-accent/40 focus:border-accent transition-colors duration-150"
             />
         </div>
 
-        <p class="text-center text-xs text-dark/50">
+        <p class="text-center text-xs text-subtle">
             {{ __('auth.verify_email_expires_at', [
                 'time' => auth()->user()->email_verification_code_expires_at?->format('H:i') ?? '—',
             ]) }}
@@ -165,11 +165,11 @@ new #[Layout('layouts.auth')] class extends Component {
         </x-cta>
     </form>
 
-    <p class="text-sm text-dark/50 mt-6">
+    <p class="text-sm text-subtle mt-6">
         <button
             type="button"
             wire:click="resend"
-            class="text-dark font-medium underline underline-offset-2 hover:text-accent transition-colors duration-150 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent rounded-sm cursor-pointer disabled:opacity-50"
+            class="text-body font-medium underline underline-offset-2 hover:text-accent transition-colors duration-150 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent rounded-sm cursor-pointer disabled:opacity-50"
             wire:loading.attr="disabled"
             wire:target="resend"
         >

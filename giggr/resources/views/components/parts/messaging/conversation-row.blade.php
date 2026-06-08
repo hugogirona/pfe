@@ -20,8 +20,8 @@
         <div class="flex items-baseline gap-2">
             <span @class([
                 'text-sm truncate',
-                'font-semibold text-dark' => $hasUnread,
-                'font-medium text-dark' => ! $hasUnread,
+                'font-semibold text-body' => $hasUnread,
+                'font-medium text-body' => ! $hasUnread,
             ])>
                 {{ $other?->full_name ?? '—' }}
             </span>
@@ -29,9 +29,9 @@
                 <time
                     datetime="{{ $conversation->last_message_at?->toIso8601String() }}"
                     @class([
-                        'ml-auto text-[11px] shrink-0',
+                        'ml-auto text-[0.6875rem] shrink-0',
                         'text-accent font-semibold' => $hasUnread,
-                        'text-dark/40' => ! $hasUnread,
+                        'text-caption' => ! $hasUnread,
                     ])
                 >{{ $when }}</time>
             @endif
@@ -39,15 +39,15 @@
         <div class="flex items-center gap-2 mt-0.5">
             <p @class([
                 'text-xs truncate flex-1',
-                'text-dark/80 font-medium' => $hasUnread,
-                'text-dark/50' => ! $hasUnread,
+                'text-subtle font-medium' => $hasUnread,
+                'text-subtle' => ! $hasUnread,
             ])>
                 {{ $conversation->latestMessage?->body ?? __('messaging.no_messages_yet') }}
             </p>
             @if ($hasUnread)
                 <span
                     aria-hidden="true"
-                    class="shrink-0 min-w-[18px] h-[18px] px-1 rounded-full bg-accent text-bg text-[10px] font-bold flex items-center justify-center leading-none"
+                    class="shrink-0 min-w-[18px] h-[18px] px-1 rounded-full bg-accent text-on-dark text-[0.625rem] font-bold flex items-center justify-center leading-none"
                 >{{ $unread > 99 ? '99+' : $unread }}</span>
             @endif
         </div>

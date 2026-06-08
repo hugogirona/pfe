@@ -26,6 +26,7 @@ return [
 
     // Author card
     'author_title' => 'Publié par',
+    'author_aria' => "Auteur de l'annonce",
     'author_contact' => 'Contacter',
     'author_edit' => 'Modifier l\'annonce',
     'author_see_profile' => 'Voir le profil',

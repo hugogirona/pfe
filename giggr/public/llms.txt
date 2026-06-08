@@ -1,0 +1,21 @@
+# Giggr
+
+> Giggr is a platform that connects local musicians, bands and event organisers. Members discover musical profiles near them, post and reply to announcements (gig sessions, band searches), follow each other and exchange messages to form bands or set up jam sessions.
+
+Giggr is available in French (default), English and Dutch. The home and explore pages are public; viewing full profiles and announcements requires a free account.
+
+## Main pages
+
+- [Home](https://giggr.be/): introduction to Giggr with featured musicians and announcements.
+- [Explore — Musicians](https://giggr.be/explorer/profils): browse musical profiles, filtered by instrument, genre and location.
+- [Explore — Announcements](https://giggr.be/explorer/annonces): browse announcements, including gig sessions and band searches.
+- [Contact](https://giggr.be/contact): contact form for questions and partnership requests.
+- [Sign up](https://giggr.be/inscription): create a free account to follow musicians and message them.
+
+## Legal
+
+- [Privacy policy](https://giggr.be/politique-de-confidentialite): how Giggr collects and processes personal data.
+
+## Optional
+
+- [Log in](https://giggr.be/connexion): sign in to an existing account.

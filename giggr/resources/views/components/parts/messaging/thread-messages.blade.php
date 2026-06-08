@@ -69,7 +69,7 @@
                 @if ($showNewMessageMarker)
                     <li class="flex items-center gap-2 px-1 py-2" role="separator">
                         <span class="h-px flex-1 bg-accent/30" aria-hidden="true"></span>
-                        <span class="text-[10px] font-semibold uppercase tracking-wider text-accent">
+                        <span class="text-[0.625rem] font-semibold uppercase tracking-wider text-accent">
                             {{ trans_choice('messaging.new_messages', $newMessageMarkerCount, ['count' => $newMessageMarkerCount]) }}
                         </span>
                         <span class="h-px flex-1 bg-accent/30" aria-hidden="true"></span>
@@ -85,7 +85,7 @@
             @endforeach
         </ol>
     @else
-        <p class="h-full flex items-center justify-center text-sm text-dark/40 italic">
+        <p class="h-full flex items-center justify-center text-sm text-caption italic">
             {{ __('messaging.no_messages_yet') }}
         </p>
     @endif

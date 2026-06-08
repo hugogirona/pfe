@@ -3,6 +3,7 @@
         {{-- Profile dropdown --}}
         <div
             class="relative"
+            data-js-only
             x-data="{ open: false, thumbnail: {{ auth()->user()->profile?->thumbnail ? json_encode(auth()->user()->profile->thumbnail) : 'null' }} }"
             x-init="
                 if (window.Echo) {
@@ -18,7 +19,7 @@
                 :aria-expanded="open"
                 aria-haspopup="true"
                 aria-label="{{ __('nav.aria_user_menu') }}"
-                class="w-8 h-8 rounded-full overflow-hidden bg-dark/60 text-bg flex items-center justify-center text-sm font-semibold uppercase cursor-pointer hover:opacity-90 transition-opacity duration-150 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
+                class="w-8 h-8 rounded-full overflow-hidden bg-dark/60 text-on-dark flex items-center justify-center text-sm font-semibold uppercase cursor-pointer hover:opacity-90 transition-opacity duration-150 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent-on-dark"
             >
                 <img
                     x-show="thumbnail"
@@ -47,9 +48,9 @@
                     wire:navigate
                     @click="open = false"
                     role="menuitem"
-                    class="flex items-center gap-2.5 px-4 py-3 text-sm text-dark hover:bg-dark/5 transition-colors duration-150 focus-visible:outline-none focus-visible:bg-dark/5"
+                    class="flex items-center gap-2.5 px-4 py-3 text-sm text-body hover:bg-dark/5 transition-colors duration-150 focus-visible:outline-none focus-visible:bg-dark/5"
                 >
-                    <x-icon name="user" class="w-4 h-4 text-dark/40"/>
+                    <x-icon name="user" class="w-4 h-4 text-caption"/>
                     {{ __('nav.view_profile') }}
                 </a>
 
@@ -58,9 +59,9 @@
                     wire:navigate
                     @click="open = false"
                     role="menuitem"
-                    class="flex items-center gap-2.5 px-4 py-3 text-sm text-dark hover:bg-dark/5 transition-colors duration-150 focus-visible:outline-none focus-visible:bg-dark/5"
+                    class="flex items-center gap-2.5 px-4 py-3 text-sm text-body hover:bg-dark/5 transition-colors duration-150 focus-visible:outline-none focus-visible:bg-dark/5"
                 >
-                    <x-icon name="cog-6-tooth" class="w-4 h-4 text-dark/40"/>
+                    <x-icon name="cog-6-tooth" class="w-4 h-4 text-caption"/>
                     {{ __('nav.settings') }}
                 </a>
 
@@ -80,6 +81,6 @@
             </div>
         </div>
     @else
-        <x-cta href="{{ route('login') }}" wire:navigate variant="dark">{{ __('nav.sign_in') }}</x-cta>
+        <x-cta href="{{ route('login') }}" wire:navigate variant="outline">{{ __('nav.sign_in') }}</x-cta>
     @endauth
 </div>

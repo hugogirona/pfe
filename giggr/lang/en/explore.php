@@ -4,6 +4,10 @@ return [
     'title' => 'Explore',
     'subtitle' => 'Profiles and listings near you.',
 
+    'search_placeholder' => 'Search',
+    'search_label' => 'Search',
+    'search_clear' => 'Clear search',
+
     // Tabs
     'tab_profiles' => 'Profiles',
     'tab_announcements' => 'Listings',
@@ -12,10 +16,6 @@ return [
     'filter_city' => 'City or region',
     'filter_following_label' => 'Followed accounts',
     'filter_following' => 'Only people I follow',
-    'filter_radius' => 'Radius',
-    'filter_radius_km' => ':n km',
-    'filter_radius_any' => 'Exact city',
-    'filter_radius_disabled_hint' => 'Pick a city first.',
     'filter_instruments' => 'Instruments',
     'filter_genres' => 'Genres',
     'filter_clear' => 'Clear filters',

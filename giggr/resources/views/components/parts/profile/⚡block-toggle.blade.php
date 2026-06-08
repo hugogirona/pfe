@@ -37,26 +37,30 @@ new class extends Component {
     @php $name = optional(\App\Models\User::find($targetUserId))->full_name ?? ''; @endphp
 
     @if ($isBlocked)
-        <button
+        <x-cta
+            variant="danger"
+            size="sm"
+            class="w-full gap-1.5"
             type="button"
             wire:click="toggle"
             aria-label="{{ __('profile.unblock_name', ['name' => $name]) }}"
-            class="w-full inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium text-danger/70 hover:text-danger hover:bg-danger/5 transition-colors duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
         >
             <x-icon name="no-symbol" class="w-3.5 h-3.5"/>
             <span>{{ __('profile.unblock') }}</span>
-        </button>
+        </x-cta>
     @else
-        <button
+        <x-cta
+            variant="danger"
+            size="sm"
+            class="w-full gap-1.5"
             type="button"
             x-show="!confirming"
             @click="confirming = true"
             aria-label="{{ __('profile.block_name', ['name' => $name]) }}"
-            class="w-full inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium text-danger/70 hover:text-danger hover:bg-danger/5 transition-colors duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
         >
             <x-icon name="no-symbol" class="w-3.5 h-3.5"/>
             <span>{{ __('profile.block') }}</span>
-        </button>
+        </x-cta>
 
         <div
             x-show="confirming"
@@ -66,23 +70,25 @@ new class extends Component {
             aria-live="polite"
             class="rounded-md border border-danger/15 bg-danger/5 px-3 py-2.5 space-y-2"
         >
-            <p class="text-xs text-dark/80 leading-relaxed">{{ __('profile.block_confirm', ['name' => $name]) }}</p>
+            <p class="text-xs text-subtle leading-relaxed">{{ __('profile.block_confirm', ['name' => $name]) }}</p>
             <div class="flex items-center justify-end gap-1.5">
-                <button
+                <x-cta
+                    variant="simple"
+                    size="sm"
                     type="button"
                     @click="confirming = false"
-                    class="px-2.5 py-1 rounded text-xs font-medium text-dark/60 hover:text-dark hover:bg-dark/5 transition-colors duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
                 >
                     {{ __('profile.cancel') }}
-                </button>
-                <button
+                </x-cta>
+                <x-cta
+                    variant="danger-solid"
+                    size="sm"
                     type="button"
                     wire:click="toggle"
                     @click="confirming = false"
-                    class="px-2.5 py-1 rounded text-xs font-medium bg-danger text-bg hover:opacity-90 transition-opacity duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
                 >
                     {{ __('profile.block') }}
-                </button>
+                </x-cta>
             </div>
         </div>
     @endif

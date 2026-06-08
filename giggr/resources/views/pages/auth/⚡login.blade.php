@@ -22,8 +22,8 @@ new #[Layout('layouts.auth')] class extends Component
 <div>
 
     <div class="mb-8">
-        <h1 id="login-heading" class="font-heading text-3xl text-dark mb-1.5">{{ __('auth.login_heading') }}</h1>
-        <p class="text-sm text-dark/50">{{ __('auth.login_subtitle') }}</p>
+        <h1 id="login-heading" class="font-heading text-3xl text-heading mb-1.5">{{ __('auth.login_heading') }}</h1>
+        <p class="text-sm text-subtle">{{ __('auth.login_subtitle') }}</p>
     </div>
 
     <form action="/login" method="POST" novalidate aria-labelledby="login-heading" class="space-y-5">
@@ -51,7 +51,7 @@ new #[Layout('layouts.auth')] class extends Component
                 {{ __('auth.login_remember') }}
             </x-form.checkbox>
             <a href="{{ route('password.request') }}"
-               class="text-xs text-dark/50 hover:text-accent transition-colors duration-150
+               class="text-xs text-subtle hover:text-accent transition-colors duration-150
                       focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent rounded-sm">
                 {{ __('auth.login_forgot') }}
             </a>
@@ -63,10 +63,10 @@ new #[Layout('layouts.auth')] class extends Component
 
     </form>
 
-    <p class="text-sm text-dark/50 mt-6">
+    <p class="text-sm text-subtle mt-6">
         {{ __('auth.login_register_prompt') }}
         <a href="{{ route('register') }}"
-           class="text-dark font-medium underline underline-offset-2
+           class="text-body font-medium underline underline-offset-2
                   hover:text-accent transition-colors duration-150
                   focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent rounded-sm">
             {{ __('auth.login_register_link') }}

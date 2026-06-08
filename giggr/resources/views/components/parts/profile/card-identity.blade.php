@@ -11,12 +11,13 @@
 @endphp
 
 <section aria-labelledby="identity-name-heading" class="text-center px-6 pb-5 border-b border-dark/[0.07]">
-    <h1 id="identity-name-heading" class="font-heading text-2xl text-dark leading-tight">{{ $name }}</h1>
+    <h1 id="identity-name-heading" class="font-heading text-2xl text-heading leading-tight" itemprop="name">{{ $name }}</h1>
 
     @if ($profile->city)
-        <p class="text-sm text-dark/50 mt-1 flex items-center justify-center gap-1">
+        <p class="text-sm text-subtle mt-1 flex items-center justify-center gap-1"
+           itemprop="address" itemscope itemtype="https://schema.org/PostalAddress">
             <x-icon name="map-pin" class="w-3.5 h-3.5"/>
-            {{ $profile->city->name }}
+            <span itemprop="addressLocality">{{ $profile->city->name }}</span>
         </p>
     @endif
 
@@ -56,7 +57,7 @@
              class="mt-3">
 
             <div class="flex items-center justify-center gap-2">
-                <span class="text-xs uppercase tracking-wider text-dark/55 font-medium">
+                <span class="text-xs uppercase tracking-wider text-subtle font-medium">
                     {{ $statusLabel }}
                 </span>
                 <button
@@ -73,7 +74,7 @@
                     :aria-expanded="open"
                     :aria-activedescendant="open && focused >= 0 ? `profile-status-option-${options[focused].value}` : null"
                     aria-label="{{ __('profile.edit_status') }}"
-                    class="p-1 text-dark/30 hover:text-dark/60 transition-colors duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent focus-visible:text-dark/60 rounded"
+                    class="p-1 text-caption hover:text-subtle transition-colors duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent focus-visible:text-subtle rounded"
                 >
                     <x-icon name="pencil-square" class="w-3.5 h-3.5"/>
                 </button>
@@ -97,7 +98,7 @@
                                 @mouseenter="focused = index"
                                 :class="[
                                     focused === index ? 'bg-dark/[0.04]' : '',
-                                    $wire.selectedStatus === option.value ? 'text-dark font-medium' : 'text-dark/55',
+                                    $wire.selectedStatus === option.value ? 'text-body font-medium' : 'text-subtle',
                                 ]"
                                 class="px-3 py-2 text-sm cursor-pointer transition-colors duration-100"
                             >
@@ -109,7 +110,7 @@
             </div>
         </div>
     @elseif ($statusLabel)
-        <span class="inline-block mt-3 text-xs uppercase tracking-wider text-dark/55 font-medium">
+        <span class="inline-block mt-3 text-xs uppercase tracking-wider text-subtle font-medium">
             {{ $statusLabel }}
         </span>
     @endif

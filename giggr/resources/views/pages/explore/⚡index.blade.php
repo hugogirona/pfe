@@ -1,13 +1,13 @@
 <?php
 
 use App\Models\Announcement;
-use App\Models\City;
 use App\Models\Follow;
 use App\Models\Profile;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\On;
+use Livewire\Attributes\Url;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -17,8 +17,10 @@ class extends Component {
 
     public string $activeTab = 'profiles';
 
+    #[Url(as: 'q', except: '')]
+    public string $search = '';
+
     public ?int $filterCityId = null;
-    public int $filterRadius = 0;
     public array $filterInstruments = [];
     public array $filterGenres = [];
     public array $filterTypes = [];
@@ -26,13 +28,20 @@ class extends Component {
 
     public function mount(?string $tab = null): void
     {
-        $this->activeTab = in_array($tab, ['annonces', 'listings'], true) ? 'announcements' : 'profiles';
+        $this->activeTab = $tab === __('explore.tab_announcements_slug') ? 'announcements' : 'profiles';
     }
 
-    #[Computed]
-    public function targetCity(): ?City
+    public function updatedSearch(): void
     {
-        return $this->filterCityId !== null ? City::find($this->filterCityId) : null;
+        $this->resetPage('profiles-page');
+        $this->resetPage('announcements-page');
+    }
+
+    private function hasSearch(): bool
+    {
+        return $this->search
+            |> trim(...)
+            |> filled(...);
     }
 
     #[Computed]
@@ -50,20 +59,10 @@ class extends Component {
 
         return Profile::query()
             ->with(['user', 'city', 'instruments', 'genres'])
-            ->when($this->filterCityId !== null, function ($q) {
-                $target = $this->targetCity;
-                if ($this->filterRadius > 0 && $target !== null) {
-                    $q->whereHas('city', fn($q2) => $q2->nearby($target->latitude, $target->longitude, $this->filterRadius));
-                } else {
-                    $q->where('city_id', $this->filterCityId);
-                }
-            })
-            ->when($this->filterInstruments, fn($q) => $q->whereHas(
-                'instruments', fn($q2) => $q2->whereIn('name', $this->filterInstruments)
-            ))
-            ->when($this->filterGenres, fn($q) => $q->whereHas(
-                'genres', fn($q2) => $q2->whereIn('name', $this->filterGenres)
-            ))
+            ->when($this->filterCityId !== null, fn($q) => $q->where('city_id', $this->filterCityId))
+            ->when($this->filterInstruments, fn($q) => $q->whereHas('instruments', fn($q2) => $q2->whereIn('name', $this->filterInstruments)))
+            ->when($this->filterGenres, fn($q) => $q->whereHas('genres', fn($q2) => $q2->whereIn('name', $this->filterGenres)))
+            ->when($this->hasSearch(), fn($q) => $q->search($this->search))
             ->when($followingActive, fn($q) => $q->whereIn('id', $this->followedProfileIdsForFilter))
             ->orderByDesc('profiles.created_at')
             ->orderByDesc('profiles.id')
@@ -78,21 +77,11 @@ class extends Component {
         return Announcement::query()
             ->with(['city', 'instruments', 'genres'])
             ->active()
-            ->when($this->filterCityId !== null, function ($q) {
-                $target = $this->targetCity;
-                if ($this->filterRadius > 0 && $target !== null) {
-                    $q->whereHas('city', fn($q2) => $q2->nearby($target->latitude, $target->longitude, $this->filterRadius));
-                } else {
-                    $q->where('city_id', $this->filterCityId);
-                }
-            })
-            ->when($this->filterInstruments, fn($q) => $q->whereHas(
-                'instruments', fn($q2) => $q2->whereIn('name', $this->filterInstruments)
-            ))
-            ->when($this->filterGenres, fn($q) => $q->whereHas(
-                'genres', fn($q2) => $q2->whereIn('name', $this->filterGenres)
-            ))
+            ->when($this->filterCityId !== null, fn($q) => $q->where('city_id', $this->filterCityId))
+            ->when($this->filterInstruments, fn($q) => $q->whereHas('instruments', fn($q2) => $q2->whereIn('name', $this->filterInstruments)))
+            ->when($this->filterGenres, fn($q) => $q->whereHas('genres', fn($q2) => $q2->whereIn('name', $this->filterGenres)))
             ->when($this->filterTypes, fn($q) => $q->whereIn('type', $this->filterTypes))
+            ->when($this->hasSearch(), fn($q) => $q->search($this->search))
             ->when($followingActive, fn($q) => $q->whereHas(
                 'user.profile', fn($q2) => $q2->whereIn('id', $this->followedProfileIdsForFilter)
             ))
@@ -124,13 +113,10 @@ class extends Component {
     #[Computed]
     public function activeFiltersCount(): int
     {
-        $radiusActive = $this->filterCityId !== null && $this->filterRadius > 0;
-
         return count($this->filterInstruments)
             + count($this->filterGenres)
             + count($this->filterTypes)
             + ($this->filterCityId !== null ? 1 : 0)
-            + ($radiusActive ? 1 : 0)
             + ($this->filterFollowing ? 1 : 0);
     }
 
@@ -138,7 +124,6 @@ class extends Component {
     {
         $this->dispatch('open-filter-drawer',
             cityId: $this->filterCityId,
-            radius: $this->filterRadius,
             instruments: $this->filterInstruments,
             genres: $this->filterGenres,
             types: $this->filterTypes,
@@ -148,10 +133,9 @@ class extends Component {
     }
 
     #[On('filters-applied')]
-    public function applyFilters(?int $cityId, int $radius, array $instruments, array $genres, array $types, bool $following = false): void
+    public function applyFilters(?int $cityId, array $instruments, array $genres, array $types, bool $following = false): void
     {
         $this->filterCityId = $cityId;
-        $this->filterRadius = $radius;
         $this->filterInstruments = $instruments;
         $this->filterGenres = $genres;
         $this->filterTypes = $types;
@@ -182,6 +166,13 @@ class extends Component {
 
     <div class="max-w-6xl mx-auto px-6 py-8 space-y-6">
 
+        <x-search-bar
+            wire:model.live.debounce.300ms="search"
+            name="explore-search"
+            :placeholder="__('explore.search_placeholder')"
+            :label="__('explore.search_label')"
+        />
+
         <x-parts.explore.actions
             :active-tab="$activeTab"
             :profiles-count="$this->filteredProfiles->total()"
@@ -194,7 +185,7 @@ class extends Component {
                 <h2 class="sr-only">{{ __('explore.tab_profiles') }}</h2>
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 items-start">
                     @foreach ($this->filteredProfiles as $profile)
-                        <x-profile-card :profile="$profile" :followed-profile-ids="$this->followedProfileIds"/>
+                        <x-profile-card :wire:key="'profile-'.$profile->id" :profile="$profile" :followed-profile-ids="$this->followedProfileIds"/>
                     @endforeach
                 </div>
                 @if ($this->filteredProfiles->isEmpty())
@@ -210,7 +201,7 @@ class extends Component {
                 <h2 class="sr-only">{{ __('explore.tab_announcements') }}</h2>
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                     @foreach ($this->filteredAnnouncements as $announcement)
-                        <x-parts.explore.announcement-card :announcement="$announcement"/>
+                        <x-parts.explore.announcement-card :wire:key="'announcement-'.$announcement->id" :announcement="$announcement"/>
                     @endforeach
                 </div>
                 @if ($this->filteredAnnouncements->isEmpty())

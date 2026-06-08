@@ -1,4 +1,5 @@
 <div class="md:hidden"
+     data-js-only
      x-data="{ open: false }"
      x-init="$watch('open', val => {
          if (val) {
@@ -10,7 +11,7 @@
 
     <button @click="open = !open"
             :aria-expanded="open"
-            class="relative z-50 text-dark/60 hover:text-dark transition-colors duration-150 p-2 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent rounded-[6px]"
+            class="relative z-50 text-subtle hover:text-body transition-colors duration-150 p-2 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent rounded-[6px]"
             aria-label="{{ __('nav.aria_menu') }}">
         <span class="flex flex-col justify-center gap-2 w-8 h-8">
             <span class="block h-[3px] w-8 bg-current rounded-full transition-all duration-300 ease-in-out origin-center"

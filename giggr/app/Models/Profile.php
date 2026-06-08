@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enums\ContactPreference;
 use App\Enums\ProfileStatus;
+use App\Models\Concerns\Searchable;
 use Database\Factories\ProfileFactory;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -18,7 +19,7 @@ use Illuminate\Support\Facades\Storage;
 class Profile extends Model
 {
     /** @use HasFactory<ProfileFactory> */
-    use HasFactory, SoftDeletes;
+    use HasFactory, Searchable, SoftDeletes;
 
     protected $fillable = [
         'user_id',
@@ -37,6 +38,18 @@ class Profile extends Model
             'status' => ProfileStatus::class,
             'contact_preference' => ContactPreference::class,
             'birth_date' => 'date',
+        ];
+    }
+
+    /**
+     * @return array<int|string, string|list<string>>
+     */
+    protected function searchable(): array
+    {
+        return [
+            'user' => ['first_name', 'last_name'],
+            'instruments' => ['name'],
+            'genres' => ['name'],
         ];
     }
 

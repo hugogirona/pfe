@@ -24,7 +24,7 @@
                 <div
                     class="absolute inset-0 bg-dark/40 opacity-0 group-hover:opacity-100 motion-safe:transition-opacity motion-safe:duration-150 flex items-center justify-center"
                     aria-hidden="true">
-                    <x-icon name="pencil-square" class="w-6 h-6 text-bg"/>
+                    <x-icon name="pencil-square" class="w-6 h-6 text-on-dark"/>
                 </div>
             </button>
         @else

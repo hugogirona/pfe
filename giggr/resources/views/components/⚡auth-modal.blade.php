@@ -69,25 +69,25 @@ new class extends Component {
             <button
                 wire:click="close"
                 type="button"
-                class="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full text-bg/35 hover:text-bg hover:bg-white/10 transition-colors duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
+                class="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full text-on-dark-caption hover:text-on-dark hover:bg-white/10 transition-colors duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent-on-dark"
                 aria-label="{{ __('Fermer') }}"
             >
                 <x-icon name="x-mark" class="w-4 h-4" />
             </button>
 
             {{-- Logo --}}
-            <x-logo class="h-7 w-auto my-10 text-bg" />
+            <x-logo class="h-7 w-auto my-10 text-on-dark" />
         </div>
 
         {{-- ── Body ── --}}
         <section class="bg-bg px-8 pt-7 pb-8">
             <h2
                 id="auth-modal-title"
-                class="font-heading text-[1.35rem] leading-snug text-dark text-center"
+                class="font-heading text-[1.35rem] leading-snug text-heading text-center"
             >
                 {{ __('Rejoins la communauté.') }}
             </h2>
-            <p class="mt-2.5 text-sm text-dark/50 text-center leading-relaxed">
+            <p class="mt-2.5 text-sm text-subtle text-center leading-relaxed">
                 {{ __('Connecte-toi pour accéder aux profils et annonces de musiciens.') }}
             </p>
 
@@ -114,7 +114,7 @@ new class extends Component {
                 </x-cta>
             </div>
 
-            <p class="mt-5 text-center text-xs text-dark/30">
+            <p class="mt-5 text-center text-xs text-caption">
                 {{ __('En continuant, tu acceptes les') }}
                 <span class="underline underline-offset-2 cursor-default">{{ __('conditions d\'utilisation') }}</span>
             </p>

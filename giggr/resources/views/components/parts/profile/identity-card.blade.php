@@ -44,6 +44,8 @@
         :selectedGenres="$selectedGenres"
     />
 
+    <x-parts.profile.music-links-soon class="border-t border-dark/[0.07]" />
+
     {{-- Actions --}}
     @if (!$isOwner)
         <div class="px-6 pb-6 border-t border-dark/7 pt-5">

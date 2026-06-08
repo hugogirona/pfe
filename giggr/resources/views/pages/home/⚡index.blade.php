@@ -3,16 +3,16 @@
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 
-new #[Layout('layouts.app')] class extends Component
-{
+new #[Layout('layouts.app')]
+class extends Component {
 
 };
 ?>
 
 <div>
-    <x-parts.home.hero />
+    <x-parts.home.hero/>
 
-    <x-parts.home.partners />
+    <x-parts.home.partners/>
 
     <x-text-image
         :title="__('home.text_image_1_title')"
@@ -21,11 +21,16 @@ new #[Layout('layouts.app')] class extends Component
         :url="route('explore', ['tab' => __('explore.tab_announcements_slug')])"
         image="home2.webp"
         alt="Instruments de musique et matériel audio"
+        :width="1200"
+        :height="800"
+        :srcset-widths="[600, 768]"
         orientation="right"
         bg="bg-pastel-salmon"
     />
 
-    <x-parts.home.features />
+    <livewire:parts.home.slider type="announcements" bg="bg-bg"/>
+
+    <x-parts.home.features/>
 
     <x-text-image
         :title="__('home.text_image_2_title')"
@@ -34,10 +39,12 @@ new #[Layout('layouts.app')] class extends Component
         :url="route('explore', ['tab' => __('explore.tab_profiles_slug')])"
         image="home1.webp"
         alt="Un chanteur sur scène"
+        :width="687"
+        :height="1032"
+        :srcset-widths="[600]"
         orientation="left"
         bg="bg-pastel-blue"
     />
-    
-    <livewire:parts.home.musician-slider />
 
+    <livewire:parts.home.slider type="profiles" bg="bg-bg"/>
 </div>

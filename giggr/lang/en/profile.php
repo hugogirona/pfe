@@ -15,6 +15,11 @@ return [
     'stat_ads' => 'active listing|active listings',
     'avatar_alt' => 'Profile picture of :name',
 
+    // Music links (coming soon)
+    'music_links_label' => 'Music links',
+    'music_links_soon' => 'Coming soon',
+    'music_links_add' => 'Add Spotify, SoundCloud…',
+
     // Owner actions
     'save' => 'Save',
     'cancel' => 'Cancel',

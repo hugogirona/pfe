@@ -1,10 +1,10 @@
 <section aria-labelledby="faq-heading">
 
     <div class="mb-8">
-        <h2 id="faq-heading" class="font-heading text-3xl md:text-4xl text-dark mb-2">
+        <h2 id="faq-heading" class="font-heading text-3xl md:text-4xl text-heading mb-2">
             {{ __('contact.faq_heading') }}
         </h2>
-        <p class="text-dark/45 text-sm leading-relaxed">
+        <p class="text-caption text-sm leading-relaxed">
             {{ __('contact.faq_subtitle') }}
         </p>
     </div>

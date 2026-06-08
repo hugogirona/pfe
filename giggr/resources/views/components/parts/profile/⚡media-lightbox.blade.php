@@ -92,7 +92,7 @@ new class extends Component {
             <button
                 wire:click="close"
                 type="button"
-                class="absolute top-2 right-2 z-20 w-11 h-11 flex items-center justify-center rounded-full bg-dark/50 hover:bg-dark/80 text-bg backdrop-blur-sm transition-colors duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
+                class="absolute top-2 right-2 z-20 w-11 h-11 flex items-center justify-center rounded-full bg-dark/50 hover:bg-dark/80 text-on-dark backdrop-blur-sm transition-colors duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent-on-dark"
                 aria-label="{{ __('profile.lightbox_close') }}"
             >
                 <x-icon name="x-mark" class="w-5 h-5"/>
@@ -122,7 +122,7 @@ new class extends Component {
 
             {{-- Caption --}}
             @if ($media->caption)
-                <p class="mt-4 text-center text-sm text-bg/80 max-w-2xl mx-auto leading-relaxed">
+                <p class="mt-4 text-center text-sm text-on-dark-subtle max-w-2xl mx-auto leading-relaxed">
                     {{ $media->caption }}
                 </p>
             @endif

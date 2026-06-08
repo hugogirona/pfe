@@ -5,17 +5,18 @@ use App\Models\Profile;
 use App\Models\User;
 use Livewire\Livewire;
 
-it('shows Suivre when the viewer is not following the profile', function () {
+it('exposes the follow affordance via its accessible label when not following', function () {
     $viewer = User::factory()->create();
     $profile = Profile::factory()->create();
 
     Livewire::actingAs($viewer)
         ->test('parts.social.follow-button', ['profileId' => $profile->id])
         ->assertSet('isFollowing', false)
-        ->assertSee(__('social.follow'));
+        ->assertSee('aria-pressed="false"', false)
+        ->assertSee(__('social.follow_aria', ['name' => $profile->user->full_name]));
 });
 
-it('shows Suivi when the viewer is already following the profile', function () {
+it('reflects the following state via aria-pressed and the unfollow label', function () {
     $viewer = User::factory()->create();
     $profile = Profile::factory()->create();
     Follow::create([
@@ -27,7 +28,8 @@ it('shows Suivi when the viewer is already following the profile', function () {
     Livewire::actingAs($viewer)
         ->test('parts.social.follow-button', ['profileId' => $profile->id])
         ->assertSet('isFollowing', true)
-        ->assertSee(__('social.following'));
+        ->assertSee('aria-pressed="true"', false)
+        ->assertSee(__('social.unfollow_aria', ['name' => $profile->user->full_name]));
 });
 
 it('toggling creates a follow row and flips the state', function () {

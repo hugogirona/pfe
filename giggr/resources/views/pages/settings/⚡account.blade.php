@@ -70,8 +70,8 @@ new #[Layout('layouts.app')] class extends Component {
     <div class="max-w-3xl mx-auto px-6 py-10 space-y-6">
 
         <header>
-            <h1 class="font-heading text-3xl text-dark">{{ __('settings.title') }}</h1>
-            <p class="text-sm text-dark/50 mt-1 uppercase tracking-wider">{{ __('settings.account_section') }}</p>
+            <h1 class="font-heading text-3xl text-heading">{{ __('settings.title') }}</h1>
+            <p class="text-sm text-subtle mt-1 uppercase tracking-wider">{{ __('settings.account_section') }}</p>
         </header>
 
         <livewire:parts.settings.update-email />
@@ -87,9 +87,9 @@ new #[Layout('layouts.app')] class extends Component {
             @if ($this->rows->isEmpty())
                 <div class="flex flex-col items-center justify-center py-10 text-center">
                     <div class="w-14 h-14 rounded-full bg-dark/5 flex items-center justify-center mb-3" aria-hidden="true">
-                        <x-icon name="no-symbol" class="w-7 h-7 text-dark/30"/>
+                        <x-icon name="no-symbol" class="w-7 h-7 text-caption"/>
                     </div>
-                    <p class="text-sm text-dark/45 italic">{{ __('settings.blocked_users_empty') }}</p>
+                    <p class="text-sm text-caption italic">{{ __('settings.blocked_users_empty') }}</p>
                 </div>
             @else
                 <ul class="divide-y divide-dark/8 -mx-6 md:-mx-8">
@@ -102,21 +102,21 @@ new #[Layout('layouts.app')] class extends Component {
                             class="flex items-center gap-3 px-6 md:px-8 py-3.5"
                             wire:key="blocked-user-{{ $user->id }}"
                         >
-                            <div class="w-11 h-11 rounded-full overflow-hidden bg-pastel-taupe text-dark flex items-center justify-center text-base font-semibold uppercase shrink-0" aria-hidden="true">
+                            <div class="w-11 h-11 rounded-full overflow-hidden bg-pastel-taupe text-body flex items-center justify-center text-base font-semibold uppercase shrink-0" aria-hidden="true">
                                 @if ($thumbnail)
                                     <img src="{{ $thumbnail }}" alt="" class="w-full h-full object-cover"/>
                                 @else
                                     <span>{{ mb_substr($user->full_name, 0, 1) }}</span>
                                 @endif
                             </div>
-                            <p class="flex-1 text-sm font-medium text-dark truncate">{{ $user->full_name }}</p>
+                            <p class="flex-1 text-sm font-medium text-body truncate">{{ $user->full_name }}</p>
 
                             @if ($isBlocked)
                                 <button
                                     type="button"
                                     wire:click="toggleBlock({{ $user->id }})"
                                     aria-label="{{ __('profile.unblock_name', ['name' => $user->full_name]) }}"
-                                    class="px-3 py-1.5 rounded-md text-xs font-medium text-dark/60 hover:text-dark hover:bg-dark/5 transition-colors duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
+                                    class="px-3 py-1.5 rounded-md text-xs font-medium text-subtle hover:text-body hover:bg-dark/5 transition-colors duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
                                 >
                                     {{ __('settings.unblock') }}
                                 </button>

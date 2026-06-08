@@ -18,14 +18,16 @@
 <div class="flex items-center justify-between gap-3 pt-2 border-t border-dark/10">
     @if ($showDelete)
         <div x-data="{ confirming: false }">
-            <button
+            <x-cta
+                variant="danger"
+                size="form"
+                class="px-4"
                 type="button"
                 x-show="!confirming"
                 @click="confirming = true"
-                class="h-11 px-4 rounded-md text-sm font-medium text-danger/70 hover:text-danger hover:bg-danger/5 transition-colors duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
             >
                 {{ $deleteLabel }}
-            </button>
+            </x-cta>
             <div
                 x-show="confirming"
                 x-cloak
@@ -34,33 +36,39 @@
                 x-transition:enter-end="opacity-100"
                 class="flex items-center gap-2"
             >
-                <button
+                <x-cta
+                    variant="simple"
+                    size="form"
+                    class="px-3"
                     type="button"
                     @click="confirming = false"
-                    class="h-11 px-3 rounded-md text-sm font-medium text-dark/60 hover:text-dark hover:bg-dark/5 transition-colors duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
                 >
                     {{ $cancelLabel }}
-                </button>
-                <button
+                </x-cta>
+                <x-cta
+                    variant="danger-solid"
+                    size="form"
+                    class="px-4"
                     type="button"
                     wire:click="{{ $deleteAction }}"
-                    class="h-11 px-4 rounded-md text-sm font-medium bg-danger text-bg hover:opacity-90 transition-opacity duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
                 >
                     {{ $deleteConfirmLabel }}
-                </button>
+                </x-cta>
             </div>
         </div>
     @else
         <span></span>
     @endif
 
-    <button
+    <x-cta
+        variant="dark"
+        size="form"
+        class="px-6"
         type="submit"
         wire:loading.attr="disabled"
         wire:loading.class="opacity-60 cursor-not-allowed"
-        class="h-11 px-6 rounded-md bg-dark text-bg text-sm font-medium hover:opacity-80 transition-opacity duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
     >
         <span wire:loading.remove wire:target="{{ $submitTarget }}">{{ $submitLabel }}</span>
         <span wire:loading wire:target="{{ $submitTarget }}">{{ $submittingLabel }}</span>
-    </button>
+    </x-cta>
 </div>

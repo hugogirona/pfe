@@ -21,15 +21,15 @@
             wire:click="switchTab('{{ $tab }}')"
             @class([
                 'flex-1 py-4 text-sm font-medium transition-colors duration-150 cursor-pointer relative focus-visible:outline-none focus-visible:bg-dark/5 inline-flex items-center justify-center gap-1.5',
-                'text-dark' => $activeTab === $tab,
-                'text-dark/40 hover:text-dark/70' => $activeTab !== $tab,
+                'text-body' => $activeTab === $tab,
+                'text-caption hover:text-subtle' => $activeTab !== $tab,
             ])
         >
             {{ __('messaging.tab_'.$tab) }}
             @if ($count > 0)
                 <span
                     aria-hidden="true"
-                    class="inline-flex items-center justify-center min-w-5 h-5 px-1.5 rounded-full bg-accent text-bg text-[11px] font-semibold leading-none"
+                    class="inline-flex items-center justify-center min-w-5 h-5 px-1.5 rounded-full bg-accent text-on-dark text-[0.6875rem] font-semibold leading-none"
                 >{{ $count > 99 ? '99+' : $count }}</span>
             @endif
             @if ($activeTab === $tab)

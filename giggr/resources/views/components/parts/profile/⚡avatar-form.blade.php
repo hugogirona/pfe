@@ -67,12 +67,12 @@ new class extends Component {
                         />
                     @else
                         <div class="w-36 h-36 rounded-full bg-pastel-blue flex items-center justify-center mb-1">
-                            <span class="font-heading text-4xl text-dark/30 select-none">
+                            <span class="font-heading text-4xl text-subtle select-none">
                                 {{ mb_substr($profile->user->full_name, 0, 1) }}
                             </span>
                         </div>
                     @endif
-                    <p class="text-sm text-dark/60">{{ __('profile.avatar_drop') }}</p>
+                    <p class="text-sm text-subtle">{{ __('profile.avatar_drop') }}</p>
                 </div>
             </label>
 
@@ -86,7 +86,7 @@ new class extends Component {
             />
         </div>
 
-        <p class="text-xs text-dark/40 text-center -mt-3">{{ __('profile.avatar_hint') }}</p>
+        <p class="text-xs text-caption text-center -mt-3">{{ __('profile.avatar_hint') }}</p>
 
         @error('photo')
         <p class="text-xs text-danger mt-1" role="alert">{{ $message }}</p>

@@ -2,7 +2,7 @@
 
 <div x-data="{ editing: false, snapshot: @js($bio ?? '') }">
     <div class="flex items-start justify-between gap-3 mb-4">
-        <h2 id="about-heading" class="font-heading text-2xl text-dark">
+        <h2 id="about-heading" class="font-heading text-2xl text-heading">
             {{ __('profile.about_title') }}
         </h2>
         @if ($isOwner)
@@ -51,14 +51,14 @@
              :class="!editing ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'">
             <div class="overflow-hidden">
                 @if ($bio)
-                    <p class="text-dark/65 leading-relaxed text-[15px]">{{ $bio }}</p>
+                    <p class="text-subtle leading-relaxed text-[0.9375rem]" itemprop="description">{{ $bio }}</p>
                 @else
-                    <p class="text-sm text-dark/40 italic">{{ __('profile.add_bio_empty') }}</p>
+                    <p class="text-sm text-caption italic">{{ __('profile.add_bio_empty') }}</p>
                 @endif
             </div>
         </div>
     @else
-        <p class="text-dark/65 leading-relaxed text-[15px]">{{ $bio }}</p>
+        <p class="text-subtle leading-relaxed text-[0.9375rem]" itemprop="description">{{ $bio }}</p>
     @endif
 
 </div>

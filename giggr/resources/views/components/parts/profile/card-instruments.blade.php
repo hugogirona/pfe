@@ -17,9 +17,9 @@
     class="{{ $sectionClass }}"
 >
     <div class="flex items-center justify-between mb-3">
-        <h3 class="text-[11px] font-semibold uppercase tracking-widest text-dark/35">
+        <h2 class="text-[0.6875rem] font-semibold uppercase tracking-widest text-caption">
             {{ __('profile.instruments_label') }}
-        </h3>
+        </h2>
         @if ($isOwner)
             <x-cta
                 variant="simple"
@@ -65,7 +65,7 @@
                         @endforeach
                     </ul>
                 @else
-                    <p class="text-xs text-dark/30 italic">{{ __('profile.instruments_empty_owner') }}</p>
+                    <p class="text-xs text-caption italic">{{ __('profile.instruments_empty_owner') }}</p>
                 @endif
             </div>
         </div>

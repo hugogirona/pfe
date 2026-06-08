@@ -10,8 +10,8 @@
             <button
                 type="button"
                 aria-label="{{ __('profile.contact_name', ['name' => $profile->user->full_name]) }}"
-                @click="Livewire.dispatchTo('modal', 'open-modal', { component: 'parts.messaging.inbox', title: {{ json_encode(__('messaging.title')) }}, model_id: '{{ $profile->user->id }}' })"
-                class="md:flex-1 lg:flex-initial flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium bg-accent text-bg hover:bg-accent/85 transition-colors duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
+                @click="Livewire.dispatch('open-modal', { component: 'parts.messaging.inbox', title: {{ json_encode(__('messaging.title')) }}, model_id: '{{ $profile->user->id }}' })"
+                class="md:flex-1 lg:flex-initial flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium bg-accent text-on-dark hover:bg-accent/90 transition-colors duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
             >
                 <x-icon name="chat-bubble" class="w-4 h-4"/>
                 <span>{{ __('profile.contact') }}</span>
@@ -27,8 +27,12 @@
         </div>
     </div>
 
-    <livewire:parts.profile.block-toggle
-        :target-user-id="$profile->user->id"
-        :wire:key="'block-toggle-'.$profile->user->id"
-    />
+    @auth
+        @if (auth()->id() !== $profile->user->id)
+            <livewire:parts.profile.block-toggle
+                :target-user-id="$profile->user->id"
+                :wire:key="'block-toggle-'.$profile->user->id"
+            />
+        @endif
+    @endauth
 </div>

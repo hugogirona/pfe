@@ -120,17 +120,17 @@ new class extends Component {
             </svg>
         </div>
         <div>
-            <h3 class="font-heading text-xl text-dark">
+            <h3 class="font-heading text-xl text-heading">
                 {{ $isEdit ? __('profile.update_image_success_title') : __('profile.add_image_success_title') }}
             </h3>
-            <p class="text-sm text-dark/60 mt-1">
+            <p class="text-sm text-subtle mt-1">
                 {{ $isEdit ? __('profile.update_image_success_body') : __('profile.add_image_success_body') }}
             </p>
         </div>
         <button
             wire:click="close"
             type="button"
-            class="h-11 px-6 rounded-md bg-dark text-bg text-sm font-medium hover:opacity-80 transition-opacity duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
+            class="h-11 px-6 rounded-md bg-dark text-on-dark text-sm font-medium hover:opacity-80 transition-opacity duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent-on-dark"
         >
             {{ __('profile.add_image_close') }}
         </button>
@@ -163,10 +163,10 @@ new class extends Component {
                             alt=""
                             class="max-w-full max-h-48 rounded-md object-contain ring-1 ring-dark/10"
                         />
-                        <p class="text-xs text-dark/50">{{ __('profile.update_image_replace_hint') }}</p>
+                        <p class="text-xs text-subtle">{{ __('profile.update_image_replace_hint') }}</p>
                     @else
-                        <x-icon name="photo" class="w-10 h-10 text-dark/30"/>
-                        <p class="text-sm text-dark/60">{{ __('profile.add_image_drop') }}</p>
+                        <x-icon name="photo" class="w-10 h-10 text-caption"/>
+                        <p class="text-sm text-subtle">{{ __('profile.add_image_drop') }}</p>
                     @endif
                 </div>
             </label>
@@ -181,7 +181,7 @@ new class extends Component {
             />
         </div>
 
-        <p class="text-xs text-dark/40 text-center -mt-3">{{ __('profile.add_image_hint') }}</p>
+        <p class="text-xs text-caption text-center -mt-3">{{ __('profile.add_image_hint') }}</p>
 
         @error('photo')
             <p class="text-xs text-accent mt-1" role="alert">{{ $message }}</p>

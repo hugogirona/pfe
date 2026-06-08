@@ -3,8 +3,9 @@
 return [
 
     'supportedLocales' => [
-        'fr' => ['name' => 'French',  'script' => 'Latn', 'native' => 'français', 'regional' => 'fr_FR'],
-        'en' => ['name' => 'English', 'script' => 'Latn', 'native' => 'English',  'regional' => 'en_GB'],
+        'fr' => ['name' => 'French',  'script' => 'Latn', 'native' => 'français',   'regional' => 'fr_FR'],
+        'en' => ['name' => 'English', 'script' => 'Latn', 'native' => 'English',    'regional' => 'en_GB'],
+        'nl' => ['name' => 'Dutch',   'script' => 'Latn', 'native' => 'Nederlands', 'regional' => 'nl_NL'],
     ],
 
     'useAcceptLanguageHeader' => false,
@@ -12,7 +13,7 @@ return [
     // FR is default: '/' = français, '/en' = english (no /fr prefix)
     'hideDefaultLocaleInURL' => true,
 
-    'localesOrder' => ['fr', 'en'],
+    'localesOrder' => ['fr', 'en', 'nl'],
     'localesMapping' => [],
 
     'utf8suffix' => env('LARAVELLOCALIZATION_UTF8SUFFIX', '.UTF-8'),

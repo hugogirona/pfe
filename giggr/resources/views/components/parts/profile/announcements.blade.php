@@ -3,7 +3,7 @@
 <section aria-labelledby="announcements-heading" class="bg-white rounded-2xl border border-dark/10 shadow-sm p-6 md:p-8">
 
     <div class="flex items-center justify-between mb-6">
-        <h2 id="announcements-heading" class="font-heading text-2xl text-dark">
+        <h2 id="announcements-heading" class="font-heading text-2xl text-heading">
             {{ __('profile.announcements_title') }}
         </h2>
         @if ($isOwner)
@@ -28,7 +28,7 @@
 
     @else
 
-        <p class="text-sm text-dark/40 italic">
+        <p class="text-sm text-caption italic">
             {{ $isOwner ? __('profile.announcements_empty_owner') : __('profile.announcements_empty', ['name' => $profile->user->full_name]) }}
         </p>
     @endif

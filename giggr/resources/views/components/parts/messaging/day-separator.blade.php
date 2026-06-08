@@ -17,7 +17,10 @@
 
 <li class="flex justify-center py-3" role="separator">
     <time
+        data-local-day
+        data-today="{{ __('messaging.day_today') }}"
+        data-yesterday="{{ __('messaging.day_yesterday') }}"
         datetime="{{ $date->toIso8601String() }}"
-        class="px-3 py-1 rounded-full bg-dark/8 text-dark/55 text-[11px] font-medium tracking-wide"
+        class="px-3 py-1 rounded-full bg-dark/8 text-subtle text-[0.6875rem] font-medium tracking-wide"
     >{{ $label }}</time>
 </li>

@@ -11,7 +11,7 @@ it('renders nothing visible when the user has no unread messages', function () {
     Livewire::actingAs($alice)
         ->test('parts.layout.messaging-badge')
         ->assertSet('count', 0)
-        ->assertDontSeeHtml('bg-accent text-bg');
+        ->assertDontSeeHtml('bg-accent text-on-dark');
 });
 
 it('shows the number of conversations with unread messages on mount', function () {

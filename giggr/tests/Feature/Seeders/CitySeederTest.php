@@ -19,16 +19,14 @@ it('is idempotent — running twice does not duplicate rows', function () {
     expect(City::count())->toBe($first);
 });
 
-it('seeds Bruxelles 1000 with real coordinates and Brussel as alt name', function () {
+it('seeds Bruxelles 1000 with Brussel as alt name', function () {
     $this->seed(CitySeeder::class);
 
     $bxl = City::where('postal_code', '1000')->where('name', 'Bruxelles')->first();
 
     expect($bxl)->not->toBeNull()
         ->and($bxl->name_alt)->toBe('Brussel')
-        ->and($bxl->country)->toBe('BE')
-        ->and($bxl->latitude)->toBeGreaterThan(50.0)
-        ->and($bxl->longitude)->toBeGreaterThan(4.0);
+        ->and($bxl->country)->toBe('BE');
 });
 
 it('seeds Antwerpen 2000 with Anvers as alt name', function () {

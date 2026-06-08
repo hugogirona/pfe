@@ -1,0 +1,42 @@
+.modal-progress {
+    position: relative;
+    height: 2px;
+    overflow: hidden;
+    background: color-mix(in oklab, var(--color-accent) 12%, transparent);
+}
+.modal-progress::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    transform-origin: left center;
+    background: linear-gradient(90deg, transparent, var(--color-accent-on-dark), var(--color-accent));
+    animation: modal-progress 1.15s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+}
+
+.skeleton {
+    background: color-mix(in oklab, var(--color-dark) 9%, transparent);
+    animation: skeleton-breathe 1.6s ease-in-out infinite;
+}
+
+@keyframes modal-progress {
+    0%   { transform: translateX(-100%) scaleX(0.35); }
+    50%  { transform: translateX(15%) scaleX(0.55); }
+    100% { transform: translateX(100%) scaleX(0.35); }
+}
+
+@keyframes skeleton-breathe {
+    0%, 100% { opacity: 1; }
+    50%      { opacity: 0.45; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .modal-progress::after {
+        animation: none;
+        transform: scaleX(1);
+        opacity: 0.55;
+    }
+    .skeleton {
+        animation: none;
+        opacity: 0.7;
+    }
+}

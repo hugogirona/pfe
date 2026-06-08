@@ -17,35 +17,38 @@
             class="px-5 py-3 border-b border-dark/10 bg-danger/5 flex items-center gap-3 transition-opacity duration-200 ease-out"
             :class="confirm ? 'opacity-100' : 'opacity-0 pointer-events-none'"
         >
-            <p class="text-sm text-dark/80 flex-1 min-w-0">
+            <p class="text-sm text-subtle flex-1 min-w-0">
                 <span x-show="confirm === 'delete'">{{ __('messaging.delete_confirm') }}</span>
                 <span x-show="confirm === 'block'">{{ __('profile.block_confirm', ['name' => $otherName]) }}</span>
             </p>
-            <button
+            <x-cta
+                variant="simple"
+                size="sm"
                 type="button"
                 @click="confirm = null"
-                class="px-3 py-1.5 rounded-md text-xs font-medium text-dark/60 hover:text-dark hover:bg-dark/5 transition-colors duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
             >
                 {{ __('profile.cancel') }}
-            </button>
-            <button
+            </x-cta>
+            <x-cta
+                variant="danger-solid"
+                size="sm"
                 type="button"
                 x-show="confirm === 'delete'"
                 wire:click="deleteConversation({{ $conversationId }})"
                 @click="confirm = null"
-                class="px-3 py-1.5 rounded-md text-xs font-medium bg-danger text-bg hover:opacity-90 transition-opacity duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
             >
                 {{ __('messaging.delete') }}
-            </button>
-            <button
+            </x-cta>
+            <x-cta
+                variant="danger-solid"
+                size="sm"
                 type="button"
                 x-show="confirm === 'block'"
                 wire:click="blockCorrespondent"
                 @click="confirm = null"
-                class="px-3 py-1.5 rounded-md text-xs font-medium bg-danger text-bg hover:opacity-90 transition-opacity duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
             >
                 {{ __('profile.block') }}
-            </button>
+            </x-cta>
         </div>
     </div>
 </div>

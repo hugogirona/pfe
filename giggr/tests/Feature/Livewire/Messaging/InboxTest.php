@@ -283,7 +283,7 @@ it('incomingMessage refreshes the conversation list with fresh unread counts', f
 
     $component = Livewire::actingAs($alice)
         ->test('parts.messaging.inbox')
-        ->assertDontSeeHtml('bg-accent text-bg text-[10px]');
+        ->assertDontSeeHtml('bg-accent text-on-dark text-[0.625rem]');
 
     Message::factory()->for($convo)->for($bob, 'sender')->create([
         'body' => 'Live message',
@@ -293,7 +293,7 @@ it('incomingMessage refreshes the conversation list with fresh unread counts', f
     $component
         ->call('incomingMessage', ['conversation_id' => $convo->id])
         ->assertSee('Live message')
-        ->assertSeeHtml('bg-accent text-bg text-[10px]');
+        ->assertSeeHtml('bg-accent text-on-dark text-[0.625rem]');
 });
 
 it('shows the unread count in the conversation row when messages are unread', function () {
@@ -318,7 +318,7 @@ it('does not show an unread count when the conversation is fully read', function
 
     Livewire::actingAs($alice)
         ->test('parts.messaging.inbox')
-        ->assertDontSeeHtml('bg-accent text-bg text-[10px]');
+        ->assertDontSeeHtml('bg-accent text-on-dark text-[0.625rem]');
 });
 
 it('renders the time HH:MM on each message bubble in the thread', function () {

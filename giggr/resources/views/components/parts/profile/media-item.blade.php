@@ -33,12 +33,12 @@
     @unless ($canEdit) aria-label="{{ $isImage ? __('profile.photo_alt', ['name' => $musicianName]) : __('profile.video_play') }}" @endunless
 >
     @if ($isProcessing)
-        <div class="absolute inset-0 flex items-center justify-center bg-dark/5 animate-pulse" aria-hidden="true">
-            <svg class="w-8 h-8 text-dark/30 animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+        <span class="absolute inset-0 flex items-center justify-center bg-dark/5 animate-pulse" aria-hidden="true">
+            <svg class="w-8 h-8 text-caption animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                 <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
             </svg>
-        </div>
+        </span>
         <span class="sr-only">{{ __('profile.media_processing') }}</span>
     @elseif ($isImage)
         <img
@@ -47,19 +47,19 @@
             class="absolute inset-0 w-full h-full object-cover transition-transform duration-300 motion-safe:group-hover:scale-105"
             loading="lazy"
         />
-        <div class="absolute inset-0 bg-dark/0 group-hover:bg-dark/15 transition-colors duration-200" aria-hidden="true"></div>
+        <span class="absolute inset-0 bg-dark/0 group-hover:bg-dark/15 transition-colors duration-200" aria-hidden="true"></span>
     @else
-        <div class="absolute inset-0 bg-dark" aria-hidden="true"></div>
+        <span class="absolute inset-0 bg-dark" aria-hidden="true"></span>
         <img
             src="{{ $media->youtube_thumbnail_url }}"
             alt=""
             class="absolute inset-0 w-full h-full object-cover transition-transform duration-300 motion-safe:group-hover:scale-105"
             loading="lazy"
         />
-        <div class="absolute inset-0 bg-dark/25 group-hover:bg-dark/40 transition-colors duration-200" aria-hidden="true"></div>
+        <span class="absolute inset-0 bg-dark/25 group-hover:bg-dark/40 transition-colors duration-200" aria-hidden="true"></span>
         <span class="absolute inset-0 flex items-center justify-center" aria-hidden="true">
             <span class="w-14 h-14 rounded-full bg-bg/90 backdrop-blur-sm flex items-center justify-center shadow-lg group-hover:bg-bg group-hover:scale-110 transition-all duration-200 motion-safe:transition-transform">
-                <x-icon name="play" class="w-5 h-5 text-dark ml-0.5"/>
+                <x-icon name="play" class="w-5 h-5 text-body ml-0.5"/>
             </span>
         </span>
     @endif
@@ -69,7 +69,7 @@
             x-show="editMode"
             x-cloak
             x-transition.opacity
-            class="absolute top-2 right-2 w-9 h-9 flex items-center justify-center rounded-full bg-accent text-bg shadow-md"
+            class="absolute top-2 right-2 w-9 h-9 flex items-center justify-center rounded-full bg-accent text-on-dark shadow-md"
             aria-hidden="true"
         >
             <x-icon name="pencil-square" class="w-4 h-4"/>

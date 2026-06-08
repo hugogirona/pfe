@@ -17,10 +17,10 @@
     class="{{ $sectionClass }}"
 >
 
-    <article class="flex items-center justify-between mb-3">
-        <h3 class="text-[11px] font-semibold uppercase tracking-widest text-dark/35">
+    <div class="flex items-center justify-between mb-3">
+        <h2 class="text-[0.6875rem] font-semibold uppercase tracking-widest text-caption">
             {{ __('profile.genres_label') }}
-        </h3>
+        </h2>
         @if ($isOwner)
             <x-cta
                 variant="simple"
@@ -32,7 +32,7 @@
                 <x-icon name="pencil-square" class="w-3.5 h-3.5" />
             </x-cta>
         @endif
-    </article>
+    </div>
 
     @if ($isOwner)
         <div class="grid motion-safe:transition-[grid-template-rows] motion-safe:duration-200 motion-safe:ease-out"
@@ -66,7 +66,7 @@
                         @endforeach
                     </ul>
                 @else
-                    <p class="text-xs text-dark/30 italic">{{ __('profile.genres_empty_owner') }}</p>
+                    <p class="text-xs text-caption italic">{{ __('profile.genres_empty_owner') }}</p>
                 @endif
             </div>
         </div>

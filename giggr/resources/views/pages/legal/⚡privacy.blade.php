@@ -21,7 +21,7 @@ new #[Layout('layouts.app')] class extends Component
 
     <div class="max-w-3xl mx-auto px-6 py-16 md:py-24">
 
-        <p class="text-sm text-dark/45 mb-12">
+        <p class="text-sm text-caption mb-12">
             {{ __('privacy.last_updated', ['date' => now()->translatedFormat('d F Y')]) }}
         </p>
 

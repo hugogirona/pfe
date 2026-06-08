@@ -95,6 +95,8 @@ class CitySeeder extends Seeder
             }
 
             [$postal, $name, $lng, $lat] = $row;
+            // The dataset's coordinate columns are no longer stored, but a row
+            // with non-numeric coords is a header or malformed line we skip.
             if (! is_numeric($lat) || ! is_numeric($lng)) {
                 continue;
             }
@@ -110,8 +112,6 @@ class CitySeeder extends Seeder
                 'country' => 'BE',
                 'postal_code' => $postal,
                 'searchable' => City::makeSearchable($name, $alt, $postal),
-                'latitude' => (float) $lat,
-                'longitude' => (float) $lng,
                 'created_at' => $now,
                 'updated_at' => $now,
             ];
@@ -137,7 +137,7 @@ class CitySeeder extends Seeder
         City::upsert(
             $batch,
             ['slug'],
-            ['name', 'name_alt', 'country', 'postal_code', 'searchable', 'latitude', 'longitude', 'updated_at'],
+            ['name', 'name_alt', 'country', 'postal_code', 'searchable', 'updated_at'],
         );
     }
 
