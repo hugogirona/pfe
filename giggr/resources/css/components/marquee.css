@@ -1,0 +1,27 @@
+@keyframes marquee {
+    from { transform: translateX(0); }
+    to   { transform: translateX(calc(-100% / 3)); }
+}
+
+@layer utilities {
+    .animate-marquee {
+        animation: marquee 30s linear infinite;
+        will-change: transform;
+    }
+
+    .marquee-mask {
+        mask-image: linear-gradient(
+            to right,
+            transparent 0%,
+            black 12%,
+            black 88%,
+            transparent 100%
+        );
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .animate-marquee {
+        animation: none !important;
+    }
+}

@@ -1,7 +1,19 @@
 @import 'tailwindcss';
+
+/* Foundations */
 @import './fonts.css';
 @import './colors.css';
-@import './custom.css';
+@import './base.css';
+
+/* Components */
+@import './components/feature-stack.css';
+@import './components/marquee.css';
+@import './components/typing-indicator.css';
+@import './components/range-slider.css';
+@import './components/hero-underline.css';
+@import './components/loading.css';
+
+/* Icon spritemap */
 @import './spritemap.css';
 
 @source '../**/*.blade.php';
