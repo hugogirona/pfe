@@ -4,6 +4,10 @@ return [
     'title' => 'Ontdekken',
     'subtitle' => 'Profielen en advertenties bij jou in de buurt.',
 
+    'search_placeholder' => 'Zoek een muzikant, een aankondiging, een instrument…',
+    'search_label' => 'Zoeken',
+    'search_clear' => 'Zoekopdracht wissen',
+
     // Tabs
     'tab_profiles' => 'Profielen',
     'tab_announcements' => 'Advertenties',

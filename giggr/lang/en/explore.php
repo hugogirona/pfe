@@ -4,6 +4,10 @@ return [
     'title' => 'Explore',
     'subtitle' => 'Profiles and listings near you.',
 
+    'search_placeholder' => 'Search a musician, a listing, an instrument…',
+    'search_label' => 'Search',
+    'search_clear' => 'Clear search',
+
     // Tabs
     'tab_profiles' => 'Profiles',
     'tab_announcements' => 'Listings',

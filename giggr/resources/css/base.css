@@ -8,6 +8,13 @@
     }
 }
 
+/* Hide the native WebKit clear affordance on search inputs; a styled clear
+   button is provided by the search-bar component instead. */
+input[type='search']::-webkit-search-cancel-button {
+    -webkit-appearance: none;
+    appearance: none;
+}
+
 @layer utilities {
     .scrollbar-none {
         scrollbar-width: none;

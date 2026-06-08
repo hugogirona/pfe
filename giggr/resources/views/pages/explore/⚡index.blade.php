@@ -8,6 +8,7 @@ use Illuminate\Pagination\LengthAwarePaginator;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\On;
+use Livewire\Attributes\Url;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -16,6 +17,9 @@ class extends Component {
     use WithPagination;
 
     public string $activeTab = 'profiles';
+
+    #[Url(as: 'q', except: '')]
+    public string $search = '';
 
     public ?int $filterCityId = null;
     public int $filterRadius = 0;
@@ -27,6 +31,23 @@ class extends Component {
     public function mount(?string $tab = null): void
     {
         $this->activeTab = $tab === __('explore.tab_announcements_slug') ? 'announcements' : 'profiles';
+    }
+
+    public function updatedSearch(): void
+    {
+        $this->resetPage('profiles-page');
+        $this->resetPage('announcements-page');
+    }
+
+    /**
+     * The search query split into individual words; every word must match
+     * (AND), so "marie sax" narrows to results matching both terms.
+     *
+     * @return list<string>
+     */
+    private function searchTerms(): array
+    {
+        return array_values(array_filter(preg_split('/\s+/', trim($this->search))));
     }
 
     #[Computed]
@@ -64,6 +85,17 @@ class extends Component {
             ->when($this->filterGenres, fn($q) => $q->whereHas(
                 'genres', fn($q2) => $q2->whereIn('name', $this->filterGenres)
             ))
+            ->when($this->searchTerms(), function ($q, $terms) {
+                foreach ($terms as $term) {
+                    $like = '%'.$term.'%';
+                    $q->where(fn($q2) => $q2
+                        ->whereHas('user', fn($u) => $u
+                            ->where('first_name', 'like', $like)
+                            ->orWhere('last_name', 'like', $like))
+                        ->orWhereHas('instruments', fn($i) => $i->where('name', 'like', $like))
+                        ->orWhereHas('genres', fn($g) => $g->where('name', 'like', $like)));
+                }
+            })
             ->when($followingActive, fn($q) => $q->whereIn('id', $this->followedProfileIdsForFilter))
             ->orderByDesc('profiles.created_at')
             ->orderByDesc('profiles.id')
@@ -93,6 +125,15 @@ class extends Component {
                 'genres', fn($q2) => $q2->whereIn('name', $this->filterGenres)
             ))
             ->when($this->filterTypes, fn($q) => $q->whereIn('type', $this->filterTypes))
+            ->when($this->searchTerms(), function ($q, $terms) {
+                foreach ($terms as $term) {
+                    $like = '%'.$term.'%';
+                    $q->where(fn($q2) => $q2
+                        ->where('title', 'like', $like)
+                        ->orWhereHas('instruments', fn($i) => $i->where('name', 'like', $like))
+                        ->orWhereHas('genres', fn($g) => $g->where('name', 'like', $like)));
+                }
+            })
             ->when($followingActive, fn($q) => $q->whereHas(
                 'user.profile', fn($q2) => $q2->whereIn('id', $this->followedProfileIdsForFilter)
             ))
@@ -181,6 +222,13 @@ class extends Component {
     <livewire:parts.explore.filter-drawer/>
 
     <div class="max-w-6xl mx-auto px-6 py-8 space-y-6">
+
+        <x-search-bar
+            wire:model.live.debounce.300ms="search"
+            name="explore-search"
+            :placeholder="__('explore.search_placeholder')"
+            :label="__('explore.search_label')"
+        />
 
         <x-parts.explore.actions
             :active-tab="$activeTab"

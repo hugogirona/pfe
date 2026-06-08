@@ -4,6 +4,10 @@ return [
     'title' => 'Explorer',
     'subtitle' => 'Profils et annonces près de chez vous.',
 
+    'search_placeholder' => 'Rechercher un musicien, une annonce, un instrument…',
+    'search_label' => 'Rechercher',
+    'search_clear' => 'Effacer la recherche',
+
     // Tabs
     'tab_profiles' => 'Profils',
     'tab_announcements' => 'Annonces',
