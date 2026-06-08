@@ -42,13 +42,13 @@
 
         </div>
 
-         <div class="hidden md:flex md:w-[42%] bg-dark/5 flex-col min-h-screen top-0 relative" aria-hidden="true">
+         <div class="hidden md:flex md:w-[42%] bg-dark/5 flex-col min-h-screen top-0 relative">
             <div class="absolute top-0 left-0 p-10">
                 <a href="{{ route('home') }}" aria-label="Giggr.">
                     <x-logo class="h-7 w-auto text-body" />
                 </a>
             </div>
-            <div class="flex-1 flex flex-col px-8 md:px-14 lg:px-16 pt-[22.5vh] pb-10">
+            <div class="flex-1 flex flex-col px-8 md:px-14 lg:px-16 pt-[22.5vh] pb-10" aria-hidden="true">
                 <div class="text-right">
                     <section>
                         <h2 class="text-accent text-sm font-medium uppercase tracking-widest mb-5">{{ __('auth.panel_eyebrow') }}</h2>
