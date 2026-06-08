@@ -1,6 +1,7 @@
 @props(['title' => null, 'description' => null])
 
 @php
+    use App\Support\LocalizedUrl;
     use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
     $siteName = config('app.name');
@@ -15,10 +16,9 @@
     $keywords = __('seo.keywords');
     $image = asset('images/summary_image.jpg');
 
-    $url = url()->current();
     $locale = app()->getLocale();
     $locales = LaravelLocalization::getSupportedLanguagesKeys();
-    $canonical = LaravelLocalization::getLocalizedURL($locale, $url);
+    $canonical = LocalizedUrl::for($locale);
     $regional = fn (string $l) => config("laravellocalization.supportedLocales.{$l}.regional", $l);
 @endphp
 
@@ -27,9 +27,9 @@
 <link rel="canonical" href="{{ $canonical }}">
 
 @foreach ($locales as $alt)
-    <link rel="alternate" hreflang="{{ $alt }}" href="{{ LaravelLocalization::getLocalizedURL($alt, $url) }}">
+    <link rel="alternate" hreflang="{{ $alt }}" href="{{ LocalizedUrl::for($alt) }}">
 @endforeach
-<link rel="alternate" hreflang="x-default" href="{{ LaravelLocalization::getLocalizedURL(LaravelLocalization::getDefaultLocale(), $url) }}">
+<link rel="alternate" hreflang="x-default" href="{{ LocalizedUrl::for(LaravelLocalization::getDefaultLocale()) }}">
 
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="{{ $siteName }}">

@@ -17,3 +17,12 @@ it('renders SEO meta tags in the head of public pages', function () {
         ->toContain('property="og:locale"')
         ->toContain('name="twitter:card"');
 });
+
+it('localizes the explore tab slug in hreflang alternates', function () {
+    $html = $this->get('/explorer/'.__('explore.tab_announcements_slug'))->assertOk()->getContent();
+
+    expect($html)
+        ->toContain('hreflang="en" href="'.url('/en/explore/'.__('explore.tab_announcements_slug', [], 'en')).'"')
+        ->toContain('hreflang="nl" href="'.url('/nl/ontdekken/'.__('explore.tab_announcements_slug', [], 'nl')).'"')
+        ->not->toContain('/explore/'.__('explore.tab_announcements_slug'));
+});
