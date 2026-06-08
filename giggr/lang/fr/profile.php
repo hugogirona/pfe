@@ -15,6 +15,11 @@ return [
     'stat_ads' => 'annonce active|annonces actives',
     'avatar_alt' => 'Photo de profil de :name',
 
+    // Liens musicaux (à venir)
+    'music_links_label' => 'Liens musicaux',
+    'music_links_soon' => 'Bientôt disponible',
+    'music_links_add' => 'Ajouter Spotify, SoundCloud…',
+
     // Owner actions
     'save' => 'Enregistrer',
     'cancel' => 'Annuler',

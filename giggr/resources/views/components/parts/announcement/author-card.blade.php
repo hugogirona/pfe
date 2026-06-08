@@ -59,6 +59,8 @@
         </div>
     @endif
 
+    <x-parts.profile.music-links-soon class="border-b border-dark/[0.07]" />
+
     {{-- Actions --}}
     <div class="px-6 py-5 space-y-2.5">
         @if ($isOwner)

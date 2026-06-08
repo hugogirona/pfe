@@ -15,6 +15,11 @@ return [
     'stat_ads' => 'actieve advertentie|actieve advertenties',
     'avatar_alt' => 'Profielfoto van :name',
 
+    // Muzieklinks (binnenkort)
+    'music_links_label' => 'Muzieklinks',
+    'music_links_soon' => 'Binnenkort beschikbaar',
+    'music_links_add' => 'Spotify, SoundCloud toevoegen…',
+
     // Owner actions
     'save' => 'Opslaan',
     'cancel' => 'Annuleren',
