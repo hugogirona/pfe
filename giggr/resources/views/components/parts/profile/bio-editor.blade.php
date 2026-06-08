@@ -51,14 +51,14 @@
              :class="!editing ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'">
             <div class="overflow-hidden">
                 @if ($bio)
-                    <p class="text-subtle leading-relaxed text-[15px]" itemprop="description">{{ $bio }}</p>
+                    <p class="text-subtle leading-relaxed text-[0.9375rem]" itemprop="description">{{ $bio }}</p>
                 @else
                     <p class="text-sm text-caption italic">{{ __('profile.add_bio_empty') }}</p>
                 @endif
             </div>
         </div>
     @else
-        <p class="text-subtle leading-relaxed text-[15px]" itemprop="description">{{ $bio }}</p>
+        <p class="text-subtle leading-relaxed text-[0.9375rem]" itemprop="description">{{ $bio }}</p>
     @endif
 
 </div>

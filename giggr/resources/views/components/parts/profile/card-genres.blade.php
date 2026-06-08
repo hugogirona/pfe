@@ -18,7 +18,7 @@
 >
 
     <div class="flex items-center justify-between mb-3">
-        <h2 class="text-[11px] font-semibold uppercase tracking-widest text-caption">
+        <h2 class="text-[0.6875rem] font-semibold uppercase tracking-widest text-caption">
             {{ __('profile.genres_label') }}
         </h2>
         @if ($isOwner)

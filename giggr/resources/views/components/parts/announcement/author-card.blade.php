@@ -13,7 +13,7 @@
 
     {{-- Header label --}}
     <div class="px-6 pt-6 pb-4 border-b border-dark/[0.07]">
-        <p class="text-[11px] font-semibold uppercase tracking-widest text-caption">
+        <p class="text-[0.6875rem] font-semibold uppercase tracking-widest text-caption">
             {{ __('announcement.author_title') }}
         </p>
     </div>

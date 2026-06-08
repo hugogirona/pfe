@@ -16,7 +16,7 @@
 
             @if ($instruments->isNotEmpty())
                 <div>
-                    <p class="text-[11px] font-semibold uppercase tracking-widest text-caption mb-2.5">
+                    <p class="text-[0.6875rem] font-semibold uppercase tracking-widest text-caption mb-2.5">
                         <x-icon name="music-note" class="w-3 h-3 inline mr-1" />
                         Instruments
                     </p>
@@ -30,7 +30,7 @@
 
             @if ($genres->isNotEmpty())
                 <div>
-                    <p class="text-[11px] font-semibold uppercase tracking-widest text-caption mb-2.5">Genres</p>
+                    <p class="text-[0.6875rem] font-semibold uppercase tracking-widest text-caption mb-2.5">Genres</p>
                     <div class="flex flex-wrap gap-2">
                         @foreach ($genres as $genre)
                             <x-pill variant="genre" size="lg">{{ $genre }}</x-pill>

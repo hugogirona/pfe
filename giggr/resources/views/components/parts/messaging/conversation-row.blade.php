@@ -29,7 +29,7 @@
                 <time
                     datetime="{{ $conversation->last_message_at?->toIso8601String() }}"
                     @class([
-                        'ml-auto text-[11px] shrink-0',
+                        'ml-auto text-[0.6875rem] shrink-0',
                         'text-accent font-semibold' => $hasUnread,
                         'text-caption' => ! $hasUnread,
                     ])
@@ -47,7 +47,7 @@
             @if ($hasUnread)
                 <span
                     aria-hidden="true"
-                    class="shrink-0 min-w-[18px] h-[18px] px-1 rounded-full bg-accent text-on-dark text-[10px] font-bold flex items-center justify-center leading-none"
+                    class="shrink-0 min-w-[18px] h-[18px] px-1 rounded-full bg-accent text-on-dark text-[0.625rem] font-bold flex items-center justify-center leading-none"
                 >{{ $unread > 99 ? '99+' : $unread }}</span>
             @endif
         </div>

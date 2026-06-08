@@ -36,7 +36,7 @@ new class extends Component {
     @if ($count > 0)
         <span
             aria-hidden="true"
-            class="absolute -top-0.5 -right-0.5 min-w-4.5 h-4.5 px-1 rounded-full bg-accent text-on-dark text-[10px] font-bold flex items-center justify-center leading-none"
+            class="absolute -top-0.5 -right-0.5 min-w-4.5 h-4.5 px-1 rounded-full bg-accent text-on-dark text-[0.625rem] font-bold flex items-center justify-center leading-none"
         >{{ $count > 99 ? '99+' : $count }}</span>
     @endif
 </button>

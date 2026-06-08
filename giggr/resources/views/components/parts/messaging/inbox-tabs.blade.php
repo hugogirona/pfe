@@ -29,7 +29,7 @@
             @if ($count > 0)
                 <span
                     aria-hidden="true"
-                    class="inline-flex items-center justify-center min-w-5 h-5 px-1.5 rounded-full bg-accent text-on-dark text-[11px] font-semibold leading-none"
+                    class="inline-flex items-center justify-center min-w-5 h-5 px-1.5 rounded-full bg-accent text-on-dark text-[0.6875rem] font-semibold leading-none"
                 >{{ $count > 99 ? '99+' : $count }}</span>
             @endif
             @if ($activeTab === $tab)

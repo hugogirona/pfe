@@ -11,7 +11,7 @@
     <p class="m-0 whitespace-pre-wrap wrap-break-word">{{ $message->body }}</p>
 
     <footer @class([
-        'mt-1 flex items-center gap-1 text-[10px] leading-none',
+        'mt-1 flex items-center gap-1 text-[0.625rem] leading-none',
         'justify-end text-on-dark-subtle' => $isMine,
         'justify-start text-caption' => ! $isMine,
     ])>
