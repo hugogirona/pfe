@@ -69,10 +69,10 @@ new class extends Component {
                 <ul
                     x-ref="track"
                     @scroll.passive="onScroll()"
-                    class="flex gap-6 overflow-x-auto snap-x snap-mandatory scroll-smooth scrollbar-none overscroll-x-contain py-2 list-none m-0 p-0"
+                    class="flex gap-6 overflow-x-auto snap-x snap-mandatory scroll-smooth scrollbar-none overscroll-x-contain py-2 list-none m-0 p-0 scroll-pl-[7.5%] sm:scroll-pl-0"
                 >
                     @foreach ($items as $item)
-                        <li id="{{ $sliderId }}-{{ $loop->index }}" class="{{ $cardClass }} scroll-mt-24">
+                        <li id="{{ $sliderId }}-{{ $loop->index }}" @class([$cardClass, 'scroll-mt-24', 'ml-[7.5%] sm:ml-0' => $loop->first, 'mr-[7.5%] sm:mr-0' => $loop->last])>
                             @if ($type === 'announcements')
                                 <x-parts.explore.announcement-card :announcement="$item" />
                             @else
