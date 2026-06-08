@@ -1,6 +1,6 @@
 <?php
 
-it("permet à un visiteur d'atteindre la page de connexion depuis l'en-tête", function () {
+it('lets a visitor reach the login page from the header', function () {
     $page = visit('/');
 
     $page->assertSee(__('nav.sign_in'))
@@ -9,13 +9,13 @@ it("permet à un visiteur d'atteindre la page de connexion depuis l'en-tête", f
         ->assertSee(__('auth.login_heading'));
 });
 
-it('redirige un visiteur vers la connexion sur une route protégée', function () {
+it('redirects a visitor to login on a protected route', function () {
     $page = visit(path('settings.account'));
 
     $page->assertPathIs(path('login'));
 });
 
-it('ouvre le menu mobile et révèle les liens de navigation', function () {
+it('opens the mobile menu and reveals the navigation links', function () {
     $page = visit('/')->on()->mobile();
 
     $page->click('[aria-label="'.__('nav.aria_menu').'"]')

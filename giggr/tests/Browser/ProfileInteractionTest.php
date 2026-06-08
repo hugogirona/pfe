@@ -2,7 +2,7 @@
 
 use App\Models\User;
 
-it('permet à un membre connecté de suivre un autre musicien', function () {
+it('lets a logged-in member follow another musician', function () {
     $viewer = User::factory()->create();
     $target = User::factory()->withProfile()->create();
 

@@ -1,6 +1,6 @@
 <?php
 
-it('déploie une réponse de la FAQ au clic (accordéon Alpine)', function () {
+it('expands a FAQ answer on click (Alpine accordion)', function () {
     $page = visit(path('contact'));
 
     $page->assertSee(__('contact.faq_q2'))
@@ -8,7 +8,7 @@ it('déploie une réponse de la FAQ au clic (accordéon Alpine)', function () {
         ->assertSee(__('contact.faq_a2'));
 });
 
-it('affiche le formulaire de contact avec ses champs', function () {
+it('shows the contact form with its fields', function () {
     $page = visit(path('contact'));
 
     $page->assertSee(__('contact.form_title'))

@@ -2,7 +2,7 @@
 
 use App\Models\User;
 
-it('affiche le formulaire de connexion', function () {
+it('shows the login form', function () {
     $page = visit(path('login'));
 
     $page->assertSee(__('auth.login_heading'))
@@ -11,7 +11,7 @@ it('affiche le formulaire de connexion', function () {
         ->assertSee(__('auth.login_submit'));
 });
 
-it('affiche une erreur quand les identifiants sont invalides', function () {
+it('shows an error when the credentials are invalid', function () {
     $page = visit(path('login'));
 
     $page->fill('email', 'inconnu@exemple.com')
@@ -20,7 +20,7 @@ it('affiche une erreur quand les identifiants sont invalides', function () {
         ->assertSee(__('auth.failed'));
 });
 
-it('connecte un utilisateur avec des identifiants valides', function () {
+it('logs a user in with valid credentials', function () {
     User::factory()->create([
         'email' => 'marie@exemple.com',
     ]);
@@ -33,7 +33,7 @@ it('connecte un utilisateur avec des identifiants valides', function () {
         ->assertPathContains('explorer');
 });
 
-it("affiche le formulaire d'inscription avec tous ses champs", function () {
+it('shows the registration form with all its fields', function () {
     $page = visit(path('register'));
 
     $page->assertSee(__('auth.register_heading'))

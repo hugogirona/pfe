@@ -1,8 +1,8 @@
 <?php
 
-it("bascule l'interface du français vers l'anglais via le sélecteur de langue", function () {
+it('switches the interface from French to English via the language selector', function () {
     $page = visit('/');
 
-    $page->click('a[hreflang="en"]')
+    $page->click('header a[hreflang="en"]')
         ->assertPathBeginsWith('/en');
 });

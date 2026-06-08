@@ -1,6 +1,6 @@
 <?php
 
-it('affiche le hero et ne déclenche aucune erreur JavaScript', function () {
+it('renders the hero without triggering any JavaScript errors', function () {
     $page = visit('/');
 
     $page->assertSee(__('home.welcome'))
@@ -9,7 +9,7 @@ it('affiche le hero et ne déclenche aucune erreur JavaScript', function () {
         ->assertNoJavaScriptErrors();
 });
 
-it("ne présente aucun problème d'accessibilité sérieux sur l'accueil", function () {
+it('has no serious accessibility issues on the home page', function () {
     $page = visit('/');
 
     $page->assertNoAccessibilityIssues();

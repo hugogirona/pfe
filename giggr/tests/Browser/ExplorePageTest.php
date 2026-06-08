@@ -1,6 +1,6 @@
 <?php
 
-it("bascule entre les onglets Profils et Annonces via l'URL", function () {
+it('switches between the Profiles and Announcements tabs via the URL', function () {
     $page = visit(path('explore'));
 
     $page->assertSee(__('explore.tab_profiles'))
@@ -9,7 +9,7 @@ it("bascule entre les onglets Profils et Annonces via l'URL", function () {
         ->assertPathContains(__('explore.tab_announcements_slug'));
 });
 
-it('ouvre le tiroir de filtres au clic', function () {
+it('opens the filter drawer on click', function () {
     $page = visit(path('explore'))->on()->mobile();
 
     $page->click('button[aria-haspopup="dialog"]')
