@@ -13,7 +13,7 @@
         aria-selected="{{ $activeTab === 'profiles' ? 'true' : 'false' }}"
     >
         {{ __('explore.tab_profiles') }}
-        <span class="ml-1.5 text-xs opacity-60 tabular-nums" aria-hidden="true">({{ $profilesCount }})</span>
+        <span class="ml-1.5 text-xs tabular-nums" aria-hidden="true">({{ $profilesCount }})</span>
     </a>
 
     <a
@@ -28,6 +28,6 @@
         aria-selected="{{ $activeTab === 'announcements' ? 'true' : 'false' }}"
     >
         {{ __('explore.tab_announcements') }}
-        <span class="ml-1.5 text-xs opacity-60 tabular-nums" aria-hidden="true">({{ $announcementsCount }})</span>
+        <span class="ml-1.5 text-xs tabular-nums" aria-hidden="true">({{ $announcementsCount }})</span>
     </a>
 </div>
