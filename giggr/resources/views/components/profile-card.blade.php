@@ -14,7 +14,7 @@
     $extraGenres       = max(0, $profile->genres->count() - $pillLimit);
 @endphp
 
-<div class="relative" itemscope itemtype="https://schema.org/Person">
+<div {{ $attributes->class('relative') }} itemscope itemtype="https://schema.org/Person">
     <link itemprop="url" href="{{ $url }}">
     <a
         href="{{ $url }}"

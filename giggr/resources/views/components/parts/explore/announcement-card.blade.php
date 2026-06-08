@@ -9,7 +9,7 @@
     $extraGenres       = max(0, $announcement->genres->count() - $pillLimit);
 @endphp
 
-<div class="relative h-full" itemscope itemtype="https://schema.org/Event">
+<div {{ $attributes->class('relative h-full') }} itemscope itemtype="https://schema.org/Event">
     <link itemprop="url" href="{{ route('announcement', ['id' => $announcement->id]) }}">
     @if ($isOwner)
         <x-cta

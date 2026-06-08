@@ -47,7 +47,11 @@ class extends Component {
      */
     private function searchTerms(): array
     {
-        return array_values(array_filter(preg_split('/\s+/', trim($this->search))));
+        return $this->search
+                |> trim(...)
+                |> (fn($x) => preg_split('/\s+/', $x))
+                |> array_filter(...)
+                |> array_values(...);
     }
 
     #[Computed]
@@ -242,7 +246,7 @@ class extends Component {
                 <h2 class="sr-only">{{ __('explore.tab_profiles') }}</h2>
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 items-start">
                     @foreach ($this->filteredProfiles as $profile)
-                        <x-profile-card :profile="$profile" :followed-profile-ids="$this->followedProfileIds"/>
+                        <x-profile-card :wire:key="'profile-'.$profile->id" :profile="$profile" :followed-profile-ids="$this->followedProfileIds"/>
                     @endforeach
                 </div>
                 @if ($this->filteredProfiles->isEmpty())
@@ -258,7 +262,7 @@ class extends Component {
                 <h2 class="sr-only">{{ __('explore.tab_announcements') }}</h2>
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                     @foreach ($this->filteredAnnouncements as $announcement)
-                        <x-parts.explore.announcement-card :announcement="$announcement"/>
+                        <x-parts.explore.announcement-card :wire:key="'announcement-'.$announcement->id" :announcement="$announcement"/>
                     @endforeach
                 </div>
                 @if ($this->filteredAnnouncements->isEmpty())
