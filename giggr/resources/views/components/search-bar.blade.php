@@ -36,7 +36,7 @@
         @blur="focused = false"
         @keydown.escape="value = ''; $el.blur()"
         {{ $attributes->except('class') }}
-        class="w-full pl-10 pr-12 py-2.5 text-base bg-bg border border-dark/15 rounded-[6px] text-body placeholder:text-placeholder focus:outline-none focus:ring-1 focus:ring-accent transition-colors duration-150"
+        class="w-full pl-10 pr-12 py-2.5 text-base bg-bg border border-dark/15 rounded-md text-body placeholder:text-placeholder focus:outline-none focus:ring-1 focus:ring-accent transition-colors duration-150"
     />
 
     <div class="absolute inset-y-0 right-2 flex items-center">

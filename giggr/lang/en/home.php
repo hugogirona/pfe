@@ -7,7 +7,7 @@ return [
     'hero_title_share' => 'shared',
     'hero_subtitle' => 'Discover music profiles near you. Form your band, organise jam sessions and share your passion.',
     'hero_cta' => 'Browse listings',
-    'search_placeholder' => 'Search for a profile or instrument...',
+    'search_placeholder' => 'Search',
 
     // Partners
     'partners_title' => 'They trust us',

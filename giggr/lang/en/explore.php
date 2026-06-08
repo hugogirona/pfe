@@ -4,7 +4,7 @@ return [
     'title' => 'Explore',
     'subtitle' => 'Profiles and listings near you.',
 
-    'search_placeholder' => 'Search a musician, a listing, an instrument…',
+    'search_placeholder' => 'Search',
     'search_label' => 'Search',
     'search_clear' => 'Clear search',
 

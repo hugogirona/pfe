@@ -7,7 +7,7 @@ return [
     'hero_title_share' => 'deelt',
     'hero_subtitle' => 'Ontdek muziekprofielen bij jou in de buurt. Vorm je band, organiseer jamsessies en deel je passie.',
     'hero_cta' => 'Bekijk de advertenties',
-    'search_placeholder' => 'Zoek een profiel of instrument...',
+    'search_placeholder' => 'Zoek',
 
     // Partners
     'partners_title' => 'Zij vertrouwen ons',

@@ -7,7 +7,7 @@ return [
     'hero_title_share' => 'partage',
     'hero_subtitle' => 'Découvre les profils musicaux près de chez toi. Forme ton groupe, organise des jam sessions et partage ta passion.',
     'hero_cta' => 'Voir les annonces',
-    'search_placeholder' => 'Recherchez un profil ou un instrument...',
+    'search_placeholder' => 'Recherchez',
 
     // Partners
     'partners_title' => 'Ils nous font confiance',
