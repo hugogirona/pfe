@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enums\AnnouncementStatus;
 use App\Enums\AnnouncementType;
+use App\Models\Concerns\Searchable;
 use Database\Factories\AnnouncementFactory;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
@@ -16,7 +17,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Announcement extends Model
 {
     /** @use HasFactory<AnnouncementFactory> */
-    use HasFactory, SoftDeletes;
+    use HasFactory, Searchable, SoftDeletes;
 
     protected $fillable = [
         'user_id',
@@ -34,6 +35,18 @@ class Announcement extends Model
             'type' => AnnouncementType::class,
             'status' => AnnouncementStatus::class,
             'expires_at' => 'datetime',
+        ];
+    }
+
+    /**
+     * @return array<int|string, string|list<string>>
+     */
+    protected function searchable(): array
+    {
+        return [
+            'title',
+            'instruments' => ['name'],
+            'genres' => ['name'],
         ];
     }
 
