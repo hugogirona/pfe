@@ -14,6 +14,21 @@ it('lists the new-follower notifications', function () {
         ->assertSee($follower->full_name);
 });
 
+it('renders the follower current avatar, not the one frozen at notification time', function () {
+    $user = User::factory()->withProfile()->create();
+    $follower = User::factory()->withProfile()->create();
+    $follower->profile->update(['avatar_path' => 'old-hash']);
+
+    $user->notify(new NewFollower($follower));
+
+    $follower->profile->update(['avatar_path' => 'new-hash']);
+
+    Livewire::actingAs($user)
+        ->test('parts.notifications.panel')
+        ->assertSee('new-hash')
+        ->assertDontSee('old-hash');
+});
+
 it('loads the first 20 notifications and reveals more on demand', function () {
     $user = User::factory()->withProfile()->create();
     $follower = User::factory()->withProfile()->create();

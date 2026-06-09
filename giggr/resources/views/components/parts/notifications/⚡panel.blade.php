@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Profile;
 use Illuminate\Support\Collection;
 use Livewire\Attributes\Computed;
 use Livewire\Component;
@@ -24,6 +25,31 @@ new class extends Component {
             ->get();
     }
 
+    /**
+     * Current avatar URL for each follower, keyed by profile id and resolved
+     * live so a follower's later photo change is always reflected.
+     *
+     * @return array<int, string|null>
+     */
+    #[Computed]
+    public function thumbnails(): array
+    {
+        $profileIds = $this->rows
+            ->pluck('data.follower_profile_id')
+            ->filter()
+            ->unique()
+            ->all();
+
+        if ($profileIds === []) {
+            return [];
+        }
+
+        return Profile::whereIn('id', $profileIds)
+            ->get(['id', 'avatar_path'])
+            ->mapWithKeys(fn (Profile $profile) => [$profile->id => $profile->thumbnail])
+            ->all();
+    }
+
     #[Computed]
     public function hasMore(): bool
     {
@@ -40,7 +66,7 @@ new class extends Component {
     {
         $this->perPage += self::PER_PAGE;
 
-        unset($this->rows, $this->hasMore);
+        unset($this->rows, $this->hasMore, $this->thumbnails);
     }
 
     public function markAllRead(): void
@@ -89,7 +115,8 @@ new class extends Component {
         <ul class="divide-y divide-dark/8 -mx-6">
             @foreach ($this->rows as $row)
                 @php
-                    $thumbnail = $row->data['follower_thumbnail'] ?? null;
+                    $profileId = $row->data['follower_profile_id'] ?? null;
+                    $thumbnail = $profileId ? ($this->thumbnails[$profileId] ?? null) : null;
                     $name = $row->data['follower_name'] ?? '';
                     $isUnread = $row->read_at === null;
                 @endphp
