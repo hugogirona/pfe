@@ -15,6 +15,7 @@
 
         <div class="ml-auto flex items-center gap-2 md:gap-3">
             @auth
+                <livewire:parts.layout.notifications-badge />
                 <livewire:parts.layout.messaging-badge />
             @endauth
             <x-nav.actions />
