@@ -26,7 +26,6 @@ class NewFollower extends Notification
             'follower_user_id' => $this->follower->id,
             'follower_profile_id' => $this->follower->profile?->id,
             'follower_name' => $this->follower->full_name,
-            'follower_thumbnail' => $this->follower->profile?->thumbnail,
         ];
     }
 }
