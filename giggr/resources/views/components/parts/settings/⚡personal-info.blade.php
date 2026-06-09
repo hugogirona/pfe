@@ -99,7 +99,7 @@ new class extends Component {
 
         <div class="flex items-center justify-between gap-4 pt-1">
             <p
-                @class(['text-sm text-accent', 'invisible' => ! $saved])
+                @class(['text-sm text-success', 'invisible' => ! $saved])
                 role="status"
                 aria-live="polite"
             >

@@ -95,7 +95,7 @@ new class extends Component {
     </fieldset>
 
     <p
-        @class(['text-sm text-accent mt-4', 'invisible' => ! $saved])
+        @class(['text-sm text-success mt-4', 'invisible' => ! $saved])
         role="status"
         aria-live="polite"
         wire:key="privacy-saved"
