@@ -30,6 +30,11 @@ return [
     'personal_title' => 'Persoonlijke gegevens',
     'personal_description' => 'Je geboortedatum wordt gebruikt om je leeftijd op je profiel te tonen. Die blijft optioneel.',
     'birth_date_label' => 'Geboortedatum',
+    'city_label' => 'Stad',
+    'experience_label' => 'Ervaringsniveau',
+    'experience_unset' => 'Niet opgegeven',
+    'experience_option' => ':count jaar|:count jaar',
+    'experience_max' => '15+ jaar',
     'personal_submit' => 'Opslaan',
     'personal_saved' => 'Gegevens opgeslagen.',
 
@@ -44,4 +49,12 @@ return [
     'contact_followers_description' => 'Alleen profielen die je volgt kunnen je een eerste bericht sturen.',
     'contact_nobody_label' => 'Niemand',
     'contact_nobody_description' => 'Je wil niet gecontacteerd worden.',
+
+    // Delete account
+    'delete_title' => 'Mijn account verwijderen',
+    'delete_description' => 'Je account verwijderen is definitief. Al je gegevens (profiel, advertenties, berichten) worden gewist en kunnen niet worden hersteld.',
+    'delete_button' => 'Mijn account verwijderen',
+    'delete_warning' => 'Deze actie kan niet ongedaan worden gemaakt. Voer je wachtwoord in om te bevestigen.',
+    'delete_cancel' => 'Annuleren',
+    'delete_confirm' => 'Definitief verwijderen',
 ];

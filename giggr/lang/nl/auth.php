@@ -56,6 +56,7 @@ return [
     'register_last_name' => 'Naam',
     'register_last_name_ph' => 'Janssens',
     'register_birth_date' => 'Geboortedatum',
+    'register_city' => 'Stad',
     'register_password_ph' => 'Minstens 8 tekens',
     'register_rgpd_label' => 'Ik ga ermee akkoord dat mijn gegevens worden gebruikt om mijn account aan te maken en te beheren, in overeenstemming met het :link.',
     'register_rgpd_policy' => 'privacybeleid',

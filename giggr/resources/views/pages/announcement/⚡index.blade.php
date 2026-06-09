@@ -69,7 +69,7 @@ new #[Layout('layouts.app')] class extends Component
         <div class="flex flex-col lg:flex-row gap-8 items-start">
 
             {{-- Main content --}}
-            <div class="flex-1 min-w-0 space-y-6 order-2 lg:order-1">
+            <div class="w-full lg:w-auto lg:flex-1 min-w-0 space-y-6 order-2 lg:order-1">
                 <x-parts.announcement.tags :announcement="$announcement" />
                 <x-parts.announcement.description :announcement="$announcement" />
             </div>

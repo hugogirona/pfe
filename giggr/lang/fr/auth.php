@@ -56,6 +56,7 @@ return [
     'register_last_name' => 'Nom',
     'register_last_name_ph' => 'Dupont',
     'register_birth_date' => 'Date de naissance',
+    'register_city' => 'Ville',
     'register_password_ph' => '8 caractères minimum',
     'register_rgpd_label' => "J'accepte que mes données soient utilisées pour créer et gérer mon compte, conformément à la :link.",
     'register_rgpd_policy' => 'politique de confidentialité',

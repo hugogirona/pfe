@@ -12,6 +12,7 @@ return [
     'instruments_label' => 'Instrumenten',
     'genres_label' => 'Genres',
     'stat_experience' => 'jaar ervaring',
+    'experience_unset_short' => 'n.v.t.',
     'stat_ads' => 'actieve advertentie|actieve advertenties',
     'avatar_alt' => 'Profielfoto van :name',
 

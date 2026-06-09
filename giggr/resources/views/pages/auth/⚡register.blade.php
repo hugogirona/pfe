@@ -57,6 +57,18 @@ new #[Layout('layouts.auth')] class extends Component
             :max="now()->format('Y-m-d')"
         />
 
+        <div>
+            <livewire:parts.form.locality-picker
+                name="city_id"
+                :city-id="old('city_id')"
+                :label="__('auth.register_city')"
+                :required="false"
+            />
+            @error('city_id')
+            <p class="text-xs text-accent mt-1.5" role="alert">{{ $message }}</p>
+            @enderror
+        </div>
+
         <x-form.input
             name="email"
             type="email"
