@@ -19,15 +19,17 @@
                 :aria-expanded="open"
                 aria-haspopup="true"
                 aria-label="{{ __('nav.aria_user_menu') }}"
-                class="w-8 h-8 rounded-full overflow-hidden bg-dark/60 text-on-dark flex items-center justify-center text-sm font-semibold uppercase cursor-pointer hover:opacity-90 transition-opacity duration-150 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent-on-dark"
+                class="w-10 h-10 flex items-center justify-center rounded-full cursor-pointer hover:opacity-90 transition-opacity duration-150 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
             >
-                <img
-                    x-show="thumbnail"
-                    :src="thumbnail"
-                    alt="{{ __('profile.avatar_alt', ['name' => auth()->user()->full_name]) }}"
-                    class="w-full h-full object-cover object-center"
-                />
-                <span x-show="!thumbnail">{{ mb_substr(auth()->user()->full_name, 0, 1) }}</span>
+                <span class="w-8 h-8 rounded-full overflow-hidden bg-dark/60 text-on-dark flex items-center justify-center text-sm font-semibold uppercase">
+                    <img
+                        x-show="thumbnail"
+                        :src="thumbnail"
+                        alt="{{ __('profile.avatar_alt', ['name' => auth()->user()->full_name]) }}"
+                        class="w-full h-full object-cover object-center"
+                    />
+                    <span x-show="!thumbnail">{{ mb_substr(auth()->user()->full_name, 0, 1) }}</span>
+                </span>
             </button>
 
             <div
