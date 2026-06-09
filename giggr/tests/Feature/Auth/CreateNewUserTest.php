@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\City;
 use App\Models\Profile;
 use Illuminate\Validation\ValidationException;
 use Laravel\Fortify\Contracts\CreatesNewUsers;
@@ -45,6 +46,26 @@ it('allows registration without a birth date', function () {
     $user = app(CreatesNewUsers::class)->create($input);
 
     expect($user->profile->birth_date)->toBeNull();
+});
+
+it('stores the city on the profile when one is provided', function () {
+    $city = City::factory()->create();
+
+    $user = app(CreatesNewUsers::class)->create(validRegistrationInput(['city_id' => $city->id]));
+
+    expect($user->profile->city_id)->toBe($city->id);
+});
+
+it('allows registration without a city', function () {
+    $user = app(CreatesNewUsers::class)->create(validRegistrationInput());
+
+    expect($user->profile->city_id)->toBeNull();
+});
+
+it('rejects a city that does not exist', function () {
+    expect(fn () => app(CreatesNewUsers::class)->create(
+        validRegistrationInput(['city_id' => 999999])
+    ))->toThrow(ValidationException::class);
 });
 
 it('rejects a birth date in the future', function () {

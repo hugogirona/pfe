@@ -30,6 +30,7 @@ return [
     'personal_title' => 'Personal information',
     'personal_description' => 'Your date of birth is used to show your age on your profile. It stays optional.',
     'birth_date_label' => 'Date of birth',
+    'city_label' => 'City',
     'personal_submit' => 'Save',
     'personal_saved' => 'Information saved.',
 

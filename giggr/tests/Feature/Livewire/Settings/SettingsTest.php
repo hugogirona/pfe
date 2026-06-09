@@ -2,6 +2,8 @@
 
 use App\Enums\ContactPreference;
 use App\Events\ContactPreferenceUpdated;
+use App\Models\City;
+use App\Models\Profile;
 use App\Models\User;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Hash;
@@ -76,6 +78,44 @@ it('saves the birth date', function () {
         ->assertSet('saved', true);
 
     expect($user->fresh()->profile->birth_date->format('Y-m-d'))->toBe('1990-05-05');
+});
+
+it('saves the city', function () {
+    $user = User::factory()->withProfile()->create();
+    $city = City::factory()->create();
+
+    Livewire::actingAs($user)
+        ->test('parts.settings.personal-info')
+        ->set('cityId', $city->id)
+        ->call('save')
+        ->assertHasNoErrors()
+        ->assertSet('saved', true);
+
+    expect($user->fresh()->profile->city_id)->toBe($city->id);
+});
+
+it('allows clearing the city', function () {
+    $city = City::factory()->create();
+    $user = User::factory()->withProfile()->create();
+    $user->profile->update(['city_id' => $city->id]);
+
+    Livewire::actingAs($user)
+        ->test('parts.settings.personal-info')
+        ->set('cityId', null)
+        ->call('save')
+        ->assertHasNoErrors();
+
+    expect($user->fresh()->profile->city_id)->toBeNull();
+});
+
+it('rejects a city that does not exist when saving the profile', function () {
+    $user = User::factory()->withProfile()->create();
+
+    Livewire::actingAs($user)
+        ->test('parts.settings.personal-info')
+        ->set('cityId', 999999)
+        ->call('save')
+        ->assertHasErrors('cityId');
 });
 
 it('rejects a future birth date', function () {

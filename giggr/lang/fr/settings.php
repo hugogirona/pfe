@@ -30,6 +30,7 @@ return [
     'personal_title' => 'Informations personnelles',
     'personal_description' => 'Ta date de naissance sert à afficher ton âge sur ton profil. Elle reste facultative.',
     'birth_date_label' => 'Date de naissance',
+    'city_label' => 'Ville',
     'personal_submit' => 'Enregistrer',
     'personal_saved' => 'Informations enregistrées.',
 

@@ -30,6 +30,7 @@ return [
     'personal_title' => 'Persoonlijke gegevens',
     'personal_description' => 'Je geboortedatum wordt gebruikt om je leeftijd op je profiel te tonen. Die blijft optioneel.',
     'birth_date_label' => 'Geboortedatum',
+    'city_label' => 'Stad',
     'personal_submit' => 'Opslaan',
     'personal_saved' => 'Gegevens opgeslagen.',
 
