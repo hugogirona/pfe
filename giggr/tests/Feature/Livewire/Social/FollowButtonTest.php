@@ -3,6 +3,8 @@
 use App\Models\Follow;
 use App\Models\Profile;
 use App\Models\User;
+use App\Notifications\NewFollower;
+use Illuminate\Support\Facades\Notification;
 use Livewire\Livewire;
 
 it('exposes the follow affordance via its accessible label when not following', function () {
@@ -163,4 +165,45 @@ it('dispatches follow-state-changed after a successful toggle', function () {
         ->test('parts.social.follow-button', ['profileId' => $profile->id])
         ->call('toggle')
         ->assertDispatched('follow-state-changed');
+});
+
+it('notifies the followed user on a new follow', function () {
+    Notification::fake();
+    $viewer = User::factory()->withProfile()->create();
+    $profile = Profile::factory()->create();
+
+    Livewire::actingAs($viewer)
+        ->test('parts.social.follow-button', ['profileId' => $profile->id])
+        ->call('toggle');
+
+    Notification::assertSentTo($profile->user, NewFollower::class);
+});
+
+it('does not notify when unfollowing', function () {
+    $viewer = User::factory()->withProfile()->create();
+    $profile = Profile::factory()->create();
+    $viewer->follow($profile);
+
+    Notification::fake();
+
+    Livewire::actingAs($viewer)
+        ->test('parts.social.follow-button', ['profileId' => $profile->id])
+        ->call('toggle');
+
+    Notification::assertNothingSent();
+});
+
+it('stores a database notification linking to the follower profile', function () {
+    $viewer = User::factory()->withProfile()->create();
+    $profile = Profile::factory()->create();
+
+    Livewire::actingAs($viewer)
+        ->test('parts.social.follow-button', ['profileId' => $profile->id])
+        ->call('toggle');
+
+    $notification = $profile->user->notifications()->first();
+
+    expect($notification)->not->toBeNull()
+        ->and($notification->data['follower_profile_id'])->toBe($viewer->profile->id)
+        ->and($notification->data['follower_name'])->toBe($viewer->full_name);
 });
