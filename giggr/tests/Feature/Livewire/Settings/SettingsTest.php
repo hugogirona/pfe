@@ -128,6 +128,43 @@ it('rejects a future birth date', function () {
         ->assertHasErrors('birth_date');
 });
 
+it('deletes the account with the correct password and redirects home', function () {
+    $user = User::factory()->withProfile()->create();
+
+    Livewire::actingAs($user)
+        ->test('parts.settings.delete-account')
+        ->set('current_password', 'password')
+        ->call('delete')
+        ->assertHasNoErrors()
+        ->assertRedirect(route('home'));
+
+    expect(User::find($user->id))->toBeNull();
+});
+
+it('rejects account deletion with a wrong password', function () {
+    $user = User::factory()->withProfile()->create();
+
+    Livewire::actingAs($user)
+        ->test('parts.settings.delete-account')
+        ->set('current_password', 'wrong')
+        ->call('delete')
+        ->assertHasErrors('current_password');
+
+    expect(User::find($user->id))->not->toBeNull();
+});
+
+it('cascades the account deletion to the profile', function () {
+    $user = User::factory()->withProfile()->create();
+    $profileId = $user->profile->id;
+
+    Livewire::actingAs($user)
+        ->test('parts.settings.delete-account')
+        ->set('current_password', 'password')
+        ->call('delete');
+
+    expect(Profile::withTrashed()->find($profileId))->toBeNull();
+});
+
 it('updates the contact preference live', function () {
     $user = User::factory()->withProfile()->create();
 

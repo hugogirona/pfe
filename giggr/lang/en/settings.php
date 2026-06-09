@@ -45,4 +45,12 @@ return [
     'contact_followers_description' => 'Only the profiles you follow can send you a first message.',
     'contact_nobody_label' => 'Nobody',
     'contact_nobody_description' => "You don't want to be contacted.",
+
+    // Delete account
+    'delete_title' => 'Delete my account',
+    'delete_description' => 'Deleting your account is permanent. All your data (profile, announcements, messages) will be erased and cannot be recovered.',
+    'delete_button' => 'Delete my account',
+    'delete_warning' => 'This action cannot be undone. Enter your password to confirm.',
+    'delete_cancel' => 'Cancel',
+    'delete_confirm' => 'Delete permanently',
 ];

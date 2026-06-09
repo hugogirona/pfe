@@ -45,4 +45,12 @@ return [
     'contact_followers_description' => 'Alleen profielen die je volgt kunnen je een eerste bericht sturen.',
     'contact_nobody_label' => 'Niemand',
     'contact_nobody_description' => 'Je wil niet gecontacteerd worden.',
+
+    // Delete account
+    'delete_title' => 'Mijn account verwijderen',
+    'delete_description' => 'Je account verwijderen is definitief. Al je gegevens (profiel, advertenties, berichten) worden gewist en kunnen niet worden hersteld.',
+    'delete_button' => 'Mijn account verwijderen',
+    'delete_warning' => 'Deze actie kan niet ongedaan worden gemaakt. Voer je wachtwoord in om te bevestigen.',
+    'delete_cancel' => 'Annuleren',
+    'delete_confirm' => 'Definitief verwijderen',
 ];

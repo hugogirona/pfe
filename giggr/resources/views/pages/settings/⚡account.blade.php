@@ -136,5 +136,7 @@ new #[Layout('layouts.app')] class extends Component {
             @endif
         </x-settings.section>
 
+        <livewire:parts.settings.delete-account />
+
     </div>
 </div>
