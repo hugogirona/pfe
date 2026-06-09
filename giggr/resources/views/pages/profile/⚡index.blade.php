@@ -62,8 +62,12 @@ class extends Component
             $this->allStatuses = collect(ProfileStatus::cases())
                 ->map(fn ($case) => ['value' => $case->value, 'label' => __($case->label())])
                 ->all();
-            $this->allInstruments = Instrument::orderBy('name')->pluck('name', 'id')->toArray();
-            $this->allGenres = Genre::orderBy('name')->pluck('name', 'id')->toArray();
+            $this->allInstruments = Instrument::orderBy('name')->get()
+                ->mapWithKeys(fn (Instrument $i) => [$i->id => $i->translated_name])
+                ->all();
+            $this->allGenres = Genre::orderBy('name')->get()
+                ->mapWithKeys(fn (Genre $g) => [$g->id => $g->translated_name])
+                ->all();
         }
     }
 
@@ -198,10 +202,10 @@ class extends Component
         <div class="flex flex-col lg:flex-row gap-8 lg:items-start" itemscope itemtype="https://schema.org/Person">
             <link itemprop="url" href="{{ route('profile', ['id' => $profile->id]) }}">
             @foreach ($profile->instruments as $instrument)
-                <meta itemprop="knowsAbout" content="{{ $instrument->name }}">
+                <meta itemprop="knowsAbout" content="{{ $instrument->translated_name }}">
             @endforeach
             @foreach ($profile->genres as $genre)
-                <meta itemprop="knowsAbout" content="{{ $genre->name }}">
+                <meta itemprop="knowsAbout" content="{{ $genre->translated_name }}">
             @endforeach
 
             {{-- Sidebar --}}

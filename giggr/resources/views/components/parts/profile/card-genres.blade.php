@@ -62,7 +62,7 @@
                 @if ($profile->genres->isNotEmpty())
                     <ul class="flex flex-wrap gap-1.5">
                         @foreach ($profile->genres as $genre)
-                            <li><x-pill variant="genre">{{ $genre->name }}</x-pill></li>
+                            <li><x-pill variant="genre">{{ $genre->translated_name }}</x-pill></li>
                         @endforeach
                     </ul>
                 @else
@@ -74,7 +74,7 @@
         @if ($profile->genres->isNotEmpty())
             <ul class="flex flex-wrap gap-1.5">
                 @foreach ($profile->genres as $genre)
-                    <li><x-pill variant="genre">{{ $genre->name }}</x-pill></li>
+                    <li><x-pill variant="genre">{{ $genre->translated_name }}</x-pill></li>
                 @endforeach
             </ul>
         @endif

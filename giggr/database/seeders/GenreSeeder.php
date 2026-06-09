@@ -13,6 +13,10 @@ class GenreSeeder extends Seeder
         $genres = [
             'Rock', 'Jazz', 'Pop', 'Folk', 'Metal', 'Classique',
             'Electronic', 'Soul', 'Indie', 'Blues', 'World', 'Funk',
+            'Hip-hop', 'Rap', 'R&B', 'Reggae', 'Dancehall', 'Shatta',
+            'Électro', 'House', 'Techno', 'Disco', 'Punk', 'Hardcore',
+            'Grunge', 'Country', 'Gospel', 'Ska', 'Reggaeton', 'Afrobeat',
+            'Trap', 'Latin', 'Salsa', 'Bossa nova', 'Variété',
         ];
 
         foreach ($genres as $name) {

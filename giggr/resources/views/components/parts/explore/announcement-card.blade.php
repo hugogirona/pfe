@@ -49,13 +49,13 @@
 
                 <div class="flex flex-wrap gap-2">
                     @foreach ($shownInstruments as $instrument)
-                        <x-pill variant="instrument">{{ $instrument->name }}</x-pill>
+                        <x-pill variant="instrument">{{ $instrument->translated_name }}</x-pill>
                     @endforeach
                     @if ($extraInstruments > 0)
                         <x-pill variant="instrument">+{{ $extraInstruments }}</x-pill>
                     @endif
                     @foreach ($shownGenres as $genre)
-                        <x-pill variant="genre">{{ $genre->name }}</x-pill>
+                        <x-pill variant="genre">{{ $genre->translated_name }}</x-pill>
                     @endforeach
                     @if ($extraGenres > 0)
                         <x-pill variant="genre">+{{ $extraGenres }}</x-pill>
