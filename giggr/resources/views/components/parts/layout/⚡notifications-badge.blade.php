@@ -16,23 +16,22 @@ new class extends Component {
         $this->refreshCount();
     }
 
-    #[On('echo-private:App.Models.User.{userId},.message.sent')]
-    #[On('echo-private:App.Models.User.{userId},.messages.read')]
-    #[On('messaging-updated')]
+    #[On('echo-private:App.Models.User.{userId},.notification.created')]
+    #[On('notifications-updated')]
     public function refreshCount(): void
     {
-        $this->count = auth()->user()->unreadConversationsCount();
+        $this->count = auth()->user()->unreadNotifications()->count();
     }
 };
 ?>
 
 <button
     type="button"
-    @click="Livewire.dispatch('open-modal', { component: 'parts.messaging.inbox', title: @js(__('messaging.title')) })"
+    @click="Livewire.dispatch('open-modal', { component: 'parts.notifications.panel', title: @js(__('notifications.title')) })"
     class="relative w-10 h-10 text-subtle hover:text-accent transition-colors duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent rounded-[6px] flex items-center justify-center"
-    aria-label="{{ __('nav.aria_messaging') }}{{ $count > 0 ? ' ('.$count.')' : '' }}"
+    aria-label="{{ __('notifications.aria_open') }}{{ $count > 0 ? ' ('.$count.')' : '' }}"
 >
-    <x-icon name="chat-bubble" class="w-7 h-7"/>
+    <x-icon name="bell" class="w-6 h-6"/>
     @if ($count > 0)
         <span
             aria-hidden="true"
