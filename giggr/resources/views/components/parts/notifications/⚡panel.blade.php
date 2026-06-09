@@ -126,7 +126,7 @@ new class extends Component {
         </ul>
 
         @if ($this->hasMore)
-            <div class="flex justify-center pt-4 pb-1">
+            <div class="flex justify-center py-4">
                 <x-cta variant="outline" size="sm" type="button" wire:click="loadMore" wire:loading.attr="disabled">
                     {{ __('notifications.load_more') }}
                 </x-cta>
