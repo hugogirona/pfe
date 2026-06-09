@@ -25,12 +25,12 @@
         <article
             class="group flex flex-col w-full rounded-xl overflow-hidden border border-dark/10 bg-white shadow-sm hover:shadow-md transition-shadow duration-200"
         >
-            <div class="relative h-52 shrink-0 bg-dark/5">
+            <div class="relative h-64 shrink-0 bg-dark/5">
                 @if ($profile->medium)
                     <img
                         src="{{ $profile->medium }}"
                         alt="Photo de {{ $name }}"
-                        class="absolute inset-0 w-full h-full object-cover object-center"
+                        class="absolute inset-0 w-full h-full object-cover object-top"
                         loading="lazy"
                         itemprop="image"
                     />
