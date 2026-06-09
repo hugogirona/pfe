@@ -1,8 +1,8 @@
 @props(['announcement'])
 
 @php
-    $instruments = $announcement->instruments->pluck('name');
-    $genres = $announcement->genres->pluck('name');
+    $instruments = $announcement->instruments->pluck('translated_name');
+    $genres = $announcement->genres->pluck('translated_name');
 @endphp
 
 @if ($instruments->isNotEmpty() || $genres->isNotEmpty())

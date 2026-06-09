@@ -35,8 +35,12 @@ new class extends Component {
     public function mount(?string $model_id = null): void
     {
         $this->model_id = $model_id;
-        $this->availableInstruments = Instrument::orderBy('name')->get(['id', 'name'])->toArray();
-        $this->availableGenres = Genre::orderBy('name')->get(['id', 'name'])->toArray();
+        $this->availableInstruments = Instrument::orderBy('name')->get()
+            ->map(fn (Instrument $i) => ['id' => $i->id, 'name' => $i->translated_name])
+            ->all();
+        $this->availableGenres = Genre::orderBy('name')->get()
+            ->map(fn (Genre $g) => ['id' => $g->id, 'name' => $g->translated_name])
+            ->all();
         $this->availableTypes = collect(AnnouncementType::cases())
             ->map(fn($case) => ['value' => $case->value, 'label' => __($case->label())])
             ->toArray();

@@ -8,9 +8,9 @@
     $url               = route('profile', ['id' => $profile->id]);
     $isFollowing       = is_array($followedProfileIds) ? in_array($profile->id, $followedProfileIds, true) : null;
     $pillLimit         = 2;
-    $shownInstruments  = $profile->instruments->take($pillLimit)->pluck('name');
+    $shownInstruments  = $profile->instruments->take($pillLimit)->pluck('translated_name');
     $extraInstruments  = max(0, $profile->instruments->count() - $pillLimit);
-    $shownGenres       = $profile->genres->take($pillLimit)->pluck('name');
+    $shownGenres       = $profile->genres->take($pillLimit)->pluck('translated_name');
     $extraGenres       = max(0, $profile->genres->count() - $pillLimit);
 @endphp
 

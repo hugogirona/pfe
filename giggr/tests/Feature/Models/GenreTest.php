@@ -18,6 +18,19 @@ it('can create a genre with name and slug', function () {
         ->slug->toBe('rock');
 });
 
+it('exposes a localised name for a known slug', function () {
+    app()->setLocale('en');
+    $genre = Genre::create(['name' => 'Classique', 'slug' => 'classique']);
+
+    expect($genre->translated_name)->toBe('Classical');
+});
+
+it('falls back to the stored name when the slug has no translation', function () {
+    $genre = Genre::create(['name' => 'Mon Genre', 'slug' => 'mon-genre-inconnu']);
+
+    expect($genre->translated_name)->toBe('Mon Genre');
+});
+
 it('enforces a unique slug', function () {
     Genre::create(['name' => 'Rock', 'slug' => 'rock']);
 
