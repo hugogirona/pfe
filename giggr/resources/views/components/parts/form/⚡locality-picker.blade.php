@@ -17,6 +17,8 @@ new class extends Component {
 
     public bool $filterStyle = false;
 
+    public string $name = '';
+
     public string $query = '';
 
     /** @var array<int, array{id:int, display:string}> */
@@ -84,6 +86,10 @@ new class extends Component {
     x-data="{ highlight: 0 }"
     @keydown.escape.window="$wire.set('results', [])"
 >
+    @if ($name !== '')
+        <input type="hidden" name="{{ $name }}" :value="$wire.cityId">
+    @endif
+
     <label for="locality-picker-input" @class([
         'block text-xs font-semibold uppercase tracking-widest text-caption mb-3' => $filterStyle,
         'block text-sm font-medium text-subtle mb-1.5' => !$filterStyle,

@@ -30,6 +30,7 @@ class CreateNewUser implements CreatesNewUsers
             'email' => ['required', 'string', 'email', 'max:255', Rule::unique(User::class)],
             'password' => $this->passwordRules(),
             'birth_date' => ['nullable', 'date_format:Y-m-d', 'before:today', 'after:1900-01-01'],
+            'city_id' => ['nullable', 'integer', 'exists:cities,id'],
             'rgpd' => ['accepted'],
         ], [
             'email.unique' => __('auth.email_taken', ['url' => route('login')]),
@@ -52,6 +53,7 @@ class CreateNewUser implements CreatesNewUsers
             Profile::create([
                 'user_id' => $user->id,
                 'birth_date' => $input['birth_date'] ?? null,
+                'city_id' => $input['city_id'] ?? null,
             ]);
 
             return $user;

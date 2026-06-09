@@ -30,6 +30,11 @@ return [
     'personal_title' => 'Informations personnelles',
     'personal_description' => 'Ta date de naissance sert à afficher ton âge sur ton profil. Elle reste facultative.',
     'birth_date_label' => 'Date de naissance',
+    'city_label' => 'Ville',
+    'experience_label' => "Niveau d'expérience",
+    'experience_unset' => 'Non précisé',
+    'experience_option' => ':count an|:count ans',
+    'experience_max' => '15+ ans',
     'personal_submit' => 'Enregistrer',
     'personal_saved' => 'Informations enregistrées.',
 
@@ -44,4 +49,12 @@ return [
     'contact_followers_description' => 'Seuls les profils que tu suis peuvent t\'envoyer un premier message.',
     'contact_nobody_label' => 'Personne',
     'contact_nobody_description' => 'Tu ne souhaites pas être contacté·e.',
+
+    // Delete account
+    'delete_title' => 'Supprimer mon compte',
+    'delete_description' => 'La suppression de ton compte est définitive. Toutes tes données (profil, annonces, messages) seront effacées et ne pourront pas être récupérées.',
+    'delete_button' => 'Supprimer mon compte',
+    'delete_warning' => 'Cette action est irréversible. Saisis ton mot de passe pour confirmer.',
+    'delete_cancel' => 'Annuler',
+    'delete_confirm' => 'Supprimer définitivement',
 ];

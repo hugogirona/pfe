@@ -29,10 +29,10 @@ new class extends Component {
 <button
     type="button"
     @click="Livewire.dispatch('open-modal', { component: 'parts.messaging.inbox', title: @js(__('messaging.title')) })"
-    class="relative text-subtle hover:text-accent transition-colors duration-150 p-2 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent rounded-[6px] flex items-center justify-center"
+    class="relative w-10 h-10 text-subtle hover:text-accent transition-colors duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent rounded-[6px] flex items-center justify-center"
     aria-label="{{ __('nav.aria_messaging') }}{{ $count > 0 ? ' ('.$count.')' : '' }}"
 >
-    <x-icon name="chat-bubble" class="w-8 h-8"/>
+    <x-icon name="chat-bubble" class="w-7 h-7"/>
     @if ($count > 0)
         <span
             aria-hidden="true"

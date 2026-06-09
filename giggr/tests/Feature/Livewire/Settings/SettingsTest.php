@@ -2,6 +2,8 @@
 
 use App\Enums\ContactPreference;
 use App\Events\ContactPreferenceUpdated;
+use App\Models\City;
+use App\Models\Profile;
 use App\Models\User;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Hash;
@@ -78,6 +80,80 @@ it('saves the birth date', function () {
     expect($user->fresh()->profile->birth_date->format('Y-m-d'))->toBe('1990-05-05');
 });
 
+it('saves the city', function () {
+    $user = User::factory()->withProfile()->create();
+    $city = City::factory()->create();
+
+    Livewire::actingAs($user)
+        ->test('parts.settings.personal-info')
+        ->set('cityId', $city->id)
+        ->call('save')
+        ->assertHasNoErrors()
+        ->assertSet('saved', true);
+
+    expect($user->fresh()->profile->city_id)->toBe($city->id);
+});
+
+it('allows clearing the city', function () {
+    $city = City::factory()->create();
+    $user = User::factory()->withProfile()->create();
+    $user->profile->update(['city_id' => $city->id]);
+
+    Livewire::actingAs($user)
+        ->test('parts.settings.personal-info')
+        ->set('cityId', null)
+        ->call('save')
+        ->assertHasNoErrors();
+
+    expect($user->fresh()->profile->city_id)->toBeNull();
+});
+
+it('rejects a city that does not exist when saving the profile', function () {
+    $user = User::factory()->withProfile()->create();
+
+    Livewire::actingAs($user)
+        ->test('parts.settings.personal-info')
+        ->set('cityId', 999999)
+        ->call('save')
+        ->assertHasErrors('cityId');
+});
+
+it('saves the experience level', function () {
+    $user = User::factory()->withProfile()->create();
+
+    Livewire::actingAs($user)
+        ->test('parts.settings.personal-info')
+        ->set('experienceYears', 7)
+        ->call('save')
+        ->assertHasNoErrors()
+        ->assertSet('saved', true);
+
+    expect($user->fresh()->profile->experience_years)->toBe(7);
+});
+
+it('stores zero experience when left unspecified', function () {
+    $user = User::factory()->withProfile()->create();
+    $user->profile->update(['experience_years' => 9]);
+
+    Livewire::actingAs($user)
+        ->test('parts.settings.personal-info')
+        ->set('experienceYears', null)
+        ->call('save')
+        ->assertHasNoErrors();
+
+    expect($user->fresh()->profile->experience_years)->toBe(0);
+});
+
+it('rejects an experience level above the allowed range', function () {
+    $user = User::factory()->withProfile()->create();
+
+    Livewire::actingAs($user)
+        ->test('parts.settings.personal-info')
+        ->set('experienceYears', 16)
+        ->call('save')
+        ->assertHasErrors('experienceYears');
+});
+
 it('rejects a future birth date', function () {
     $user = User::factory()->withProfile()->create();
 
@@ -86,6 +162,43 @@ it('rejects a future birth date', function () {
         ->set('birth_date', now()->addDay()->format('Y-m-d'))
         ->call('save')
         ->assertHasErrors('birth_date');
+});
+
+it('deletes the account with the correct password and redirects home', function () {
+    $user = User::factory()->withProfile()->create();
+
+    Livewire::actingAs($user)
+        ->test('parts.settings.delete-account')
+        ->set('current_password', 'password')
+        ->call('delete')
+        ->assertHasNoErrors()
+        ->assertRedirect(route('home'));
+
+    expect(User::find($user->id))->toBeNull();
+});
+
+it('rejects account deletion with a wrong password', function () {
+    $user = User::factory()->withProfile()->create();
+
+    Livewire::actingAs($user)
+        ->test('parts.settings.delete-account')
+        ->set('current_password', 'wrong')
+        ->call('delete')
+        ->assertHasErrors('current_password');
+
+    expect(User::find($user->id))->not->toBeNull();
+});
+
+it('cascades the account deletion to the profile', function () {
+    $user = User::factory()->withProfile()->create();
+    $profileId = $user->profile->id;
+
+    Livewire::actingAs($user)
+        ->test('parts.settings.delete-account')
+        ->set('current_password', 'password')
+        ->call('delete');
+
+    expect(Profile::withTrashed()->find($profileId))->toBeNull();
 });
 
 it('updates the contact preference live', function () {

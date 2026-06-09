@@ -24,8 +24,12 @@ new class extends Component {
 
     public function mount(): void
     {
-        $this->availableInstruments = Instrument::orderBy('name')->pluck('name')->toArray();
-        $this->availableGenres = Genre::orderBy('name')->pluck('name')->toArray();
+        $this->availableInstruments = Instrument::orderBy('name')->get()
+            ->mapWithKeys(fn (Instrument $i) => [$i->name => $i->translated_name])
+            ->all();
+        $this->availableGenres = Genre::orderBy('name')->get()
+            ->mapWithKeys(fn (Genre $g) => [$g->name => $g->translated_name])
+            ->all();
         $this->availableTypes = collect(AnnouncementType::cases())
             ->map(fn ($case) => ['value' => $case->value, 'label' => __($case->label())])
             ->all();
@@ -204,17 +208,17 @@ new class extends Component {
                     @endif
                 </div>
                 <div class="flex flex-wrap gap-2" role="group" :aria-label="'{{ __('explore.filter_instruments') }}'">
-                    @foreach ($availableInstruments as $instr)
+                    @foreach ($availableInstruments as $value => $label)
                         <button
                             type="button"
-                            wire:click="toggleInstrument('{{ $instr }}')"
+                            wire:click="toggleInstrument('{{ $value }}')"
                             @class([
                                 'h-9 px-4 rounded-full border text-sm font-medium transition-all duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent',
-                                'bg-dark text-on-dark border-dark'                                                => in_array($instr, $draftInstruments),
-                                'bg-white text-subtle border-dark/15 hover:border-dark/40 hover:text-body' => !in_array($instr, $draftInstruments),
+                                'bg-dark text-on-dark border-dark'                                                => in_array($value, $draftInstruments),
+                                'bg-white text-subtle border-dark/15 hover:border-dark/40 hover:text-body' => !in_array($value, $draftInstruments),
                             ])
-                            aria-pressed="{{ in_array($instr, $draftInstruments) ? 'true' : 'false' }}"
-                        >{{ $instr }}</button>
+                            aria-pressed="{{ in_array($value, $draftInstruments) ? 'true' : 'false' }}"
+                        >{{ $label }}</button>
                     @endforeach
                 </div>
             </section>
@@ -230,17 +234,17 @@ new class extends Component {
                     @endif
                 </div>
                 <div class="flex flex-wrap gap-2" role="group" :aria-label="'{{ __('explore.filter_genres') }}'">
-                    @foreach ($availableGenres as $genre)
+                    @foreach ($availableGenres as $value => $label)
                         <button
                             type="button"
-                            wire:click="toggleGenre('{{ $genre }}')"
+                            wire:click="toggleGenre('{{ $value }}')"
                             @class([
                                 'h-9 px-4 rounded-full border text-sm font-medium transition-all duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent',
-                                'bg-accent text-on-dark border-accent'                                            => in_array($genre, $draftGenres),
-                                'bg-white text-subtle border-dark/15 hover:border-dark/40 hover:text-body' => !in_array($genre, $draftGenres),
+                                'bg-accent text-on-dark border-accent'                                            => in_array($value, $draftGenres),
+                                'bg-white text-subtle border-dark/15 hover:border-dark/40 hover:text-body' => !in_array($value, $draftGenres),
                             ])
-                            aria-pressed="{{ in_array($genre, $draftGenres) ? 'true' : 'false' }}"
-                        >{{ $genre }}</button>
+                            aria-pressed="{{ in_array($value, $draftGenres) ? 'true' : 'false' }}"
+                        >{{ $label }}</button>
                     @endforeach
                 </div>
             </section>

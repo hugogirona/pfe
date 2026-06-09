@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Str;
 use InvalidArgumentException;
 
 class User extends Authenticatable implements MustVerifyEmail
@@ -65,6 +66,20 @@ class User extends Authenticatable implements MustVerifyEmail
         dispatch(function () use ($token) {
             $this->notify(new PasswordResetLink($token));
         })->afterResponse();
+    }
+
+    protected function firstName(): Attribute
+    {
+        return Attribute::make(
+            set: fn (string $value): string => Str::ucfirst(trim($value)),
+        );
+    }
+
+    protected function lastName(): Attribute
+    {
+        return Attribute::make(
+            set: fn (string $value): string => Str::ucfirst(trim($value)),
+        );
     }
 
     protected function fullName(): Attribute

@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Models\Announcement;
 use App\Models\Profile;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\ServiceProvider;
 
@@ -16,6 +17,7 @@ class AppServiceProvider extends ServiceProvider
         Relation::enforceMorphMap([
             'profile' => Profile::class,
             'announcement' => Announcement::class,
+            'user' => User::class,
         ]);
     }
 }

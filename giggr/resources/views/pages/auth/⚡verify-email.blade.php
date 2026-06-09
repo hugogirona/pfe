@@ -156,7 +156,7 @@ new #[Layout('layouts.auth')] class extends Component {
             <p role="alert" class="text-sm text-danger">{{ $error }}</p>
         @endif
         @if ($info)
-            <p role="status" class="text-sm text-accent">{{ $info }}</p>
+            <p role="status" class="text-sm text-success">{{ $info }}</p>
         @endif
 
         <x-cta type="submit" size="lg" class="w-full min-h-11">

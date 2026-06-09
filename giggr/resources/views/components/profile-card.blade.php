@@ -8,9 +8,9 @@
     $url               = route('profile', ['id' => $profile->id]);
     $isFollowing       = is_array($followedProfileIds) ? in_array($profile->id, $followedProfileIds, true) : null;
     $pillLimit         = 2;
-    $shownInstruments  = $profile->instruments->take($pillLimit)->pluck('name');
+    $shownInstruments  = $profile->instruments->take($pillLimit)->pluck('translated_name');
     $extraInstruments  = max(0, $profile->instruments->count() - $pillLimit);
-    $shownGenres       = $profile->genres->take($pillLimit)->pluck('name');
+    $shownGenres       = $profile->genres->take($pillLimit)->pluck('translated_name');
     $extraGenres       = max(0, $profile->genres->count() - $pillLimit);
 @endphp
 
@@ -25,12 +25,12 @@
         <article
             class="group flex flex-col w-full rounded-xl overflow-hidden border border-dark/10 bg-white shadow-sm hover:shadow-md transition-shadow duration-200"
         >
-            <div class="relative h-52 shrink-0 bg-dark/5">
+            <div class="relative h-64 shrink-0 bg-dark/5">
                 @if ($profile->medium)
                     <img
                         src="{{ $profile->medium }}"
                         alt="Photo de {{ $name }}"
-                        class="absolute inset-0 w-full h-full object-cover object-center"
+                        class="absolute inset-0 w-full h-full object-cover object-top"
                         loading="lazy"
                         itemprop="image"
                     />

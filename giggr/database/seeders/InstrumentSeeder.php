@@ -13,6 +13,10 @@ class InstrumentSeeder extends Seeder
         $instruments = [
             'Guitare', 'Basse', 'Batterie', 'Clavier', 'Violon',
             'Chant', 'Saxophone', 'Trompette', 'Percussions',
+            'Piano', 'Synthétiseur', 'Orgue', 'Platines DJ', 'Ukulélé',
+            'Violoncelle', 'Contrebasse', 'Flûte', 'Clarinette', 'Trombone',
+            'Harpe', 'Accordéon', 'Banjo', 'Mandoline', 'Harmonica',
+            'Triangle', 'Tambourin', 'Djembé', 'Congas', 'Cajón',
         ];
 
         foreach ($instruments as $name) {

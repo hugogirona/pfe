@@ -18,6 +18,19 @@ it('can create an instrument with name and slug', function () {
         ->slug->toBe('guitare');
 });
 
+it('exposes a localised name for a known slug', function () {
+    app()->setLocale('en');
+    $instrument = Instrument::create(['name' => 'Batterie', 'slug' => 'batterie']);
+
+    expect($instrument->translated_name)->toBe('Drums');
+});
+
+it('falls back to the stored name when the slug has no translation', function () {
+    $instrument = Instrument::create(['name' => 'Mon Instrument', 'slug' => 'mon-instrument-inconnu']);
+
+    expect($instrument->translated_name)->toBe('Mon Instrument');
+});
+
 it('enforces a unique slug', function () {
     Instrument::create(['name' => 'Guitare', 'slug' => 'guitare']);
 

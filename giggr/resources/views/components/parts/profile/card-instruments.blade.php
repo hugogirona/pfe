@@ -61,7 +61,7 @@
                 @if ($profile->instruments->isNotEmpty())
                     <ul class="flex flex-wrap gap-1.5">
                         @foreach ($profile->instruments as $instr)
-                            <li><x-pill variant="instrument">{{ $instr->name }}</x-pill></li>
+                            <li><x-pill variant="instrument">{{ $instr->translated_name }}</x-pill></li>
                         @endforeach
                     </ul>
                 @else
@@ -73,7 +73,7 @@
         @if ($profile->instruments->isNotEmpty())
             <ul class="flex flex-wrap gap-1.5">
                 @foreach ($profile->instruments as $instr)
-                    <li><x-pill variant="instrument">{{ $instr->name }}</x-pill></li>
+                    <li><x-pill variant="instrument">{{ $instr->translated_name }}</x-pill></li>
                 @endforeach
             </ul>
         @endif

@@ -1,6 +1,9 @@
 <?php
 
+use App\Events\UserFollowed;
 use App\Models\Profile;
+use App\Models\User;
+use App\Notifications\NewFollower;
 use Livewire\Component;
 
 new class extends Component {
@@ -75,11 +78,31 @@ new class extends Component {
             $viewer->unfollow($profile);
             $this->isFollowing = false;
         } else {
-            $viewer->follow($profile);
+            $follow = $viewer->follow($profile);
             $this->isFollowing = true;
+
+            if ($follow->wasRecentlyCreated) {
+                $this->notifyFollowed($profile->user_id, $viewer);
+            }
         }
 
         $this->dispatch('follow-state-changed');
+    }
+
+    private function notifyFollowed(int $ownerId, User $follower): void
+    {
+        $owner = User::find($ownerId);
+        if ($owner === null) {
+            return;
+        }
+
+        $owner->notify(new NewFollower($follower));
+
+        try {
+            broadcast(new UserFollowed($ownerId));
+        } catch (\Throwable $e) {
+            report($e);
+        }
     }
 };
 ?>

@@ -30,6 +30,11 @@ return [
     'personal_title' => 'Personal information',
     'personal_description' => 'Your date of birth is used to show your age on your profile. It stays optional.',
     'birth_date_label' => 'Date of birth',
+    'city_label' => 'City',
+    'experience_label' => 'Experience level',
+    'experience_unset' => 'Not specified',
+    'experience_option' => ':count year|:count years',
+    'experience_max' => '15+ years',
     'personal_submit' => 'Save',
     'personal_saved' => 'Information saved.',
 
@@ -44,4 +49,12 @@ return [
     'contact_followers_description' => 'Only the profiles you follow can send you a first message.',
     'contact_nobody_label' => 'Nobody',
     'contact_nobody_description' => "You don't want to be contacted.",
+
+    // Delete account
+    'delete_title' => 'Delete my account',
+    'delete_description' => 'Deleting your account is permanent. All your data (profile, announcements, messages) will be erased and cannot be recovered.',
+    'delete_button' => 'Delete my account',
+    'delete_warning' => 'This action cannot be undone. Enter your password to confirm.',
+    'delete_cancel' => 'Cancel',
+    'delete_confirm' => 'Delete permanently',
 ];

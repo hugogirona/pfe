@@ -3,8 +3,8 @@
 @php
     $image = $author->thumbnail;
     $cityName = $author->city?->name;
-    $instruments = $author->instruments->pluck('name');
-    $genres = $author->genres->pluck('name');
+    $instruments = $author->instruments->pluck('translated_name');
+    $genres = $author->genres->pluck('translated_name');
     $isOwner = auth()->check() && auth()->id() === $announcement->user_id;
     $canContact = auth()->check() && ! $isOwner && $announcement->user->canBeContactedBy(auth()->user());
 @endphp

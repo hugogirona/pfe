@@ -12,6 +12,7 @@ return [
     'instruments_label' => 'Instruments',
     'genres_label' => 'Genres',
     'stat_experience' => 'an(s) d\'expérience',
+    'experience_unset_short' => 'N.P.',
     'stat_ads' => 'annonce active|annonces actives',
     'avatar_alt' => 'Photo de profil de :name',
 
