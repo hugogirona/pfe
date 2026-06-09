@@ -31,6 +31,10 @@ return [
     'personal_description' => 'Je geboortedatum wordt gebruikt om je leeftijd op je profiel te tonen. Die blijft optioneel.',
     'birth_date_label' => 'Geboortedatum',
     'city_label' => 'Stad',
+    'experience_label' => 'Ervaringsniveau',
+    'experience_unset' => 'Niet opgegeven',
+    'experience_option' => ':count jaar|:count jaar',
+    'experience_max' => '15+ jaar',
     'personal_submit' => 'Opslaan',
     'personal_saved' => 'Gegevens opgeslagen.',
 

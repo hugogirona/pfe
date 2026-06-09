@@ -31,6 +31,10 @@ return [
     'personal_description' => 'Your date of birth is used to show your age on your profile. It stays optional.',
     'birth_date_label' => 'Date of birth',
     'city_label' => 'City',
+    'experience_label' => 'Experience level',
+    'experience_unset' => 'Not specified',
+    'experience_option' => ':count year|:count years',
+    'experience_max' => '15+ years',
     'personal_submit' => 'Save',
     'personal_saved' => 'Information saved.',
 

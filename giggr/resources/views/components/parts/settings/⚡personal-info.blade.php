@@ -7,6 +7,8 @@ new class extends Component {
 
     public ?int $cityId = null;
 
+    public ?int $experienceYears = null;
+
     public bool $saved = false;
 
     public function mount(): void
@@ -17,6 +19,9 @@ new class extends Component {
 
         $this->birth_date = $profile?->birth_date?->format('Y-m-d');
         $this->cityId = $profile?->city_id;
+
+        $years = $profile?->experience_years ?? 0;
+        $this->experienceYears = $years > 0 ? min($years, 15) : null;
     }
 
     public function save(): void
@@ -24,11 +29,13 @@ new class extends Component {
         $validated = $this->validate([
             'birth_date' => ['nullable', 'date_format:Y-m-d', 'before:today', 'after:1900-01-01'],
             'cityId' => ['nullable', 'integer', 'exists:cities,id'],
+            'experienceYears' => ['nullable', 'integer', 'between:1,15'],
         ]);
 
         auth()->user()->profile->update([
             'birth_date' => $validated['birth_date'] ?? null,
             'city_id' => $validated['cityId'] ?? null,
+            'experience_years' => $validated['experienceYears'] ?? 0,
         ]);
 
         $this->saved = true;
@@ -40,6 +47,11 @@ new class extends Component {
     }
 
     public function updatedCityId(): void
+    {
+        $this->saved = false;
+    }
+
+    public function updatedExperienceYears(): void
     {
         $this->saved = false;
     }
@@ -72,6 +84,18 @@ new class extends Component {
             <p class="text-xs text-accent mt-1.5" role="alert">{{ $message }}</p>
             @enderror
         </div>
+
+        <x-form.select
+            name="experienceYears"
+            :label="__('settings.experience_label')"
+            wire:model="experienceYears"
+        >
+            <option value="">{{ __('settings.experience_unset') }}</option>
+            @for ($i = 1; $i < 15; $i++)
+                <option value="{{ $i }}">{{ trans_choice('settings.experience_option', $i) }}</option>
+            @endfor
+            <option value="15">{{ __('settings.experience_max') }}</option>
+        </x-form.select>
 
         <div class="flex items-center justify-between gap-4 pt-1">
             <p

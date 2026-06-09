@@ -98,6 +98,17 @@ class Profile extends Model
         );
     }
 
+    protected function experienceYearsLabel(): Attribute
+    {
+        return Attribute::make(
+            get: fn (): string => match (true) {
+                $this->experience_years <= 0 => __('profile.experience_unset_short'),
+                $this->experience_years >= 15 => '15+',
+                default => (string) $this->experience_years,
+            },
+        );
+    }
+
     protected function thumbnail(): Attribute
     {
         return Attribute::make(

@@ -8,6 +8,24 @@ use App\Models\Profile;
 use App\Models\User;
 use Database\Seeders\CitySeeder;
 
+it('caps the experience label at 15+', function () {
+    $profile = Profile::factory()->make(['experience_years' => 20]);
+
+    expect($profile->experience_years_label)->toBe('15+');
+});
+
+it('renders the exact experience label below the cap', function () {
+    $profile = Profile::factory()->make(['experience_years' => 8]);
+
+    expect($profile->experience_years_label)->toBe('8');
+});
+
+it('marks unspecified experience with a short label', function () {
+    $profile = Profile::factory()->make(['experience_years' => 0]);
+
+    expect($profile->experience_years_label)->toBe(__('profile.experience_unset_short'));
+});
+
 it('can be created with a user', function () {
     $user = User::factory()->create();
     $profile = Profile::create(['user_id' => $user->id]);

@@ -118,6 +118,42 @@ it('rejects a city that does not exist when saving the profile', function () {
         ->assertHasErrors('cityId');
 });
 
+it('saves the experience level', function () {
+    $user = User::factory()->withProfile()->create();
+
+    Livewire::actingAs($user)
+        ->test('parts.settings.personal-info')
+        ->set('experienceYears', 7)
+        ->call('save')
+        ->assertHasNoErrors()
+        ->assertSet('saved', true);
+
+    expect($user->fresh()->profile->experience_years)->toBe(7);
+});
+
+it('stores zero experience when left unspecified', function () {
+    $user = User::factory()->withProfile()->create();
+    $user->profile->update(['experience_years' => 9]);
+
+    Livewire::actingAs($user)
+        ->test('parts.settings.personal-info')
+        ->set('experienceYears', null)
+        ->call('save')
+        ->assertHasNoErrors();
+
+    expect($user->fresh()->profile->experience_years)->toBe(0);
+});
+
+it('rejects an experience level above the allowed range', function () {
+    $user = User::factory()->withProfile()->create();
+
+    Livewire::actingAs($user)
+        ->test('parts.settings.personal-info')
+        ->set('experienceYears', 16)
+        ->call('save')
+        ->assertHasErrors('experienceYears');
+});
+
 it('rejects a future birth date', function () {
     $user = User::factory()->withProfile()->create();
 
