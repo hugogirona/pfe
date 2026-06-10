@@ -15,6 +15,7 @@ return [
     'experience_unset_short' => 'N.P.',
     'stat_ads' => 'annonce active|annonces actives',
     'avatar_alt' => 'Photo de profil de :name',
+    'card_heading' => 'Carte de profil de :name',
 
     // Liens musicaux (à venir)
     'music_links_label' => 'Liens musicaux',

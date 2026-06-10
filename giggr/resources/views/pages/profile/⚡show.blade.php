@@ -210,6 +210,7 @@ class extends Component
 
             {{-- Sidebar --}}
             <aside class="w-full lg:w-80 shrink-0 lg:sticky lg:top-24" aria-label="{{ $profile->user->full_name }}">
+                <h2 class="sr-only">{{ __('profile.card_heading', ['name' => $profile->user->full_name]) }}</h2>
                 <x-parts.profile.identity-card
                     :profile="$profile"
                     :isOwner="$isOwner"
