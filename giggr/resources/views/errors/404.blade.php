@@ -9,8 +9,7 @@
     @livewireStyles
 </head>
 <body class="bg-bg text-body font-sans antialiased flex flex-col min-h-screen">
-    <h1 class="sr-only">404</h1>
-    <x-header />
+    <x-header :heading="__('errors.not_found_title')" />
     <main class="flex-1 flex flex-col items-center justify-center px-6 py-16 md:py-24">
         <div class="flex items-center justify-center" role="img" aria-label="404">
             <img

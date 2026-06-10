@@ -4,6 +4,8 @@
         aria-label="{{ __('Pagination Navigation') }}"
         class="flex items-center justify-center gap-1"
     >
+        <h2 class="sr-only">{{ __('pagination.aria_label') }}</h2>
+
         {{-- Previous --}}
         @if ($paginator->onFirstPage())
             <span

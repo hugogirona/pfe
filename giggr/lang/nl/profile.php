@@ -15,6 +15,7 @@ return [
     'experience_unset_short' => 'n.v.t.',
     'stat_ads' => 'actieve advertentie|actieve advertenties',
     'avatar_alt' => 'Profielfoto van :name',
+    'card_heading' => 'Profielkaart van :name',
 
     // Muzieklinks (binnenkort)
     'music_links_label' => 'Muzieklinks',

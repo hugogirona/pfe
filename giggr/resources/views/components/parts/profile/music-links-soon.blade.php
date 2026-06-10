@@ -1,8 +1,8 @@
 <section {{ $attributes->class('px-6 py-5') }}>
     <div class="flex items-center justify-between mb-3">
-        <h2 class="text-[0.6875rem] font-semibold uppercase tracking-widest text-caption">
+        <h3 class="text-[0.6875rem] font-semibold uppercase tracking-widest text-caption">
             {{ __('profile.music_links_label') }}
-        </h2>
+        </h3>
         <span class="inline-flex items-center rounded-full bg-dark/5 px-2 py-0.5 text-[0.625rem] font-semibold uppercase tracking-wide text-caption">
             {{ __('profile.music_links_soon') }}
         </span>
