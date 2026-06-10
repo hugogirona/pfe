@@ -25,7 +25,8 @@ export const featureStack = {
     this.timeline?.kill();
     this.timeline = null;
     document.querySelectorAll('[data-stack-pin]').forEach((pin) => pin.classList.remove('is-stacking'));
-    gsap.set('[data-stack-card]', { clearProps: 'transform,opacity,visibility' });
+    const cards = document.querySelectorAll('[data-stack-card]');
+    if (cards.length) gsap.set(cards, { clearProps: 'transform,opacity,visibility' });
     this.enabled = false;
   },
 

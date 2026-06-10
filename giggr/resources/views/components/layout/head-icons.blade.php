@@ -4,8 +4,3 @@
 <link rel="apple-touch-icon" sizes="180x180" href="{{ Vite::asset('resources/favicon/apple-touch-icon.png') }}">
 <meta name="apple-mobile-web-app-title" content="Giggr.">
 <link rel="manifest" href="{{ route('site.webmanifest') }}">
-
-@production
-    <link rel="preload" href="{{ Vite::asset('resources/fonts/antic-didone-regular.woff2') }}" as="font" type="font/woff2" crossorigin>
-    <link rel="preload" href="{{ Vite::asset('resources/fonts/dm-sans-regular.woff2') }}" as="font" type="font/woff2" crossorigin>
-@endproduction
