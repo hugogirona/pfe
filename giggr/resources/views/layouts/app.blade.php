@@ -24,7 +24,7 @@
     {{ __('nav.skip_to_content') }}
 </a>
 
-<x-header/>
+<x-header :heading="$title ?? null"/>
 
 <main id="main" class="flex-1">
     {{ $slot }}

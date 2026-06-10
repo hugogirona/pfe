@@ -47,9 +47,9 @@
         </div>
 
         {{-- Title --}}
-        <h1 class="font-heading text-3xl md:text-5xl text-on-dark leading-tight max-w-3xl" itemprop="name">
+        <h2 class="font-heading text-3xl md:text-5xl text-on-dark leading-tight max-w-3xl" itemprop="name">
             {{ $announcement->title }}
-        </h1>
+        </h2>
 
     </div>
 </div>
