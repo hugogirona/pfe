@@ -40,8 +40,8 @@ Route::group([
     Route::livewire(LaravelLocalization::transRoute('routes.explore'), 'pages::explore.index')
         ->name('explore')
         ->where('tab', __('explore.tab_profiles_slug').'|'.__('explore.tab_announcements_slug'));
-    Route::livewire(LaravelLocalization::transRoute('routes.profile'), 'pages::profile.index')->name('profile')->middleware(['auth', 'verified']);
-    Route::livewire(LaravelLocalization::transRoute('routes.announcement'), 'pages::announcement.index')->name('announcement')->middleware(['auth', 'verified']);
+    Route::livewire(LaravelLocalization::transRoute('routes.profile'), 'pages::profile.show')->name('profile')->middleware(['auth', 'verified']);
+    Route::livewire(LaravelLocalization::transRoute('routes.announcement'), 'pages::announcement.show')->name('announcement')->middleware(['auth', 'verified']);
     Route::livewire(LaravelLocalization::transRoute('routes.contact'), 'pages::contact.index')->name('contact');
     Route::livewire(LaravelLocalization::transRoute('routes.privacy'), 'pages::legal.privacy')->name('privacy');
     Route::livewire(LaravelLocalization::transRoute('routes.settings_account'), 'pages::settings.account')->name('settings.account')->middleware(['auth', 'verified']);
