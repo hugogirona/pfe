@@ -204,6 +204,6 @@ it('stores a database notification linking to the follower profile', function ()
     $notification = $profile->user->notifications()->first();
 
     expect($notification)->not->toBeNull()
-        ->and($notification->data['follower_profile_id'])->toBe($viewer->profile->id)
-        ->and($notification->data['follower_name'])->toBe($viewer->full_name);
+        ->and($notification->data['actor_profile_id'])->toBe($viewer->profile->id)
+        ->and($notification->data['actor_name'])->toBe($viewer->full_name);
 });

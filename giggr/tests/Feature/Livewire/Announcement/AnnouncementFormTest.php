@@ -7,8 +7,10 @@ use App\Models\City;
 use App\Models\Genre;
 use App\Models\Instrument;
 use App\Models\User;
+use App\Notifications\NewAnnouncement;
 use Database\Seeders\GenreSeeder;
 use Database\Seeders\InstrumentSeeder;
+use Illuminate\Support\Facades\Notification;
 use Livewire\Livewire;
 
 it('mounts with available instruments, genres and types', function () {
@@ -147,6 +149,26 @@ it('creates an announcement on valid submission', function () {
         ->title->toBe('Cherche bassiste pour trio jazz')
         ->city_id->toBe($city->id)
         ->status->toBe(AnnouncementStatus::Open);
+});
+
+it('notifies the author followers when an announcement is published', function () {
+    Notification::fake();
+
+    $author = User::factory()->withProfile()->create();
+    $follower = User::factory()->withProfile()->create();
+    $follower->follow($author->profile);
+    $city = City::factory()->create();
+
+    Livewire::actingAs($author)
+        ->test('parts.announcement.form')
+        ->set('title', 'Cherche bassiste pour trio jazz')
+        ->set('type', 'musician_wanted')
+        ->set('city_id', $city->id)
+        ->set('description', 'Groupe de jazz en quête d\'un bassiste expérimenté pour sessions régulières.')
+        ->call('save')
+        ->assertHasNoErrors();
+
+    Notification::assertSentTo($follower, NewAnnouncement::class);
 });
 
 it('syncs selected instruments on save', function () {

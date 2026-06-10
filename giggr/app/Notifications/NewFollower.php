@@ -3,10 +3,14 @@
 namespace App\Notifications;
 
 use App\Models\User;
+use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Notification;
 
-class NewFollower extends Notification
+class NewFollower extends Notification implements ShouldQueue
 {
+    use Queueable;
+
     public function __construct(public User $follower) {}
 
     /**
@@ -23,9 +27,9 @@ class NewFollower extends Notification
     public function toArray(object $notifiable): array
     {
         return [
-            'follower_user_id' => $this->follower->id,
-            'follower_profile_id' => $this->follower->profile?->id,
-            'follower_name' => $this->follower->full_name,
+            'actor_user_id' => $this->follower->id,
+            'actor_profile_id' => $this->follower->profile?->id,
+            'actor_name' => $this->follower->full_name,
         ];
     }
 }
