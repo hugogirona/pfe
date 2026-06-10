@@ -1,6 +1,5 @@
 <?php
 
-use App\Events\UserFollowed;
 use App\Models\Profile;
 use App\Models\User;
 use App\Notifications\NewFollower;
@@ -97,12 +96,6 @@ new class extends Component {
         }
 
         $owner->notify(new NewFollower($follower));
-
-        try {
-            broadcast(new UserFollowed($ownerId));
-        } catch (\Throwable $e) {
-            report($e);
-        }
     }
 };
 ?>

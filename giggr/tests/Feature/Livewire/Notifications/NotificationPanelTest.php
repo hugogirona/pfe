@@ -1,8 +1,25 @@
 <?php
 
+use App\Models\Announcement;
 use App\Models\User;
+use App\Notifications\NewAnnouncement;
 use App\Notifications\NewFollower;
 use Livewire\Livewire;
+
+it('renders an announcement notification and links it to the announcement', function () {
+    $user = User::factory()->withProfile()->create();
+    $author = User::factory()->withProfile()->create();
+    $announcement = Announcement::factory()->for($author)->create(['title' => 'Cherche bassiste']);
+    $user->notify(new NewAnnouncement($announcement));
+
+    $id = $user->notifications()->first()->id;
+
+    Livewire::actingAs($user)
+        ->test('parts.notifications.panel')
+        ->assertSee('Cherche bassiste')
+        ->call('open', $id)
+        ->assertRedirect(route('announcement', ['id' => $announcement->id]));
+});
 
 it('lists the new-follower notifications', function () {
     $user = User::factory()->withProfile()->create();

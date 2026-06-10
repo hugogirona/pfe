@@ -7,4 +7,5 @@ return [
     'load_more' => 'Load more',
     'empty' => "You don't have any notifications yet.",
     'new_follower' => ':name just started following you.',
+    'new_announcement' => ':name posted a new listing: :title',
 ];
