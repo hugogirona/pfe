@@ -76,6 +76,7 @@ new #[Layout('layouts.app')] class extends Component
 
             {{-- Sidebar --}}
             <aside class="w-full lg:w-72 shrink-0 lg:sticky lg:top-24 order-1 lg:order-2" aria-label="{{ __('announcement.author_aria') }}">
+                <h2 class="sr-only">{{ __('profile.card_heading', ['name' => $announcement->user->full_name]) }}</h2>
                 <x-parts.announcement.author-card :announcement="$announcement" :author="$announcement->user->profile" :name="$announcement->user->full_name" />
             </aside>
 

@@ -17,9 +17,9 @@
     class="{{ $sectionClass }}"
 >
     <div class="flex items-center justify-between mb-3">
-        <h2 class="text-[0.6875rem] font-semibold uppercase tracking-widest text-caption">
+        <h3 class="text-[0.6875rem] font-semibold uppercase tracking-widest text-caption">
             {{ __('profile.instruments_label') }}
-        </h2>
+        </h3>
         @if ($isOwner)
             <x-cta
                 variant="simple"
