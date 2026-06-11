@@ -25,7 +25,7 @@ it('does not seed anything in production', function () {
     expect(User::count())->toBe(0);
 });
 
-it('seeds 30 demo users plus the developer account in local environment', function () {
+it('seeds 30 demo users plus the developer and jury accounts in local environment', function () {
     App::partialMock()
         ->shouldReceive('environment')
         ->with(['local', 'staging'])
@@ -33,10 +33,10 @@ it('seeds 30 demo users plus the developer account in local environment', functi
 
     $this->seed(DemoDataSeeder::class);
 
-    expect(User::count())->toBe(32);
+    expect(User::count())->toBe(33);
 });
 
-it('seeds the developer account with a stable email', function () {
+it('seeds the developer and jury accounts with stable emails', function () {
     App::partialMock()
         ->shouldReceive('environment')
         ->with(['local', 'staging'])
@@ -44,7 +44,9 @@ it('seeds the developer account with a stable email', function () {
 
     $this->seed(DemoDataSeeder::class);
 
-    expect(User::where('email', 'hugo@giggr.be')->exists())->toBeTrue();
+    expect(User::where('email', 'hugo@giggr.be')->exists())->toBeTrue()
+        ->and(User::where('email', 'dvilain@giggr.be')->exists())->toBeTrue()
+        ->and(User::where('email', 'fparmentier@giggr.be')->exists())->toBeTrue();
 });
 
 it('seeds a profile for every user', function () {
@@ -78,8 +80,8 @@ it('seeds approximately 100 follows', function () {
 
     $this->seed(DemoDataSeeder::class);
 
-    expect(Follow::count())->toBeGreaterThanOrEqual(80)
-        ->and(Follow::count())->toBeLessThanOrEqual(120);
+    expect(Follow::count())->toBeGreaterThanOrEqual(100)
+        ->and(Follow::count())->toBeLessThanOrEqual(140);
 });
 
 it('every announcement belongs to a seeded user', function () {

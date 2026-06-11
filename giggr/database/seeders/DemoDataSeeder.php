@@ -36,7 +36,7 @@ class DemoDataSeeder extends Seeder
 
         $liege = City::where('name', 'Liège')->where('postal_code', '4020')->first();
 
-        $hugo = User::factory()->withProfile([
+        $developer = User::factory()->withProfile([
             'city_id' => $liege?->id,
             'birth_date' => '2000-02-14',
             'experience_years' => 12,
@@ -47,28 +47,24 @@ class DemoDataSeeder extends Seeder
             'password' => 'change_this',
         ]);
 
-        $valentina = User::factory()->withProfile([
+        $jury = collect([
+            ['first_name' => 'Dominique', 'last_name' => 'Vilain', 'email' => 'dvilain@giggr.be', 'password' => 'dvilain0626'],
+            ['first_name' => 'François', 'last_name' => 'Parmentier', 'email' => 'fparmentier@giggr.be', 'password' => 'fparmentier0626'],
+        ])->map(fn (array $attributes) => User::factory()->withProfile([
             'city_id' => $liege?->id,
-            'birth_date' => '1995-02-01',
-            'experience_years' => 4,
-        ])->create([
-            'first_name' => 'Valentina',
-            'last_name' => 'Vuksani',
-            'email' => 'vali@giggr.be',
-            'password' => 'change_this',
-        ]);
+            'birth_date' => null,
+            'experience_years' => 8,
+        ])->create($attributes));
+
+        $featured = $jury->prepend($developer);
 
         $users = User::factory()->count(30)->withProfile()->create();
 
-        $hugoProfile = $hugo->profile;
-        $valentinaProfile = $valentina->profile;
         foreach ($users->random(5) as $followed) {
-            $hugo->follow($followed->profile);
-            $valentina->follow($followed->profile);
+            $featured->each(fn (User $user) => $user->follow($followed->profile));
         }
         foreach ($users->random(5) as $follower) {
-            $follower->follow($hugoProfile);
-            $follower->follow($valentinaProfile);
+            $featured->each(fn (User $user) => $follower->follow($user->profile));
         }
 
         $announcements = Announcement::factory()->count(50)->recycle($users)->create();
@@ -95,13 +91,16 @@ class DemoDataSeeder extends Seeder
             }
         }
 
-        $this->seedMedia($hugoProfile, $valentinaProfile, $profiles);
+        $this->seedMedia($featured->map->profile, $profiles);
     }
 
     /**
+     * @param  iterable<Profile>  $featuredProfiles
+     * @param  iterable<Profile>  $otherProfiles
+     *
      * @throws Throwable
      */
-    private function seedMedia(Profile $hugoProfile, Profile $valentinaProfile, iterable $otherProfiles): void
+    private function seedMedia(iterable $featuredProfiles, iterable $otherProfiles): void
     {
         $tmpPath = tempnam(sys_get_temp_dir(), 'giggr-demo-media-').'.jpg';
         $img = imagecreatetruecolor(self::DEMO_IMAGE_WIDTH, self::DEMO_IMAGE_HEIGHT);
@@ -113,12 +112,14 @@ class DemoDataSeeder extends Seeder
         $originalConnection = config('queue.default');
         config(['queue.default' => 'sync']);
 
-        try {
-            $hugoImage = app(UploadMediaImage::class)->execute($hugoProfile, $file);
-            $this->attachYoutube($hugoProfile);
+        $featuredImage = null;
 
-            app(UploadMediaImage::class)->execute($valentinaProfile, $file);
-            $this->attachYoutube($valentinaProfile);
+        try {
+            foreach ($featuredProfiles as $profile) {
+                $image = app(UploadMediaImage::class)->execute($profile, $file);
+                $featuredImage ??= $image;
+                $this->attachYoutube($profile);
+            }
         } finally {
             config(['queue.default' => $originalConnection]);
         }
@@ -127,7 +128,7 @@ class DemoDataSeeder extends Seeder
             Media::create([
                 'profile_id' => $profile->id,
                 'type' => MediaType::Image,
-                'source' => $hugoImage->source,
+                'source' => $featuredImage->source,
                 'position' => 0,
                 'width' => self::DEMO_IMAGE_WIDTH,
                 'height' => self::DEMO_IMAGE_HEIGHT,
