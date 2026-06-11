@@ -1,15 +1,15 @@
 <?php
 
-use App\Events\UserFollowed;
+use App\Events\NotificationCreated;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 
 it('implements ShouldBroadcastNow for synchronous broadcasting', function () {
-    expect(new UserFollowed(42))->toBeInstanceOf(ShouldBroadcastNow::class);
+    expect(new NotificationCreated(42))->toBeInstanceOf(ShouldBroadcastNow::class);
 });
 
 it('broadcasts on the notified user private channel', function () {
-    $channels = (new UserFollowed(42))->broadcastOn();
+    $channels = (new NotificationCreated(42))->broadcastOn();
 
     expect($channels)->toHaveCount(1)
         ->and($channels[0])->toBeInstanceOf(PrivateChannel::class)
@@ -17,5 +17,5 @@ it('broadcasts on the notified user private channel', function () {
 });
 
 it('uses a short broadcast event name', function () {
-    expect((new UserFollowed(42))->broadcastAs())->toBe('notification.created');
+    expect((new NotificationCreated(42))->broadcastAs())->toBe('notification.created');
 });

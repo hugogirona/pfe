@@ -153,7 +153,28 @@ class extends Component
         ]);
     }
 
-    #[On('echo-private:App.Models.User.{profile.user_id},.avatar.processed')]
+    /**
+     * Avatar and media processing run in queued jobs that broadcast back on the
+     * owner's private user channel. Only the owner sees these live updates, so we
+     * subscribe conditionally: a visitor would otherwise request authorization for
+     * someone else's private channel on /broadcasting/auth and receive a 403.
+     *
+     * @return array<string, string>
+     */
+    public function getListeners(): array
+    {
+        if (! $this->isOwner) {
+            return [];
+        }
+
+        $userId = (int) $this->profile->user_id;
+
+        return [
+            "echo-private:App.Models.User.{$userId},.avatar.processed" => 'refreshAvatar',
+            "echo-private:App.Models.User.{$userId},.media.processed" => 'refreshMedia',
+        ];
+    }
+
     public function refreshAvatar(): void
     {
         $this->profile->refresh();
@@ -163,7 +184,6 @@ class extends Component
     #[On('media-added')]
     #[On('media-updated')]
     #[On('media-deleted')]
-    #[On('echo-private:App.Models.User.{profile.user_id},.media.processed')]
     public function refreshMedia(): void
     {
         $this->profile->load('media');
@@ -210,6 +230,7 @@ class extends Component
 
             {{-- Sidebar --}}
             <aside class="w-full lg:w-80 shrink-0 lg:sticky lg:top-24" aria-label="{{ $profile->user->full_name }}">
+                <h2 class="sr-only">{{ __('profile.card_heading', ['name' => $profile->user->full_name]) }}</h2>
                 <x-parts.profile.identity-card
                     :profile="$profile"
                     :isOwner="$isOwner"

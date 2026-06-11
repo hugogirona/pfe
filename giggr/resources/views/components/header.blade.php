@@ -1,5 +1,7 @@
+@props(['heading' => null])
+
 <header class="sticky top-0 z-50 bg-bg border-b border-dark/10">
-    <h1 class="sr-only">{{ __('nav.site_title') }}</h1>
+    <h1 class="sr-only">{{ $heading ?? __('nav.site_title') }}</h1>
     <div class="border-b border-dark/10">
         <div class="max-w-6xl mx-auto px-6 py-1.5 flex items-center justify-end">
             <x-footer.lang-switcher variant="light" />

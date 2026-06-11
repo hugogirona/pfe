@@ -15,6 +15,7 @@ return [
     'experience_unset_short' => 'N/A',
     'stat_ads' => 'active listing|active listings',
     'avatar_alt' => 'Profile picture of :name',
+    'card_heading' => 'Profile card of :name',
 
     // Music links (coming soon)
     'music_links_label' => 'Music links',

@@ -7,4 +7,5 @@ return [
     'load_more' => 'Meer laden',
     'empty' => 'Je hebt nog geen meldingen.',
     'new_follower' => ':name volgt je nu.',
+    'new_announcement' => ':name plaatste een nieuwe advertentie: :title',
 ];

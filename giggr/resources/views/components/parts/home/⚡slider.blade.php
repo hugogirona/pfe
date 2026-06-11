@@ -24,7 +24,12 @@ new class extends Component {
 
         $this->items = $this->type === 'announcements'
             ? Announcement::with(['city', 'instruments', 'genres'])->active()->latest()->limit(7)->get()
-            : Profile::with(['user', 'city', 'instruments', 'genres'])->inRandomOrder()->limit(7)->get();
+            : Profile::with(['user', 'city', 'instruments', 'genres'])
+                ->whereNotNull('avatar_path')
+                ->whereNotNull('bio')
+                ->inRandomOrder()
+                ->limit(7)
+                ->get();
 
         if ($this->type === 'profiles') {
             $viewer = auth()->user();

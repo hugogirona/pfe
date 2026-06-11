@@ -47,7 +47,7 @@ it('preserves relation counts when the avatar is refreshed', function () {
 
     $this->actingAs($owner);
 
-    $component = Livewire::test('pages::profile.index', ['id' => $profile->id]);
+    $component = Livewire::test('pages::profile.show', ['id' => $profile->id]);
 
     expect($component->get('profile')->followers_count)->toBe(1)
         ->and($component->get('profile')->followed_count)->toBe(1);
@@ -71,7 +71,7 @@ it('preserves relation counts after announcement-created is received', function 
 
     $this->actingAs($owner);
 
-    $component = Livewire::test('pages::profile.index', ['id' => $profile->id]);
+    $component = Livewire::test('pages::profile.show', ['id' => $profile->id]);
 
     expect($component->get('profile')->followers_count)->toBe(1)
         ->and($component->get('profile')->followed_count)->toBe(1);
@@ -95,7 +95,7 @@ it('preserves relation counts after the bio is saved', function () {
 
     $this->actingAs($owner);
 
-    $component = Livewire::test('pages::profile.index', ['id' => $profile->id])
+    $component = Livewire::test('pages::profile.show', ['id' => $profile->id])
         ->set('bio', 'A new bio with more than ten characters.')
         ->call('saveBio');
 
@@ -111,7 +111,7 @@ it('refreshes followers and followed counts when follow-state-changed is receive
 
     $this->actingAs($owner);
 
-    $component = Livewire::test('pages::profile.index', ['id' => $profile->id]);
+    $component = Livewire::test('pages::profile.show', ['id' => $profile->id]);
 
     expect($component->get('profile')->followers_count)->toBe(0)
         ->and($component->get('profile')->followed_count)->toBe(0);

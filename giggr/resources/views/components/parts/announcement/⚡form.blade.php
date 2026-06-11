@@ -1,5 +1,6 @@
 <?php
 
+use App\Actions\NotifyFollowersOfNewAnnouncement;
 use App\Enums\AnnouncementStatus;
 use App\Enums\AnnouncementType;
 use App\Models\Announcement;
@@ -95,6 +96,8 @@ new class extends Component {
 
         $announcement->instruments()->sync($this->selectedInstruments);
         $announcement->genres()->sync($this->selectedGenres);
+
+        app(NotifyFollowersOfNewAnnouncement::class)->execute($announcement);
 
         $this->redirectRoute('announcement', ['id' => $announcement->id], navigate: true);
     }

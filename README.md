@@ -62,27 +62,64 @@ php artisan migrate --seed
 ## Lancer le projet
 
 ```bash
-# Lancer le serveur et la compilation des assets
+# Lancer le serveur, la file d'attente, les logs et la compilation des assets
 composer run dev
 ```
 
+Cette commande démarre en parallèle :
+
+- le serveur web (`php artisan serve`)
+- le worker de file d'attente (`php artisan queue:listen`)
+- le suivi des logs en direct (`php artisan pail`)
+- la compilation des assets en mode watch (`npm run dev`)
+
 L'application est accessible sur `http://localhost:8000`.
 
-Le back-office Filament est accessible sur `http://localhost:8000/admin`.
+### Messagerie en temps réel (Laravel Reverb)
+
+La messagerie s'appuie sur **Laravel Reverb** (serveur WebSocket). Pour
+l'utiliser, installer puis démarrer le serveur Reverb :
+
+```bash
+# 1. Installer Reverb (renseigne les identifiants dans .env)
+php artisan reverb:install
+
+# 2. Démarrer le serveur WebSocket (dans un terminal dédié)
+php artisan reverb:start
+```
+
+### File d'attente (jobs `ShouldQueue`)
+
+Plusieurs traitements sont mis en file d'attente (`ShouldQueue`) : traitement
+des images d'avatar et de média, envoi des e-mails (contact, vérification,
+réinitialisation de mot de passe). Un worker doit donc tourner pour les
+exécuter :
+
+```bash
+php artisan queue:work
+```
+
+> composer run dev` lance déjà un `queue:listen` ; cette commande n'est
+> nécessaire que si vous démarrez le serveur seul (`php artisan serve`).
 
 
 
 ## Technologies utilisées
 
-| Technologie                   | Rôle                      |
-| ----------------------------- | ------------------------- |
-| **Laravel**                   | Framework back-end        |
-| **Livewire**                  | Composants dynamiques     |
-| **Alpine.js**                 | Interactivité côté client |
-| **Tailwind CSS**              | Styles                    |
-| **WebSockets** (Laravel Echo) | Messagerie en temps réel  |
-| **MySQL**                     | Base de données           |
-| **Filament**                  | Back-office admin         |
+| Technologie                | Rôle                                   |
+| -------------------------- | -------------------------------------- |
+| **Laravel 13**             | Framework back-end                     |
+| **Livewire 4**             | Composants dynamiques côté serveur     |
+| **Alpine.js**              | Interactivité côté client              |
+| **Tailwind CSS 4**         | Styles                                 |
+| **Laravel Fortify**        | Authentification                       |
+| **Laravel Reverb** + Echo  | Messagerie en temps réel (WebSockets)  |
+| **Laravel Localization**   | Internationalisation (FR / EN / NL)    |
+| **Intervention Image**     | Traitement des images (avatars)        |
+| **Resend**                 | Envoi d'e-mails                        |
+| **Pest 4**                 | Tests automatisés                      |
+| **Vite**                   | Build des assets front-end             |
+| **MySQL**                  | Base de données                        |
 
 
 
@@ -154,21 +191,29 @@ Giggr offre un espace dédié où les artistes peuvent :
 
 
 
-## Pages
+L'application est disponible en trois langues (FR / EN / NL), les URL étant
+elles-mêmes traduites et préfixées par la locale (ex. `/fr/explorer`,
+`/en/explore`).
 
-| Page                    | Accès                                             |
-| ----------------------- | ------------------------------------------------- |
-| Accueil                 | Public                                            |
-| Explorer                | Public (contacter → invitation à créer un compte) |
-| Profil public           | Public (contacter → invitation à créer un compte) |
-| Détail annonce          | Public (contacter → invitation à créer un compte) |
-| Publier une annonce     | Connecté                                          |
-| Modifier une annonce    | Connecté (propriétaire)                           |
-| Mon profil              | Connecté                                          |
-| Modifier mon profil     | Connecté                                          |
-| Messagerie              | Connecté                                          |
-| Connexion / Inscription | Public                                            |
-| Contact                 | Public                                            |
+| Page                          | Route (FR)                              | Accès                |
+| ----------------------------- | --------------------------------------- | -------------------- |
+| Accueil                       | `/`                                     | Public               |
+| Explorer                      | `/explorer/{tab?}`                      | Public               |
+| Profil                        | `/profil/{id}`                          | Connecté + vérifié   |
+| Détail d'une annonce          | `/annonces/{id}`                        | Connecté + vérifié   |
+| Paramètres du compte          | `/parametres/compte`                    | Connecté + vérifié   |
+| Contact                       | `/contact`                              | Public               |
+| Politique de confidentialité  | `/politique-de-confidentialite`         | Public               |
+| Inscription                   | `/inscription`                          | Public (invité)      |
+| Connexion                     | `/connexion`                            | Public (invité)      |
+| Mot de passe oublié           | `/mot-de-passe-oublie`                  | Public (invité)      |
+| Réinitialiser le mot de passe | `/reinitialiser-mot-de-passe/{token}`   | Public (invité)      |
+| Vérification de l'e-mail      | `/verifier-email`                       | Connecté             |
+
+La **messagerie**, la **publication / modification d'annonces** et
+l'**édition du profil** ne sont pas des pages dédiées : ce sont des panneaux
+et formulaires intégrés (overlay, modales, édition en ligne) chargés par
+Livewire au sein des pages ci-dessus.
 
 ---
 
@@ -182,61 +227,67 @@ Giggr offre un espace dédié où les artistes peuvent :
 
 ### Explorer
 
-- Filtres : ville, rayon, instruments
+- Filtres dans un tiroir (drawer) : ville, rayon, instruments, genres
 - Onglet **Musiciens** : liste des profils correspondant aux filtres
 - Onglet **Annonces** : liste des annonces correspondant aux filtres
-- Le contenu est visible sans compte, mais cliquer sur "Contacter" redirige vers `/connexion` avec une invitation à créer un compte
+- Pagination des résultats
+- Le contenu est visible sans compte ; cliquer sur un profil, une annonce ou "Contacter" redirige vers `/connexion` avec une invitation à créer un compte
 
 ---
 
-### Profil public
+### Profil
 
-- Informations du musicien : nom, âge, ville, bio, instruments, genres, disponibilités, statut
-- Annonces actives publiées par cet utilisateur
-- Bouton "Contacter" : visible mais redirige vers `/connexion` si non connecté
-
----
-
-### Mon profil
-
-- Vue de son propre profil public
-- Bouton "Modifier" pour accéder au formulaire d'édition
-
-### Modifier mon profil
-
-- Formulaire : nom, âge, ville, bio, instruments, genres, disponibilités, statut, avatar
+- Informations du musicien : nom, ville, bio, instruments, genres, disponibilités, statut
+- Galerie de médias (images, liens YouTube)
+- Annonces publiées par cet utilisateur
+- Actions sociales : suivre / demander en ami, bloquer
+- Bouton "Contacter" qui ouvre la messagerie
+- Sur son **propre** profil : édition en ligne (bio, avatar, instruments, genres, ajout de médias) directement sur la page
 
 ---
 
 ### Détail d'une annonce
 
-- Toutes les informations de l'annonce
+- Toutes les informations de l'annonce : titre, type (Je cherche / Je propose), description, ville, rayon, instruments, genres
 - Fiche de l'auteur avec lien vers son profil
-- Bouton "Contacter l'auteur" : visible mais redirige vers `/connexion` si non connecté
+- Annonces liées
+- Bouton "Contacter l'auteur" qui ouvre la messagerie
+- L'auteur peut publier / modifier son annonce via un formulaire intégré
 
 ---
 
-### Publier / Modifier une annonce
+### Paramètres du compte
 
-- Formulaire : titre, type (Je cherche / Je propose), description, ville, rayon, instruments, genres
+- Informations personnelles : nom, ville, date de naissance, statut
+- Confidentialité : visibilité du profil (public / privé)
+- Modification de l'adresse e-mail et du mot de passe
+- Suppression du compte
 
 ---
 
 ### Messagerie (overlay)
 
-- Accessible depuis l'icône dans la navigation ou les boutons "Contacter"
+- Accessible depuis l'icône dans la navigation (avec badge de messages non lus) ou les boutons "Contacter"
 - Liste des conversations
-- Vue d'une conversation avec envoi de messages en temps réel
+- Vue d'une conversation avec envoi de messages **en temps réel** (Laravel Reverb)
 
 ---
 
-### Connexion / Inscription (/connexion)
+### Authentification
 
-- Onglet connexion : email, mot de passe
-- Onglet inscription : prénom, nom, email, mot de passe
+- **Inscription** : prénom, nom, email, mot de passe (protégée par honeypot anti-spam)
+- **Connexion** : email, mot de passe
+- **Vérification de l'e-mail** : saisie du code envoyé par e-mail après l'inscription
+- **Mot de passe oublié / réinitialisation** : envoi d'un lien par e-mail puis définition d'un nouveau mot de passe
 
 ---
 
 ### Contact
 
-- Formulaire de contact : nom, email, sujet, message
+- Formulaire de contact : nom, email, sujet, message (protégé par honeypot anti-spam)
+
+---
+
+### Politique de confidentialité
+
+- Page légale statique présentant le traitement des données personnelles

@@ -70,7 +70,7 @@ new #[Layout('layouts.app')] class extends Component {
     <div class="max-w-3xl mx-auto px-6 py-10 space-y-6">
 
         <header>
-            <h1 class="font-heading text-3xl text-heading">{{ __('settings.title') }}</h1>
+            <h2 class="font-heading text-3xl text-heading">{{ __('settings.title') }}</h2>
             <p class="text-sm text-subtle mt-1 uppercase tracking-wider">{{ __('settings.account_section') }}</p>
         </header>
 

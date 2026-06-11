@@ -1,8 +1,25 @@
 <?php
 
+use App\Models\Announcement;
 use App\Models\User;
+use App\Notifications\NewAnnouncement;
 use App\Notifications\NewFollower;
 use Livewire\Livewire;
+
+it('renders an announcement notification and links it to the announcement', function () {
+    $user = User::factory()->withProfile()->create();
+    $author = User::factory()->withProfile()->create();
+    $announcement = Announcement::factory()->for($author)->create(['title' => 'Cherche bassiste']);
+    $user->notify(new NewAnnouncement($announcement));
+
+    $id = $user->notifications()->first()->id;
+
+    Livewire::actingAs($user)
+        ->test('parts.notifications.panel')
+        ->assertSee('Cherche bassiste')
+        ->call('open', $id)
+        ->assertRedirect(route('announcement', ['id' => $announcement->id]));
+});
 
 it('lists the new-follower notifications', function () {
     $user = User::factory()->withProfile()->create();
@@ -12,6 +29,21 @@ it('lists the new-follower notifications', function () {
     Livewire::actingAs($user)
         ->test('parts.notifications.panel')
         ->assertSee($follower->full_name);
+});
+
+it('renders the follower current avatar, not the one frozen at notification time', function () {
+    $user = User::factory()->withProfile()->create();
+    $follower = User::factory()->withProfile()->create();
+    $follower->profile->update(['avatar_path' => 'old-hash']);
+
+    $user->notify(new NewFollower($follower));
+
+    $follower->profile->update(['avatar_path' => 'new-hash']);
+
+    Livewire::actingAs($user)
+        ->test('parts.notifications.panel')
+        ->assertSee('new-hash')
+        ->assertDontSee('old-hash');
 });
 
 it('loads the first 20 notifications and reveals more on demand', function () {

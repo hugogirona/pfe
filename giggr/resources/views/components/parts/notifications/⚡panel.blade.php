@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\Profile;
+use App\Notifications\NewAnnouncement;
 use Illuminate\Support\Collection;
 use Livewire\Attributes\Computed;
 use Livewire\Component;
@@ -24,6 +26,37 @@ new class extends Component {
             ->get();
     }
 
+    /**
+     * @return array<int, string|null>
+     */
+    #[Computed]
+    public function thumbnails(): array
+    {
+        $profileIds = $this->rows
+            ->map(fn (object $notification) => $this->actorProfileId($notification))
+            ->filter()
+            ->unique()
+            ->values()
+            ->all();
+
+        if ($profileIds === []) {
+            return [];
+        }
+
+        return Profile::whereIn('id', $profileIds)
+            ->get(['id', 'avatar_path'])
+            ->mapWithKeys(fn (Profile $profile) => [$profile->id => $profile->thumbnail])
+            ->all();
+    }
+
+    /** Actor profile id, tolerating the legacy `follower_*` payload of old rows. */
+    private function actorProfileId(object $notification): ?int
+    {
+        return $notification->data['actor_profile_id']
+            ?? $notification->data['follower_profile_id']
+            ?? null;
+    }
+
     #[Computed]
     public function hasMore(): bool
     {
@@ -40,7 +73,7 @@ new class extends Component {
     {
         $this->perPage += self::PER_PAGE;
 
-        unset($this->rows, $this->hasMore);
+        unset($this->rows, $this->hasMore, $this->thumbnails);
     }
 
     public function markAllRead(): void
@@ -61,10 +94,25 @@ new class extends Component {
         $notification->markAsRead();
         $this->dispatch('notifications-updated');
 
-        $profileId = $notification->data['follower_profile_id'] ?? null;
-        if ($profileId !== null) {
-            $this->redirect(route('profile', ['id' => $profileId]), navigate: true);
+        $url = $this->urlFor($notification);
+        if ($url !== null) {
+            $this->redirect($url, navigate: true);
         }
+    }
+
+    private function urlFor(object $notification): ?string
+    {
+        if ($notification->type === NewAnnouncement::class) {
+            $announcementId = $notification->data['announcement_id'] ?? null;
+
+            return $announcementId !== null
+                ? route('announcement', ['id' => $announcementId])
+                : null;
+        }
+
+        $profileId = $this->actorProfileId($notification);
+
+        return $profileId !== null ? route('profile', ['id' => $profileId]) : null;
     }
 };
 ?>
@@ -89,9 +137,12 @@ new class extends Component {
         <ul class="divide-y divide-dark/8 -mx-6">
             @foreach ($this->rows as $row)
                 @php
-                    $thumbnail = $row->data['follower_thumbnail'] ?? null;
-                    $name = $row->data['follower_name'] ?? '';
+                    $data = $row->data;
+                    $profileId = $data['actor_profile_id'] ?? $data['follower_profile_id'] ?? null;
+                    $thumbnail = $profileId ? ($this->thumbnails[$profileId] ?? null) : null;
+                    $name = $data['actor_name'] ?? $data['follower_name'] ?? '';
                     $isUnread = $row->read_at === null;
+                    $isAnnouncement = $row->type === \App\Notifications\NewAnnouncement::class;
                 @endphp
                 <li wire:key="notification-{{ $row->id }}">
                     <button
@@ -112,7 +163,14 @@ new class extends Component {
 
                         <div class="flex-1 min-w-0">
                             <p class="text-sm text-body leading-snug">
-                                {!! __('notifications.new_follower', ['name' => '<span class="font-semibold">'.e($name).'</span>']) !!}
+                                @if ($isAnnouncement)
+                                    {!! __('notifications.new_announcement', [
+                                        'name' => '<span class="font-semibold">'.e($name).'</span>',
+                                        'title' => '<span class="font-medium">'.e($data['announcement_title'] ?? '').'</span>',
+                                    ]) !!}
+                                @else
+                                    {!! __('notifications.new_follower', ['name' => '<span class="font-semibold">'.e($name).'</span>']) !!}
+                                @endif
                             </p>
                             <p class="text-xs text-caption mt-0.5">{{ $row->created_at->diffForHumans() }}</p>
                         </div>

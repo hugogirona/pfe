@@ -13,6 +13,7 @@ $scrollIntoViewJsSnippet = ($scrollTo !== false)
 <div>
     @if ($paginator->hasPages())
         <nav aria-label="{{ __('pagination.aria_label') }}" class="flex items-center justify-center gap-1">
+            <h2 class="sr-only">{{ __('pagination.aria_label') }}</h2>
 
             {{-- Previous --}}
             @if ($paginator->onFirstPage())
