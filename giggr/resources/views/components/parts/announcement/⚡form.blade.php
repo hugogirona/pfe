@@ -160,9 +160,6 @@ new class extends Component {
                     :placeholder="__('announcement.form_title_placeholder')"
                     required
                 />
-                @error('title')
-                <p class="text-xs text-accent mt-1.5" role="alert">{{ $message }}</p>
-                @enderror
             </div>
 
             {{-- Type --}}
@@ -174,9 +171,6 @@ new class extends Component {
                         <option value="{{ $typeOption['value'] }}">{{ $typeOption['label'] }}</option>
                     @endforeach
                 </x-form.select>
-                @error('type')
-                <p class="text-xs text-accent mt-1.5" role="alert">{{ $message }}</p>
-                @enderror
             </div>
 
             {{-- Ville --}}
@@ -225,9 +219,6 @@ new class extends Component {
                     :rows="4"
                     required
                 />
-                @error('description')
-                <p class="text-xs text-accent mt-1.5" role="alert">{{ $message }}</p>
-                @enderror
             </div>
 
             <x-parts.form-actions

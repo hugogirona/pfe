@@ -194,9 +194,6 @@ new class extends Component {
                 wire:model="caption"
                 :placeholder="__('profile.add_image_caption_placeholder')"
             />
-            @error('caption')
-                <p class="text-xs text-accent mt-1.5" role="alert">{{ $message }}</p>
-            @enderror
         </div>
 
         <x-parts.form-actions
