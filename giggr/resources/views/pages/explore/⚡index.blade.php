@@ -66,7 +66,8 @@ class extends Component {
             ->when($followingActive, fn($q) => $q->whereIn('id', $this->followedProfileIdsForFilter))
             ->orderByDesc('profiles.created_at')
             ->orderByDesc('profiles.id')
-            ->paginate(12, pageName: 'profiles-page');
+            ->paginate(12, pageName: 'profiles-page')
+            ->onEachSide(1);
     }
 
     #[Computed]
@@ -87,7 +88,8 @@ class extends Component {
             ))
             ->orderByDesc('announcements.created_at')
             ->orderByDesc('announcements.id')
-            ->paginate(12, pageName: 'announcements-page');
+            ->paginate(12, pageName: 'announcements-page')
+            ->onEachSide(1);
     }
 
     #[Computed]

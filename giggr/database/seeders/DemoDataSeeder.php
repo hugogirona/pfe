@@ -10,6 +10,7 @@ use App\Models\Follow;
 use App\Models\Media;
 use App\Models\Profile;
 use App\Models\User;
+use App\Support\JuryRoster;
 use Illuminate\Database\Seeder;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\App;
@@ -47,18 +48,20 @@ class DemoDataSeeder extends Seeder
             'password' => 'change_this',
         ]);
 
-        $jury = collect([
-            ['first_name' => 'Dominique', 'last_name' => 'Vilain', 'email' => 'dvilain@giggr.be', 'password' => 'dvilain0626'],
-            ['first_name' => 'François', 'last_name' => 'Parmentier', 'email' => 'fparmentier@giggr.be', 'password' => 'fparmentier0626'],
-        ])->map(fn (array $attributes) => User::factory()->withProfile([
-            'city_id' => $liege?->id,
-            'birth_date' => null,
-            'experience_years' => 8,
-        ])->create($attributes));
+        JuryRoster::members()->each(function (array $member): void {
+            $user = User::factory()->create([
+                'first_name' => $member['first_name'],
+                'last_name' => $member['last_name'],
+                'email' => $member['email'],
+                'password' => $member['password'],
+            ]);
 
-        $featured = $jury->prepend($developer);
+            Profile::create(['user_id' => $user->id]);
+        });
 
-        $users = User::factory()->count(30)->withProfile()->create();
+        $featured = collect([$developer]);
+
+        $users = User::factory()->count(80)->withProfile()->create();
 
         foreach ($users->random(5) as $followed) {
             $featured->each(fn (User $user) => $user->follow($followed->profile));
@@ -67,7 +70,7 @@ class DemoDataSeeder extends Seeder
             $featured->each(fn (User $user) => $follower->follow($user->profile));
         }
 
-        $announcements = Announcement::factory()->count(50)->recycle($users)->create();
+        $announcements = Announcement::factory()->count(150)->recycle($users)->create();
         $profiles = Profile::whereIn('user_id', $users->pluck('id'))->get();
         $followables = $profiles->map(fn ($p) => ['type' => $p->getMorphClass(), 'id' => $p->id])
             ->concat($announcements->map(fn ($a) => ['type' => $a->getMorphClass(), 'id' => $a->id])->all());
@@ -75,7 +78,7 @@ class DemoDataSeeder extends Seeder
         $created = 0;
         $attempts = 0;
 
-        while ($created < 100 && $attempts < 500) {
+        while ($created < 250 && $attempts < 1500) {
             $attempts++;
             $user = $users->random();
             $followable = $followables->random();

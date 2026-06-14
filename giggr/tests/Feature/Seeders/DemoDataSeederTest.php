@@ -6,8 +6,10 @@ use App\Models\Follow;
 use App\Models\Media;
 use App\Models\Profile;
 use App\Models\User;
+use App\Support\JuryRoster;
 use Database\Seeders\DemoDataSeeder;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 
 beforeEach(function () {
@@ -25,7 +27,7 @@ it('does not seed anything in production', function () {
     expect(User::count())->toBe(0);
 });
 
-it('seeds 30 demo users plus the developer and jury accounts in local environment', function () {
+it('seeds 80 demo users plus the developer and the jury accounts in local environment', function () {
     App::partialMock()
         ->shouldReceive('environment')
         ->with(['local', 'staging'])
@@ -33,10 +35,10 @@ it('seeds 30 demo users plus the developer and jury accounts in local environmen
 
     $this->seed(DemoDataSeeder::class);
 
-    expect(User::count())->toBe(33);
+    expect(User::count())->toBe(1 + JuryRoster::COUNT + 80);
 });
 
-it('seeds the developer and jury accounts with stable emails', function () {
+it('seeds the developer and every jury account with stable credentials', function () {
     App::partialMock()
         ->shouldReceive('environment')
         ->with(['local', 'staging'])
@@ -44,9 +46,35 @@ it('seeds the developer and jury accounts with stable emails', function () {
 
     $this->seed(DemoDataSeeder::class);
 
-    expect(User::where('email', 'hugo@giggr.be')->exists())->toBeTrue()
-        ->and(User::where('email', 'dvilain@giggr.be')->exists())->toBeTrue()
-        ->and(User::where('email', 'fparmentier@giggr.be')->exists())->toBeTrue();
+    expect(User::where('email', 'hugo@giggr.be')->exists())->toBeTrue();
+
+    JuryRoster::members()->each(function (array $member) {
+        $user = User::where('email', $member['email'])->first();
+
+        expect($user)->not->toBeNull()
+            ->and(Hash::check($member['password'], $user->password))->toBeTrue()
+            ->and($user->email_verified_at)->not->toBeNull();
+    });
+});
+
+it('seeds empty jury profiles so the onboarding state can be demonstrated', function () {
+    App::partialMock()
+        ->shouldReceive('environment')
+        ->with(['local', 'staging'])
+        ->andReturn(true);
+
+    $this->seed(DemoDataSeeder::class);
+
+    JuryRoster::members()->each(function (array $member) {
+        $profile = User::where('email', $member['email'])->first()->profile;
+
+        expect($profile)->not->toBeNull()
+            ->and($profile->bio)->toBeNull()
+            ->and($profile->avatar_path)->toBeNull()
+            ->and($profile->instruments)->toHaveCount(0)
+            ->and($profile->genres)->toHaveCount(0)
+            ->and($profile->media)->toHaveCount(0);
+    });
 });
 
 it('seeds a profile for every user', function () {
@@ -60,7 +88,7 @@ it('seeds a profile for every user', function () {
     expect(Profile::count())->toBe(User::count());
 });
 
-it('seeds approximately 50 announcements', function () {
+it('seeds 150 announcements', function () {
     App::partialMock()
         ->shouldReceive('environment')
         ->with(['local', 'staging'])
@@ -68,11 +96,10 @@ it('seeds approximately 50 announcements', function () {
 
     $this->seed(DemoDataSeeder::class);
 
-    expect(Announcement::count())->toBeGreaterThanOrEqual(40)
-        ->and(Announcement::count())->toBeLessThanOrEqual(60);
+    expect(Announcement::count())->toBe(150);
 });
 
-it('seeds approximately 100 follows', function () {
+it('seeds approximately 250 follows', function () {
     App::partialMock()
         ->shouldReceive('environment')
         ->with(['local', 'staging'])
@@ -80,8 +107,8 @@ it('seeds approximately 100 follows', function () {
 
     $this->seed(DemoDataSeeder::class);
 
-    expect(Follow::count())->toBeGreaterThanOrEqual(100)
-        ->and(Follow::count())->toBeLessThanOrEqual(140);
+    expect(Follow::count())->toBeGreaterThanOrEqual(250)
+        ->and(Follow::count())->toBeLessThanOrEqual(310);
 });
 
 it('every announcement belongs to a seeded user', function () {
@@ -110,7 +137,7 @@ it('every follow belongs to a seeded user', function () {
     expect(Follow::whereNotIn('user_id', $userIds)->count())->toBe(0);
 });
 
-it('seeds one image and one video for every profile', function () {
+it('seeds one image and one video for every non-jury profile', function () {
     App::partialMock()
         ->shouldReceive('environment')
         ->with(['local', 'staging'])
@@ -118,8 +145,10 @@ it('seeds one image and one video for every profile', function () {
 
     $this->seed(DemoDataSeeder::class);
 
-    expect(Media::where('type', MediaType::Image)->count())->toBe(Profile::count())
-        ->and(Media::where('type', MediaType::Youtube)->count())->toBe(Profile::count());
+    $populatedProfiles = Profile::count() - JuryRoster::COUNT;
+
+    expect(Media::where('type', MediaType::Image)->count())->toBe($populatedProfiles)
+        ->and(Media::where('type', MediaType::Youtube)->count())->toBe($populatedProfiles);
 });
 
 it('generates image variants on disk for the seeded photo', function () {
