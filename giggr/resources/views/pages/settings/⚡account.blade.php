@@ -74,6 +74,7 @@ new #[Layout('layouts.app')] class extends Component {
             <p class="text-sm text-subtle mt-1 uppercase tracking-wider">{{ __('settings.account_section') }}</p>
         </header>
 
+        <livewire:parts.settings.update-name />
         <livewire:parts.settings.update-email />
         <livewire:parts.settings.update-password />
         <livewire:parts.settings.personal-info />

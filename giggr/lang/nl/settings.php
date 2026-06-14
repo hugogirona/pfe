@@ -9,6 +9,14 @@ return [
     'block' => 'Blokkeren',
     'unblock' => 'Deblokkeren',
 
+    // Name
+    'name_title' => 'Naam',
+    'name_description' => 'Je voor- en achternaam zoals ze op je profiel verschijnen.',
+    'name_first_label' => 'Voornaam',
+    'name_last_label' => 'Achternaam',
+    'name_submit' => 'Opslaan',
+    'name_saved' => 'Naam opgeslagen.',
+
     // Email
     'email_title' => 'E-mailadres',
     'email_description' => 'Als je je e-mail wijzigt, moet je je nieuwe adres bevestigen met een verificatiecode.',
