@@ -8,6 +8,7 @@ return [
         'lessons' => 'Muziekles',
     ],
     'profile_status' => [
+        'newcomer' => 'Nieuw hier',
         'looking_for_band' => 'Zoekt band',
         'available_for_sessions' => 'Beschikbaar voor sessies',
         'teaching' => 'Geeft les',
