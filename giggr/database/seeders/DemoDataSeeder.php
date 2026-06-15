@@ -10,6 +10,7 @@ use App\Models\Follow;
 use App\Models\Media;
 use App\Models\Profile;
 use App\Models\User;
+use App\Support\JuryRoster;
 use Illuminate\Database\Seeder;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\App;
@@ -36,7 +37,7 @@ class DemoDataSeeder extends Seeder
 
         $liege = City::where('name', 'Liège')->where('postal_code', '4020')->first();
 
-        $hugo = User::factory()->withProfile([
+        $developer = User::factory()->withProfile([
             'city_id' => $liege?->id,
             'birth_date' => '2000-02-14',
             'experience_years' => 12,
@@ -47,31 +48,29 @@ class DemoDataSeeder extends Seeder
             'password' => 'change_this',
         ]);
 
-        $valentina = User::factory()->withProfile([
-            'city_id' => $liege?->id,
-            'birth_date' => '1995-02-01',
-            'experience_years' => 4,
-        ])->create([
-            'first_name' => 'Valentina',
-            'last_name' => 'Vuksani',
-            'email' => 'vali@giggr.be',
-            'password' => 'change_this',
-        ]);
+        JuryRoster::members()->each(function (array $member): void {
+            $user = User::factory()->create([
+                'first_name' => $member['first_name'],
+                'last_name' => $member['last_name'],
+                'email' => $member['email'],
+                'password' => $member['password'],
+            ]);
 
-        $users = User::factory()->count(30)->withProfile()->create();
+            Profile::create(['user_id' => $user->id]);
+        });
 
-        $hugoProfile = $hugo->profile;
-        $valentinaProfile = $valentina->profile;
+        $featured = collect([$developer]);
+
+        $users = User::factory()->count(80)->withProfile()->create();
+
         foreach ($users->random(5) as $followed) {
-            $hugo->follow($followed->profile);
-            $valentina->follow($followed->profile);
+            $featured->each(fn (User $user) => $user->follow($followed->profile));
         }
         foreach ($users->random(5) as $follower) {
-            $follower->follow($hugoProfile);
-            $follower->follow($valentinaProfile);
+            $featured->each(fn (User $user) => $follower->follow($user->profile));
         }
 
-        $announcements = Announcement::factory()->count(50)->recycle($users)->create();
+        $announcements = Announcement::factory()->count(150)->recycle($users)->create();
         $profiles = Profile::whereIn('user_id', $users->pluck('id'))->get();
         $followables = $profiles->map(fn ($p) => ['type' => $p->getMorphClass(), 'id' => $p->id])
             ->concat($announcements->map(fn ($a) => ['type' => $a->getMorphClass(), 'id' => $a->id])->all());
@@ -79,7 +78,7 @@ class DemoDataSeeder extends Seeder
         $created = 0;
         $attempts = 0;
 
-        while ($created < 100 && $attempts < 500) {
+        while ($created < 250 && $attempts < 1500) {
             $attempts++;
             $user = $users->random();
             $followable = $followables->random();
@@ -95,13 +94,16 @@ class DemoDataSeeder extends Seeder
             }
         }
 
-        $this->seedMedia($hugoProfile, $valentinaProfile, $profiles);
+        $this->seedMedia($featured->map->profile, $profiles);
     }
 
     /**
+     * @param  iterable<Profile>  $featuredProfiles
+     * @param  iterable<Profile>  $otherProfiles
+     *
      * @throws Throwable
      */
-    private function seedMedia(Profile $hugoProfile, Profile $valentinaProfile, iterable $otherProfiles): void
+    private function seedMedia(iterable $featuredProfiles, iterable $otherProfiles): void
     {
         $tmpPath = tempnam(sys_get_temp_dir(), 'giggr-demo-media-').'.jpg';
         $img = imagecreatetruecolor(self::DEMO_IMAGE_WIDTH, self::DEMO_IMAGE_HEIGHT);
@@ -113,12 +115,14 @@ class DemoDataSeeder extends Seeder
         $originalConnection = config('queue.default');
         config(['queue.default' => 'sync']);
 
-        try {
-            $hugoImage = app(UploadMediaImage::class)->execute($hugoProfile, $file);
-            $this->attachYoutube($hugoProfile);
+        $featuredImage = null;
 
-            app(UploadMediaImage::class)->execute($valentinaProfile, $file);
-            $this->attachYoutube($valentinaProfile);
+        try {
+            foreach ($featuredProfiles as $profile) {
+                $image = app(UploadMediaImage::class)->execute($profile, $file);
+                $featuredImage ??= $image;
+                $this->attachYoutube($profile);
+            }
         } finally {
             config(['queue.default' => $originalConnection]);
         }
@@ -127,7 +131,7 @@ class DemoDataSeeder extends Seeder
             Media::create([
                 'profile_id' => $profile->id,
                 'type' => MediaType::Image,
-                'source' => $hugoImage->source,
+                'source' => $featuredImage->source,
                 'position' => 0,
                 'width' => self::DEMO_IMAGE_WIDTH,
                 'height' => self::DEMO_IMAGE_HEIGHT,

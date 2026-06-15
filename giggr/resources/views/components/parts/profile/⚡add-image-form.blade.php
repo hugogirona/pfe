@@ -40,10 +40,8 @@ new class extends Component {
 
     public function save(): void
     {
-        abort_unless(auth()->check(), 403);
-
         $profile = Profile::findOrFail((int) $this->model_id);
-        abort_unless(auth()->id() === $profile->user_id, 403);
+        $this->authorize('update', $profile);
 
         $this->validate([
             'photo' => [
@@ -58,6 +56,7 @@ new class extends Component {
         if ($this->isEdit) {
             $media = Media::findOrFail((int) $this->media_id);
             abort_unless($media->profile_id === $profile->id, 403);
+            $this->authorize('update', $media);
 
             if ($this->photo !== null) {
                 app(UploadMediaImage::class)->replace($media, $this->photo);
@@ -92,10 +91,10 @@ new class extends Component {
 
     public function delete(): void
     {
-        abort_unless(auth()->check() && $this->media_id !== null, 403);
+        abort_unless($this->media_id !== null, 403);
 
         $media = Media::findOrFail((int) $this->media_id);
-        abort_unless(auth()->id() === $media->profile->user_id, 403);
+        $this->authorize('delete', $media);
 
         $media->deleteVariants();
         $media->delete();
@@ -194,9 +193,6 @@ new class extends Component {
                 wire:model="caption"
                 :placeholder="__('profile.add_image_caption_placeholder')"
             />
-            @error('caption')
-                <p class="text-xs text-accent mt-1.5" role="alert">{{ $message }}</p>
-            @enderror
         </div>
 
         <x-parts.form-actions

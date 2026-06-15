@@ -250,10 +250,7 @@ new class extends Component {
 
     public function openConversation(int $id): void
     {
-        abort_unless(
-            auth()->user()->conversations()->whereKey($id)->exists(),
-            403,
-        );
+        $this->authorize('view', Conversation::findOrFail($id));
 
         $userId = (int) auth()->id();
 
@@ -310,10 +307,7 @@ new class extends Component {
 
     public function deleteConversation(int $id): void
     {
-        abort_unless(
-            auth()->user()->conversations()->whereKey($id)->exists(),
-            403,
-        );
+        $this->authorize('delete', Conversation::findOrFail($id));
 
         app(HideConversation::class)->execute(auth()->user(), $id);
 
@@ -331,6 +325,7 @@ new class extends Component {
 
         $correspondent = $this->correspondent;
         abort_unless($correspondent !== null, 404);
+        $this->authorize('block', $correspondent);
 
         auth()->user()->block($correspondent);
         $this->backToList();
@@ -367,15 +362,9 @@ new class extends Component {
 
     private function resolvePendingRequest(int $id): Conversation
     {
-        $userId = (int) auth()->id();
+        $conversation = Conversation::findOrFail($id);
 
-        $conversation = auth()->user()
-            ->conversations()
-            ->whereKey($id)
-            ->first();
-
-        abort_unless($conversation !== null, 403);
-        abort_unless($conversation->requester_user_id !== $userId, 403);
+        $this->authorize('respondToRequest', $conversation);
 
         return $conversation;
     }

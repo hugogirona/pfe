@@ -19,7 +19,7 @@ new class extends Component {
 
     public function save(): void
     {
-        abort_unless(auth()->id() === $this->profile->user_id, 403);
+        $this->authorize('update', $this->profile);
 
         $this->validate([
             'photo' => [

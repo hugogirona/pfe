@@ -31,9 +31,6 @@
                         :rows="5"
                         wire:model="bio"
                     />
-                    @error('bio')
-                        <p class="mt-1.5 text-xs text-danger">{{ $message }}</p>
-                    @enderror
                     <x-parts.profile.inline-edit-actions class="mt-4">
                         <x-slot:cancel @click="$wire.set('bio', snapshot); editing = false">
                             {{ __('profile.cancel') }}

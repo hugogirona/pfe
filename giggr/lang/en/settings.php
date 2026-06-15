@@ -9,6 +9,14 @@ return [
     'block' => 'Block',
     'unblock' => 'Unblock',
 
+    // Name
+    'name_title' => 'Name',
+    'name_description' => 'Your first and last name as they appear across your profile.',
+    'name_first_label' => 'First name',
+    'name_last_label' => 'Last name',
+    'name_submit' => 'Save',
+    'name_saved' => 'Name saved.',
+
     // Email
     'email_title' => 'Email address',
     'email_description' => 'After changing your email, you will need to confirm the new address with a verification code.',
