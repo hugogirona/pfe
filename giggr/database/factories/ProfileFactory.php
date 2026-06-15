@@ -25,7 +25,7 @@ class ProfileFactory extends Factory
             'bio' => fake()->paragraph(),
             'birth_date' => fake()->dateTimeBetween('-55 years', '-18 years')->format('Y-m-d'),
             'avatar_path' => null,
-            'status' => fake()->randomElement(ProfileStatus::cases()),
+            'status' => fake()->randomElement(ProfileStatus::selectable()),
             'experience_years' => fake()->numberBetween(0, 30),
         ];
     }

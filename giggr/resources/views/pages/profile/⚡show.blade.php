@@ -59,7 +59,7 @@ class extends Component
             $this->selectedStatus = $this->profile->status->value;
             $this->selectedInstruments = $this->profile->instruments->pluck('id')->toArray();
             $this->selectedGenres = $this->profile->genres->pluck('id')->toArray();
-            $this->allStatuses = collect(ProfileStatus::cases())
+            $this->allStatuses = collect(ProfileStatus::selectable())
                 ->map(fn ($case) => ['value' => $case->value, 'label' => __($case->label())])
                 ->all();
             $this->allInstruments = Instrument::orderBy('name')->get()
@@ -97,7 +97,7 @@ class extends Component
             $this->selectedStatus = $value;
         }
         $this->validate([
-            'selectedStatus' => ['required', 'in:'.implode(',', array_column(ProfileStatus::cases(), 'value'))],
+            'selectedStatus' => ['required', 'in:'.implode(',', array_column(ProfileStatus::selectable(), 'value'))],
         ]);
         $this->profile->update(['status' => $this->selectedStatus]);
         $this->dispatch('status-saved');
