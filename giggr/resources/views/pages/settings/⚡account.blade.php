@@ -55,6 +55,8 @@ new #[Layout('layouts.app')] class extends Component {
             return;
         }
 
+        $this->authorize('block', $target);
+
         if ($this->blockedState[$userId] ?? false) {
             auth()->user()->unblock($target);
             $this->blockedState[$userId] = false;

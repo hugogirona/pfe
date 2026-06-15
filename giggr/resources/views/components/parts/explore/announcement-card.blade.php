@@ -1,7 +1,7 @@
 @props(['announcement'])
 
 @php
-    $isOwner           = auth()->check() && auth()->id() === $announcement->user_id;
+    $isOwner           = auth()->user()?->can('update', $announcement) ?? false;
     $pillLimit         = 2;
     $shownInstruments  = $announcement->instruments->take($pillLimit);
     $extraInstruments  = max(0, $announcement->instruments->count() - $pillLimit);
