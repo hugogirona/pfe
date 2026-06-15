@@ -144,6 +144,31 @@ it('owner can save status to any ProfileStatus case', function () {
     expect($profile->fresh()->status)->toBe(ProfileStatus::Teaching);
 });
 
+it('does not offer the automatic newcomer state in the status selector', function () {
+    $this->seed([CitySeeder::class, InstrumentSeeder::class, GenreSeeder::class]);
+    $profile = Profile::factory()->create();
+
+    $component = Livewire::actingAs($profile->user)
+        ->test('pages::profile.show', ['id' => $profile->id]);
+
+    expect(array_column($component->get('allStatuses'), 'value'))
+        ->not->toContain(ProfileStatus::Newcomer->value)
+        ->toContain(ProfileStatus::LookingForBand->value);
+});
+
+it('saveStatus rejects the automatic newcomer state', function () {
+    $this->seed([CitySeeder::class, InstrumentSeeder::class, GenreSeeder::class]);
+    $profile = Profile::factory()->create(['status' => ProfileStatus::LookingForBand]);
+
+    Livewire::actingAs($profile->user)
+        ->test('pages::profile.show', ['id' => $profile->id])
+        ->set('selectedStatus', ProfileStatus::Newcomer->value)
+        ->call('saveStatus')
+        ->assertHasErrors(['selectedStatus']);
+
+    expect($profile->fresh()->status)->toBe(ProfileStatus::LookingForBand);
+});
+
 it('saveStatus rejects values outside the ProfileStatus enum', function () {
     $this->seed([CitySeeder::class, InstrumentSeeder::class, GenreSeeder::class]);
     $profile = Profile::factory()->create(['status' => ProfileStatus::LookingForBand]);

@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\ProfileStatus;
 use App\Models\City;
 use App\Models\Profile;
 use Illuminate\Validation\ValidationException;
@@ -23,6 +24,12 @@ it('creates a profile automatically when a new user registers', function () {
     $user = app(CreatesNewUsers::class)->create(validRegistrationInput());
 
     expect(Profile::where('user_id', $user->id)->exists())->toBeTrue();
+});
+
+it('marks a freshly registered profile as a newcomer', function () {
+    $user = app(CreatesNewUsers::class)->create(validRegistrationInput());
+
+    expect($user->profile->status)->toBe(ProfileStatus::Newcomer);
 });
 
 it('stores first_name and last_name separately on the user', function () {
