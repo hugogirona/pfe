@@ -85,7 +85,7 @@ it('marks a notification as read and redirects to the follower profile', functio
     Livewire::actingAs($user)
         ->test('parts.notifications.panel')
         ->call('open', $id)
-        ->assertRedirect(route('profile', ['id' => $follower->profile->id]));
+        ->assertRedirect(route('profile', $follower->profile));
 
     expect($user->fresh()->unreadNotifications()->count())->toBe(0);
 });

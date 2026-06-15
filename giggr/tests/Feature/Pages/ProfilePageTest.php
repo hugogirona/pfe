@@ -13,7 +13,7 @@ it('profile page renders a real profile', function () {
     $profile = Profile::factory()->create();
 
     $this->actingAs($profile->user)
-        ->get(route('profile', ['id' => $profile->id]))
+        ->get(route('profile', $profile))
         ->assertOk()
         ->assertSee($profile->user->full_name);
 });
@@ -22,7 +22,7 @@ it('profile page returns 404 for a missing profile', function () {
     $user = User::factory()->create();
 
     $this->actingAs($user)
-        ->get(route('profile', ['id' => 99999]))
+        ->get(route('profile', 99999))
         ->assertNotFound();
 });
 
@@ -30,7 +30,7 @@ it('profile page redirects guests to login', function () {
     $this->seed([CitySeeder::class, InstrumentSeeder::class, GenreSeeder::class]);
     $profile = Profile::factory()->create();
 
-    $this->get(route('profile', ['id' => $profile->id]))
+    $this->get(route('profile', $profile))
         ->assertRedirectToRoute('login');
 });
 
@@ -47,7 +47,7 @@ it('preserves relation counts when the avatar is refreshed', function () {
 
     $this->actingAs($owner);
 
-    $component = Livewire::test('pages::profile.show', ['id' => $profile->id]);
+    $component = Livewire::test('pages::profile.show', ['profile' => $profile]);
 
     expect($component->get('profile')->followers_count)->toBe(1)
         ->and($component->get('profile')->followed_count)->toBe(1);
@@ -71,7 +71,7 @@ it('preserves relation counts after announcement-created is received', function 
 
     $this->actingAs($owner);
 
-    $component = Livewire::test('pages::profile.show', ['id' => $profile->id]);
+    $component = Livewire::test('pages::profile.show', ['profile' => $profile]);
 
     expect($component->get('profile')->followers_count)->toBe(1)
         ->and($component->get('profile')->followed_count)->toBe(1);
@@ -95,7 +95,7 @@ it('preserves relation counts after the bio is saved', function () {
 
     $this->actingAs($owner);
 
-    $component = Livewire::test('pages::profile.show', ['id' => $profile->id])
+    $component = Livewire::test('pages::profile.show', ['profile' => $profile])
         ->set('bio', 'A new bio with more than ten characters.')
         ->call('saveBio');
 
@@ -111,7 +111,7 @@ it('refreshes followers and followed counts when follow-state-changed is receive
 
     $this->actingAs($owner);
 
-    $component = Livewire::test('pages::profile.show', ['id' => $profile->id]);
+    $component = Livewire::test('pages::profile.show', ['profile' => $profile]);
 
     expect($component->get('profile')->followers_count)->toBe(0)
         ->and($component->get('profile')->followed_count)->toBe(0);
@@ -147,7 +147,7 @@ it('profile page renders gallery items when the profile has medias', function ()
     ]);
 
     $response = $this->actingAs(User::factory()->create())
-        ->get(route('profile', ['id' => $profile->id]))
+        ->get(route('profile', $profile))
         ->assertOk();
 
     $response->assertSee('gallery-photo-rendered')
@@ -161,7 +161,7 @@ it('profile page renders the empty state when no medias', function () {
     $profile = Profile::factory()->create();
 
     $this->actingAs(User::factory()->create())
-        ->get(route('profile', ['id' => $profile->id]))
+        ->get(route('profile', $profile))
         ->assertOk()
         ->assertSee(__('profile.gallery_empty'));
 });
@@ -185,7 +185,7 @@ it('profile page renders the followers and following counts', function () {
     $owner->follow($followed3);
 
     $response = $this->actingAs(User::factory()->create())
-        ->get(route('profile', ['id' => $profile->id]))
+        ->get(route('profile', $profile))
         ->assertOk();
 
     $response->assertSeeTextInOrder(['2', __('social.tab_followers')], false)

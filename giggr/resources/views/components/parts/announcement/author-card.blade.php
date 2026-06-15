@@ -84,7 +84,7 @@
         @endcan
 
         <a
-            href="{{ route('profile', ['id' => $author->id]) }}"
+            href="{{ route('profile', $author) }}"
             class="group w-full flex items-center justify-center gap-1.5 py-2 text-sm font-medium text-subtle hover:text-body transition-colors duration-150 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent rounded-lg"
         >
             {{ __('announcement.author_see_profile') }}

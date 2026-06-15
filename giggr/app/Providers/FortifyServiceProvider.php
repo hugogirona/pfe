@@ -36,7 +36,7 @@ class FortifyServiceProvider extends ServiceProvider
                     return redirect()->route('verification.notice');
                 }
 
-                return redirect()->route('profile', ['id' => $user->profile->id]);
+                return redirect()->route('profile', $user->profile);
             }
         });
     }
