@@ -195,7 +195,7 @@ class extends Component
         $this->reloadRelationCounts();
     }
 
-    #[On('echo:profile.{profile.id},.contact-preference.updated')]
+    #[On('echo-private:profile.{profile.id},.contact-preference.updated')]
     public function refreshContactState(): void
     {
         $this->profile->user->unsetRelation('profile');

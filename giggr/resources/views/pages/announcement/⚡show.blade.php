@@ -39,7 +39,7 @@ new #[Layout('layouts.app')] class extends Component
             ->get();
     }
 
-    #[On('echo:profile.{announcement.user.profile.id},.contact-preference.updated')]
+    #[On('echo-private:profile.{announcement.user.profile.id},.contact-preference.updated')]
     public function refreshContactState(): void
     {
         $this->announcement->user->unsetRelation('profile');
