@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class Profile extends Model
 {
@@ -58,6 +59,22 @@ class Profile extends Model
             'instruments' => ['name'],
             'genres' => ['name'],
         ];
+    }
+
+    public function getRouteKey(): string
+    {
+        $slug = Str::slug((string) $this->user?->full_name);
+
+        return $slug === '' ? (string) $this->getKey() : "{$slug}-{$this->getKey()}";
+    }
+
+    /**
+     * Resolve route model binding by the trailing id, ignoring the cosmetic
+     * name slug produced by getRouteKey().
+     */
+    public function resolveRouteBinding($value, $field = null): ?self
+    {
+        return $this->whereKey((int) Str::afterLast((string) $value, '-'))->first();
     }
 
     public function user(): BelongsTo

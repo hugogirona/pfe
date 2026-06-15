@@ -2,7 +2,7 @@
 
 return [
     'explore' => 'ontdekken/{tab?}',
-    'profile' => 'profiel/{id}',
+    'profile' => 'profiel/{profile}',
     'announcement' => 'advertenties/{id}',
     'contact' => 'contact',
     'privacy' => 'privacybeleid',

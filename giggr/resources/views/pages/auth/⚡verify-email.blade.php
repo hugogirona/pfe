@@ -23,7 +23,7 @@ new #[Layout('layouts.auth')] class extends Component {
             return;
         }
         if ($user->hasVerifiedEmail()) {
-            $this->redirect(route('profile', ['id' => $user->profile->id]), navigate: true);
+            $this->redirect(route('profile', $user->profile), navigate: true);
         }
     }
 
@@ -37,7 +37,7 @@ new #[Layout('layouts.auth')] class extends Component {
         $user = auth()->user();
         abort_unless($user !== null, 403);
         if ($user->hasVerifiedEmail()) {
-            $this->redirect(route('profile', ['id' => $user->profile->id]), navigate: true);
+            $this->redirect(route('profile', $user->profile), navigate: true);
 
             return;
         }
@@ -76,7 +76,7 @@ new #[Layout('layouts.auth')] class extends Component {
 
         $limiter->clear($throttleKey);
 
-        $this->redirect(route('profile', ['id' => $user->profile->id]), navigate: true);
+        $this->redirect(route('profile', $user->profile), navigate: true);
     }
 
     public function resend(RateLimiter $limiter): void

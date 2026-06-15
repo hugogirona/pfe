@@ -111,8 +111,13 @@ new class extends Component {
         }
 
         $profileId = $this->actorProfileId($notification);
+        if ($profileId === null) {
+            return null;
+        }
 
-        return $profileId !== null ? route('profile', ['id' => $profileId]) : null;
+        $profile = Profile::with('user')->find($profileId);
+
+        return $profile !== null ? route('profile', $profile) : null;
     }
 };
 ?>

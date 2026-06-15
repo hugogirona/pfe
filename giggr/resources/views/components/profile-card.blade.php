@@ -5,7 +5,7 @@
 
 @php
     $name              = $profile->user->full_name;
-    $url               = route('profile', ['id' => $profile->id]);
+    $url               = route('profile', $profile);
     $isFollowing       = is_array($followedProfileIds) ? in_array($profile->id, $followedProfileIds, true) : null;
     $pillLimit         = 2;
     $shownInstruments  = $profile->instruments->take($pillLimit)->pluck('translated_name');

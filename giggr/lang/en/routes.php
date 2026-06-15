@@ -2,7 +2,7 @@
 
 return [
     'explore' => 'explore/{tab?}',
-    'profile' => 'profile/{id}',
+    'profile' => 'profile/{profile}',
     'announcement' => 'listings/{id}',
     'contact' => 'contact',
     'privacy' => 'privacy-policy',

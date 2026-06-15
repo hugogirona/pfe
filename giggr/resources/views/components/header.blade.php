@@ -32,7 +32,9 @@
                 <li class="md:hidden"><a href="{{ route('explore') }}" class="hover:text-body hover:underline underline-offset-4">{{ __('nav.explore') }}</a></li>
                 <li class="md:hidden"><a href="{{ route('contact') }}" class="hover:text-body hover:underline underline-offset-4">{{ __('nav.contact') }}</a></li>
                 @auth
-                    <li><a href="{{ route('profile', ['id' => auth()->id()]) }}" class="hover:text-body hover:underline underline-offset-4">{{ __('nav.profile') }}</a></li>
+                    @if (auth()->user()->profile)
+                        <li><a href="{{ route('profile', auth()->user()->profile) }}" class="hover:text-body hover:underline underline-offset-4">{{ __('nav.profile') }}</a></li>
+                    @endif
                     <li><a href="{{ route('settings.account') }}" class="hover:text-body hover:underline underline-offset-4">{{ __('nav.settings') }}</a></li>
                     <li>
                         <form method="POST" action="/logout">

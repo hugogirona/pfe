@@ -26,7 +26,7 @@
     <h3 id="messaging-thread-heading" class="text-sm font-medium text-body truncate min-w-0 flex-1">
         @if ($user)
             <a
-                href="{{ route('profile', ['id' => $user->id]) }}"
+                href="{{ route('profile', $user->profile) }}"
                 wire:navigate
                 class="hover:underline focus-visible:underline focus-visible:outline-none cursor-pointer"
                 aria-label="{{ __('messaging.open_profile', ['name' => $name]) }}"
