@@ -25,10 +25,10 @@ new class extends Component {
     public function mount(): void
     {
         $this->availableInstruments = Instrument::orderBy('name')->get()
-            ->mapWithKeys(fn (Instrument $i) => [$i->name => $i->translated_name])
+            ->mapWithKeys(fn (Instrument $i) => [$i->id => $i->translated_name])
             ->all();
         $this->availableGenres = Genre::orderBy('name')->get()
-            ->mapWithKeys(fn (Genre $g) => [$g->name => $g->translated_name])
+            ->mapWithKeys(fn (Genre $g) => [$g->id => $g->translated_name])
             ->all();
         $this->availableTypes = collect(AnnouncementType::cases())
             ->map(fn ($case) => ['value' => $case->value, 'label' => __($case->label())])
@@ -52,14 +52,14 @@ new class extends Component {
         $this->open = false;
     }
 
-    public function toggleInstrument(string $instrument): void
+    public function toggleInstrument(int $instrument): void
     {
         $this->draftInstruments = in_array($instrument, $this->draftInstruments)
             ? array_values(array_filter($this->draftInstruments, fn($i) => $i !== $instrument))
             : [...$this->draftInstruments, $instrument];
     }
 
-    public function toggleGenre(string $genre): void
+    public function toggleGenre(int $genre): void
     {
         $this->draftGenres = in_array($genre, $this->draftGenres)
             ? array_values(array_filter($this->draftGenres, fn($g) => $g !== $genre))
@@ -211,7 +211,7 @@ new class extends Component {
                     @foreach ($availableInstruments as $value => $label)
                         <button
                             type="button"
-                            wire:click="toggleInstrument('{{ $value }}')"
+                            wire:click="toggleInstrument({{ $value }})"
                             @class([
                                 'h-9 px-4 rounded-full border text-sm font-medium transition-all duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent',
                                 'bg-dark text-on-dark border-dark'                                                => in_array($value, $draftInstruments),
@@ -237,7 +237,7 @@ new class extends Component {
                     @foreach ($availableGenres as $value => $label)
                         <button
                             type="button"
-                            wire:click="toggleGenre('{{ $value }}')"
+                            wire:click="toggleGenre({{ $value }})"
                             @class([
                                 'h-9 px-4 rounded-full border text-sm font-medium transition-all duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent',
                                 'bg-accent text-on-dark border-accent'                                            => in_array($value, $draftGenres),
