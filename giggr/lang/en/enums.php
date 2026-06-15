@@ -8,6 +8,7 @@ return [
         'lessons' => 'Music lessons',
     ],
     'profile_status' => [
+        'newcomer' => 'New here',
         'looking_for_band' => 'Looking for a band',
         'available_for_sessions' => 'Available for sessions',
         'teaching' => 'Offering lessons',

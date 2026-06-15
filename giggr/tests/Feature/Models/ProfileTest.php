@@ -34,11 +34,15 @@ it('can be created with a user', function () {
         ->and($profile->user_id)->toBe($user->id);
 });
 
-it('has a default status of looking_for_band', function () {
+it('defaults a brand-new profile to newcomer at the model level', function () {
+    expect((new Profile)->status)->toBe(ProfileStatus::Newcomer);
+});
+
+it('has a default status of newcomer', function () {
     $user = User::factory()->create();
     $profile = Profile::create(['user_id' => $user->id]);
 
-    expect($profile->fresh()->status)->toBe(ProfileStatus::LookingForBand);
+    expect($profile->fresh()->status)->toBe(ProfileStatus::Newcomer);
 });
 
 it('casts status to ProfileStatus enum', function () {

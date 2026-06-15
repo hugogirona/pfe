@@ -32,6 +32,13 @@ class Profile extends Model
         'experience_years',
     ];
 
+    /**
+     * @var array<string, mixed>
+     */
+    protected $attributes = [
+        'status' => ProfileStatus::Newcomer->value,
+    ];
+
     protected function casts(): array
     {
         return [

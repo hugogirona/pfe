@@ -8,8 +8,9 @@ return [
         'lessons' => 'Cours de musique',
     ],
     'profile_status' => [
-        'looking_for_band' => 'Cherche groupe',
-        'available_for_sessions' => 'Disponible sessions',
+        'newcomer' => "Vient d'arriver",
+        'looking_for_band' => 'Cherche un groupe',
+        'available_for_sessions' => 'Disponible pour sessions',
         'teaching' => 'Propose cours',
         'open_to_collab' => 'Ouvert collaboration',
         'not_available' => 'Non disponible',
