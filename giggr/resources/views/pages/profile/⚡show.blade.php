@@ -52,7 +52,7 @@ class extends Component
             ])
             ->findOrFail($id);
 
-        $this->isOwner = auth()->check() && auth()->id() === $this->profile->user_id;
+        $this->isOwner = auth()->user()?->can('update', $this->profile) ?? false;
 
         if ($this->isOwner) {
             $this->bio = $this->profile->bio ?? '';
@@ -84,7 +84,7 @@ class extends Component
 
     public function saveBio(): void
     {
-        abort_unless($this->isOwner, 403);
+        $this->authorize('update', $this->profile);
         $this->validate(['bio' => ['required', 'string', 'min:10', 'max:1000']]);
         $this->profile->update(['bio' => $this->bio]);
         $this->dispatch('bio-saved');
@@ -92,7 +92,7 @@ class extends Component
 
     public function saveStatus(?string $value = null): void
     {
-        abort_unless($this->isOwner, 403);
+        $this->authorize('update', $this->profile);
         if ($value !== null) {
             $this->selectedStatus = $value;
         }
@@ -105,7 +105,7 @@ class extends Component
 
     public function toggleInstrument(int $id): void
     {
-        abort_unless($this->isOwner, 403);
+        $this->authorize('update', $this->profile);
         $this->selectedInstruments = in_array($id, $this->selectedInstruments)
             ? array_values(array_filter($this->selectedInstruments, fn ($i) => $i !== $id))
             : [...$this->selectedInstruments, $id];
@@ -113,7 +113,7 @@ class extends Component
 
     public function saveInstruments(): void
     {
-        abort_unless($this->isOwner, 403);
+        $this->authorize('update', $this->profile);
         $this->validate([
             'selectedInstruments' => ['array'],
             'selectedInstruments.*' => ['integer', 'exists:instruments,id'],
@@ -125,7 +125,7 @@ class extends Component
 
     public function toggleGenre(int $id): void
     {
-        abort_unless($this->isOwner, 403);
+        $this->authorize('update', $this->profile);
         $this->selectedGenres = in_array($id, $this->selectedGenres)
             ? array_values(array_filter($this->selectedGenres, fn ($g) => $g !== $id))
             : [...$this->selectedGenres, $id];
@@ -133,7 +133,7 @@ class extends Component
 
     public function saveGenres(): void
     {
-        abort_unless($this->isOwner, 403);
+        $this->authorize('update', $this->profile);
         $this->validate([
             'selectedGenres' => ['array'],
             'selectedGenres.*' => ['integer', 'exists:genres,id'],

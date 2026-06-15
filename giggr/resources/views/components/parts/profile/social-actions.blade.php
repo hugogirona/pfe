@@ -1,12 +1,8 @@
 @props(['profile'])
 
-@php
-    $canContact = auth()->check() && $profile->user->canBeContactedBy(auth()->user());
-@endphp
-
 <div class="space-y-2.5">
     <div class="flex flex-col md:flex-row lg:flex-col gap-2.5">
-        @if ($canContact)
+        @can('contact', $profile->user)
             <button
                 type="button"
                 aria-label="{{ __('profile.contact_name', ['name' => $profile->user->full_name]) }}"
@@ -16,7 +12,7 @@
                 <x-icon name="chat-bubble" class="w-4 h-4"/>
                 <span>{{ __('profile.contact') }}</span>
             </button>
-        @endif
+        @endcan
 
         <div class="md:flex-1 lg:flex-initial">
             <livewire:parts.social.follow-button

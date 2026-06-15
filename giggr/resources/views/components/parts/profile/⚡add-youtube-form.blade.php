@@ -37,10 +37,8 @@ new class extends Component {
 
     public function save(): void
     {
-        abort_unless(auth()->check(), 403);
-
         $profile = Profile::findOrFail((int) $this->model_id);
-        abort_unless(auth()->id() === $profile->user_id, 403);
+        $this->authorize('update', $profile);
 
         $this->validate();
 
@@ -49,6 +47,7 @@ new class extends Component {
         if ($this->isEdit) {
             $media = Media::findOrFail((int) $this->media_id);
             abort_unless($media->profile_id === $profile->id, 403);
+            $this->authorize('update', $media);
 
             $duplicate = $profile->media()
                 ->where('type', MediaType::Youtube->value)
@@ -103,10 +102,10 @@ new class extends Component {
 
     public function delete(): void
     {
-        abort_unless(auth()->check() && $this->media_id !== null, 403);
+        abort_unless($this->media_id !== null, 403);
 
         $media = Media::findOrFail((int) $this->media_id);
-        abort_unless(auth()->id() === $media->profile->user_id, 403);
+        $this->authorize('delete', $media);
 
         $media->delete();
 

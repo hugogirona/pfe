@@ -48,7 +48,7 @@ new class extends Component {
 
         if ($model_id !== null) {
             $announcement = Announcement::findOrFail((int)$model_id);
-            abort_unless(auth()->id() === $announcement->user_id, 403);
+            $this->authorize('update', $announcement);
 
             $this->title = $announcement->title;
             $this->type = $announcement->type->value;
@@ -61,14 +61,19 @@ new class extends Component {
 
     public function save(): void
     {
-        abort_unless(auth()->check(), 403);
+        $announcement = $this->model_id !== null
+            ? Announcement::findOrFail((int)$this->model_id)
+            : null;
+
+        if ($announcement !== null) {
+            $this->authorize('update', $announcement);
+        } else {
+            $this->authorize('create', Announcement::class);
+        }
 
         $this->validate();
 
-        if ($this->model_id !== null) {
-            $announcement = Announcement::findOrFail((int)$this->model_id);
-            abort_unless(auth()->id() === $announcement->user_id, 403);
-
+        if ($announcement !== null) {
             $announcement->update([
                 'city_id' => $this->city_id,
                 'title' => $this->title,
@@ -107,7 +112,7 @@ new class extends Component {
         abort_unless($this->model_id !== null, 404);
 
         $announcement = Announcement::findOrFail((int)$this->model_id);
-        abort_unless(auth()->id() === $announcement->user_id, 403);
+        $this->authorize('delete', $announcement);
 
         $announcement->delete();
 

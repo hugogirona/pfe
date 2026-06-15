@@ -10,8 +10,8 @@ new class extends Component {
 
     public function mount(int $targetUserId): void
     {
-        abort_unless(auth()->check(), 403);
-        abort_unless(auth()->id() !== $targetUserId, 403);
+        $target = User::findOrFail($targetUserId);
+        $this->authorize('block', $target);
 
         $this->targetUserId = $targetUserId;
         $this->isBlocked = auth()->user()->blockedUsers()->whereKey($targetUserId)->exists();
@@ -21,6 +21,7 @@ new class extends Component {
     {
         $target = User::find($this->targetUserId);
         abort_unless($target !== null, 404);
+        $this->authorize('block', $target);
 
         if ($this->isBlocked) {
             auth()->user()->unblock($target);
