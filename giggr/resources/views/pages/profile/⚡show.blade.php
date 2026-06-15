@@ -36,21 +36,21 @@ class extends Component
         $this->reloadRelationCounts();
     }
 
-    public function mount(int $id): void
+    public function mount(Profile $profile): void
     {
-        $this->profile = Profile::with([
+        // $profile is resolved from the "name-slug-{id}" route key by
+        // Profile::resolveRouteBinding(); here we just load what the view needs.
+        $this->profile = $profile->load([
             'user',
             'city',
             'instruments',
             'genres',
             'media',
             'user.announcements' => fn ($q) => $q->active()->with(['city', 'instruments', 'genres']),
-        ])
-            ->withCount([
-                'followers',
-                'followed as followed_count',
-            ])
-            ->findOrFail($id);
+        ])->loadCount([
+            'followers',
+            'followed as followed_count',
+        ]);
 
         $this->isOwner = auth()->user()?->can('update', $this->profile) ?? false;
 
@@ -143,16 +143,6 @@ class extends Component
         $this->dispatch('genres-saved');
     }
 
-    #[On('announcement-created')]
-    #[On('announcement-updated')]
-    #[On('announcement-deleted')]
-    public function refreshAnnouncements(): void
-    {
-        $this->profile->load([
-            'user.announcements' => fn ($q) => $q->active()->with(['city', 'instruments', 'genres']),
-        ]);
-    }
-
     /**
      * Avatar and media processing run in queued jobs that broadcast back on the
      * owner's private user channel. Only the owner sees these live updates, so we
@@ -179,6 +169,16 @@ class extends Component
     {
         $this->profile->refresh();
         $this->reloadRelationCounts();
+    }
+
+    #[On('announcement-created')]
+    #[On('announcement-updated')]
+    #[On('announcement-deleted')]
+    public function refreshAnnouncements(): void
+    {
+        $this->profile->load([
+            'user.announcements' => fn ($q) => $q->active()->with(['city', 'instruments', 'genres']),
+        ]);
     }
 
     #[On('media-added')]
@@ -220,7 +220,7 @@ class extends Component
 
     <div class="max-w-6xl mx-auto px-6 py-10">
         <div class="flex flex-col lg:flex-row gap-8 lg:items-start" itemscope itemtype="https://schema.org/Person">
-            <link itemprop="url" href="{{ route('profile', ['id' => $profile->id]) }}">
+            <link itemprop="url" href="{{ route('profile', $profile) }}">
             @foreach ($profile->instruments as $instrument)
                 <meta itemprop="knowsAbout" content="{{ $instrument->translated_name }}">
             @endforeach

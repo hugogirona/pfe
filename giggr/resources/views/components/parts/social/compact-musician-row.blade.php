@@ -7,7 +7,7 @@
 
 @php
     $name = $profile->user->full_name;
-    $url = route('profile', ['id' => $profile->id]);
+    $url = route('profile', $profile);
     $isSelf = $viewerId !== null && (int) $viewerId === (int) $profile->user_id;
 @endphp
 

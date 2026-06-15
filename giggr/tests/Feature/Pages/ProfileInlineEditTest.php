@@ -15,7 +15,7 @@ it('owner can save bio', function () {
     $profile = Profile::factory()->create();
 
     Livewire::actingAs($profile->user)
-        ->test('pages::profile.show', ['id' => $profile->id])
+        ->test('pages::profile.show', ['profile' => $profile])
         ->set('bio', 'Une bio suffisamment longue pour passer la validation.')
         ->call('saveBio')
         ->assertDispatched('bio-saved');
@@ -28,7 +28,7 @@ it('saveBio requires at least 10 characters', function () {
     $profile = Profile::factory()->create();
 
     Livewire::actingAs($profile->user)
-        ->test('pages::profile.show', ['id' => $profile->id])
+        ->test('pages::profile.show', ['profile' => $profile])
         ->set('bio', 'Court')
         ->call('saveBio')
         ->assertHasErrors(['bio']);
@@ -42,7 +42,7 @@ it('non-owner cannot save bio', function () {
 
     try {
         Livewire::actingAs($visitor)
-            ->test('pages::profile.show', ['id' => $profile->id])
+            ->test('pages::profile.show', ['profile' => $profile])
             ->set('bio', 'Tentative de modification du profil de quelqu\'un d\'autre.')
             ->call('saveBio');
     } catch (Throwable) {
@@ -59,7 +59,7 @@ it('non-owner cannot save instruments', function () {
 
     try {
         Livewire::actingAs($visitor)
-            ->test('pages::profile.show', ['id' => $profile->id])
+            ->test('pages::profile.show', ['profile' => $profile])
             ->call('saveInstruments');
     } catch (Throwable) {
     }
@@ -76,7 +76,7 @@ it('non-owner cannot save genres', function () {
 
     try {
         Livewire::actingAs($visitor)
-            ->test('pages::profile.show', ['id' => $profile->id])
+            ->test('pages::profile.show', ['profile' => $profile])
             ->call('saveGenres');
     } catch (Throwable) {
     }
@@ -91,7 +91,7 @@ it('saveInstruments rejects non-existent IDs', function () {
     $originalIds = $profile->fresh()->instruments->pluck('id')->sort()->values()->toArray();
 
     Livewire::actingAs($profile->user)
-        ->test('pages::profile.show', ['id' => $profile->id])
+        ->test('pages::profile.show', ['profile' => $profile])
         ->set('selectedInstruments', [999999])
         ->call('saveInstruments')
         ->assertHasErrors(['selectedInstruments.*']);
@@ -106,7 +106,7 @@ it('saveGenres rejects non-existent IDs', function () {
     $originalIds = $profile->fresh()->genres->pluck('id')->sort()->values()->toArray();
 
     Livewire::actingAs($profile->user)
-        ->test('pages::profile.show', ['id' => $profile->id])
+        ->test('pages::profile.show', ['profile' => $profile])
         ->set('selectedGenres', [999999])
         ->call('saveGenres')
         ->assertHasErrors(['selectedGenres.*']);
@@ -123,7 +123,7 @@ it('owner can toggle and save instruments', function () {
     $instrumentId = Instrument::first()->id;
 
     Livewire::actingAs($profile->user)
-        ->test('pages::profile.show', ['id' => $profile->id])
+        ->test('pages::profile.show', ['profile' => $profile])
         ->call('toggleInstrument', $instrumentId)
         ->call('saveInstruments')
         ->assertDispatched('instruments-saved');
@@ -136,7 +136,7 @@ it('owner can save status to any ProfileStatus case', function () {
     $profile = Profile::factory()->create(['status' => ProfileStatus::LookingForBand]);
 
     Livewire::actingAs($profile->user)
-        ->test('pages::profile.show', ['id' => $profile->id])
+        ->test('pages::profile.show', ['profile' => $profile])
         ->set('selectedStatus', ProfileStatus::Teaching->value)
         ->call('saveStatus')
         ->assertDispatched('status-saved');
@@ -149,7 +149,7 @@ it('does not offer the automatic newcomer state in the status selector', functio
     $profile = Profile::factory()->create();
 
     $component = Livewire::actingAs($profile->user)
-        ->test('pages::profile.show', ['id' => $profile->id]);
+        ->test('pages::profile.show', ['profile' => $profile]);
 
     expect(array_column($component->get('allStatuses'), 'value'))
         ->not->toContain(ProfileStatus::Newcomer->value)
@@ -161,7 +161,7 @@ it('saveStatus rejects the automatic newcomer state', function () {
     $profile = Profile::factory()->create(['status' => ProfileStatus::LookingForBand]);
 
     Livewire::actingAs($profile->user)
-        ->test('pages::profile.show', ['id' => $profile->id])
+        ->test('pages::profile.show', ['profile' => $profile])
         ->set('selectedStatus', ProfileStatus::Newcomer->value)
         ->call('saveStatus')
         ->assertHasErrors(['selectedStatus']);
@@ -174,7 +174,7 @@ it('saveStatus rejects values outside the ProfileStatus enum', function () {
     $profile = Profile::factory()->create(['status' => ProfileStatus::LookingForBand]);
 
     Livewire::actingAs($profile->user)
-        ->test('pages::profile.show', ['id' => $profile->id])
+        ->test('pages::profile.show', ['profile' => $profile])
         ->set('selectedStatus', 'rockstar_overlord')
         ->call('saveStatus')
         ->assertHasErrors(['selectedStatus']);
@@ -187,7 +187,7 @@ it('saveStatus accepts the new value as an argument', function () {
     $profile = Profile::factory()->create(['status' => ProfileStatus::LookingForBand]);
 
     Livewire::actingAs($profile->user)
-        ->test('pages::profile.show', ['id' => $profile->id])
+        ->test('pages::profile.show', ['profile' => $profile])
         ->call('saveStatus', ProfileStatus::OpenToCollab->value)
         ->assertSet('selectedStatus', ProfileStatus::OpenToCollab->value)
         ->assertDispatched('status-saved');
@@ -204,7 +204,7 @@ it('saveStatus preserves the followers and followed counts on the loaded profile
     $owner->follow($followed->profile);
 
     $component = Livewire::actingAs($owner)
-        ->test('pages::profile.show', ['id' => $owner->profile->id])
+        ->test('pages::profile.show', ['profile' => $owner->profile])
         ->set('selectedStatus', ProfileStatus::Teaching->value)
         ->call('saveStatus');
 
@@ -220,7 +220,7 @@ it('non-owner cannot save status', function () {
 
     try {
         Livewire::actingAs($visitor)
-            ->test('pages::profile.show', ['id' => $profile->id])
+            ->test('pages::profile.show', ['profile' => $profile])
             ->set('selectedStatus', ProfileStatus::Teaching->value)
             ->call('saveStatus');
     } catch (Throwable) {
@@ -237,7 +237,7 @@ it('owner can toggle and save genres', function () {
     $genreId = Genre::first()->id;
 
     Livewire::actingAs($profile->user)
-        ->test('pages::profile.show', ['id' => $profile->id])
+        ->test('pages::profile.show', ['profile' => $profile])
         ->call('toggleGenre', $genreId)
         ->call('saveGenres')
         ->assertDispatched('genres-saved');

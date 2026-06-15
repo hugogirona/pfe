@@ -39,7 +39,9 @@
         <x-nav.mobile-link href="{{ route('contact') }}">{{ __('nav.contact') }}</x-nav.mobile-link>
 
         @auth
-            <x-nav.mobile-link href="{{ route('profile', ['id' => auth()->user()->id]) }}">{{ __('nav.profile') }}</x-nav.mobile-link>
+            @if (auth()->user()->profile)
+                <x-nav.mobile-link href="{{ route('profile', auth()->user()->profile) }}">{{ __('nav.profile') }}</x-nav.mobile-link>
+            @endif
             <x-nav.mobile-link href="{{ route('settings.account') }}">{{ __('nav.settings') }}</x-nav.mobile-link>
 
             <form method="POST" action="/logout" class="absolute bottom-10">

@@ -45,16 +45,18 @@
                 role="menu"
                 style="display: none"
             >
-                <a
-                    href="{{ route('profile', ['id' => auth()->user()->id]) }}"
-                    wire:navigate
-                    @click="open = false"
-                    role="menuitem"
-                    class="flex items-center gap-2.5 px-4 py-3 text-sm text-body hover:bg-dark/5 transition-colors duration-150 focus-visible:outline-none focus-visible:bg-dark/5"
-                >
-                    <x-icon name="user" class="w-4 h-4 text-caption"/>
-                    {{ __('nav.view_profile') }}
-                </a>
+                @if (auth()->user()->profile)
+                    <a
+                        href="{{ route('profile', auth()->user()->profile) }}"
+                        wire:navigate
+                        @click="open = false"
+                        role="menuitem"
+                        class="flex items-center gap-2.5 px-4 py-3 text-sm text-body hover:bg-dark/5 transition-colors duration-150 focus-visible:outline-none focus-visible:bg-dark/5"
+                    >
+                        <x-icon name="user" class="w-4 h-4 text-caption"/>
+                        {{ __('nav.view_profile') }}
+                    </a>
+                @endif
 
                 <a
                     href="{{ route('settings.account') }}"
