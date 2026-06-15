@@ -9,7 +9,7 @@ it('shows the contact button when the owner accepts everyone', function () {
     $viewer = User::factory()->withProfile()->create(['email_verified_at' => now()]);
 
     Livewire::actingAs($viewer)
-        ->test('pages::profile.show', ['id' => $owner->profile->id])
+        ->test('pages::profile.show', ['profile' => $owner->profile])
         ->assertSeeHtml('parts.messaging.inbox');
 });
 
@@ -19,7 +19,7 @@ it('hides the contact button when the owner accepts nobody', function () {
     $viewer = User::factory()->withProfile()->create(['email_verified_at' => now()]);
 
     Livewire::actingAs($viewer)
-        ->test('pages::profile.show', ['id' => $owner->profile->id])
+        ->test('pages::profile.show', ['profile' => $owner->profile])
         ->assertDontSeeHtml('parts.messaging.inbox');
 });
 
@@ -29,7 +29,7 @@ it('hides the contact button from a non-followed viewer under followers_only', f
     $viewer = User::factory()->withProfile()->create(['email_verified_at' => now()]);
 
     Livewire::actingAs($viewer)
-        ->test('pages::profile.show', ['id' => $owner->profile->id])
+        ->test('pages::profile.show', ['profile' => $owner->profile])
         ->assertDontSeeHtml('parts.messaging.inbox');
 });
 
@@ -40,6 +40,6 @@ it('shows the contact button to a viewer the owner follows under followers_only'
     $owner->follow($viewer->profile);
 
     Livewire::actingAs($viewer)
-        ->test('pages::profile.show', ['id' => $owner->profile->id])
+        ->test('pages::profile.show', ['profile' => $owner->profile])
         ->assertSeeHtml('parts.messaging.inbox');
 });

@@ -89,7 +89,7 @@ it('redirects the user to their own profile after a successful verification', fu
         ->test('pages::auth.verify-email')
         ->set('code', '123456')
         ->call('verify')
-        ->assertRedirect(route('profile', ['id' => $user->profile->id]));
+        ->assertRedirect(route('profile', $user->profile));
 });
 
 it('rejects an expired code', function () {
@@ -129,7 +129,7 @@ it('redirects already-verified users away from the verify page to their profile'
 
     Livewire::actingAs($user)
         ->test('pages::auth.verify-email')
-        ->assertRedirect(route('profile', ['id' => $user->profile->id]));
+        ->assertRedirect(route('profile', $user->profile));
 });
 
 it('resend generates a new code and notifies the user', function () {
@@ -205,7 +205,7 @@ it('redirects an unverified user away from a verified-only route', function () {
     $profile = Profile::factory()->create(['user_id' => $owner->id]);
 
     $this->actingAs($owner)
-        ->get(route('profile', ['id' => $profile->id]))
+        ->get(route('profile', $profile))
         ->assertRedirect(route('verification.notice'));
 });
 
@@ -215,6 +215,6 @@ it('lets a verified user access a verified-only route', function () {
     $profile = Profile::factory()->create(['user_id' => $owner->id]);
 
     $this->actingAs($owner)
-        ->get(route('profile', ['id' => $profile->id]))
+        ->get(route('profile', $profile))
         ->assertOk();
 });

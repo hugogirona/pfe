@@ -8,7 +8,7 @@ it('lets a logged-in member follow another musician', function () {
 
     $this->actingAs($viewer);
 
-    $page = visit(path('profile', ['id' => $target->profile->id]));
+    $page = visit(path('profile', ['profile' => $target->profile]));
 
     $page->assertSee(__('social.follow'))
         ->click(__('social.follow'))
