@@ -2,8 +2,8 @@
 
 namespace App\Events;
 
-use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
+use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
@@ -17,11 +17,11 @@ class ContactPreferenceUpdated implements ShouldBroadcastNow
     ) {}
 
     /**
-     * @return array<int, Channel>
+     * @return array<int, PrivateChannel>
      */
     public function broadcastOn(): array
     {
-        return [new Channel('profile.'.$this->profileId)];
+        return [new PrivateChannel('profile.'.$this->profileId)];
     }
 
     public function broadcastAs(): string
