@@ -145,3 +145,32 @@ it('User::follow() works for Announcement too', function () {
     expect($user->isFollowing($announcement))->toBeTrue()
         ->and(Follow::where('followable_type', 'announcement')->count())->toBe(1);
 });
+
+it('deletes inbound profile follows when a followed user deletes their account', function () {
+    $follower = User::factory()->withProfile()->create();
+    $followed = User::factory()->withProfile()->create();
+
+    $follower->follow($followed->profile);
+    $followedProfileId = $followed->profile->id;
+
+    expect(Follow::where('followable_type', 'profile')->where('followable_id', $followedProfileId)->count())->toBe(1);
+
+    $followed->delete();
+
+    expect(Follow::where('followable_type', 'profile')->where('followable_id', $followedProfileId)->count())->toBe(0)
+        ->and(Follow::count())->toBe(0);
+});
+
+it("keeps the follower's followed_count accurate after a followed user is deleted", function () {
+    $follower = User::factory()->withProfile()->create();
+    $followed = User::factory()->withProfile()->create();
+
+    $follower->follow($followed->profile);
+    $followed->delete();
+
+    $followedCount = $follower->profile
+        ->loadCount(['followed as followed_count'])
+        ->followed_count;
+
+    expect($followedCount)->toBe(0);
+});

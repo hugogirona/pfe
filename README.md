@@ -148,46 +148,48 @@ Giggr offre un espace dédié où les artistes peuvent :
 
 ## Parcours utilisateurs
 
-### Persona 1 — Léa, 24 ans, guitariste
+### Persona 1 — Léa, 24 ans, guitariste (nouvelle visiteuse, sans compte)
 
-**Contexte** : Léa joue de la guitare depuis 5 ans et cherche à intégrer un groupe de rock alternatif.
+**Contexte** : Léa joue de la guitare depuis 5 ans et cherche à intégrer un groupe de rock alternatif. Elle découvre Giggr pour la première fois et n'a pas de compte.
 
-**Parcours : Trouver un groupe**
+**Parcours : Créer un compte puis trouver un groupe**
 
-1. Léa arrive sur la page d'accueil via Google
-2. Elle clique sur "Voir les annonces" et arrive sur `/explorer`
-3. Elle filtre par instrument "Guitare" et ville "Bruxelles"
-4. Elle consulte les annonces et trouve "Groupe de rock alternatif cherche guitariste"
-5. Elle clique sur l'annonce et lit les détails
-6. Elle clique sur "Contacter" — le panneau de messagerie s'ouvre
-7. Elle envoie un message au groupe
-8. Le groupe lui répond, ils organisent une rencontre
+1. Léa arrive sur la page d'accueil via Google, puis clique sur "Voir les annonces" pour atteindre `/explorer`
+2. Sans être connectée, elle peut **parcourir** la liste des annonces et appliquer les filtres (instrument "Guitare", ville "Bruxelles")
+3. Une annonce l'intéresse : "Groupe de rock alternatif cherche guitariste". Mais **dès qu'elle clique pour en lire le détail** (ou sur "Contacter"), elle est **redirigée vers `/connexion`**, car le détail d'une annonce et la messagerie exigent un compte connecté et vérifié
+4. N'ayant pas de compte, elle suit l'invitation à s'inscrire et arrive sur `/inscription` : elle renseigne prénom, nom, email et mot de passe
+5. Elle **vérifie son adresse e-mail** en saisissant le code reçu par e-mail (`/verifier-email`)
+6. Désormais **connectée et vérifiée**, elle retourne sur `/explorer`, refiltre, ouvre enfin le détail de l'annonce et lit toutes les informations
+7. Elle clique sur "Contacter l'auteur" — le panneau de messagerie s'ouvre et elle envoie son message
+8. Le groupe lui répond en temps réel (Laravel Reverb), ils organisent une rencontre
 
-### Persona 2 — Marc, 32 ans, batteur
+### Persona 2 — Marc, 32 ans, batteur (membre déjà inscrit)
 
-**Contexte** : Marc cherche des musiciens pour jouer régulièrement.
+**Contexte** : Marc possède déjà un compte vérifié et cherche des musiciens pour jouer régulièrement.
 
 **Parcours : Publier une annonce**
 
-1. Marc est connecté, il clique sur "Publier une annonce"
-2. Il remplit le formulaire : titre, type "Je cherche", instruments, ville, description
-3. L'annonce est publiée et visible sur `/explorer` et sur son profil `/profil/{id}`
-4. Des musiciens intéressés lui envoient un message via le panneau de messagerie
-5. Marc répond et organise une session
+1. Marc se connecte sur `/connexion` (email + mot de passe)
+2. Depuis la navigation, il ouvre le formulaire intégré "Publier une annonce" (modale Livewire, pas de page dédiée)
+3. Il remplit le formulaire : titre, type "Je cherche", instruments, ville, rayon, description
+4. L'annonce est publiée et devient visible sur `/explorer` et sur son profil `/profil/{id}`
+5. Des musiciens connectés et vérifiés ouvrent le détail de l'annonce et lui écrivent via le bouton "Contacter l'auteur"
+6. Marc reçoit la notification (badge de messages non lus), répond depuis le panneau de messagerie et organise une session
 
-### Persona 3 — Sophie, 28 ans, chanteuse
+### Persona 3 — Sophie, 28 ans, chanteuse (membre déjà inscrite)
 
-**Contexte** : Sophie cherche des musiciens pour former un groupe de pop.
+**Contexte** : Sophie possède déjà un compte vérifié et cherche des musiciens pour former un groupe de pop.
 
 **Parcours : Trouver des musiciens**
 
-1. Sophie arrive sur `/explorer`
-2. Elle bascule sur l'onglet "Musiciens"
-3. Elle filtre par instrument et ville
-4. Elle consulte plusieurs profils
-5. Sur chaque profil qui l'intéresse, elle clique "Contacter"
-6. Elle envoie des messages personnalisés depuis le panneau de messagerie
-7. Trois musiciens répondent positivement, ils organisent une répétition
+1. Sophie se connecte, puis arrive sur `/explorer` et bascule sur l'onglet "Profils"
+2. Elle parcourt la liste et filtre par instrument et ville
+3. Un profil l'intéresse : comme elle est **connectée et vérifiée**, elle ouvre `/profil/{id}` et consulte les détails (instruments, genres, disponibilités, médias)
+4. Sur chaque profil qui l'intéresse, elle clique "Contacter" — le panneau de messagerie s'ouvre
+5. Elle envoie des messages personnalisés, peut aussi **suivre** ou **demander en ami** les musiciens
+6. Trois musiciens répondent positivement en temps réel, ils organisent une répétition
+
+> **Note sur les accès** : la liste des onglets "Profils" et "Annonces" sur `/explorer` est consultable sans compte, mais **ouvrir un profil, le détail d'une annonce ou la messagerie exige d'être connecté et vérifié**. Tout visiteur non connecté qui tente l'une de ces actions est redirigé vers `/connexion` avec une invitation à créer un compte (cf. tableau des accès ci-dessous).
 
 
 
@@ -228,7 +230,7 @@ Livewire au sein des pages ci-dessus.
 ### Explorer
 
 - Filtres dans un tiroir (drawer) : ville, rayon, instruments, genres
-- Onglet **Musiciens** : liste des profils correspondant aux filtres
+- Onglet **Profils** : liste des profils correspondant aux filtres
 - Onglet **Annonces** : liste des annonces correspondant aux filtres
 - Pagination des résultats
 - Le contenu est visible sans compte ; cliquer sur un profil, une annonce ou "Contacter" redirige vers `/connexion` avec une invitation à créer un compte
