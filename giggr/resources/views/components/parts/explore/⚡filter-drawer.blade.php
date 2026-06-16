@@ -107,8 +107,13 @@ new class extends Component {
 ?>
 
 <div
-    x-data
-    x-init="$wire.$watch('open', val => document.body.style.overflow = val ? 'hidden' : '')"
+    x-data="{
+        open: $wire.entangle('open').live,
+        init() {
+            this.$watch('open', val => document.body.style.overflow = val ? 'hidden' : '');
+        },
+    }"
+    x-on:livewire:navigating.window="document.body.style.overflow = ''"
 >
     {{-- Backdrop --}}
     <div
@@ -126,7 +131,7 @@ new class extends Component {
     ></div>
 
     {{-- Panel --}}
-    <div
+    <section
         x-show="$wire.open"
         x-transition:enter="transform transition ease-out duration-300"
         x-transition:enter-start="translate-x-full"
@@ -135,7 +140,7 @@ new class extends Component {
         x-transition:leave-start="translate-x-0"
         x-transition:leave-end="translate-x-full"
         @keydown.escape.window="$wire.close()"
-        class="fixed inset-y-0 right-0 z-50 flex flex-col w-full md:w-105 bg-bg shadow-2xl"
+        class="fixed inset-y-0 right-0 z-50 flex flex-col w-full md:w-[520px] bg-bg shadow-2xl"
         style="display: none"
         role="dialog"
         aria-modal="true"
@@ -168,7 +173,7 @@ new class extends Component {
         <div class="flex-1 overflow-y-auto px-6 py-6 space-y-8">
 
             {{-- Ville --}}
-            <section>
+            <div>
                 <livewire:parts.form.locality-picker
                     wire:model.live="draftCityId"
                     :label="__('explore.filter_city')"
@@ -176,7 +181,7 @@ new class extends Component {
                     :filter-style="true"
                     :wire:key="'drawer-locality-' . $pickerKey"
                 />
-            </section>
+            </div>
 
             @if ($activeTab === 'announcements')
                 <x-parts.explore.type-filter
@@ -274,5 +279,5 @@ new class extends Component {
                 {{ __('explore.filter_apply') }}
             </x-cta>
         </div>
-    </div>
+    </section>
 </div>

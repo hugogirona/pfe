@@ -41,8 +41,6 @@ new class extends Component {
         },
         close() {
             this.show = false;
-            // Reset server state only after the slide-out finishes, so the
-            // content doesn't flash back to the skeleton mid-transition.
             setTimeout(() => $wire.close(), 200);
         },
     }"
@@ -61,7 +59,7 @@ new class extends Component {
         x-transition:leave="transition ease-in duration-200"
         x-transition:leave-start="opacity-100"
         x-transition:leave-end="opacity-0"
-        @click="close()"
+        wire:click="close()"
         class="fixed inset-0 bg-dark/40 backdrop-blur-sm"
         aria-hidden="true"
     ></div>
