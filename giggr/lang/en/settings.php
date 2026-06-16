@@ -23,6 +23,7 @@ return [
     'email_label' => 'New email address',
     'email_submit' => 'Change email',
     'email_unchanged' => 'This is already your current address.',
+    'email_taken' => 'This email address is already in use.',
 
     // Password
     'password_title' => 'Password',
