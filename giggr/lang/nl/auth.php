@@ -32,6 +32,7 @@ return [
     // Laravel defaults
     'failed' => 'Deze gegevens komen niet overeen met onze gegevens.',
     'email_taken' => 'Dit e-mailadres is al gekoppeld aan een account. <a href=":url" class="underline font-medium">Inloggen?</a>',
+    'email_disposable' => 'Wegwerp-e-mailadressen zijn niet toegestaan. Gebruik een permanent adres.',
     'password' => 'Het opgegeven wachtwoord is onjuist.',
     'throttle' => 'Te veel inlogpogingen. Probeer het opnieuw over :seconds seconden.',
 
