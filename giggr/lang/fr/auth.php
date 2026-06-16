@@ -32,6 +32,7 @@ return [
     // Laravel defaults
     'failed' => 'Ces identifiants ne correspondent pas à nos enregistrements.',
     'email_taken' => 'Cette adresse e-mail est déjà associée à un compte. <a href=":url" class="underline font-medium">Se connecter ?</a>',
+    'email_disposable' => 'Les adresses e-mail jetables ne sont pas autorisées. Merci d’utiliser une adresse permanente.',
     'password' => 'Le mot de passe fourni est incorrect.',
     'throttle' => 'Trop de tentatives de connexion. Veuillez réessayer dans :seconds secondes.',
 

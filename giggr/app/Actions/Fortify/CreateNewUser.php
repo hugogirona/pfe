@@ -27,13 +27,14 @@ class CreateNewUser implements CreatesNewUsers
         Validator::make($input, [
             'first_name' => ['required', 'string', 'max:255'],
             'last_name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', Rule::unique(User::class)],
+            'email' => ['required', 'string', 'email', 'indisposable', 'max:255', Rule::unique(User::class)],
             'password' => $this->passwordRules(),
             'birth_date' => ['nullable', 'date_format:Y-m-d', 'before:today', 'after:1900-01-01'],
             'city_id' => ['nullable', 'integer', 'exists:cities,id'],
             'rgpd' => ['accepted'],
         ], [
             'email.unique' => __('auth.email_taken', ['url' => route('login')]),
+            'email.indisposable' => __('auth.email_disposable'),
             'rgpd.accepted' => __('auth.register_rgpd_required'),
         ])->validate();
 

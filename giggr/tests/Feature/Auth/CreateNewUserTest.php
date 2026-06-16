@@ -110,3 +110,17 @@ it('rejects registration when the privacy policy is declined', function () {
     expect(fn () => app(CreatesNewUsers::class)->create(validRegistrationInput(['rgpd' => false])))
         ->toThrow(ValidationException::class);
 });
+
+it('rejects registration with a disposable email address', function (string $email) {
+    expect(fn () => app(CreatesNewUsers::class)->create(validRegistrationInput(['email' => $email])))
+        ->toThrow(ValidationException::class);
+})->with([
+    'mailinator.com' => 'spammer@mailinator.com',
+    'vtmpj.com' => 'dkvvvalkqdtoiudmni@vtmpj.com',
+]);
+
+it('allows registration with a real email provider', function () {
+    $user = app(CreatesNewUsers::class)->create(validRegistrationInput(['email' => 'real.person@gmail.com']));
+
+    expect($user->email)->toBe('real.person@gmail.com');
+});
