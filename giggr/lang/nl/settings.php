@@ -23,6 +23,7 @@ return [
     'email_label' => 'Nieuw e-mailadres',
     'email_submit' => 'E-mail wijzigen',
     'email_unchanged' => 'Dit adres is al van jou.',
+    'email_taken' => 'Dit e-mailadres is al in gebruik.',
 
     // Password
     'password_title' => 'Wachtwoord',

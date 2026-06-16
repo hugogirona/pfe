@@ -28,6 +28,7 @@ class UpdateUserEmail
             ],
         ], [
             'current_password.current_password' => __('settings.current_password_mismatch'),
+            'email.unique' => __('settings.email_taken'),
         ])->after(function ($validator) use ($user, $input): void {
             if (($input['email'] ?? null) === $user->email) {
                 $validator->errors()->add('email', __('settings.email_unchanged'));
